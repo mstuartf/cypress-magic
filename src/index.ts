@@ -21,8 +21,8 @@ export const makeRequest = () => {
 
 export const periodicRequests = () => {
   setTimeout(makeRequest, 1000);
-  setTimeout(makeRequest, 2000);
   setTimeout(makeRequest, 5000);
+  setTimeout(makeRequest, 9000);
 }
 
 createButton();
