@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@medv/finder": "^2.1.0",
-    "lodash": "^4.17.21"
+    "fetch-intercept": "^2.4.0",
+    "lodash": "^4.17.21",
+    "whatwg-fetch": "^3.6.2"
   }
 }
