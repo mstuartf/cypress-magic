@@ -28,3 +28,6 @@ export const periodicRequests = () => {
 createButton();
 createInput();
 periodicRequests();
+
+// todo setViewport
+// todo navigate
