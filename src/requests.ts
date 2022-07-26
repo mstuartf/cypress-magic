@@ -7,13 +7,18 @@ const parseRequest = (url: string, init?: RequestInit) => ({
     method: init ? init.method : 'GET',
 })
 
-const parseResponse = ({request: {url, method}, status, body}: Response & {request: Request}) => ({
-    type: 'response',
-    url,
-    method,
-    status,
-    body,
-})
+const parseResponse: (res: Response & {request: Request}) => void = (response) => {
+    const {request: {url, method}, status} = response;
+    response.clone().json().then(body => {
+        console.log({
+            type: 'response',
+            url,
+            method,
+            status,
+            body,
+        })
+    })
+}
 
 export const initialiseRequests = () => {
     register({
@@ -25,7 +30,7 @@ export const initialiseRequests = () => {
 
         response: function (response) {
             // Modify the reponse object
-            console.log(parseResponse(response));
+            parseResponse(response);
             return response;
         },
 
