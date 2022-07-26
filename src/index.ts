@@ -1,22 +1,19 @@
-import * as _ from 'lodash';
-import {initializeUserEvents, logEvents} from "./userEvents";
+import {initializeUserEvents} from "./userEvents";
 import {initialiseRequests} from "./requests";
 
 initializeUserEvents();
 initialiseRequests();
 
-function component() {
+function createButton() {
   const element = document.createElement('button');
-
-  // Lodash, currently included via a script, is required for this line to work
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-  element.onclick = logEvents;
-
-  return element;
+  element.innerHTML = "click me"
+  document.body.appendChild(element);
 }
 
-document.body.appendChild(component());
-
+function createInput() {
+  const element = document.createElement('input');
+  document.body.appendChild(element);
+}
 
 export const makeRequest = () => {
   return fetch('https://swapi.dev/api/people/1')
@@ -28,4 +25,6 @@ export const periodicRequests = () => {
   setTimeout(makeRequest, 5000);
 }
 
+createButton();
+createInput();
 periodicRequests();

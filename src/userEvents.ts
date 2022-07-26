@@ -1,8 +1,6 @@
 import {EventType, ParsedEvent} from "./types";
 import {finder} from '@medv/finder';
 
-const EVENTS: ParsedEvent[] = [];
-
 function parseEvent(event: Event): ParsedEvent {
     let selector: string;
     if ((event.target as Element).hasAttribute('data-cy')) {
@@ -33,11 +31,7 @@ function parseEvent(event: Event): ParsedEvent {
  */
 function handleEvent(event: Event): void {
     if (event.isTrusted === true) {
-        try {
-            EVENTS.push(parseEvent(event));
-        } catch (error) {
-            throw new Error(error as any);
-        }
+        console.log(parseEvent(event));
     }
 }
 
@@ -69,4 +63,3 @@ export function initializeUserEvents(): void {
     addDOMListeners();
 }
 
-export const logEvents = () => console.log('events', EVENTS);
