@@ -1,21 +1,31 @@
 import {register} from "fetch-intercept";
 
+
+const parseRequest = (url: string, init?: RequestInit) => ({
+    type: 'request',
+    url,
+    method: init ? init.method : 'GET',
+})
+
+const parseResponse = ({request: {url, method}, status, body}: Response & {request: Request}) => ({
+    type: 'response',
+    url,
+    method,
+    status,
+    body,
+})
+
 export const initialiseRequests = () => {
     register({
         request: function (url, config) {
             // Modify the url or config here
-            console.log(url);
+            console.log(parseRequest(url, config));
             return [url, config];
-        },
-
-        requestError: function (error) {
-            // Called when an error occured during another 'request' interceptor call
-            return Promise.reject(error);
         },
 
         response: function (response) {
             // Modify the reponse object
-            console.log(response);
+            console.log(parseResponse(response));
             return response;
         },
 
