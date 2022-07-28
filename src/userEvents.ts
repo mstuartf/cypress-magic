@@ -10,6 +10,7 @@ function parseEvent(event: Event): ParsedEvent {
     } else if ((event.target as Element).hasAttribute('data-testid')) {
         selector = `[data-testid=${(event.target as Element).getAttribute('data-testid')}]`;
     } else {
+        // todo: select by containing text
         selector = finder(event.target as Element, { attr: (name, value) => name === 'data-cy' || name === 'data-test' || name === 'data-testid' });
     }
     const parsedEvent: ParsedEvent = {

@@ -1,12 +1,22 @@
 import {initializeUserEvents} from "./userEvents";
 import {initialiseRequests} from "./requests";
+import {initializeNav} from "./navigation";
 
 initializeUserEvents();
 initialiseRequests();
+initializeNav();
+
+function updateURL() {
+  if (history.pushState) {
+    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?para=hello';
+    window.history.pushState({path:newurl},'',newurl);
+  }
+}
 
 function createButton() {
   const element = document.createElement('button');
   element.innerHTML = "click me"
+  element.onclick = updateURL;
   document.body.appendChild(element);
 }
 
@@ -31,3 +41,4 @@ periodicRequests();
 
 // todo setViewport
 // todo navigate
+// todo onunload
