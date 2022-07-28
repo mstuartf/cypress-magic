@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@medv/finder": "^2.1.0",
+    "@types/history": "^5.0.0",
     "fetch-intercept": "^2.4.0",
     "whatwg-fetch": "^3.6.2"
   }
