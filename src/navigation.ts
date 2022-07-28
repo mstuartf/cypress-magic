@@ -1,7 +1,7 @@
-function monkeyPatchHistory (history: History) {
+function monkeyPatchHistory (history: History, register: (event: any) => void) {
     const pushState = history.pushState;
     history.pushState = function(state, unused, url) {
-        console.log({
+        register({
             type: 'navigate',
             url,
             title: '?'
@@ -10,7 +10,7 @@ function monkeyPatchHistory (history: History) {
     }
     const replaceState = history.replaceState;
     history.replaceState = function(state, unused, url) {
-        console.log({
+        register({
             type: 'navigate',
             url,
             title: '?'
@@ -19,6 +19,6 @@ function monkeyPatchHistory (history: History) {
     }
 }
 
-export const initializeNav = () => {
-    monkeyPatchHistory(window.history);
+export const initializeNav = (register: (event: any) => void) => {
+    monkeyPatchHistory(window.history, register);
 }

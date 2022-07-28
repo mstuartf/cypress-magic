@@ -26,41 +26,22 @@ function parseEvent(event: Event): ParsedEvent {
     return parsedEvent;
 }
 
-/**
- * Checks if DOM event was triggered by user; if so, it calls parseEvent on the data.
- * @param event
- */
-function handleEvent(event: Event): void {
+function handleEvent(event: Event, register: (event: any) => void): void {
     if (event.isTrusted === true) {
-        console.log(parseEvent(event));
+        register(parseEvent(event));
     }
 }
 
-/**
- * Adds event listeners to the DOM.
- */
-function addDOMListeners(): void {
+function addDOMListeners(register: (event: any) => void): void {
     Object.values(EventType).forEach(event => {
-        document.addEventListener(event, handleEvent, {
+        document.addEventListener(event, (event) => handleEvent(event, register), {
             capture: true,
             passive: true,
         });
     });
 }
 
-/**
- * Removes event listeners from the DOM.
- */
-function removeDOMListeners(): void {
-    Object.values(EventType).forEach(event => {
-        document.removeEventListener(event, handleEvent, { capture: true });
-    });
-}
-
-/**
- * Initializes the event recorder.
- */
-export function initializeUserEvents(): void {
-    addDOMListeners();
+export function initializeUserEvents(register: (event: any) => void): void {
+    addDOMListeners(register);
 }
 
