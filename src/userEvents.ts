@@ -12,7 +12,7 @@ function parseEvent(event: Event): ParsedEvent {
     const parsedEvent: ParsedEvent = {
         timestamp: Date.now(),
         selector,
-        action: event.type,
+        type: event.type,
         tag: target.tagName,
         value: (event.target as HTMLInputElement).value,
         classList: target.classList,

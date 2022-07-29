@@ -1,6 +1,6 @@
 export interface ParsedEvent {
     selector: string;
-    action: string;
+    type: string;
     tag: string;
     value: string;
     id?: string;

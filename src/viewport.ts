@@ -3,10 +3,11 @@ export const initializeViewport = (register: (event: any) => void) => {
         type: 'setViewport',
         "width": window.innerWidth,
         "height": window.innerHeight,
-        // "deviceScaleFactor": 1,
-        // "isMobile": false,
-        // "hasTouch": false,
-        // "isLandscape": false
+        // todo: un hard code
+        "deviceScaleFactor": 1,
+        "isMobile": false,
+        "hasTouch": false,
+        "isLandscape": false
     })
     // todo: listen for changes?
 }
