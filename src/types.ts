@@ -8,6 +8,7 @@ export interface ParsedEvent {
     href?: string;
     inputType?: string;
     innerText?: string;
+    timestamp: number;
 }
 
 export enum EventType {

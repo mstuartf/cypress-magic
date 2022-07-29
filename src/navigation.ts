@@ -1,20 +1,26 @@
 function monkeyPatchHistory (history: History, register: (event: any) => void) {
+
+    const baseEvent = {
+        type: 'navigate',
+        timestamp: Date.now(),
+    }
+
     const pushState = history.pushState;
     history.pushState = function(state, unused, url) {
-        register({type: 'navigate', url})
+        register({...baseEvent, url})
         return pushState.apply(history, arguments);
     }
 
     const replaceState = history.replaceState;
     history.replaceState = function(state, unused, url) {
-        register({type: 'navigate', url})
+        register({...baseEvent, url})
         return replaceState.apply(history, arguments);
     }
 
     const back = history.back;
     history.back = function() {
         register({
-            type: 'navigate',
+            ...baseEvent,
             url: 'back',
         })
         return back.apply(history, arguments);
@@ -23,7 +29,7 @@ function monkeyPatchHistory (history: History, register: (event: any) => void) {
     const forward = history.forward;
     history.forward = function() {
         register({
-            type: 'navigate',
+            ...baseEvent,
             url: 'forward',
         })
         return forward.apply(history, arguments);
@@ -32,7 +38,7 @@ function monkeyPatchHistory (history: History, register: (event: any) => void) {
     const go = history.go;
     history.go = function(delta) {
         register({
-            type: 'navigate',
+            ...baseEvent,
             delta,
         })
         return go.apply(history, arguments);

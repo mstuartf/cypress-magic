@@ -3,6 +3,7 @@ import {register} from "fetch-intercept";
 
 const parseRequest = (url: string, init?: RequestInit) => ({
     type: 'request',
+    timestamp: Date.now(),
     url,
     method: init ? init.method : 'GET',
 })
@@ -12,6 +13,7 @@ const parseResponse: (res: Response & {request: Request}, r: (event: any) => voi
     response.clone().json().then(body => {
         r({
             type: 'response',
+            timestamp: Date.now(),
             url,
             method,
             status,

@@ -10,6 +10,7 @@ function parseEvent(event: Event): ParsedEvent {
         selector = finder(target);
     }
     const parsedEvent: ParsedEvent = {
+        timestamp: Date.now(),
         selector,
         action: event.type,
         tag: target.tagName,
