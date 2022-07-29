@@ -9,6 +9,7 @@ export interface ParsedEvent {
     inputType?: string;
     innerText?: string;
     timestamp: number;
+    classList: DOMTokenList;
 }
 
 export enum EventType {

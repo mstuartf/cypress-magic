@@ -15,6 +15,7 @@ function parseEvent(event: Event): ParsedEvent {
         action: event.type,
         tag: target.tagName,
         value: (event.target as HTMLInputElement).value,
+        classList: target.classList,
     };
     if ((target as HTMLAnchorElement).hasAttribute('href')) {
         parsedEvent.href = (target as HTMLAnchorElement).href
