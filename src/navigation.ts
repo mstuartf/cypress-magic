@@ -1,7 +1,7 @@
 function monkeyPatchHistory (history: History, register: (event: any) => void) {
 
     const baseEvent = {
-        type: 'navigate',
+        type: 'urlChange',
         timestamp: Date.now(),
     }
 
