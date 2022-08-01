@@ -1,5 +1,6 @@
 import {EventType, ParsedEvent} from "./types";
 import {finder} from '@medv/finder';
+import {obfuscate} from "./obfuscate";
 
 function parseEvent(event: Event): ParsedEvent {
     let selector: string;
@@ -10,12 +11,16 @@ function parseEvent(event: Event): ParsedEvent {
     } else {
         selector = finder(target);
     }
+    let value = (event.target as HTMLInputElement).value;
+    if (typeof value === "string") {
+        value = obfuscate(value);
+    }
     const parsedEvent: ParsedEvent = {
         timestamp: Date.now(),
         selectors: [[selector]],
         type: event.type,
         tag: target.tagName,
-        value: (event.target as HTMLInputElement).value,
+        value,
         classList: target.classList,
     };
     if ((target as HTMLAnchorElement).hasAttribute('href')) {

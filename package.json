@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "@medv/finder": "^2.1.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/history": "^5.0.0",
+    "crypto-js": "^4.1.1",
     "fetch-intercept": "^2.4.0",
     "whatwg-fetch": "^3.6.2"
   }
