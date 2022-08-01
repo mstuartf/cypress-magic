@@ -24,8 +24,20 @@ export const obfuscate: (raw: string | number | boolean) => string | number | bo
     return AES.encrypt(raw, PASSPHRASE).toString().slice(0, raw.length);
 };
 
+type NestedOption = number | boolean | string | NestedObj;
+
 interface NestedObj {
-    [key: string]: number | boolean | string | NestedObj;
+    [key: string]: NestedOption | Array<NestedOption>;
+}
+
+const obfuscateValue: (v: NestedOption | Array<NestedOption>) => any = (v)  => {
+    if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
+        return obfuscate(v);
+    } else if (Array.isArray(v)) {
+        return v.map(item => obfuscateValue(item))
+    } else {
+        return obfuscateObj(v);
+    }
 }
 
 export const obfuscateObj: (obj: NestedObj) => NestedObj = (obj) => {
@@ -35,7 +47,7 @@ export const obfuscateObj: (obj: NestedObj) => NestedObj = (obj) => {
     return Object.entries(obj)
         .reduce((prev, [k, v]) => ({
             ...prev,
-            [k]: (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') ? obfuscate(v) : obfuscateObj(v)
+            [k]: obfuscateValue(v)
         }), {})
 
 }
