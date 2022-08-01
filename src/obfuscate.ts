@@ -12,7 +12,10 @@ export const validateEmail = (email: string) => {
         );
 };
 
-export const obfuscate: (raw: string) => string = (raw) => {
+export const obfuscate: (raw: string | number | boolean) => string | number | boolean = (raw) => {
+    if (typeof raw !== 'string') {
+        return raw;
+    }
     if (validateEmail(raw)) {
         const [user, domain] = raw.split("@");
         const [domain1, domain2] = domain.split(/\.(.*)/s)
@@ -20,3 +23,19 @@ export const obfuscate: (raw: string) => string = (raw) => {
     }
     return AES.encrypt(raw, PASSPHRASE).toString().slice(0, raw.length);
 };
+
+interface NestedObj {
+    [key: string]: number | boolean | string | NestedObj;
+}
+
+export const obfuscateObj: (obj: NestedObj) => NestedObj = (obj) => {
+    if (!obj) {
+        return obj;
+    }
+    return Object.entries(obj)
+        .reduce((prev, [k, v]) => ({
+            ...prev,
+            [k]: (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') ? obfuscate(v) : obfuscateObj(v)
+        }), {})
+
+}

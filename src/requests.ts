@@ -1,4 +1,5 @@
 import {register} from "fetch-intercept";
+import {obfuscateObj} from "./obfuscate";
 
 
 const parseRequest = (url: string, init?: RequestInit) => ({
@@ -17,7 +18,7 @@ const parseResponse: (res: Response & {request: Request}, r: (event: any) => voi
             url,
             method,
             status,
-            body,
+            body: body ? obfuscateObj(body) : body,
         })
     })
 }

@@ -13,7 +13,7 @@ function parseEvent(event: Event): ParsedEvent {
     }
     let value = (event.target as HTMLInputElement).value;
     if (typeof value === "string") {
-        value = obfuscate(value);
+        value = obfuscate(value) as string;
     }
     const parsedEvent: ParsedEvent = {
         timestamp: Date.now(),
