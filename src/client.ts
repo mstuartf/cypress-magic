@@ -9,10 +9,11 @@ export const createRegister = () => {
 
     const output = () => ({
         'cypress-recorder': {
-            "title": "autogen",
+            "title": "lib events only",
             "steps": events.filter(event => !['navigate', 'request', 'response'].includes(event.type))
         },
         'qa-aas': {
+            "title": "all events",
             'steps': events,
         }
     })
