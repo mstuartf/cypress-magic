@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "write": "npx @cypress/chrome-recorder ./output1.json"
+    "write": "npx @cypress/chrome-recorder ./op1.json"
   },
   "keywords": [],
   "author": "",

@@ -4,6 +4,7 @@ import {finder} from '@medv/finder';
 function parseEvent(event: Event): ParsedEvent {
     let selector: string;
     const target = event.target as Element;
+    // todo: support multiple selectors (nested array?)
     if (target.hasAttribute('data-cy')) {
         selector = `[data-cy=${target.getAttribute('data-cy')}]`;
     } else {
@@ -26,9 +27,11 @@ function parseEvent(event: Event): ParsedEvent {
     if (parsedEvent.tag === 'INPUT') {
         parsedEvent.inputType = (target as HTMLInputElement).type;
     }
+    // todo: should be keyDown or keyUp
     if (event.type === 'keydown') {
         parsedEvent.key = (event as KeyboardEvent).key;
     }
+    // todo: add offsetX and offsetY for click events
     parsedEvent.innerText = (target as HTMLDivElement).innerText;
     return parsedEvent;
 }
