@@ -8,14 +8,8 @@ export const createRegister = () => {
     }
 
     const output = () => ({
-        'cypress-recorder': {
-            "title": "lib events only",
-            "steps": events.filter(event => !['navigate', 'request', 'response'].includes(event.type))
-        },
-        'qa-aas': {
-            "title": "all events",
-            'steps': events,
-        }
+        "title": "all events",
+        'steps': events,
     })
 
     return {
