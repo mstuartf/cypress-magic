@@ -47,4 +47,9 @@ function monkeyPatchHistory (history: History, register: (event: any) => void) {
 
 export const initializeNav = (register: (event: any) => void) => {
     monkeyPatchHistory(window.history, register);
+    // this is only required once for the cy.visit at the start of the test
+    register({
+        type: 'navigate',
+        url: window.location.href
+    })
 }
