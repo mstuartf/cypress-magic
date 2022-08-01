@@ -1,5 +1,5 @@
 export interface ParsedEvent {
-    selector: string[][];
+    selectors: string[][];
     type: string;
     tag: string;
     value: string;
