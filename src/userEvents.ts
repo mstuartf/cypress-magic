@@ -27,16 +27,27 @@ function parseEvent(event: Event): ParsedEvent {
     if (parsedEvent.tag === 'INPUT') {
         parsedEvent.inputType = (target as HTMLInputElement).type;
     }
-    // todo: should be keyDown or keyUp
     if (event.type === 'keydown') {
         parsedEvent.key = (event as KeyboardEvent).key;
+        parsedEvent.type = 'keyDown';
     }
-    // todo: add offsetX and offsetY for click events
+    if (event.type === 'keyup') {
+        parsedEvent.type = 'keyUp';
+    }
+    if (event.type === 'click') {
+        parsedEvent.offsetX = (event as PointerEvent).pageX
+        parsedEvent.offsetY = (event as PointerEvent).pageY
+
+    }
     parsedEvent.innerText = (target as HTMLDivElement).innerText;
     return parsedEvent;
 }
 
 function handleEvent(event: Event, register: (event: any) => void): void {
+    if ((event.target as HTMLDivElement).innerText === 'download file') {
+        // todo: remove when the download button hack is removed
+        return
+    }
     if (event.isTrusted === true) {
         register(parseEvent(event));
     }

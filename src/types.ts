@@ -10,6 +10,8 @@ export interface ParsedEvent {
     innerText?: string;
     timestamp: number;
     classList: DOMTokenList;
+    offsetX?: number;
+    offsetY?: number;
 }
 
 export enum EventType {

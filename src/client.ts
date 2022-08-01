@@ -4,7 +4,6 @@ export const createRegister = () => {
 
     const register = (event: any) => {
         events.push(event);
-        console.log(events.length, events.slice(-1)[0])
     }
 
     const output = () => ({
