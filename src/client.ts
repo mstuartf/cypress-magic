@@ -1,18 +1,17 @@
 export const createRegister = () => {
+  const events: any[] = [];
 
-    const events: any[] = [];
+  const register = (event: any) => {
+    events.push(event);
+  };
 
-    const register = (event: any) => {
-        events.push(event);
-    }
+  const output = () => ({
+    title: "all events",
+    steps: events,
+  });
 
-    const output = () => ({
-        "title": "all events",
-        'steps': events,
-    })
-
-    return {
-        register,
-        output,
-    };
-}
+  return {
+    register,
+    output,
+  };
+};
