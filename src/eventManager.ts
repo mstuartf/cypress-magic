@@ -5,6 +5,7 @@ export const createEventManager = () => {
 
   const saveEvent = (event: any) => {
     events.push(event);
+    // todo: push to the server in real time?
   };
 
   const getEvents = () => events;
