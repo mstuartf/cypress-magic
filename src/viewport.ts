@@ -1,6 +1,8 @@
 // Records the initial viewport size and listens for changes
 
-export const initializeViewport = (saveEvent: (event: any) => void) => {
+import { SaveEvent } from "./types";
+
+export const initializeViewport = (saveEvent: SaveEvent) => {
   saveEvent({
     type: "setViewport",
     width: window.innerWidth,

@@ -20,3 +20,5 @@ export enum EventType {
   DBLCLICK = "dblclick",
   SUBMIT = "submit",
 }
+
+export type SaveEvent = (event: any) => void;

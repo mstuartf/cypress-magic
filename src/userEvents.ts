@@ -1,6 +1,6 @@
 // Listens for user events (e.g. click, scroll, etc)
 
-import { EventType, ParsedEvent } from "./types";
+import { EventType, ParsedEvent, SaveEvent } from "./types";
 import { finder } from "@medv/finder";
 import { obfuscate } from "./obfuscate";
 
@@ -49,7 +49,7 @@ function parseEvent(event: Event): ParsedEvent {
   return parsedEvent;
 }
 
-function handleEvent(event: Event, saveEvent: (event: any) => void): void {
+function handleEvent(event: Event, saveEvent: SaveEvent): void {
   if ((event.target as HTMLDivElement).innerText === "download file") {
     // todo: remove when the download button hack is removed
     return;
@@ -59,7 +59,7 @@ function handleEvent(event: Event, saveEvent: (event: any) => void): void {
   }
 }
 
-function addDOMListeners(saveEvent: (event: any) => void): void {
+function addDOMListeners(saveEvent: SaveEvent): void {
   Object.values(EventType).forEach((event) => {
     document.addEventListener(event, (event) => handleEvent(event, saveEvent), {
       capture: true,
@@ -68,6 +68,6 @@ function addDOMListeners(saveEvent: (event: any) => void): void {
   });
 }
 
-export function initializeUserEvents(saveEvent: (event: any) => void): void {
+export function initializeUserEvents(saveEvent: SaveEvent): void {
   addDOMListeners(saveEvent);
 }

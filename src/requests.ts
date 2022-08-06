@@ -2,6 +2,7 @@
 
 import { register } from "fetch-intercept";
 import { obfuscateObj } from "./obfuscate";
+import { SaveEvent } from "./types";
 
 const parseRequest = (url: string, init?: RequestInit) => ({
   type: "request",
@@ -12,8 +13,8 @@ const parseRequest = (url: string, init?: RequestInit) => ({
 
 const parseResponse: (
   res: Response & { request: Request },
-  r: (event: any) => void
-) => void = (response, r) => {
+  saveEvent: SaveEvent
+) => void = (response, saveEvent) => {
   const {
     request: { url, method },
     status,
@@ -22,7 +23,7 @@ const parseResponse: (
     .clone()
     .json()
     .then((body) => {
-      r({
+      saveEvent({
         type: "response",
         timestamp: Date.now(),
         url,
@@ -33,7 +34,7 @@ const parseResponse: (
     });
 };
 
-export const initialiseRequests = (saveEvent: (event: any) => void) => {
+export const initialiseRequests = (saveEvent: SaveEvent) => {
   register({
     request: function (url, config) {
       // Modify the url or config here
