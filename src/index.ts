@@ -1,10 +1,10 @@
+// Initializes the lib to start listening for events and (temporarily) adds the download button the page.
+
 import { initializeUserEvents } from "./userEvents";
 import { initialiseRequests } from "./requests";
 import { initializeNav } from "./navigation";
 import { initializeViewport } from "./viewport";
 import { createRegister } from "./client";
-
-// todo onunload?
 
 const createDownloadBtn = (output: () => any) => {
   const btn = document.createElement("button");

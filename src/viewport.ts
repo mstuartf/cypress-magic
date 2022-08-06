@@ -1,3 +1,5 @@
+// Records the initial viewport size and listens for changes
+
 export const initializeViewport = (register: (event: any) => void) => {
   register({
     type: "setViewport",

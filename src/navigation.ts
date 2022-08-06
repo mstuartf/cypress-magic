@@ -1,3 +1,5 @@
+// Listens for navigation events
+
 function monkeyPatchHistory(history: History, register: (event: any) => void) {
   const baseEvent = {
     type: "urlChange",

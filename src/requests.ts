@@ -1,3 +1,5 @@
+// Listens for API calls and responses
+
 import { register } from "fetch-intercept";
 import { obfuscateObj } from "./obfuscate";
 

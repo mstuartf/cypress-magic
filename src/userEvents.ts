@@ -1,3 +1,5 @@
+// Listens for user events (e.g. click, scroll, etc)
+
 import { EventType, ParsedEvent } from "./types";
 import { finder } from "@medv/finder";
 import { obfuscate } from "./obfuscate";

@@ -1,3 +1,5 @@
+// Stores all events and handles pushing them to the server
+
 export const createRegister = () => {
   const events: any[] = [];
 

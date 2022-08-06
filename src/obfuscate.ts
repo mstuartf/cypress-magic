@@ -1,3 +1,5 @@
+// Obfuscates data before sending to server
+
 import { AES } from "crypto-js";
 
 // todo: env variable
