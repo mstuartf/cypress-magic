@@ -4,7 +4,7 @@ import { initializeUserEvents } from "./userEvents";
 import { initialiseRequests } from "./requests";
 import { initializeNav } from "./navigation";
 import { initializeViewport } from "./viewport";
-import { createEventManager } from "./client";
+import { createEventManager } from "./eventManager";
 
 const createDownloadBtn = (getEvents: () => any) => {
   const btn = document.createElement("button");
