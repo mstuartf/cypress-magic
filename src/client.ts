@@ -1,19 +1,16 @@
 // Stores all events and handles pushing them to the server
 
-export const createRegister = () => {
+export const createEventManager = () => {
   const events: any[] = [];
 
-  const register = (event: any) => {
+  const saveEvent = (event: any) => {
     events.push(event);
   };
 
-  const output = () => ({
-    title: "all events",
-    steps: events,
-  });
+  const getEvents = () => events;
 
   return {
-    register,
-    output,
+    saveEvent,
+    getEvents,
   };
 };

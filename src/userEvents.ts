@@ -49,25 +49,25 @@ function parseEvent(event: Event): ParsedEvent {
   return parsedEvent;
 }
 
-function handleEvent(event: Event, register: (event: any) => void): void {
+function handleEvent(event: Event, saveEvent: (event: any) => void): void {
   if ((event.target as HTMLDivElement).innerText === "download file") {
     // todo: remove when the download button hack is removed
     return;
   }
   if (event.isTrusted === true) {
-    register(parseEvent(event));
+    saveEvent(parseEvent(event));
   }
 }
 
-function addDOMListeners(register: (event: any) => void): void {
+function addDOMListeners(saveEvent: (event: any) => void): void {
   Object.values(EventType).forEach((event) => {
-    document.addEventListener(event, (event) => handleEvent(event, register), {
+    document.addEventListener(event, (event) => handleEvent(event, saveEvent), {
       capture: true,
       passive: true,
     });
   });
 }
 
-export function initializeUserEvents(register: (event: any) => void): void {
-  addDOMListeners(register);
+export function initializeUserEvents(saveEvent: (event: any) => void): void {
+  addDOMListeners(saveEvent);
 }

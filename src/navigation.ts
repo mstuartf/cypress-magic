@@ -1,6 +1,6 @@
 // Listens for navigation events
 
-function monkeyPatchHistory(history: History, register: (event: any) => void) {
+function monkeyPatchHistory(history: History, saveEvent: (event: any) => void) {
   const baseEvent = {
     type: "urlChange",
     timestamp: Date.now(),
@@ -8,19 +8,19 @@ function monkeyPatchHistory(history: History, register: (event: any) => void) {
 
   const pushState = history.pushState;
   history.pushState = function (state, unused, url) {
-    register({ ...baseEvent, url });
+    saveEvent({ ...baseEvent, url });
     return pushState.apply(history, arguments);
   };
 
   const replaceState = history.replaceState;
   history.replaceState = function (state, unused, url) {
-    register({ ...baseEvent, url });
+    saveEvent({ ...baseEvent, url });
     return replaceState.apply(history, arguments);
   };
 
   const back = history.back;
   history.back = function () {
-    register({
+    saveEvent({
       ...baseEvent,
       url: "back",
     });
@@ -29,7 +29,7 @@ function monkeyPatchHistory(history: History, register: (event: any) => void) {
 
   const forward = history.forward;
   history.forward = function () {
-    register({
+    saveEvent({
       ...baseEvent,
       url: "forward",
     });
@@ -38,7 +38,7 @@ function monkeyPatchHistory(history: History, register: (event: any) => void) {
 
   const go = history.go;
   history.go = function (delta) {
-    register({
+    saveEvent({
       ...baseEvent,
       delta,
     });
@@ -46,10 +46,10 @@ function monkeyPatchHistory(history: History, register: (event: any) => void) {
   };
 }
 
-export const initializeNav = (register: (event: any) => void) => {
-  monkeyPatchHistory(window.history, register);
+export const initializeNav = (saveEvent: (event: any) => void) => {
+  monkeyPatchHistory(window.history, saveEvent);
   // this is only required once for the cy.visit at the start of the test
-  register({
+  saveEvent({
     type: "navigate",
     url: window.location.href,
   });

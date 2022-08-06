@@ -33,17 +33,17 @@ const parseResponse: (
     });
 };
 
-export const initialiseRequests = (r: (event: any) => void) => {
+export const initialiseRequests = (saveEvent: (event: any) => void) => {
   register({
     request: function (url, config) {
       // Modify the url or config here
-      r(parseRequest(url, config));
+      saveEvent(parseRequest(url, config));
       return [url, config];
     },
 
     response: function (response) {
       // Modify the reponse object
-      parseResponse(response, r);
+      parseResponse(response, saveEvent);
       return response;
     },
 

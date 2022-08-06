@@ -4,16 +4,19 @@ import { initializeUserEvents } from "./userEvents";
 import { initialiseRequests } from "./requests";
 import { initializeNav } from "./navigation";
 import { initializeViewport } from "./viewport";
-import { createRegister } from "./client";
+import { createEventManager } from "./client";
 
-const createDownloadBtn = (output: () => any) => {
+const createDownloadBtn = (getEvents: () => any) => {
   const btn = document.createElement("button");
   btn.innerText = "download file";
   btn.style.position = "absolute";
   btn.style.top = "0px";
   btn.style.left = "0px";
   btn.onclick = () => {
-    const content = output();
+    const content = {
+      title: "all events",
+      events: getEvents(),
+    };
     const a = document.createElement("a");
     const file = new Blob([JSON.stringify(content)], { type: "text/plain" });
     a.href = URL.createObjectURL(file);
@@ -24,12 +27,12 @@ const createDownloadBtn = (output: () => any) => {
 };
 
 const initialize = () => {
-  const { register, output } = createRegister();
-  initializeUserEvents(register);
-  initialiseRequests(register);
-  initializeNav(register);
-  initializeViewport(register);
-  createDownloadBtn(output);
+  const { saveEvent, getEvents } = createEventManager();
+  initializeUserEvents(saveEvent);
+  initialiseRequests(saveEvent);
+  initializeNav(saveEvent);
+  initializeViewport(saveEvent);
+  createDownloadBtn(getEvents);
 };
 
 // needs to be in onload or body is null
