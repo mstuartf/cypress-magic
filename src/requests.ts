@@ -2,9 +2,12 @@
 
 import { register } from "fetch-intercept";
 import { obfuscateObj } from "./obfuscate";
-import { SaveEvent } from "./types";
+import { RequestEvent, ResponseEvent, SaveEvent } from "./types";
 
-const parseRequest = (url: string, init?: RequestInit) => ({
+const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
+  url,
+  init
+) => ({
   type: "request",
   timestamp: Date.now(),
   url,
@@ -23,33 +26,31 @@ const parseResponse: (
     .clone()
     .json()
     .then((body) => {
-      saveEvent({
+      const res: ResponseEvent = {
         type: "response",
         timestamp: Date.now(),
         url,
         method,
         status,
         body: body ? obfuscateObj(body) : body,
-      });
+      };
+      saveEvent(res);
     });
 };
 
 export const initialiseRequests = (saveEvent: SaveEvent) => {
   register({
     request: function (url, config) {
-      // Modify the url or config here
       saveEvent(parseRequest(url, config));
       return [url, config];
     },
 
     response: function (response) {
-      // Modify the reponse object
       parseResponse(response, saveEvent);
       return response;
     },
 
     responseError: function (error) {
-      // Handle an fetch error
       return Promise.reject(error);
     },
   });

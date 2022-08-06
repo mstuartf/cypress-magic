@@ -5,8 +5,9 @@ import { initialiseRequests } from "./requests";
 import { initializeNav } from "./navigation";
 import { initializeViewport } from "./viewport";
 import { createEventManager } from "./eventManager";
+import { ParsedEvent } from "./types";
 
-const createDownloadBtn = (getEvents: () => any) => {
+const createDownloadBtn = (getEvents: () => ParsedEvent[]) => {
   const btn = document.createElement("button");
   btn.innerText = "download file";
   btn.style.position = "absolute";

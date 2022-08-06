@@ -53,6 +53,7 @@ export const initializeNav = (saveEvent: SaveEvent) => {
   // this is only required once for the cy.visit at the start of the test
   saveEvent({
     type: "navigate",
+    timestamp: Date.now(),
     url: window.location.href,
   });
 };

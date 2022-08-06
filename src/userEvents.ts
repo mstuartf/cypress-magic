@@ -1,53 +1,71 @@
 // Listens for user events (e.g. click, scroll, etc)
 
-import { EventType, ParsedEvent, SaveEvent } from "./types";
+import {
+  BaseEvent,
+  ChangeEvent,
+  ClickEvent,
+  EventType,
+  UserEvent,
+  SaveEvent,
+  SubmitEvent,
+  TargetEvent,
+} from "./types";
 import { finder } from "@medv/finder";
 import { obfuscate } from "./obfuscate";
 
-function parseEvent(event: Event): ParsedEvent {
-  let selector: string;
-  const target = event.target as Element;
-  // todo: support multiple selectors (nested array?)
-  if (target.hasAttribute("data-cy")) {
-    selector = `[data-cy=${target.getAttribute("data-cy")}]`;
-  } else {
-    selector = finder(target);
-  }
-  let value = (event.target as HTMLInputElement).value;
-  if (typeof value === "string") {
-    value = obfuscate(value) as string;
-  }
-  const parsedEvent: ParsedEvent = {
-    timestamp: Date.now(),
-    selectors: [[selector]],
-    type: event.type,
-    tag: target.tagName,
-    value,
-    classList: target.classList,
+const getBaseProps: (event: Event) => BaseEvent = (event) => ({
+  type: event.type,
+  timestamp: Date.now(),
+});
+
+const getTargetProps: (
+  target: Element
+) => Omit<TargetEvent, "type" | "timestamp"> = (target) => ({
+  selectors: [
+    [
+      target.hasAttribute("data-cy")
+        ? `[data-cy=${target.getAttribute("data-cy")}]`
+        : finder(target),
+    ],
+  ],
+  tag: target.tagName,
+  classList: target.classList,
+  id: target.id,
+});
+
+const parseClickEvent: (event: MouseEvent) => ClickEvent = (event) => ({
+  ...getBaseProps(event),
+  ...getTargetProps(event.target as Element),
+  offsetX: event.pageX,
+  offsetY: event.pageY,
+  innerText: (event.target as HTMLDivElement).innerText,
+  href: (event.target as HTMLAnchorElement).href,
+});
+
+const parseChangeEvent: (event: Event) => ChangeEvent = (event) => {
+  const { type, value } = event.target as HTMLInputElement;
+  return {
+    ...getBaseProps(event),
+    ...getTargetProps(event.target as Element),
+    inputType: type,
+    value: typeof value === "string" ? obfuscate(value) : value,
   };
-  if ((target as HTMLAnchorElement).hasAttribute("href")) {
-    parsedEvent.href = (target as HTMLAnchorElement).href;
+};
+
+const parseSubmitEvent: (event: Event) => SubmitEvent = (event) => ({
+  ...getBaseProps(event),
+  ...getTargetProps(event.target as Element),
+});
+
+const parseEvent: (event: Event) => UserEvent = (event) => {
+  if (event.type === "click" || event.type === "dblclick") {
+    return parseClickEvent(event as MouseEvent);
+  } else if (event.type === "change") {
+    return parseChangeEvent(event);
+  } else if (event.type === "submit") {
+    return parseSubmitEvent(event);
   }
-  if (target.hasAttribute("id")) {
-    parsedEvent.id = target.id;
-  }
-  if (parsedEvent.tag === "INPUT") {
-    parsedEvent.inputType = (target as HTMLInputElement).type;
-  }
-  if (event.type === "keydown") {
-    parsedEvent.key = (event as KeyboardEvent).key;
-    parsedEvent.type = "keyDown";
-  }
-  if (event.type === "keyup") {
-    parsedEvent.type = "keyUp";
-  }
-  if (event.type === "click") {
-    parsedEvent.offsetX = (event as PointerEvent).pageX;
-    parsedEvent.offsetY = (event as PointerEvent).pageY;
-  }
-  parsedEvent.innerText = (target as HTMLDivElement).innerText;
-  return parsedEvent;
-}
+};
 
 function handleEvent(event: Event, saveEvent: SaveEvent): void {
   if ((event.target as HTMLDivElement).innerText === "download file") {

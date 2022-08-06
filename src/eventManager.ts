@@ -1,9 +1,11 @@
 // Stores all events and handles pushing them to the server
 
-export const createEventManager = () => {
-  const events: any[] = [];
+import { ParsedEvent } from "./types";
 
-  const saveEvent = (event: any) => {
+export const createEventManager = () => {
+  const events: ParsedEvent[] = [];
+
+  const saveEvent = (event: ParsedEvent) => {
     events.push(event);
     // todo: push to the server in real time?
   };

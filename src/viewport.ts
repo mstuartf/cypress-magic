@@ -5,6 +5,7 @@ import { SaveEvent } from "./types";
 export const initializeViewport = (saveEvent: SaveEvent) => {
   saveEvent({
     type: "setViewport",
+    timestamp: Date.now(),
     width: window.innerWidth,
     height: window.innerHeight,
     // todo: un hard code
