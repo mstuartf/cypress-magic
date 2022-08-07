@@ -1,7 +1,8 @@
 import { DiffDOM } from "diff-dom";
 
 export const initializeDomObserver = () => {
-  let oldDom;
+  // compare against an empty body on first load
+  let oldDom = document.createElement("body");
   let newDom;
   let diff;
 
@@ -9,11 +10,7 @@ export const initializeDomObserver = () => {
 
   const createDiffEvent = () => {
     newDom = document.body.cloneNode(true);
-    if (oldDom && newDom) {
-      diff = dd.diff(oldDom, newDom);
-    } else {
-      diff = []; // todo: compare against an empty body on first load?
-    }
+    diff = dd.diff(oldDom, newDom);
     oldDom = newDom;
     newDom = undefined;
 
