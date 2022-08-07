@@ -52,12 +52,17 @@ export interface ViewEvent extends BaseEvent {
 
 export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent;
 
+export interface DiffEvent extends BaseEvent {
+  diff: any;
+}
+
 export type ParsedEvent =
   | UserEvent
   | NavigationEvent
   | RequestEvent
   | ResponseEvent
-  | ViewEvent;
+  | ViewEvent
+  | DiffEvent;
 
 export enum EventType {
   CLICK = "click",

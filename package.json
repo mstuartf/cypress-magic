@@ -25,6 +25,7 @@
     "@types/crypto-js": "^4.1.1",
     "@types/history": "^5.0.0",
     "crypto-js": "^4.1.1",
+    "diff-dom": "^4.2.5",
     "fetch-intercept": "^2.4.0",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
