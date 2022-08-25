@@ -3,7 +3,7 @@
 import { ParsedEvent } from "./types";
 import { initializeDomObserver } from "./diffDom";
 
-const SOCKET_URL = "ws://0.0.0.0:1337/ws/chat/events/";
+const SOCKET_URL = "ws://0.0.0.0:1337/ws/events/";
 
 const createWsClient = () => {
   const ws = new WebSocket(SOCKET_URL);
