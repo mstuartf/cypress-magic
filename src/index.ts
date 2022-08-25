@@ -5,15 +5,13 @@ import { initialiseRequests } from "./requests";
 import { initializeNav } from "./navigation";
 import { initializeViewport } from "./viewport";
 import { createEventManager } from "./eventManager";
-import { createDownloadBtn } from "./createDownloadBtn";
 
 const initialize = () => {
-  const { saveEvent, getEvents } = createEventManager();
+  const { saveEvent } = createEventManager();
   initializeUserEvents(saveEvent);
   initialiseRequests(saveEvent);
   initializeNav(saveEvent);
   initializeViewport(saveEvent);
-  createDownloadBtn(getEvents);
 };
 
 // needs to be in onload or body is null
