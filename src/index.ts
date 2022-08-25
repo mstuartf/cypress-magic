@@ -7,6 +7,7 @@ import { initializeViewport } from "./viewport";
 import { createEventManager } from "./eventManager";
 
 const initialize = () => {
+  console.log("new version");
   const { saveEvent } = createEventManager();
   initializeUserEvents(saveEvent);
   initialiseRequests(saveEvent);
