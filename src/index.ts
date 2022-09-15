@@ -8,6 +8,7 @@ import { createEventManager } from "./eventManager";
 import { readDomains } from "./globals";
 import { version } from "../package.json";
 import { isChrome } from "./isChrome";
+import { initializeStorage } from "./storage";
 
 const initialize = () => {
   const domains = readDomains();
@@ -28,6 +29,7 @@ const initialize = () => {
   initialiseRequests(saveEvent);
   initializeNav(saveEvent);
   initializeViewport(saveEvent);
+  initializeStorage(saveEvent);
 };
 
 initialize();

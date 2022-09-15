@@ -57,13 +57,18 @@ export interface DiffEvent extends BaseEvent {
   diff: any;
 }
 
+export interface StorageEvent extends BaseEvent {
+  value: any;
+}
+
 export type ParsedEvent =
   | UserEvent
   | NavigationEvent
   | RequestEvent
   | ResponseEvent
   | ViewEvent
-  | DiffEvent;
+  | DiffEvent
+  | StorageEvent;
 
 export enum EventType {
   CLICK = "click",
