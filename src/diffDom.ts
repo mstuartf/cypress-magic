@@ -9,10 +9,19 @@ import {
 import { DiffEvent } from "./types";
 import { obfuscate } from "./obfuscate";
 
+// Cannot send DOM data raw as it may contain sensitive info.
+// Obfuscating everything is useless as the data will not be useful for assertions.
+// We want to obfuscate state data (if we do not obfuscate, sensitive data will be sent).
+// But not hardcoded data (if we obfuscate this then make assertions on it, tests will always fail).
+// Could track all state data (user input and api responses) and obfuscate these in DOM contents.
+// But will be false positives if there is any overlap between state and hardcoded data, causing tests to fail.
+// Also will be false negatives if state data is transformed before being added to DOM.
+// There are also some issues around understanding what in the DOM is actually visible.
+
 function isAddAction(
   action: AddElementAction | ReplaceElementAction
 ): action is AddElementAction {
-  return (action as AddElementAction).action !== undefined;
+  return (action as AddElementAction).action === "addElement";
 }
 
 function isTextNode(node: ElementNode | TextNode): node is TextNode {
