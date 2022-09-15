@@ -21,7 +21,6 @@ const getSnapshot = () =>
 const buildEvent: (snapshot: any) => StorageEvent = (snapshot) => ({
   type: "storage",
   timestamp: Date.now(),
-  domain: window.location.hostname,
   value: obfuscateObj(snapshot),
 });
 

@@ -1,12 +1,11 @@
 // Listens for navigation events
 
-import { SaveEvent } from "./types";
+import { BaseEvent, SaveEvent } from "./types";
 
 function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
-  const baseEvent = {
+  const baseEvent: BaseEvent = {
     type: "urlChange",
     timestamp: Date.now(),
-    domain: window.location.hostname,
   };
 
   const pushState = history.pushState;
@@ -55,7 +54,6 @@ export const initializeNav = (saveEvent: SaveEvent) => {
   saveEvent({
     type: "navigate",
     timestamp: Date.now(),
-    domain: window.location.hostname,
     url: window.location.href,
   });
 };

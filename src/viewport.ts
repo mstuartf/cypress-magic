@@ -6,7 +6,6 @@ export const initializeViewport = (saveEvent: SaveEvent) => {
   saveEvent({
     type: "setViewport",
     timestamp: Date.now(),
-    domain: window.location.hostname,
     width: window.innerWidth,
     height: window.innerHeight,
     // todo: un hard code

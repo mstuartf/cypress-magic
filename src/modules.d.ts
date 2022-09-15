@@ -4,6 +4,6 @@ declare module "storage-changed" {
 
 declare module "diff-dom" {
   export var DiffDOM: {
-    new (): { diff(a: Node, b: Node): object };
+    new (): { diff(a: Node, b: Node): object[] };
   };
 }

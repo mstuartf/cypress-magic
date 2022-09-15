@@ -1,4 +1,4 @@
-import { ParsedEvent } from "./types";
+import { EventMeta, ParsedEvent } from "./types";
 
 const SOCKET_URL = "wss://api.testdetector.com/ws/events/";
 
@@ -19,16 +19,10 @@ export const createWsClient = () => {
     }
   };
 
-  const sendEvent = (
-    clientId: string,
-    sessionId: string,
-    event: ParsedEvent
-  ) => {
+  const sendEvent = (payload: EventMeta & { event: ParsedEvent }) => {
     send(
       JSON.stringify({
-        clientId,
-        sessionId,
-        event: event,
+        ...payload,
       })
     );
   };

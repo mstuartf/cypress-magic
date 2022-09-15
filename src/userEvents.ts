@@ -16,7 +16,6 @@ import { obfuscate } from "./obfuscate";
 const getBaseProps: (event: Event) => BaseEvent = (event) => ({
   type: event.type,
   timestamp: Date.now(),
-  domain: window.location.hostname,
 });
 
 const getTargetProps: (

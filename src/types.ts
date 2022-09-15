@@ -1,7 +1,12 @@
+export interface EventMeta {
+  clientId: string;
+  sessionId: string;
+  domain: string;
+}
+
 export interface BaseEvent {
   type: string;
   timestamp: number;
-  domain: string;
 }
 
 export interface NavigationEvent extends BaseEvent {
