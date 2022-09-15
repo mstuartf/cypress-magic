@@ -3,10 +3,20 @@ import storageChanged from "storage-changed";
 import { obfuscateObj } from "./obfuscate";
 
 const localStorageSnapshotEvent: () => StorageEvent = () => ({
-  type: "navigate",
+  type: "storage",
   timestamp: Date.now(),
   domain: window.location.hostname,
-  value: obfuscateObj({ ...localStorage }),
+  value: obfuscateObj(
+    Object.entries(localStorage)
+      .filter(([, v]) => typeof v !== "function")
+      .reduce(
+        (prev, [k, v]) => ({
+          ...prev,
+          [k]: v,
+        }),
+        {}
+      )
+  ),
 });
 
 export const initializeStorage = (saveEvent: SaveEvent) => {
