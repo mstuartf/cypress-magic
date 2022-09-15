@@ -10,6 +10,7 @@ const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
 ) => ({
   type: "request",
   timestamp: Date.now(),
+  domain: window.location.hostname,
   url,
   method: init ? init.method : "GET",
 });
@@ -29,6 +30,7 @@ const parseResponse: (
       const res: ResponseEvent = {
         type: "response",
         timestamp: Date.now(),
+        domain: window.location.hostname,
         url,
         method,
         status,

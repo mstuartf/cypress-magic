@@ -5,9 +5,17 @@ import { initialiseRequests } from "./requests";
 import { initializeNav } from "./navigation";
 import { initializeViewport } from "./viewport";
 import { createEventManager } from "./eventManager";
+import { readDomains } from "./globals";
+import { version } from "../package.json";
 
 const initialize = () => {
-  console.log("new version");
+  const domains = readDomains();
+  if (!domains.includes(window.location.hostname)) {
+    return;
+  }
+
+  console.log(`td version ${version} active`);
+
   const { saveEvent } = createEventManager();
   initializeUserEvents(saveEvent);
   initialiseRequests(saveEvent);
@@ -15,5 +23,4 @@ const initialize = () => {
   initializeViewport(saveEvent);
 };
 
-// needs to be in onload or body is null
-window.onload = initialize;
+initialize();

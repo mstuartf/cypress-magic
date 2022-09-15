@@ -4,7 +4,7 @@ import { ParsedEvent } from "./types";
 import { initializeDomObserver } from "./diffDom";
 import { createWsClient } from "./createWSClient";
 import { createSessionId } from "./createSessionId";
-import { readClientId } from "./readClientId";
+import { readClientId } from "./globals";
 
 export const createEventManager = () => {
   const sessionId = createSessionId();

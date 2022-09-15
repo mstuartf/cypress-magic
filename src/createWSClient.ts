@@ -1,6 +1,6 @@
 import { ParsedEvent } from "./types";
 
-const SOCKET_URL = "ws://0.0.0.0:1337/ws/events/";
+const SOCKET_URL = "wss://api.testdetector.com/ws/events/";
 
 export const createWsClient = () => {
   const ws = new WebSocket(SOCKET_URL);

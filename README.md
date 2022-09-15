@@ -1,6 +1,7 @@
 ```html
 <script type="text/javascript">
-  window.TD_WEBSITE_ID = "3861ed71-ebb1-4692-a3a1-ced6ced11d79";
+  window.TD_CLIENT_ID = "$CLIENT_ID";
+  window.TD_DOMAINS = ["dev.example.com"];
   (function () {
     d = document;
     s = d.createElement("script");

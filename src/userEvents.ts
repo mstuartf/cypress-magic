@@ -16,11 +16,12 @@ import { obfuscate } from "./obfuscate";
 const getBaseProps: (event: Event) => BaseEvent = (event) => ({
   type: event.type,
   timestamp: Date.now(),
+  domain: window.location.hostname,
 });
 
 const getTargetProps: (
   target: Element
-) => Omit<TargetEvent, "type" | "timestamp"> = (target) => ({
+) => Omit<TargetEvent, "type" | "timestamp" | "domain"> = (target) => ({
   selectors: [
     [
       target.hasAttribute("data-cy")

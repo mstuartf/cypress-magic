@@ -6,6 +6,7 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   const baseEvent = {
     type: "urlChange",
     timestamp: Date.now(),
+    domain: window.location.hostname,
   };
 
   const pushState = history.pushState;
@@ -54,6 +55,7 @@ export const initializeNav = (saveEvent: SaveEvent) => {
   saveEvent({
     type: "navigate",
     timestamp: Date.now(),
+    domain: window.location.hostname,
     url: window.location.href,
   });
 };

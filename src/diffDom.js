@@ -17,6 +17,7 @@ export const initializeDomObserver = () => {
     return {
       type: "domDiff",
       timestamp: Date.now(),
+      domain: window.location.hostname,
       diff, // todo: don't send the whole (large) diff object?
     };
   };
