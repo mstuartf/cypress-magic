@@ -1,6 +1,6 @@
 // Stores all events and handles pushing them to the server
 
-import { ParsedEvent } from "./types";
+import { DiffEvent, ParsedEvent } from "./types";
 import { initializeDomObserver } from "./diffDom";
 import { createWsClient } from "./createWSClient";
 import { createSessionId } from "./createSessionId";
@@ -11,20 +11,28 @@ export const createEventManager = () => {
   const clientId = readClientId();
   const domain = window.location.hostname;
 
-  const { checkDomDiff } = initializeDomObserver();
+  const { createDiffEvent } = initializeDomObserver();
 
   const ws = createWsClient();
 
-  const saveEvent = (event: ParsedEvent) => {
+  const sendEvent = (event: ParsedEvent) => {
     ws.sendEvent({
       clientId,
       sessionId,
       domain,
       event,
-      // After every event check to see if the DOM has changed. This will allow us to filter out events that do nothing
-      // (e.g. random background clicks) to better group journeys together.
-      domDiff: checkDomDiff(),
     });
+  };
+
+  const saveEvent = (event: ParsedEvent) => {
+    sendEvent(event);
+
+    // After every event check to see if the DOM has changed. This will allow us to filter out events that do nothing
+    // (e.g. random background clicks) to better group journeys together.
+    const diffEvent: DiffEvent | null = createDiffEvent();
+    if (diffEvent) {
+      sendEvent(diffEvent);
+    }
   };
 
   return { saveEvent };

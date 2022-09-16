@@ -1,8 +1,9 @@
+import { TextNode } from "diff-dom";
+
 export interface EventMeta {
   clientId: string;
   sessionId: string;
   domain: string;
-  domDiff: string[];
 }
 
 export interface BaseEvent {
@@ -59,6 +60,10 @@ export interface ViewEvent extends BaseEvent {
 
 export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent;
 
+export interface DiffEvent extends BaseEvent {
+  diff: TextNode[];
+}
+
 export interface StorageEvent extends BaseEvent {
   value: any;
 }
@@ -69,6 +74,7 @@ export type ParsedEvent =
   | RequestEvent
   | ResponseEvent
   | ViewEvent
+  | DiffEvent
   | StorageEvent;
 
 export enum EventType {
