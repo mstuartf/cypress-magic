@@ -80,6 +80,7 @@ export const initializeDomObserver = ({
 
     const textNodes = getNewTextNodes(actions)
       .filter(({ data }) => !!data.trim())
+      .filter(({ data }) => data.length > 5)
       .map(({ data, ...rest }) => ({
         ...rest,
         data: removeStateData(data),

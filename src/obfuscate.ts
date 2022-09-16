@@ -1,10 +1,7 @@
 // Obfuscates data before sending to server
 
-import { AES } from "crypto-js";
+import { v4 as uuidv4 } from "uuid";
 import { NestedObj, ObfuscateFn } from "./types";
-
-// todo: env variable
-const PASSPHRASE = "Secret Passphrase";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -20,9 +17,7 @@ export const createPrivacyManager = () => {
 
   const obfuscateString = (raw: string) => {
     if (!tracker.hasOwnProperty(raw)) {
-      tracker[raw] = AES.encrypt(raw, PASSPHRASE)
-        .toString()
-        .slice(0, raw.length);
+      tracker[raw] = uuidv4().slice(0, raw.length);
     }
     return tracker[raw];
   };
