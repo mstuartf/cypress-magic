@@ -6,21 +6,20 @@ import {
   ClickEvent,
   EventType,
   UserEvent,
-  SaveEvent,
   SubmitEvent,
   TargetEvent,
+  InitArgs,
 } from "./types";
 import { finder } from "@medv/finder";
-import { obfuscate } from "./obfuscate";
 
-const getBaseProps: (event: Event) => BaseEvent = (event) => ({
+const getBaseProps = (event: Event): BaseEvent => ({
   type: event.type,
   timestamp: Date.now(),
 });
 
-const getTargetProps: (
+const getTargetProps = (
   target: Element
-) => Omit<TargetEvent, "type" | "timestamp" | "domain"> = (target) => ({
+): Omit<TargetEvent, "type" | "timestamp" | "domain"> => ({
   selectors: [
     [
       target.hasAttribute("data-cy")
@@ -33,16 +32,22 @@ const getTargetProps: (
   id: target.id,
 });
 
-const parseClickEvent: (event: MouseEvent) => ClickEvent = (event) => ({
+const parseClickEvent = (
+  event: MouseEvent,
+  removeStateData: InitArgs["removeStateData"]
+): ClickEvent => ({
   ...getBaseProps(event),
   ...getTargetProps(event.target as Element),
   offsetX: event.pageX,
   offsetY: event.pageY,
-  innerText: (event.target as HTMLDivElement).innerText,
+  innerText: removeStateData((event.target as HTMLDivElement).innerText),
   href: (event.target as HTMLAnchorElement).href,
 });
 
-const parseChangeEvent: (event: Event) => ChangeEvent = (event) => {
+const parseChangeEvent = (
+  event: Event,
+  obfuscate: InitArgs["obfuscate"]
+): ChangeEvent => {
   const { type, value } = event.target as HTMLInputElement;
   return {
     ...getBaseProps(event),
@@ -52,40 +57,45 @@ const parseChangeEvent: (event: Event) => ChangeEvent = (event) => {
   };
 };
 
-const parseSubmitEvent: (event: Event) => SubmitEvent = (event) => ({
+const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getBaseProps(event),
   ...getTargetProps(event.target as Element),
 });
 
-const parseEvent: (event: Event) => UserEvent = (event) => {
+const parseEvent = (
+  event: Event,
+  { obfuscate, removeStateData }: ObsArgs
+): UserEvent => {
   if (event.type === "click" || event.type === "dblclick") {
-    return parseClickEvent(event as MouseEvent);
+    return parseClickEvent(event as MouseEvent, removeStateData);
   } else if (event.type === "change") {
-    return parseChangeEvent(event);
+    return parseChangeEvent(event, obfuscate);
   } else if (event.type === "submit") {
     return parseSubmitEvent(event);
   }
 };
 
-function handleEvent(event: Event, saveEvent: SaveEvent): void {
+type ObsArgs = Pick<InitArgs, "obfuscate" | "removeStateData">;
+
+function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   if ((event.target as HTMLDivElement).innerText === "download file") {
     // todo: remove when the download button hack is removed
     return;
   }
   if (event.isTrusted === true) {
-    saveEvent(parseEvent(event));
+    saveEvent(parseEvent(event, { ...rest }));
   }
 }
 
-function addDOMListeners(saveEvent: SaveEvent): void {
+function addDOMListeners(args: InitArgs): void {
   Object.values(EventType).forEach((event) => {
-    document.addEventListener(event, (event) => handleEvent(event, saveEvent), {
+    document.addEventListener(event, (event) => handleEvent(event, args), {
       capture: true,
       passive: true,
     });
   });
 }
 
-export function initializeUserEvents(saveEvent: SaveEvent): void {
-  addDOMListeners(saveEvent);
+export function initializeUserEvents(args: InitArgs): void {
+  addDOMListeners(args);
 }

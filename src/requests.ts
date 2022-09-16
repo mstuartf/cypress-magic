@@ -1,8 +1,7 @@
 // Listens for API calls and responses
 
 import { register } from "fetch-intercept";
-import { obfuscateObj } from "./obfuscate";
-import { RequestEvent, ResponseEvent, SaveEvent } from "./types";
+import { InitArgs, RequestEvent, ResponseEvent, SaveEvent } from "./types";
 
 const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
   url,
@@ -16,8 +15,8 @@ const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
 
 const parseResponse: (
   res: Response & { request: Request },
-  saveEvent: SaveEvent
-) => void = (response, saveEvent) => {
+  args: RequiredArgs
+) => void = (response, { saveEvent, obfuscate }) => {
   const {
     request: { url, method },
     status,
@@ -32,13 +31,15 @@ const parseResponse: (
         url,
         method,
         status,
-        body: body ? obfuscateObj(body) : body,
+        body: body ? obfuscate(body) : body,
       };
       saveEvent(res);
     });
 };
 
-export const initialiseRequests = (saveEvent: SaveEvent) => {
+type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
+
+export const initialiseRequests = ({ saveEvent, obfuscate }: RequiredArgs) => {
   register({
     request: function (url, config) {
       saveEvent(parseRequest(url, config));
@@ -46,7 +47,7 @@ export const initialiseRequests = (saveEvent: SaveEvent) => {
     },
 
     response: function (response) {
-      parseResponse(response, saveEvent);
+      parseResponse(response, { saveEvent, obfuscate });
       return response;
     },
 

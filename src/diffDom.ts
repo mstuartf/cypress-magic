@@ -6,8 +6,7 @@ import {
   ReplaceElementAction,
   TextNode,
 } from "diff-dom";
-import { DiffEvent } from "./types";
-import { obfuscate } from "./obfuscate";
+import { DiffEvent, InitArgs } from "./types";
 
 // Cannot send DOM data raw as it may contain sensitive info.
 // Obfuscating everything is useless as the data will not be useful for assertions.
@@ -59,7 +58,9 @@ const getNewTextNodes = (actions: DiffAction[]): TextNode[] => {
     .reduce((prev, next) => [...prev, ...extractTextNodes(next)], []);
 };
 
-export const initializeDomObserver = () => {
+export const initializeDomObserver = ({
+  removeStateData,
+}: Pick<InitArgs, "removeStateData">) => {
   // compare against an empty body on first load
   let oldDom: Node = document.createElement("body");
   let newDom: Node;
@@ -77,10 +78,12 @@ export const initializeDomObserver = () => {
       return null;
     }
 
-    const textNodes = getNewTextNodes(actions).map(({ data, ...rest }) => ({
-      ...rest,
-      data: obfuscate(data) as string, // todo when should this be obfuscated?
-    }));
+    const textNodes = getNewTextNodes(actions)
+      .filter(({ data }) => !!data.trim())
+      .map(({ data, ...rest }) => ({
+        ...rest,
+        data: removeStateData(data),
+      }));
 
     return {
       type: "domDiff",

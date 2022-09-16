@@ -1,8 +1,10 @@
 // Records the initial viewport size and listens for changes
 
-import { SaveEvent } from "./types";
+import { InitArgs } from "./types";
 
-export const initializeViewport = (saveEvent: SaveEvent) => {
+export const initializeViewport = ({
+  saveEvent,
+}: Pick<InitArgs, "saveEvent">) => {
   saveEvent({
     type: "setViewport",
     timestamp: Date.now(),

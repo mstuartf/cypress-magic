@@ -9,6 +9,7 @@ import { readDomains } from "./globals";
 import { version } from "../package.json";
 import { isChrome } from "./isChrome";
 import { initializeStorage } from "./storage";
+import { createPrivacyManager } from "./obfuscate";
 
 const initialize = () => {
   const domains = readDomains();
@@ -24,12 +25,14 @@ const initialize = () => {
 
   console.log(`td version ${version} active`);
 
-  const { saveEvent } = createEventManager();
-  initializeUserEvents(saveEvent);
-  initialiseRequests(saveEvent);
-  initializeNav(saveEvent);
-  initializeViewport(saveEvent);
-  initializeStorage(saveEvent);
+  const { obfuscate, removeStateData } = createPrivacyManager();
+  const { saveEvent } = createEventManager({ removeStateData });
+
+  initializeUserEvents({ saveEvent, obfuscate, removeStateData });
+  initialiseRequests({ saveEvent, obfuscate });
+  initializeNav({ saveEvent });
+  initializeViewport({ saveEvent });
+  initializeStorage({ saveEvent, obfuscate });
 };
 
 initialize();

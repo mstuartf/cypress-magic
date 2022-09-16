@@ -1,6 +1,5 @@
-import { SaveEvent, StorageEvent } from "./types";
+import { InitArgs, StorageEvent } from "./types";
 import storageChanged from "storage-changed";
-import { obfuscateObj } from "./obfuscate";
 
 const getSnapshot = () =>
   Object.entries(localStorage)
@@ -21,10 +20,10 @@ const getSnapshot = () =>
 const buildEvent: (snapshot: any) => StorageEvent = (snapshot) => ({
   type: "storage",
   timestamp: Date.now(),
-  value: obfuscateObj(snapshot),
+  value: snapshot,
 });
 
-const snapshotManager = (saveEventFn: SaveEvent) => {
+const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
   let prev: string = "";
 
   const save = () => {
@@ -33,15 +32,17 @@ const snapshotManager = (saveEventFn: SaveEvent) => {
     if (snapShotString === prev) {
       return;
     }
-    saveEventFn(buildEvent(snapshot));
+    saveEvent(buildEvent(obfuscate(snapshot)));
     prev = snapShotString;
   };
 
   return { save };
 };
 
-export const initializeStorage = (saveEvent: SaveEvent) => {
-  const { save } = snapshotManager(saveEvent);
+type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
+
+export const initializeStorage = (args: RequiredArgs) => {
+  const { save } = snapshotManager(args);
   storageChanged("local");
   window.addEventListener("localStorageChanged", save);
   save();

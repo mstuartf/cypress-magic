@@ -1,11 +1,12 @@
 // Obfuscates data before sending to server
 
 import { AES } from "crypto-js";
+import { NestedObj, ObfuscateFn } from "./types";
 
 // todo: env variable
 const PASSPHRASE = "Secret Passphrase";
 
-export const validateEmail = (email: string) => {
+const validateEmail = (email: string) => {
   return String(email)
     .toLowerCase()
     .match(
@@ -13,49 +14,71 @@ export const validateEmail = (email: string) => {
     );
 };
 
-export const obfuscate: (
-  raw: string | number | boolean
-) => string | number | boolean = (raw) => {
-  if (typeof raw !== "string") {
-    return raw;
-  }
-  if (validateEmail(raw)) {
-    const [user, domain] = raw.split("@");
-    const [domain1, domain2] = domain.split(/\.(.*)/s);
-    return `${obfuscate(user)}@${obfuscate(domain1)}.${obfuscate(domain2)}`;
-  }
-  return AES.encrypt(raw, PASSPHRASE).toString().slice(0, raw.length);
-};
+export const createPrivacyManager = () => {
+  // this is to keep track of all sensitive strings that should be stripped from html
+  const tracker: { [key: string]: string } = {};
 
-type NestedOption = number | boolean | string | NestedObj;
+  const obfuscateString = (raw: string) => {
+    if (!tracker.hasOwnProperty(raw)) {
+      tracker[raw] = AES.encrypt(raw, PASSPHRASE)
+        .toString()
+        .slice(0, raw.length);
+    }
+    return tracker[raw];
+  };
 
-interface NestedObj {
-  [key: string]: NestedOption | Array<NestedOption>;
-}
+  const obfuscatePrimitive: (
+    raw: string | number | boolean
+  ) => string | number | boolean = (raw) => {
+    if (typeof raw !== "string") {
+      return raw;
+    }
+    if (validateEmail(raw)) {
+      const [user, domain] = raw.split("@");
+      const [domain1, domain2] = domain.split(/\.(.*)/s);
+      return `${obfuscatePrimitive(user)}@${obfuscatePrimitive(
+        domain1
+      )}.${obfuscatePrimitive(domain2)}`;
+    }
+    return obfuscateString(raw);
+  };
 
-const obfuscateValue: (v: NestedOption | Array<NestedOption>) => any = (v) => {
-  if (
-    typeof v === "string" ||
-    typeof v === "number" ||
-    typeof v === "boolean"
-  ) {
-    return obfuscate(v);
-  } else if (Array.isArray(v)) {
-    return v.map((item) => obfuscateValue(item));
-  } else {
-    return obfuscateObj(v);
-  }
-};
+  const obfuscateObj: (obj: NestedObj) => NestedObj = (obj) => {
+    if (!obj) {
+      return obj;
+    }
+    return Object.entries(obj).reduce(
+      (prev, [k, v]) => ({
+        ...prev,
+        [k]: obfuscate(v),
+      }),
+      {}
+    );
+  };
 
-export const obfuscateObj: (obj: NestedObj) => NestedObj = (obj) => {
-  if (!obj) {
-    return obj;
-  }
-  return Object.entries(obj).reduce(
-    (prev, [k, v]) => ({
-      ...prev,
-      [k]: obfuscateValue(v),
-    }),
-    {}
-  );
+  const obfuscate: ObfuscateFn = (v) => {
+    if (
+      typeof v === "string" ||
+      typeof v === "number" ||
+      typeof v === "boolean"
+    ) {
+      return obfuscatePrimitive(v);
+    } else if (Array.isArray(v)) {
+      return v.map((item) => obfuscate(item));
+    } else {
+      return obfuscateObj(v);
+    }
+  };
+
+  // this obfuscates any state data found in a string (based on the tracker)
+  const removeStateData = (val: string): string =>
+    Object.entries(tracker).reduce(
+      (prev, [k, v]) => prev.replace(new RegExp(`\\b${k}\\b`, "g"), v),
+      val
+    );
+
+  return {
+    obfuscate,
+    removeStateData,
+  };
 };
