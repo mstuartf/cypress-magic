@@ -1,10 +1,10 @@
 // Obfuscates data before sending to server
 
 import { v4 as uuidv4 } from "uuid";
-import { NestedObj, ObfuscateFn } from "../types";
+import { NestedObj, ObfuscateFn, PrivacyManager } from "../types";
 import { validateEmail } from "../utils";
 
-export const createPrivacyManager = () => {
+export const createPrivacyManager = (): PrivacyManager => {
   // this is to keep track of all sensitive strings that should be stripped from html
   const tracker: { [key: string]: string } = {};
 

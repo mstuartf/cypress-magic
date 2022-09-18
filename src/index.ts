@@ -4,6 +4,7 @@ import { readDomains } from "./globals";
 import { version } from "../package.json";
 import { isChrome } from "./utils";
 import {
+  initDomObserver,
   initNavObserver,
   initRequestsObserver,
   initStorageObserver,
@@ -11,7 +12,7 @@ import {
   initViewportObserver,
 } from "./observers";
 import { createPrivacyManager } from "./managers";
-import { createEventManager } from "./events";
+import { createEventManager } from "./managers";
 
 const initialize = () => {
   const domains = readDomains();
@@ -27,15 +28,16 @@ const initialize = () => {
 
   console.log(`td version ${version} active`);
 
-  const { obfuscate, removeStateData } = createPrivacyManager();
-  const { saveEvent } = createEventManager({ removeStateData });
-  const args = { saveEvent, obfuscate, removeStateData };
+  const privacy = createPrivacyManager();
+  const events = createEventManager();
+  const args = { ...events, ...privacy };
 
   initUserObserver(args);
   initRequestsObserver(args);
   initNavObserver(args);
   initViewportObserver(args);
   initStorageObserver(args);
+  initDomObserver(args);
 };
 
 initialize();

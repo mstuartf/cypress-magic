@@ -6,7 +6,7 @@ import {
   ReplaceElementAction,
   TextNode,
 } from "diff-dom";
-import { DiffEvent, InitArgs } from "../types";
+import { InitArgs, OnSaveCallback } from "../types";
 
 // Cannot send DOM data raw as it may contain sensitive info.
 // Obfuscating everything is useless as the data will not be useful for assertions.
@@ -58,27 +58,20 @@ const getNewTextNodes = (actions: DiffAction[]): TextNode[] => {
     .reduce((prev, next) => [...prev, ...extractTextNodes(next)], []);
 };
 
-export const initDomManager = ({
+export const initDomObserver = ({
   removeStateData,
-}: Pick<InitArgs, "removeStateData">) => {
+  registerOnSave,
+}: InitArgs) => {
   // compare against an empty body on first load
   let oldDom: Node = document.createElement("body");
   let newDom: Node;
 
   const dd = new DiffDOM();
 
-  const createDiffEvent: () => DiffEvent | null = () => {
+  const calculateDiff = (): TextNode[] => {
     newDom = document.body.cloneNode(true);
-    const actions: DiffAction[] = dd.diff(oldDom, newDom);
 
-    oldDom = newDom;
-    newDom = undefined;
-
-    if (!actions.length) {
-      return null;
-    }
-
-    const textNodes = getNewTextNodes(actions)
+    const textNodes: TextNode[] = getNewTextNodes(dd.diff(oldDom, newDom))
       .filter(({ data }) => !!data.trim())
       .filter(({ data }) => data.length > 5)
       .map(({ data, ...rest }) => ({
@@ -86,14 +79,24 @@ export const initDomManager = ({
         data: removeStateData(data),
       }));
 
-    return {
-      type: "domDiff",
-      timestamp: Date.now(),
-      diff: textNodes,
-    };
+    oldDom = newDom;
+    newDom = undefined;
+
+    return textNodes;
   };
 
-  return {
-    createDiffEvent,
+  const onSave: OnSaveCallback = (saveEventFn) => {
+    // After every event check to see if the DOM has changed. This will allow us to filter out events that do nothing
+    // (e.g. random background clicks) to better group journeys together.
+    const textNodes = calculateDiff();
+    if (textNodes.length) {
+      saveEventFn({
+        type: "domDiff",
+        timestamp: Date.now(),
+        diff: textNodes,
+      });
+    }
   };
+
+  registerOnSave(onSave);
 };
