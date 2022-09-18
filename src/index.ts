@@ -28,9 +28,7 @@ const initialize = () => {
 
   console.log(`td version ${version} active`);
 
-  const privacy = createPrivacyManager();
-  const events = createEventManager();
-  const args = { ...events, ...privacy };
+  const args = { ...createEventManager(), ...createPrivacyManager() };
 
   initUserObserver(args);
   initRequestsObserver(args);
