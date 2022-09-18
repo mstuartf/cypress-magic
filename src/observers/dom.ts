@@ -50,7 +50,7 @@ const extractTextNodes = (
     return [];
   }
 
-  return el.childNodes.reduce(
+  return el.childNodes.reduce<TextNodeWithRoute[]>(
     (prev, next, i) => [...prev, ...extractTextNodes(next, [...route, i])],
     []
   );
@@ -68,7 +68,7 @@ const getNewTextNodes = (actions: DiffAction[]): TextNodeWithRoute[] => {
       ],
       []
     )
-    .reduce(
+    .reduce<TextNodeWithRoute[]>(
       (prev, [node, route]) => [...prev, ...extractTextNodes(node, route)],
       []
     );
