@@ -1,4 +1,4 @@
-import { InitArgs, StorageEvent } from "./types";
+import { InitArgs, StorageEvent } from "../types";
 import storageChanged from "storage-changed";
 
 const getSnapshot = () =>
@@ -41,7 +41,7 @@ const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
-export const initializeStorage = (args: RequiredArgs) => {
+export const initStorageObserver = (args: InitArgs) => {
   const { save } = snapshotManager(args);
   storageChanged("local");
   window.addEventListener("localStorageChanged", save);

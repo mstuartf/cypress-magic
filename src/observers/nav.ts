@@ -1,6 +1,6 @@
 // Listens for navigation events
 
-import { BaseEvent, InitArgs, SaveEvent } from "./types";
+import { BaseEvent, InitArgs, SaveEvent } from "../types";
 
 function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   const baseEvent: BaseEvent = {
@@ -48,7 +48,7 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   };
 }
 
-export const initializeNav = ({ saveEvent }: Pick<InitArgs, "saveEvent">) => {
+export const initNavObserver = ({ saveEvent }: InitArgs) => {
   monkeyPatchHistory(window.history, saveEvent);
   // this is only required once for the cy.visit at the start of the test
   saveEvent({

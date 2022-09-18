@@ -1,19 +1,19 @@
 // Stores all events and handles pushing them to the server
 
 import { DiffEvent, InitArgs, ParsedEvent } from "./types";
-import { initializeDomObserver } from "./diffDom";
-import { createWsClient } from "./createWSClient";
-import { createSessionId } from "./createSessionId";
+import { initDomManager } from "./managers";
+import { createWsClient } from "./sockets";
+import { readSessionId } from "./globals";
 import { readClientId } from "./globals";
 
 export const createEventManager = ({
   removeStateData,
 }: Pick<InitArgs, "removeStateData">) => {
-  const sessionId = createSessionId();
+  const sessionId = readSessionId();
   const clientId = readClientId();
   const domain = window.location.hostname;
 
-  const { createDiffEvent } = initializeDomObserver({ removeStateData });
+  const { createDiffEvent } = initDomManager({ removeStateData });
 
   const ws = createWsClient();
 

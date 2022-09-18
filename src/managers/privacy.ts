@@ -1,15 +1,8 @@
 // Obfuscates data before sending to server
 
 import { v4 as uuidv4 } from "uuid";
-import { NestedObj, ObfuscateFn } from "./types";
-
-const validateEmail = (email: string) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
+import { NestedObj, ObfuscateFn } from "../types";
+import { validateEmail } from "../utils";
 
 export const createPrivacyManager = () => {
   // this is to keep track of all sensitive strings that should be stripped from html

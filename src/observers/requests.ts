@@ -1,7 +1,7 @@
 // Listens for API calls and responses
 
 import { register } from "fetch-intercept";
-import { InitArgs, RequestEvent, ResponseEvent, SaveEvent } from "./types";
+import { InitArgs, RequestEvent, ResponseEvent } from "../types";
 
 const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
   url,
@@ -39,7 +39,7 @@ const parseResponse: (
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
-export const initialiseRequests = ({ saveEvent, obfuscate }: RequiredArgs) => {
+export const initRequestsObserver = ({ saveEvent, obfuscate }: InitArgs) => {
   register({
     request: function (url, config) {
       saveEvent(parseRequest(url, config));

@@ -1,15 +1,17 @@
 // Initializes the lib to start listening for events
 
-import { initializeUserEvents } from "./userEvents";
-import { initialiseRequests } from "./requests";
-import { initializeNav } from "./navigation";
-import { initializeViewport } from "./viewport";
-import { createEventManager } from "./eventManager";
 import { readDomains } from "./globals";
 import { version } from "../package.json";
-import { isChrome } from "./isChrome";
-import { initializeStorage } from "./storage";
-import { createPrivacyManager } from "./obfuscate";
+import { isChrome } from "./utils";
+import {
+  initNavObserver,
+  initRequestsObserver,
+  initStorageObserver,
+  initUserObserver,
+  initViewportObserver,
+} from "./observers";
+import { createPrivacyManager } from "./managers";
+import { createEventManager } from "./events";
 
 const initialize = () => {
   const domains = readDomains();
@@ -27,12 +29,13 @@ const initialize = () => {
 
   const { obfuscate, removeStateData } = createPrivacyManager();
   const { saveEvent } = createEventManager({ removeStateData });
+  const args = { saveEvent, obfuscate, removeStateData };
 
-  initializeUserEvents({ saveEvent, obfuscate, removeStateData });
-  initialiseRequests({ saveEvent, obfuscate });
-  initializeNav({ saveEvent });
-  initializeViewport({ saveEvent });
-  initializeStorage({ saveEvent, obfuscate });
+  initUserObserver(args);
+  initRequestsObserver(args);
+  initNavObserver(args);
+  initViewportObserver(args);
+  initStorageObserver(args);
 };
 
 initialize();

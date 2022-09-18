@@ -9,7 +9,7 @@ import {
   SubmitEvent,
   TargetEvent,
   InitArgs,
-} from "./types";
+} from "../types";
 import { finder } from "@medv/finder";
 
 const getBaseProps = (event: Event): BaseEvent => ({
@@ -96,6 +96,6 @@ function addDOMListeners(args: InitArgs): void {
   });
 }
 
-export function initializeUserEvents(args: InitArgs): void {
+export function initUserObserver(args: InitArgs): void {
   addDOMListeners(args);
 }

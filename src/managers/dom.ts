@@ -6,7 +6,7 @@ import {
   ReplaceElementAction,
   TextNode,
 } from "diff-dom";
-import { DiffEvent, InitArgs } from "./types";
+import { DiffEvent, InitArgs } from "../types";
 
 // Cannot send DOM data raw as it may contain sensitive info.
 // Obfuscating everything is useless as the data will not be useful for assertions.
@@ -58,7 +58,7 @@ const getNewTextNodes = (actions: DiffAction[]): TextNode[] => {
     .reduce((prev, next) => [...prev, ...extractTextNodes(next)], []);
 };
 
-export const initializeDomObserver = ({
+export const initDomManager = ({
   removeStateData,
 }: Pick<InitArgs, "removeStateData">) => {
   // compare against an empty body on first load
