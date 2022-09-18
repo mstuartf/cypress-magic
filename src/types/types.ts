@@ -1,4 +1,4 @@
-import { ParsedEvent } from "./events";
+import { EventMeta, ParsedEvent } from "./events";
 
 export type SaveEvent = (event: ParsedEvent) => void;
 export type RegisterOnSave = (fn: OnSaveCallback) => void;
@@ -24,3 +24,5 @@ export interface PrivacyManager {
 }
 
 export type InitArgs = EventManager & PrivacyManager;
+
+export type Payload = EventMeta & { event: ParsedEvent };
