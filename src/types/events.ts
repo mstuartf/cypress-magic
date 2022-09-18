@@ -1,4 +1,5 @@
 import { TextNode } from "diff-dom";
+import { TextNodeWithRoute } from "../observers";
 
 export interface EventMeta {
   clientId: string;
@@ -61,7 +62,7 @@ export interface ViewEvent extends BaseEvent {
 export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent;
 
 export interface DiffEvent extends BaseEvent {
-  diff: TextNode[];
+  diff: TextNodeWithRoute[];
 }
 
 export interface StorageEvent extends BaseEvent {

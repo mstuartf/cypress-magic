@@ -13,6 +13,7 @@ declare module "diff-dom" {
     childNodes?: Array<ElementNode | TextNode>;
     value?: string;
   }
+  export type AnyNode = TextNode | ElementNode;
 
   export interface ModifyAttributeAction {
     action: "modifyAttribute";

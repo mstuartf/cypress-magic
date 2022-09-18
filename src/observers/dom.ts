@@ -1,5 +1,6 @@
 import {
   AddElementAction,
+  AnyNode,
   DiffAction,
   DiffDOM,
   ElementNode,
@@ -17,6 +18,10 @@ import { InitArgs, OnSaveCallback } from "../types";
 // Also will be false negatives if state data is transformed before being added to DOM.
 // There are also some issues around understanding what in the DOM is actually visible.
 
+export interface TextNodeWithRoute extends TextNode {
+  route: number[];
+}
+
 function isAddAction(
   action: AddElementAction | ReplaceElementAction
 ): action is AddElementAction {
@@ -27,10 +32,18 @@ function isTextNode(node: ElementNode | TextNode): node is TextNode {
   return (node as TextNode).nodeName === "#text";
 }
 
-const extractTextNodes = (el: ElementNode | TextNode): TextNode[] => {
+const extractTextNodes = (
+  el: ElementNode | TextNode,
+  route: number[]
+): TextNodeWithRoute[] => {
   // if text return self
   if (isTextNode(el)) {
-    return [el];
+    return [
+      {
+        ...el,
+        route,
+      },
+    ];
   }
 
   if (!el.childNodes || !el.childNodes.length) {
@@ -38,24 +51,27 @@ const extractTextNodes = (el: ElementNode | TextNode): TextNode[] => {
   }
 
   return el.childNodes.reduce(
-    (prev, next) => [...prev, ...extractTextNodes(next)],
+    (prev, next, i) => [...prev, ...extractTextNodes(next, [...route, i])],
     []
   );
 };
 
-const getNewTextNodes = (actions: DiffAction[]): TextNode[] => {
+const getNewTextNodes = (actions: DiffAction[]): TextNodeWithRoute[] => {
   return actions
     .filter((a): a is AddElementAction | ReplaceElementAction =>
       ["replaceElement", "addElement"].includes(a.action)
     )
-    .reduce(
+    .reduce<Array<[AnyNode, number[]]>>(
       (prev, next) => [
         ...prev,
-        ...[isAddAction(next) ? next.element : next.newValue],
+        [isAddAction(next) ? next.element : next.newValue, next.route],
       ],
       []
     )
-    .reduce((prev, next) => [...prev, ...extractTextNodes(next)], []);
+    .reduce(
+      (prev, [node, route]) => [...prev, ...extractTextNodes(node, route)],
+      []
+    );
 };
 
 export const initDomObserver = ({
@@ -68,10 +84,12 @@ export const initDomObserver = ({
 
   const dd = new DiffDOM();
 
-  const calculateDiff = (): TextNode[] => {
+  const calculateDiff = (): TextNodeWithRoute[] => {
     newDom = document.body.cloneNode(true);
 
-    const textNodes: TextNode[] = getNewTextNodes(dd.diff(oldDom, newDom))
+    const textNodes: TextNodeWithRoute[] = getNewTextNodes(
+      dd.diff(oldDom, newDom)
+    )
       .filter(({ data }) => !!data.trim())
       .filter(({ data }) => data.length > 5)
       .map(({ data, ...rest }) => ({
