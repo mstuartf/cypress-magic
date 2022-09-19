@@ -5,6 +5,7 @@ export interface EventMeta {
   clientId: string;
   sessionId: string;
   domain: string;
+  version: string;
 }
 
 export interface BaseEvent {

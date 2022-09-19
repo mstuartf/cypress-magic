@@ -3,6 +3,7 @@
 import { EventManager, OnSaveCallback, ParsedEvent } from "../types";
 import { createWsClient } from "../sockets";
 import { readClientId, readSessionId } from "../globals";
+import { version } from "../../package.json";
 
 export const createEventManager = (): EventManager => {
   const sessionId = readSessionId();
@@ -19,6 +20,7 @@ export const createEventManager = (): EventManager => {
       sessionId,
       domain,
       event,
+      version,
     });
   };
 
