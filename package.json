@@ -4,11 +4,11 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack && rm dist/main.js.LICENSE.txt",
     "pretty-quick": "pretty-quick --staged",
     "prepare": "husky install",
-    "deploy": "export AWS_PROFILE=default && aws s3 sync ./dist s3://testdetector --acl public-read --cache-control max-age=120"
+    "deploy:prod": "export AWS_PROFILE=default && aws s3 sync ./dist s3://testdetector --acl public-read --cache-control max-age=120",
+    "deploy:dev": "export AWS_PROFILE=default && aws s3 sync ./dist s3://testdetector-dev --acl public-read --cache-control max-age=120"
   },
   "keywords": [],
   "author": "",
