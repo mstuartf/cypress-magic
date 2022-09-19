@@ -104,8 +104,6 @@ export const initDomObserver = ({
   };
 
   const onSave: OnSaveCallback = (saveEventFn) => {
-    // After every event check to see if the DOM has changed. This will allow us to filter out events that do nothing
-    // (e.g. random background clicks) to better group journeys together.
     const textNodes = calculateDiff();
     if (textNodes.length) {
       saveEventFn({
