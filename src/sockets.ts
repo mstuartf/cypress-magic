@@ -1,30 +1,37 @@
 import { Payload } from "./types";
-
-const SOCKET_URL = "wss://api.testdetector.com/ws/events/";
+import { readSocketUrl } from "./globals";
 
 export const createWsClient = () => {
-  const ws = new WebSocket(SOCKET_URL);
+  const url = readSocketUrl();
+  const ws = new WebSocket(url);
+  let sessionId: string | undefined;
 
   const queue: Payload[] = [];
-
-  ws.onopen = function () {
-    uploadQueue();
-  };
 
   ws.onclose = function () {
     console.error("Chat socket closed unexpectedly");
   };
 
-  const send = (payload: Payload) => {
+  ws.onmessage = function (msg: MessageEvent) {
+    const data = JSON.parse(msg.data);
+    if (data.session_id) {
+      sessionId = data.session_id;
+      console.log("session id set");
+      uploadQueue();
+    }
+  };
+
+  const sendWithSessionId = (payload: Payload) => {
     ws.send(
       JSON.stringify({
+        sessionId,
         ...payload,
       })
     );
   };
 
   const uploadQueue = () => {
-    queue.forEach((event) => send(event));
+    queue.forEach((event) => sendWithSessionId(event));
   };
 
   const sendEvent = (payload: Payload) => {

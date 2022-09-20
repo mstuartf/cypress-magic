@@ -1,9 +1,7 @@
-import { TextNode } from "diff-dom";
 import { TextNodeWithRoute } from "../observers";
 
 export interface EventMeta {
   clientId: string;
-  sessionId: string;
   domain: string;
   version: string;
 }

@@ -2,11 +2,10 @@
 
 import { EventManager, OnSaveCallback, ParsedEvent } from "../types";
 import { createWsClient } from "../sockets";
-import { readClientId, readSessionId } from "../globals";
+import { readClientId } from "../globals";
 import { version } from "../../package.json";
 
 export const createEventManager = (): EventManager => {
-  const sessionId = readSessionId();
   const clientId = readClientId();
   const domain = window.location.hostname;
 
@@ -17,7 +16,6 @@ export const createEventManager = (): EventManager => {
   const sendEvent = (event: ParsedEvent) => {
     ws.sendEvent({
       clientId,
-      sessionId,
       domain,
       event,
       version,
