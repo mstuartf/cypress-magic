@@ -3,27 +3,27 @@
 import { BaseEvent, InitArgs, SaveEvent } from "../types";
 
 function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
-  const baseEvent: BaseEvent = {
+  const getBaseEvent = (): BaseEvent => ({
     type: "urlChange",
     timestamp: Date.now(),
-  };
+  });
 
   const pushState = history.pushState;
   history.pushState = function (state, unused, url) {
-    saveEvent({ ...baseEvent, url });
+    saveEvent({ ...getBaseEvent(), url });
     return pushState.apply(history, arguments);
   };
 
   const replaceState = history.replaceState;
   history.replaceState = function (state, unused, url) {
-    saveEvent({ ...baseEvent, url });
+    saveEvent({ ...getBaseEvent(), url });
     return replaceState.apply(history, arguments);
   };
 
   const back = history.back;
   history.back = function () {
     saveEvent({
-      ...baseEvent,
+      ...getBaseEvent(),
       url: "back",
     });
     return back.apply(history, arguments);
@@ -32,7 +32,7 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   const forward = history.forward;
   history.forward = function () {
     saveEvent({
-      ...baseEvent,
+      ...getBaseEvent(),
       url: "forward",
     });
     return forward.apply(history, arguments);
@@ -41,7 +41,7 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   const go = history.go;
   history.go = function (delta) {
     saveEvent({
-      ...baseEvent,
+      ...getBaseEvent(),
       delta,
     });
     return go.apply(history, arguments);

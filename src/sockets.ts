@@ -6,7 +6,7 @@ export const createWsClient = () => {
   const ws = new WebSocket(url);
   let sessionId: string | undefined;
 
-  const queue: Payload[] = [];
+  let queue: Payload[] = [];
 
   ws.onclose = function () {
     console.error("Chat socket closed unexpectedly");
@@ -32,6 +32,7 @@ export const createWsClient = () => {
 
   const uploadQueue = () => {
     queue.forEach((event) => sendWithSessionId(event));
+    queue = [];
   };
 
   const sendEvent = (payload: Payload) => {
