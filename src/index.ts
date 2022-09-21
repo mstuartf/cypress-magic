@@ -4,7 +4,6 @@ import { readDomains } from "./globals";
 import { version } from "../package.json";
 import { isChrome } from "./utils";
 import {
-  initDomObserver,
   initNavObserver,
   initRequestsObserver,
   initStorageObserver,
@@ -35,7 +34,6 @@ const initialize = () => {
   initNavObserver(args);
   initViewportObserver(args);
   initStorageObserver(args);
-  // initDomObserver(args);
 };
 
 initialize();

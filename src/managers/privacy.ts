@@ -1,17 +1,31 @@
 // Obfuscates data before sending to server
 
-import { v4 as uuidv4 } from "uuid";
 import { NestedObj, ObfuscateFn, PrivacyManager } from "../types";
 import { validateEmail } from "../utils";
 import { escapeRegExp } from "../utils/escapeRegexChars";
+import { getRandomLetter, getRandomNumber } from "../utils/random";
 
 export const createPrivacyManager = (): PrivacyManager => {
   // this is to keep track of all sensitive strings that should be stripped from html
   const tracker: { [key: string]: string } = {};
 
+  // todo: this might be too slow?
   const obfuscateString = (raw: string) => {
     if (!tracker.hasOwnProperty(raw)) {
-      tracker[raw] = uuidv4().slice(0, raw.length);
+      tracker[raw] = raw
+        .split("")
+        .map((char) => {
+          if (/^\d+$/.test(char)) {
+            return `${getRandomNumber(1)}`;
+          }
+          if (char.match(/[a-z]/i)) {
+            const isUppercase = char === char.toUpperCase();
+            const letter = getRandomLetter();
+            return isUppercase ? letter.toUpperCase() : letter;
+          }
+          return char;
+        })
+        .join("");
     }
     return tracker[raw];
   };

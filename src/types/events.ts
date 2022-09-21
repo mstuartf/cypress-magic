@@ -40,6 +40,12 @@ export interface ChangeEvent extends TargetEvent {
   value: any;
 }
 
+export interface UploadEvent extends TargetEvent {
+  data: any;
+  mimeType: string;
+  fileName: string;
+}
+
 export interface ClickEvent extends TargetEvent {
   offsetX: number;
   offsetY: number;

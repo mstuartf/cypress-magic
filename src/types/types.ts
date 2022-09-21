@@ -26,3 +26,10 @@ export interface PrivacyManager {
 export type InitArgs = EventManager & PrivacyManager;
 
 export type Payload = EventMeta & { event: ParsedEvent };
+
+export interface TDWindow extends Window {
+  TD_CLIENT_ID: string;
+  TD_DOMAINS: string[];
+  TD_SOCKET_URL?: string;
+  TD_BLOCK_UPLOAD?: boolean;
+}

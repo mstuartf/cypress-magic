@@ -1,5 +1,10 @@
+import { TDWindow } from "./types";
+
 const SOCKET_URL = "wss://api.testdetector.com/ws/events/";
 
-export const readClientId = () => (window as any).TD_CLIENT_ID as string;
-export const readDomains = () => (window as any).TD_DOMAINS || ([] as string[]);
-export const readSocketUrl = () => (window as any).TD_SOCKET_URL || SOCKET_URL;
+const w = window as unknown as TDWindow;
+
+export const readClientId = (): string => w.TD_CLIENT_ID as string;
+export const readDomains = (): string[] => w.TD_DOMAINS || ([] as string[]);
+export const readSocketUrl = (): string => w.TD_SOCKET_URL || SOCKET_URL;
+export const readBlockUpload = (): boolean => w.TD_BLOCK_UPLOAD || false;

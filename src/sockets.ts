@@ -1,8 +1,10 @@
 import { Payload } from "./types";
-import { readSocketUrl } from "./globals";
+import { readBlockUpload, readSocketUrl } from "./globals";
 
 export const createWsClient = () => {
   const url = readSocketUrl();
+  const blockUpload = readBlockUpload();
+
   const ws = new WebSocket(url);
   let sessionId: string | undefined;
 
@@ -22,6 +24,10 @@ export const createWsClient = () => {
   };
 
   const sendWithSessionId = (payload: Payload) => {
+    if (blockUpload) {
+      console.log("not uploading", payload);
+      return;
+    }
     ws.send(
       JSON.stringify({
         sessionId,

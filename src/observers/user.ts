@@ -9,8 +9,10 @@ import {
   SubmitEvent,
   TargetEvent,
   InitArgs,
+  UploadEvent,
 } from "../types";
 import { finder } from "@medv/finder";
+import * as Papa from "papaparse";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   type: event.type,
@@ -57,17 +59,57 @@ const parseChangeEvent = (
   };
 };
 
+const parseCSVUploadEvent = (
+  event: Event,
+  obfuscate: InitArgs["obfuscate"]
+): Promise<UploadEvent> => {
+  return new Promise(function (complete, error) {
+    const file = (event.target as HTMLInputElement).files[0];
+    Papa.parse<string[]>(file, {
+      complete: ({ data }) => {
+        const [headers, ...rows] = data;
+        complete({
+          type: "fileUpload",
+          timestamp: Date.now(),
+          ...getTargetProps(event.target as Element),
+          data: [
+            headers,
+            ...rows.map((row) => row.map((col) => obfuscate(col))),
+          ],
+          mimeType: file.type,
+          fileName: file.name,
+        });
+      },
+      error,
+    });
+  });
+};
+
 const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getBaseProps(event),
   ...getTargetProps(event.target as Element),
 });
 
+const isCSVFileUpload = (
+  target: Event["target"]
+): target is HTMLInputElement => {
+  return (
+    target &&
+    target instanceof HTMLInputElement &&
+    target.type === "file" &&
+    !!target.files[0] &&
+    target.files[0].type === "text/csv"
+  );
+};
+
 const parseEvent = (
   event: Event,
   { obfuscate, removeStateData }: ObsArgs
-): UserEvent => {
+): UserEvent | Promise<UserEvent> => {
   if (event.type === "click" || event.type === "dblclick") {
     return parseClickEvent(event as MouseEvent, removeStateData);
+  } else if (event.type === "change" && isCSVFileUpload(event.target)) {
+    return parseCSVUploadEvent(event, obfuscate);
   } else if (event.type === "change") {
     return parseChangeEvent(event, obfuscate);
   } else if (event.type === "submit") {
@@ -78,13 +120,10 @@ const parseEvent = (
 type ObsArgs = Pick<InitArgs, "obfuscate" | "removeStateData">;
 
 function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
-  if ((event.target as HTMLDivElement).innerText === "download file") {
-    // todo: remove when the download button hack is removed
+  if (!event.isTrusted) {
     return;
   }
-  if (event.isTrusted === true) {
-    saveEvent(parseEvent(event, { ...rest }));
-  }
+  Promise.resolve(parseEvent(event, { ...rest })).then((res) => saveEvent(res));
 }
 
 function addDOMListeners(args: InitArgs): void {
