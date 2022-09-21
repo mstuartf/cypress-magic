@@ -3,6 +3,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { NestedObj, ObfuscateFn, PrivacyManager } from "../types";
 import { validateEmail } from "../utils";
+import { escapeRegExp } from "../utils/escapeRegexChars";
 
 export const createPrivacyManager = (): PrivacyManager => {
   // this is to keep track of all sensitive strings that should be stripped from html
@@ -61,7 +62,8 @@ export const createPrivacyManager = (): PrivacyManager => {
   // this obfuscates any state data found in a string (based on the tracker)
   const removeStateData = (val?: string): string =>
     Object.entries(tracker).reduce(
-      (prev, [k, v]) => prev.replace(new RegExp(`\\b${k}\\b`, "g"), v),
+      (prev, [k, v]) =>
+        prev.replace(new RegExp(`\\b${escapeRegExp(k)}\\b`, "g"), v),
       val || ""
     );
 
