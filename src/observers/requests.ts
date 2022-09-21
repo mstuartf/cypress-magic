@@ -34,6 +34,17 @@ const parseResponse: (
         body: body ? obfuscate(body) : body,
       };
       saveEvent(res);
+    })
+    .catch(() => {
+      const res: ResponseEvent = {
+        type: "response",
+        timestamp: Date.now(),
+        url,
+        method,
+        status,
+        body: null,
+      };
+      saveEvent(res);
     });
 };
 
