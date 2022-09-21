@@ -59,10 +59,10 @@ export const createPrivacyManager = (): PrivacyManager => {
   };
 
   // this obfuscates any state data found in a string (based on the tracker)
-  const removeStateData = (val: string): string =>
+  const removeStateData = (val?: string): string =>
     Object.entries(tracker).reduce(
       (prev, [k, v]) => prev.replace(new RegExp(`\\b${k}\\b`, "g"), v),
-      val
+      val || ""
     );
 
   return {
