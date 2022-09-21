@@ -35,7 +35,7 @@ const initialize = () => {
   initNavObserver(args);
   initViewportObserver(args);
   initStorageObserver(args);
-  initDomObserver(args);
+  // initDomObserver(args);
 };
 
 initialize();
