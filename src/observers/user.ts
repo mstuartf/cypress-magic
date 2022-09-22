@@ -107,6 +107,7 @@ const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
     clientX: event.clientX,
     clientY: event.clientY,
   },
+  type: "dragDrop",
 });
 
 const parseEvent = (
