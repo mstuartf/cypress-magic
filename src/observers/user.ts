@@ -10,6 +10,7 @@ import {
   TargetEvent,
   InitArgs,
   UploadEvent,
+  DragDropEvent,
 } from "../types";
 import { finder } from "@medv/finder";
 import * as Papa from "papaparse";
@@ -102,6 +103,17 @@ const isCSVFileUpload = (
   );
 };
 
+const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
+  ...getBaseProps(event),
+  target: {
+    ...getTargetProps(event.target as Element),
+  },
+  destination: {
+    clientX: event.clientX,
+    clientY: event.clientY,
+  },
+});
+
 const parseEvent = (
   event: Event,
   { obfuscate, removeStateData }: ObsArgs
@@ -114,6 +126,8 @@ const parseEvent = (
     return parseChangeEvent(event, obfuscate);
   } else if (event.type === "submit") {
     return parseSubmitEvent(event);
+  } else if (event.type === "dragend") {
+    return parseDragDropEvent(event as MouseEvent);
   }
 };
 

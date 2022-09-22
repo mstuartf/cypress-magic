@@ -35,6 +35,19 @@ export interface TargetEvent extends BaseEvent {
   id: string;
 }
 
+export interface DragDropEvent extends BaseEvent {
+  target: {
+    selectors: string[][];
+    tag: string;
+    classList: DOMTokenList;
+    id: string;
+  };
+  destination: {
+    clientX: number;
+    clientY: number;
+  };
+}
+
 export interface ChangeEvent extends TargetEvent {
   inputType: string;
   value: any;
@@ -64,7 +77,7 @@ export interface ViewEvent extends BaseEvent {
   isLandscape: boolean;
 }
 
-export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent;
+export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent | DragDropEvent;
 
 export interface DiffEvent extends BaseEvent {
   diff: TextNodeWithRoute[];
@@ -88,4 +101,5 @@ export enum EventType {
   CHANGE = "change",
   DBLCLICK = "dblclick",
   SUBMIT = "submit",
+  DRAGEND = "dragend",
 }
