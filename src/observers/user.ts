@@ -23,13 +23,8 @@ const getBaseProps = (event: Event): BaseEvent => ({
 const getTargetProps = (
   target: Element
 ): Omit<TargetEvent, "type" | "timestamp" | "domain"> => ({
-  selectors: [
-    [
-      target.hasAttribute("data-cy")
-        ? `[data-cy=${target.getAttribute("data-cy")}]`
-        : finder(target),
-    ],
-  ],
+  selectors: [[finder(target)]],
+  dataCy: target.getAttribute("data-cy"),
   tag: target.tagName,
   classList: target.classList,
   id: target.id,

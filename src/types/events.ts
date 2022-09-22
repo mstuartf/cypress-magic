@@ -33,6 +33,7 @@ export interface TargetEvent extends BaseEvent {
   tag: string;
   classList: DOMTokenList;
   id: string;
+  dataCy: string | null;
 }
 
 export interface DragDropEvent extends BaseEvent {
