@@ -1,6 +1,6 @@
 // Initializes the lib to start listening for events
 
-import { readDomains } from "./globals";
+import { readDomains, readIsTestMode } from "./globals";
 import { version } from "../package.json";
 import { isChrome } from "./utils";
 import {
@@ -22,6 +22,11 @@ const initialize = () => {
 
   if (!isChrome()) {
     console.log("browser not supported");
+    return;
+  }
+
+  if (readIsTestMode()) {
+    console.log("running in test mode");
     return;
   }
 

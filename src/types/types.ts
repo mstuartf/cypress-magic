@@ -32,4 +32,5 @@ export interface TDWindow extends Window {
   TD_DOMAINS: string[];
   TD_SOCKET_URL?: string;
   TD_BLOCK_UPLOAD?: boolean;
+  Cypress: any;
 }
