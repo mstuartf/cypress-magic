@@ -1,11 +1,5 @@
 import { TextNodeWithRoute } from "../observers";
 
-export interface EventMeta {
-  clientId: string;
-  domain: string;
-  version: string;
-}
-
 export interface BaseEvent {
   type: string;
   timestamp: number;

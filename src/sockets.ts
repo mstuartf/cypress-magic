@@ -1,17 +1,20 @@
-import { Payload } from "./types";
-import { readBlockUpload, readSocketUrl } from "./globals";
+import { ParsedEvent } from "./types";
+import { readBlockUpload, readClientId, readSocketUrl } from "./globals";
+import { version } from "../package.json";
 
 export const createWsClient = () => {
   const url = readSocketUrl();
   const blockUpload = readBlockUpload();
+  const clientId = readClientId();
+  const domain = window.location.hostname;
 
   const ws = new WebSocket(url);
   let sessionId: string | undefined;
 
-  let queue: Payload[] = [];
+  let queue: ParsedEvent[] = [];
 
   ws.onclose = function () {
-    console.error("Chat socket closed unexpectedly");
+    console.error("Chat socket closed");
   };
 
   ws.onmessage = function (msg: MessageEvent) {
@@ -23,15 +26,25 @@ export const createWsClient = () => {
     }
   };
 
-  const sendWithSessionId = (payload: Payload) => {
+  ws.onopen = function () {
+    ws.send(
+      JSON.stringify({
+        clientId,
+        domain,
+        version,
+      })
+    );
+  };
+
+  const sendWithSessionId = (event: ParsedEvent) => {
     if (blockUpload) {
-      console.log("not uploading", payload);
+      console.log("not uploading", event);
       return;
     }
     ws.send(
       JSON.stringify({
         sessionId,
-        ...payload,
+        event,
       })
     );
   };
@@ -41,9 +54,9 @@ export const createWsClient = () => {
     queue = [];
   };
 
-  const sendEvent = (payload: Payload) => {
-    queue.push(payload);
-    if (ws.readyState === 1) {
+  const sendEvent = (event: ParsedEvent) => {
+    queue.push(event);
+    if (sessionId) {
       uploadQueue();
     }
   };

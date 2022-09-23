@@ -1,4 +1,4 @@
-import { EventMeta, ParsedEvent } from "./events";
+import { ParsedEvent } from "./events";
 
 export type SaveEvent = (event: ParsedEvent) => void;
 export type RegisterOnSave = (fn: OnSaveCallback) => void;
@@ -24,8 +24,6 @@ export interface PrivacyManager {
 }
 
 export type InitArgs = EventManager & PrivacyManager;
-
-export type Payload = EventMeta & { event: ParsedEvent };
 
 export interface TDWindow extends Window {
   TD_CLIENT_ID: string;
