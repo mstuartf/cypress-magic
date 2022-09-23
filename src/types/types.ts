@@ -20,7 +20,6 @@ export interface EventManager {
 
 export interface PrivacyManager {
   obfuscate: ObfuscateFn;
-  removeStateData: (val: string) => string;
 }
 
 export type InitArgs = EventManager & PrivacyManager;

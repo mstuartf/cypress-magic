@@ -30,15 +30,11 @@ const getTargetProps = (
   id: target.id,
 });
 
-const parseClickEvent = (
-  event: MouseEvent,
-  removeStateData: InitArgs["removeStateData"]
-): ClickEvent => ({
+const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
   ...getTargetProps(event.target as Element),
   offsetX: event.pageX,
   offsetY: event.pageY,
-  innerText: removeStateData((event.target as HTMLDivElement).innerText),
   href: (event.target as HTMLAnchorElement).href,
 });
 
@@ -112,10 +108,10 @@ const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
 
 const parseEvent = (
   event: Event,
-  { obfuscate, removeStateData }: ObsArgs
+  { obfuscate }: Pick<InitArgs, "obfuscate">
 ): UserEvent | Promise<UserEvent> => {
   if (event.type === "click" || event.type === "dblclick") {
-    return parseClickEvent(event as MouseEvent, removeStateData);
+    return parseClickEvent(event as MouseEvent);
   } else if (event.type === "change" && isCSVFileUpload(event.target)) {
     return parseCSVUploadEvent(event, obfuscate);
   } else if (event.type === "change") {
@@ -126,8 +122,6 @@ const parseEvent = (
     return parseDragDropEvent(event as MouseEvent);
   }
 };
-
-type ObsArgs = Pick<InitArgs, "obfuscate" | "removeStateData">;
 
 function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   if (!event.isTrusted) {

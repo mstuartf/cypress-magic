@@ -1,5 +1,3 @@
-import { TextNodeWithRoute } from "../observers";
-
 export interface BaseEvent {
   type: string;
   timestamp: number;
@@ -57,7 +55,6 @@ export interface UploadEvent extends TargetEvent {
 export interface ClickEvent extends TargetEvent {
   offsetX: number;
   offsetY: number;
-  innerText: string;
   href?: string;
 }
 
@@ -74,10 +71,6 @@ export interface ViewEvent extends BaseEvent {
 
 export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent | DragDropEvent;
 
-export interface DiffEvent extends BaseEvent {
-  diff: TextNodeWithRoute[];
-}
-
 export interface StorageEvent extends BaseEvent {
   value: any;
 }
@@ -88,7 +81,6 @@ export type ParsedEvent =
   | RequestEvent
   | ResponseEvent
   | ViewEvent
-  | DiffEvent
   | StorageEvent;
 
 export enum EventType {
