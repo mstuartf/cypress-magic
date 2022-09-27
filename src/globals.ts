@@ -1,6 +1,6 @@
 import { TDWindow } from "./types";
 
-const SOCKET_URL = "wss://api.testdetector.com/ws/events/";
+const SOCKET_URL = "wss://api.seasmoke.io/ws/events/";
 // const SOCKET_URL = "ws://0.0.0.0:1337/ws/events/";
 
 const w = window as unknown as TDWindow;

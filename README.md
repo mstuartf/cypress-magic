@@ -14,4 +14,4 @@ Add the following to an app's <head> to test:
 </script>
 ```
 
-`$S3_URL` can be "https://testdetector.s3.eu-west-2.amazonaws.com/main.js" or "https://testdetector-dev.s3.eu-west-2.amazonaws.com/main.js".
+`$S3_URL` can be "https://seasmoke.s3.eu-west-2.amazonaws.com/main.js" or "https://seasmoke-dev.s3.eu-west-2.amazonaws.com/main.js".
