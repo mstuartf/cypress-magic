@@ -61,15 +61,11 @@ const parseCSVUploadEvent = (
     const file = (event.target as HTMLInputElement).files[0];
     Papa.parse<string[]>(file, {
       complete: ({ data }) => {
-        const [headers, ...rows] = data;
         complete({
           type: "fileUpload",
           timestamp: Date.now(),
           ...getTargetProps(event.target as HTMLElement),
-          data: [
-            headers,
-            ...rows.map((row) => row.map((col) => obfuscate(col))),
-          ],
+          data: data.map((row) => row.map((col) => obfuscate(col))),
           mimeType: file.type,
           fileName: file.name,
         });
