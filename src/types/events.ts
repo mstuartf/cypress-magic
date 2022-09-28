@@ -26,6 +26,7 @@ export interface TargetEvent extends BaseEvent {
   classList: DOMTokenList;
   id: string;
   dataCy: string | null;
+  isHidden: boolean;
 }
 
 export interface DragDropEvent extends BaseEvent {

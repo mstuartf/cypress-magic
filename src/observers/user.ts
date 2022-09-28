@@ -14,6 +14,7 @@ import {
 } from "../types";
 import { finder } from "@medv/finder";
 import * as Papa from "papaparse";
+import { isHidden } from "../utils/isHidden";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   type: event.type,
@@ -21,18 +22,19 @@ const getBaseProps = (event: Event): BaseEvent => ({
 });
 
 const getTargetProps = (
-  target: Element
+  target: HTMLElement
 ): Omit<TargetEvent, "type" | "timestamp" | "domain"> => ({
   selectors: [[finder(target)]],
   dataCy: target.getAttribute("data-cy"),
   tag: target.tagName,
   classList: target.classList,
   id: target.id,
+  isHidden: isHidden(target),
 });
 
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
-  ...getTargetProps(event.target as Element),
+  ...getTargetProps(event.target as HTMLElement),
   offsetX: event.pageX,
   offsetY: event.pageY,
   href: (event.target as HTMLAnchorElement).href,
@@ -45,7 +47,7 @@ const parseChangeEvent = (
   const { type, value } = event.target as HTMLInputElement;
   return {
     ...getBaseProps(event),
-    ...getTargetProps(event.target as Element),
+    ...getTargetProps(event.target as HTMLElement),
     inputType: type,
     value: typeof value === "string" ? obfuscate(value) : value,
   };
@@ -63,7 +65,7 @@ const parseCSVUploadEvent = (
         complete({
           type: "fileUpload",
           timestamp: Date.now(),
-          ...getTargetProps(event.target as Element),
+          ...getTargetProps(event.target as HTMLElement),
           data: [
             headers,
             ...rows.map((row) => row.map((col) => obfuscate(col))),
@@ -79,7 +81,7 @@ const parseCSVUploadEvent = (
 
 const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getBaseProps(event),
-  ...getTargetProps(event.target as Element),
+  ...getTargetProps(event.target as HTMLElement),
 });
 
 const isCSVFileUpload = (
@@ -97,7 +99,7 @@ const isCSVFileUpload = (
 const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
   ...getBaseProps(event),
   target: {
-    ...getTargetProps(event.target as Element),
+    ...getTargetProps(event.target as HTMLElement),
   },
   destination: {
     clientX: event.clientX,
