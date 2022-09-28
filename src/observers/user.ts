@@ -7,10 +7,10 @@ import {
   EventType,
   UserEvent,
   SubmitEvent,
-  TargetEvent,
   InitArgs,
   UploadEvent,
   DragDropEvent,
+  Target,
 } from "../types";
 import { finder } from "@medv/finder";
 import * as Papa from "papaparse";
@@ -22,23 +22,17 @@ const getBaseProps = (event: Event): BaseEvent => ({
   timestamp: Date.now(),
 });
 
-const getTargetProps = (
-  target: HTMLElement
-): Omit<TargetEvent, "type" | "timestamp" | "domain"> => ({
+const getTargetProps = (target: HTMLElement): Target => ({
   selectors: [[finder(target)]],
-  dataCy: target.dataset.cy,
-  dataTestid: target.dataset.testid,
   tag: target.tagName,
-  classList: target.classList,
-  id: target.id,
   isHidden: isHidden(target),
-  targetType: (target as HTMLInputElement).type,
+  type: (target as HTMLInputElement).type,
   domPath: getDomPath(target),
 });
 
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
-  ...getTargetProps(event.target as HTMLElement),
+  target: getTargetProps(event.target as HTMLElement),
   offsetX: event.pageX,
   offsetY: event.pageY,
   href: (event.target as HTMLAnchorElement).href,
@@ -51,7 +45,7 @@ const parseChangeEvent = (
   const { value } = event.target as HTMLInputElement;
   return {
     ...getBaseProps(event),
-    ...getTargetProps(event.target as HTMLElement),
+    target: getTargetProps(event.target as HTMLElement),
     value: typeof value === "string" ? obfuscate(value) : value,
   };
 };
@@ -67,7 +61,7 @@ const parseCSVUploadEvent = (
         complete({
           type: "fileUpload",
           timestamp: Date.now(),
-          ...getTargetProps(event.target as HTMLElement),
+          target: getTargetProps(event.target as HTMLElement),
           data: data.map((row) => row.map((col) => obfuscate(col))),
           mimeType: file.type,
           fileName: file.name,
@@ -80,7 +74,7 @@ const parseCSVUploadEvent = (
 
 const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getBaseProps(event),
-  ...getTargetProps(event.target as HTMLElement),
+  target: getTargetProps(event.target as HTMLElement),
 });
 
 const isCSVFileUpload = (

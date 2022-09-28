@@ -20,48 +20,42 @@ export interface ResponseEvent extends BaseEvent {
   body: any;
 }
 
-export interface TargetEvent extends BaseEvent {
-  selectors: string[][];
+export interface Target {
+  selectors: string[][]; // todo: remove
   tag: string;
-  classList: DOMTokenList;
-  id: string;
-  dataCy: string | null;
-  dataTestid: string | null;
   isHidden: boolean;
-  targetType: string;
+  type: string;
   domPath: string[];
 }
 
-export interface DragDropEvent extends BaseEvent {
-  target: {
-    selectors: string[][];
-    tag: string;
-    classList: DOMTokenList;
-    id: string;
-  };
+export interface TargetEvent {
+  target: Target;
+}
+
+export interface DragDropEvent extends BaseEvent, TargetEvent {
   destination: {
     clientX: number;
     clientY: number;
   };
 }
 
-export interface ChangeEvent extends TargetEvent {
+export interface ChangeEvent extends BaseEvent, TargetEvent {
   value: any;
 }
 
-export interface UploadEvent extends TargetEvent {
+export interface UploadEvent extends BaseEvent, TargetEvent {
   data: any;
   mimeType: string;
   fileName: string;
 }
 
-export interface ClickEvent extends TargetEvent {
+export interface ClickEvent extends BaseEvent, TargetEvent {
   offsetX: number;
   offsetY: number;
   href?: string;
 }
 
-export interface SubmitEvent extends TargetEvent {}
+export interface SubmitEvent extends BaseEvent, TargetEvent {}
 
 export interface ViewEvent extends BaseEvent {
   width: number;
