@@ -28,6 +28,7 @@ export interface TargetEvent extends BaseEvent {
   dataCy: string | null;
   isHidden: boolean;
   targetType: string;
+  domPath: string[];
 }
 
 export interface DragDropEvent extends BaseEvent {

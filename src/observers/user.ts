@@ -15,6 +15,7 @@ import {
 import { finder } from "@medv/finder";
 import * as Papa from "papaparse";
 import { isHidden } from "../utils/isHidden";
+import { getDomPath } from "../utils/getDomPath";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   type: event.type,
@@ -31,6 +32,7 @@ const getTargetProps = (
   id: target.id,
   isHidden: isHidden(target),
   targetType: (target as HTMLInputElement).type,
+  domPath: getDomPath(target),
 });
 
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
