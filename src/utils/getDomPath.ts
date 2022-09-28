@@ -12,16 +12,21 @@ export function getDomPath(el: HTMLElement): string[] {
         sibCount++;
       }
     }
-    if (
+    const nodeName = el.nodeName.toLowerCase();
+    if (!!el.dataset && !!el.dataset.cy) {
+      stack.unshift(`${nodeName}[data-cy="${el.dataset.cy}"]`);
+    } else if (!!el.dataset && !!el.dataset.testid) {
+      stack.unshift(`${nodeName}[data-testid="${el.dataset.testid}"]`);
+    } else if (
       typeof el.hasAttribute === "function" &&
       el.hasAttribute("id") &&
       el.id != ""
     ) {
-      stack.unshift(el.nodeName.toLowerCase() + "#" + el.id);
+      stack.unshift(`${nodeName}#${el.id}`);
     } else if (sibCount > 1) {
-      stack.unshift(el.nodeName.toLowerCase() + ":eq(" + sibIndex + ")");
+      stack.unshift(`${nodeName}:nth-child("${sibIndex}")`);
     } else {
-      stack.unshift(el.nodeName.toLowerCase());
+      stack.unshift(nodeName);
     }
     el = el.parentNode as HTMLElement;
   }

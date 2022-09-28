@@ -26,7 +26,8 @@ const getTargetProps = (
   target: HTMLElement
 ): Omit<TargetEvent, "type" | "timestamp" | "domain"> => ({
   selectors: [[finder(target)]],
-  dataCy: target.getAttribute("data-cy"),
+  dataCy: target.dataset.cy,
+  dataTestid: target.dataset.testid,
   tag: target.tagName,
   classList: target.classList,
   id: target.id,

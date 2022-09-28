@@ -26,6 +26,7 @@ export interface TargetEvent extends BaseEvent {
   classList: DOMTokenList;
   id: string;
   dataCy: string | null;
+  dataTestid: string | null;
   isHidden: boolean;
   targetType: string;
   domPath: string[];
