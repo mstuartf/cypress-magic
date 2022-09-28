@@ -24,7 +24,7 @@ export function getDomPath(el: HTMLElement): string[] {
     ) {
       stack.unshift(`${nodeName}#${el.id}`);
     } else if (sibCount > 1) {
-      stack.unshift(`${nodeName}:nth-child("${sibIndex}")`);
+      stack.unshift(`${nodeName}:nth-of-type(${sibIndex + 1})`);
     } else {
       stack.unshift(nodeName);
     }
