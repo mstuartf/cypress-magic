@@ -14,7 +14,8 @@ export const createWsClient = () => {
   let queue: ParsedEvent[] = [];
 
   ws.onclose = function () {
-    console.error("Chat socket closed");
+    console.warn("Chat socket closed");
+    sessionId = undefined;
   };
 
   ws.onmessage = function (msg: MessageEvent) {
