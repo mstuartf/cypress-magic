@@ -27,6 +27,7 @@ export interface TargetEvent extends BaseEvent {
   id: string;
   dataCy: string | null;
   isHidden: boolean;
+  targetType: string;
 }
 
 export interface DragDropEvent extends BaseEvent {
@@ -43,7 +44,6 @@ export interface DragDropEvent extends BaseEvent {
 }
 
 export interface ChangeEvent extends TargetEvent {
-  inputType: string;
   value: any;
 }
 

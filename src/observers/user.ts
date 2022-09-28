@@ -30,6 +30,7 @@ const getTargetProps = (
   classList: target.classList,
   id: target.id,
   isHidden: isHidden(target),
+  targetType: (target as HTMLInputElement).type,
 });
 
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
@@ -44,11 +45,10 @@ const parseChangeEvent = (
   event: Event,
   obfuscate: InitArgs["obfuscate"]
 ): ChangeEvent => {
-  const { type, value } = event.target as HTMLInputElement;
+  const { value } = event.target as HTMLInputElement;
   return {
     ...getBaseProps(event),
     ...getTargetProps(event.target as HTMLElement),
-    inputType: type,
     value: typeof value === "string" ? obfuscate(value) : value,
   };
 };
