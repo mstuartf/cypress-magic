@@ -20,12 +20,21 @@ export interface ResponseEvent extends BaseEvent {
   body: any;
 }
 
+export interface DomPathNode {
+  nodeName: string;
+  siblingCount: number;
+  siblingIndex: number;
+  id: string;
+  dataCy: string;
+  dataTestId: string;
+}
+
 export interface Target {
   selectors: string[][]; // todo: remove
   tag: string;
   isHidden: boolean;
   type: string;
-  domPath: string[];
+  domPath: DomPathNode[];
 }
 
 export interface TargetEvent {

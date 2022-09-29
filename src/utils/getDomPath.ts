@@ -1,5 +1,7 @@
-export function getDomPath(el: HTMLElement): string[] {
-  const stack: string[] = [];
+import { DomPathNode } from "../types";
+
+export function getDomPath(el: HTMLElement): DomPathNode[] {
+  const stack: DomPathNode[] = [];
   while (el.parentNode != null) {
     let sibCount = 0;
     let sibIndex = 0;
@@ -12,22 +14,15 @@ export function getDomPath(el: HTMLElement): string[] {
         sibCount++;
       }
     }
-    const nodeName = el.nodeName.toLowerCase();
-    if (!!el.dataset && !!el.dataset.cy) {
-      stack.unshift(`${nodeName}[data-cy="${el.dataset.cy}"]`);
-    } else if (!!el.dataset && !!el.dataset.testid) {
-      stack.unshift(`${nodeName}[data-testid="${el.dataset.testid}"]`);
-    } else if (
-      typeof el.hasAttribute === "function" &&
-      el.hasAttribute("id") &&
-      el.id != ""
-    ) {
-      stack.unshift(`${nodeName}#${el.id}`);
-    } else if (sibCount > 1) {
-      stack.unshift(`${nodeName}:nth-of-type(${sibIndex + 1})`);
-    } else {
-      stack.unshift(nodeName);
-    }
+    const domPathNode: DomPathNode = {
+      nodeName: el.nodeName,
+      siblingCount: sibCount,
+      siblingIndex: sibIndex,
+      id: el.id,
+      dataCy: el.dataset.cy,
+      dataTestId: el.dataset.testId,
+    };
+    stack.unshift(domPathNode);
     el = el.parentNode as HTMLElement;
   }
 
