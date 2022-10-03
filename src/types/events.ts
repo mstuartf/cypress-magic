@@ -8,6 +8,13 @@ export interface NavigationEvent extends BaseEvent {
   delta?: number;
 }
 
+export interface PerformanceResourceEvent extends BaseEvent {
+  resources: {
+    name: PerformanceResourceTiming["name"];
+    initiatorType: PerformanceResourceTiming["initiatorType"];
+  }[];
+}
+
 export interface RequestEvent extends BaseEvent {
   url: string;
   method: string;
@@ -87,7 +94,8 @@ export type ParsedEvent =
   | RequestEvent
   | ResponseEvent
   | ViewEvent
-  | StorageEvent;
+  | StorageEvent
+  | PerformanceResourceEvent;
 
 export enum EventType {
   CLICK = "click",

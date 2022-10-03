@@ -1,7 +1,12 @@
 // Listens for API calls and responses
 
 import { register } from "fetch-intercept";
-import { InitArgs, RequestEvent, ResponseEvent } from "../types";
+import {
+  InitArgs,
+  PerformanceResourceEvent,
+  RequestEvent,
+  ResponseEvent,
+} from "../types";
 
 const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
   url,
@@ -50,7 +55,24 @@ const parseResponse: (
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
+// we can use this to see if any requests had already fired by the time we monkeypatched
+const saveInitialPerformanceData = (saveEvent: InitArgs["saveEvent"]) => {
+  const entries = window.performance.getEntriesByType(
+    "resource"
+  ) as PerformanceResourceTiming[];
+  const performanceResourceEvent: PerformanceResourceEvent = {
+    type: "performance",
+    timestamp: Date.now(),
+    resources: entries.map(({ name, initiatorType }) => ({
+      name,
+      initiatorType,
+    })),
+  };
+  saveEvent(performanceResourceEvent);
+};
+
 export const initRequestsObserver = ({ saveEvent, obfuscate }: InitArgs) => {
+  saveInitialPerformanceData(saveEvent);
   register({
     request: function (url, config) {
       saveEvent(parseRequest(url, config));
