@@ -55,12 +55,11 @@ const parseResponse: (
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
-// we can use this to see if any requests had already fired by the time we monkeypatched
-const saveInitialPerformanceData = (saveEvent: InitArgs["saveEvent"]) => {
+const getInitialPerformanceData = (): PerformanceResourceEvent => {
   const entries = window.performance.getEntriesByType(
     "resource"
   ) as PerformanceResourceTiming[];
-  const performanceResourceEvent: PerformanceResourceEvent = {
+  return {
     type: "performance",
     timestamp: Date.now(),
     resources: entries.map(({ name, initiatorType }) => ({
@@ -68,14 +67,19 @@ const saveInitialPerformanceData = (saveEvent: InitArgs["saveEvent"]) => {
       initiatorType,
     })),
   };
-  saveEvent(performanceResourceEvent);
 };
 
 export const initRequestsObserver = ({ saveEvent, obfuscate }: InitArgs) => {
-  saveInitialPerformanceData(saveEvent);
+  let first = true;
   register({
     request: function (url, config) {
       saveEvent(parseRequest(url, config));
+      if (first) {
+        // This is the first request we have been able to intercept but not necessarily the first request made by the app.
+        // Send a history of requests already made so we can detect this on the backend.
+        saveEvent(getInitialPerformanceData());
+        first = false;
+      }
       return [url, config];
     },
 
