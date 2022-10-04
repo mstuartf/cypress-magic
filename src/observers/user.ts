@@ -13,9 +13,9 @@ import {
   Target,
 } from "../types";
 import { finder } from "@medv/finder";
-import * as Papa from "papaparse";
 import { isHidden } from "../utils/isHidden";
 import { getDomPath } from "../utils/getDomPath";
+import { readSpreadsheet } from "../utils/readSpreadsheet";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   type: event.type,
@@ -50,24 +50,25 @@ const parseChangeEvent = (
   };
 };
 
-const parseCSVUploadEvent = (
+const parseSpreadsheetUploadEvent = (
   event: Event,
   obfuscate: InitArgs["obfuscate"]
 ): Promise<UploadEvent> => {
-  return new Promise(function (complete, error) {
+  return new Promise((resolve, reject) => {
     const file = (event.target as HTMLInputElement).files[0];
-    Papa.parse<string[]>(file, {
-      complete: ({ data }) => {
-        complete({
-          type: "fileUpload",
-          timestamp: Date.now(),
-          target: getTargetProps(event.target as HTMLElement),
-          data: data.map((row) => row.map((col) => obfuscate(col))),
-          mimeType: file.type,
-          fileName: file.name,
-        });
-      },
-      error,
+    readSpreadsheet(file).then((data) => {
+      resolve({
+        type: "fileUpload",
+        timestamp: Date.now(),
+        target: getTargetProps(event.target as HTMLElement),
+        data: data
+          // only take first 10 rows
+          .slice(0, 10)
+          // obfuscate contents
+          .map((row) => row.map((col) => obfuscate(col))),
+        mimeType: file.type,
+        fileName: file.name,
+      });
     });
   });
 };
@@ -77,7 +78,7 @@ const parseSubmitEvent = (event: Event): SubmitEvent => ({
   target: getTargetProps(event.target as HTMLElement),
 });
 
-const isCSVFileUpload = (
+const isSpreadsheetUpload = (
   target: Event["target"]
 ): target is HTMLInputElement => {
   return (
@@ -85,7 +86,9 @@ const isCSVFileUpload = (
     target instanceof HTMLInputElement &&
     target.type === "file" &&
     !!target.files[0] &&
-    target.files[0].type === "text/csv"
+    ["xlsx", "xlsb", "xlsm", "xls", "csv"].some((extension) =>
+      target.files[0].name.includes(extension)
+    )
   );
 };
 
@@ -107,8 +110,8 @@ const parseEvent = (
 ): UserEvent | Promise<UserEvent> => {
   if (event.type === "click" || event.type === "dblclick") {
     return parseClickEvent(event as MouseEvent);
-  } else if (event.type === "change" && isCSVFileUpload(event.target)) {
-    return parseCSVUploadEvent(event, obfuscate);
+  } else if (event.type === "change" && isSpreadsheetUpload(event.target)) {
+    return parseSpreadsheetUploadEvent(event, obfuscate);
   } else if (event.type === "change") {
     return parseChangeEvent(event, obfuscate);
   } else if (event.type === "submit") {
