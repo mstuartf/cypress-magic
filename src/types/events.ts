@@ -82,7 +82,12 @@ export interface ViewEvent extends BaseEvent {
   isLandscape: boolean;
 }
 
-export type UserEvent = ChangeEvent | ClickEvent | SubmitEvent | DragDropEvent;
+export type UserEvent =
+  | ChangeEvent
+  | ClickEvent
+  | SubmitEvent
+  | DragDropEvent
+  | UploadEvent;
 
 export interface StorageEvent extends BaseEvent {
   value: any;
