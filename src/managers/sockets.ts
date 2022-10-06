@@ -1,8 +1,8 @@
-import { ParsedEvent } from "./types";
-import { readBlockUpload, readClientId, readSocketUrl } from "./globals";
-import { version } from "../package.json";
+import { EventManager, ParsedEvent } from "../types";
+import { readBlockUpload, readClientId, readSocketUrl } from "../globals";
+import { version } from "../../package.json";
 
-export const createWsClient = () => {
+export const createWsClient = (): EventManager => {
   const url = readSocketUrl();
   const blockUpload = readBlockUpload();
   const clientId = readClientId();
@@ -55,12 +55,12 @@ export const createWsClient = () => {
     queue = [];
   };
 
-  const sendEvent = (event: ParsedEvent) => {
+  const saveEvent = (event: ParsedEvent) => {
     queue.push(event);
     if (sessionId) {
       uploadQueue();
     }
   };
 
-  return { sendEvent };
+  return { saveEvent };
 };

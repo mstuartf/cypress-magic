@@ -10,8 +10,8 @@ import {
   initUserObserver,
   initViewportObserver,
 } from "./observers";
-import { createPrivacyManager } from "./managers";
-import { createEventManager } from "./managers";
+import { createPrivacyManager, createWsClient } from "./managers";
+import { InitArgs } from "./types";
 
 const initialize = () => {
   const domains = readDomains();
@@ -32,7 +32,7 @@ const initialize = () => {
 
   console.log(`td version ${version} active`);
 
-  const args = { ...createEventManager(), ...createPrivacyManager() };
+  const args: InitArgs = { ...createWsClient(), ...createPrivacyManager() };
 
   initUserObserver(args);
   initRequestsObserver(args);

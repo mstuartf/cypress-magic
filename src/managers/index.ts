@@ -1,2 +1,2 @@
 export * from "./privacy";
-export * from "./events";
+export * from "./sockets";

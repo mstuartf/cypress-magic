@@ -1,7 +1,7 @@
 import { ParsedEvent } from "./events";
 
 export type SaveEvent = (event: ParsedEvent) => void;
-export type RegisterOnSave = (fn: OnSaveCallback) => void;
+export type RegisterOnShutDown = (fn: () => void) => void;
 
 export type NestedOption = number | boolean | string | NestedObj;
 
@@ -11,11 +11,8 @@ export interface NestedObj {
 
 export type ObfuscateFn = (v: NestedOption | Array<NestedOption>) => any;
 
-export type OnSaveCallback = (saveEventFn: SaveEvent) => void;
-
 export interface EventManager {
   saveEvent: SaveEvent;
-  registerOnSave: RegisterOnSave;
 }
 
 export interface PrivacyManager {
