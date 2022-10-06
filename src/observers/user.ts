@@ -11,6 +11,7 @@ import {
   UploadEvent,
   DragDropEvent,
   Target,
+  OnCloseCallback,
 } from "../types";
 import { finder } from "@medv/finder";
 import { isHidden } from "../utils/isHidden";
@@ -128,15 +129,28 @@ function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   Promise.resolve(parseEvent(event, { ...rest })).then((res) => saveEvent(res));
 }
 
-function addDOMListeners(args: InitArgs): void {
+function addDOMListeners(args: InitArgs): OnCloseCallback {
+  const listener: EventListener = (event) => handleEvent(event, args);
   Object.values(EventType).forEach((event) => {
-    document.addEventListener(event, (event) => handleEvent(event, args), {
+    document.addEventListener(event, listener, {
       capture: true,
       passive: true,
     });
   });
+  return () => {
+    Object.values(EventType).forEach((event) => {
+      document.removeEventListener(event, listener, { capture: true });
+    });
+  };
 }
 
-export function initUserObserver(args: InitArgs): void {
-  addDOMListeners(args);
+export function initUserObserver({
+  registerOnCloseCallback,
+  ...rest
+}: InitArgs): void {
+  const removeDOMListeners = addDOMListeners({
+    registerOnCloseCallback,
+    ...rest,
+  });
+  registerOnCloseCallback(removeDOMListeners);
 }

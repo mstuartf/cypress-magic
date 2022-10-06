@@ -1,7 +1,9 @@
 import { ParsedEvent } from "./events";
 
 export type SaveEvent = (event: ParsedEvent) => void;
-export type RegisterOnShutDown = (fn: () => void) => void;
+
+export type OnCloseCallback = () => void;
+export type RegisterOnCloseCallback = (fn: OnCloseCallback) => void;
 
 export type NestedOption = number | boolean | string | NestedObj;
 
@@ -13,6 +15,8 @@ export type ObfuscateFn = (v: NestedOption | Array<NestedOption>) => any;
 
 export interface EventManager {
   saveEvent: SaveEvent;
+  // this provides a way to tell listeners to stop listening when the sockets connection closes
+  registerOnCloseCallback: RegisterOnCloseCallback;
 }
 
 export interface PrivacyManager {

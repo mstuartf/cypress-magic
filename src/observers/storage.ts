@@ -41,9 +41,16 @@ const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
-export const initStorageObserver = (args: InitArgs) => {
-  const { save } = snapshotManager(args);
+export const initStorageObserver = ({
+  registerOnCloseCallback,
+  saveEvent,
+  obfuscate,
+}: InitArgs) => {
+  const { save } = snapshotManager({ saveEvent, obfuscate });
   save();
   storageChanged("local");
   window.addEventListener("localStorageChanged", save);
+  registerOnCloseCallback(() => {
+    window.removeEventListener("localStorageChanged", save);
+  });
 };

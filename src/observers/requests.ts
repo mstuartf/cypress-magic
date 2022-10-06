@@ -69,9 +69,13 @@ const getInitialPerformanceData = (): PerformanceResourceEvent => {
   };
 };
 
-export const initRequestsObserver = ({ saveEvent, obfuscate }: InitArgs) => {
+export const initRequestsObserver = ({
+  saveEvent,
+  obfuscate,
+  registerOnCloseCallback,
+}: InitArgs) => {
   let first = true;
-  register({
+  const unregister = register({
     request: function (url, config) {
       saveEvent(parseRequest(url, config));
       if (first) {
@@ -92,4 +96,5 @@ export const initRequestsObserver = ({ saveEvent, obfuscate }: InitArgs) => {
       return Promise.reject(error);
     },
   });
+  registerOnCloseCallback(unregister);
 };

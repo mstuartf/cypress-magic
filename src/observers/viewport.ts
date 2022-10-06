@@ -14,5 +14,4 @@ export const initViewportObserver = ({ saveEvent }: InitArgs) => {
     hasTouch: false,
     isLandscape: false,
   });
-  // todo: listen for changes?
 };

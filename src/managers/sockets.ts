@@ -1,4 +1,4 @@
-import { EventManager, ParsedEvent } from "../types";
+import { EventManager, ParsedEvent, OnCloseCallback } from "../types";
 import { readBlockUpload, readClientId, readSocketUrl } from "../globals";
 import { version } from "../../package.json";
 
@@ -11,11 +11,20 @@ export const createWsClient = (): EventManager => {
   const ws = new WebSocket(url);
   let sessionId: string | undefined;
 
+  (window as any).REMOVE_SOCKET = ws;
+
   let queue: ParsedEvent[] = [];
+
+  const onCloseCallbacks: OnCloseCallback[] = [];
+
+  const registerOnCloseCallback = (fn: OnCloseCallback) => {
+    onCloseCallbacks.push(fn);
+  };
 
   ws.onclose = function () {
     console.warn("Chat socket closed");
     sessionId = undefined;
+    onCloseCallbacks.forEach((fn) => fn());
   };
 
   ws.onmessage = function (msg: MessageEvent) {
@@ -62,5 +71,5 @@ export const createWsClient = (): EventManager => {
     }
   };
 
-  return { saveEvent };
+  return { saveEvent, registerOnCloseCallback };
 };
