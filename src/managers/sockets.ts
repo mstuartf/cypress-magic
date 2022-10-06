@@ -11,8 +11,6 @@ export const createWsClient = (): EventManager => {
   const ws = new WebSocket(url);
   let sessionId: string | undefined;
 
-  (window as any).REMOVE_SOCKET = ws;
-
   let queue: ParsedEvent[] = [];
 
   const onCloseCallbacks: OnCloseCallback[] = [];

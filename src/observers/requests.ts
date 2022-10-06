@@ -19,41 +19,27 @@ const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
 });
 
 const parseResponse: (
-  res: Response & { request: Request },
-  args: RequiredArgs
-) => void = (response, { saveEvent, obfuscate }) => {
-  const {
-    request: { url, method },
-    status,
-  } = response;
-  response
-    .clone()
-    .json()
-    .then((body) => {
-      const res: ResponseEvent = {
-        type: "response",
-        timestamp: Date.now(),
-        url,
-        method,
-        status,
-        body: body ? obfuscate(body) : body,
-      };
-      saveEvent(res);
-    })
-    .catch(() => {
-      const res: ResponseEvent = {
-        type: "response",
-        timestamp: Date.now(),
-        url,
-        method,
-        status,
-        body: null,
-      };
-      saveEvent(res);
-    });
+  res: Response & { request: Request }
+) => Promise<ResponseEvent> = (response) => {
+  return new Promise((resolve, reject) => {
+    const {
+      request: { url, method },
+      status,
+    } = response;
+    const shared: Omit<ResponseEvent, "body"> = {
+      type: "response",
+      timestamp: Date.now(),
+      url,
+      method,
+      status,
+    };
+    response
+      .clone()
+      .json()
+      .then((body) => resolve({ ...shared, body }))
+      .catch(() => resolve({ ...shared, body: null }));
+  });
 };
-
-type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
 const getInitialPerformanceData = (): PerformanceResourceEvent => {
   const entries = window.performance.getEntriesByType(
@@ -88,12 +74,13 @@ export const initRequestsObserver = ({
     },
 
     response: function (response) {
-      parseResponse(response, { saveEvent, obfuscate });
+      parseResponse(response).then(({ body, ...rest }) => {
+        saveEvent({
+          ...rest,
+          body: body ? obfuscate(body) : body,
+        });
+      });
       return response;
-    },
-
-    responseError: function (error) {
-      return Promise.reject(error);
     },
   });
   registerOnCloseCallback(unregister);
