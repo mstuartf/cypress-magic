@@ -75,6 +75,18 @@ const parseSpreadsheetUploadEvent = (
   });
 };
 
+const parseOtherUploadEvent = (event: Event): UploadEvent => {
+  const file = (event.target as HTMLInputElement).files[0];
+  return {
+    type: "fileUpload",
+    timestamp: Date.now(),
+    target: getTargetProps(event.target as HTMLElement),
+    data: null,
+    mimeType: file.type,
+    fileName: file.name,
+  };
+};
+
 const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getBaseProps(event),
   target: getTargetProps(event.target as HTMLElement),
@@ -91,6 +103,15 @@ const isSpreadsheetUpload = (
     ["xlsx", "xlsb", "xlsm", "xls", "csv"].some((extension) =>
       target.files[0].name.includes(extension)
     )
+  );
+};
+
+const isOtherUpload = (target: Event["target"]): target is HTMLInputElement => {
+  return (
+    target &&
+    target instanceof HTMLInputElement &&
+    target.type === "file" &&
+    !!target.files[0]
   );
 };
 
@@ -114,6 +135,8 @@ const parseEvent = (
     return parseClickEvent(event as MouseEvent);
   } else if (event.type === "change" && isSpreadsheetUpload(event.target)) {
     return parseSpreadsheetUploadEvent(event, obfuscate);
+  } else if (event.type === "change" && isOtherUpload(event.target)) {
+    return parseOtherUploadEvent(event);
   } else if (event.type === "change") {
     return parseChangeEvent(event, obfuscate);
   } else if (event.type === "submit") {
