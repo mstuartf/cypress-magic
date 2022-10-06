@@ -71,6 +71,11 @@ export interface ClickEvent extends BaseEvent, TargetEvent {
   href?: string;
 }
 
+export interface ErrorEvent extends BaseEvent {
+  handler: string;
+  message: string;
+}
+
 export interface SubmitEvent extends BaseEvent, TargetEvent {}
 
 export interface ViewEvent extends BaseEvent {

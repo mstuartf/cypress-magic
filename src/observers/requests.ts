@@ -7,6 +7,7 @@ import {
   RequestEvent,
   ResponseEvent,
 } from "../types";
+import { createErrorEvent } from "../utils/createErrorEvent";
 
 const parseRequest: (url: string, init?: RequestInit) => RequestEvent = (
   url,
@@ -63,23 +64,31 @@ export const initRequestsObserver = ({
   let first = true;
   const unregister = register({
     request: function (url, config) {
-      saveEvent(parseRequest(url, config));
-      if (first) {
-        // This is the first request we have been able to intercept but not necessarily the first request made by the app.
-        // Send a history of requests already made so we can detect this on the backend.
-        saveEvent(getInitialPerformanceData());
-        first = false;
+      try {
+        saveEvent(parseRequest(url, config));
+        if (first) {
+          // This is the first request we have been able to intercept but not necessarily the first request made by the app.
+          // Send a history of requests already made so we can detect this on the backend.
+          saveEvent(getInitialPerformanceData());
+          first = false;
+        }
+      } catch (e) {
+        saveEvent(createErrorEvent("request", e));
       }
       return [url, config];
     },
 
     response: function (response) {
-      parseResponse(response).then(({ body, ...rest }) => {
-        saveEvent({
-          ...rest,
-          body: body ? obfuscate(body) : body,
+      try {
+        parseResponse(response).then(({ body, ...rest }) => {
+          saveEvent({
+            ...rest,
+            body: body ? obfuscate(body) : body,
+          });
         });
-      });
+      } catch (e) {
+        saveEvent(createErrorEvent("response", e));
+      }
       return response;
     },
   });

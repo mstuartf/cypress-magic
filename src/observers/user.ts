@@ -17,6 +17,7 @@ import { finder } from "@medv/finder";
 import { isHidden } from "../utils/isHidden";
 import { getDomPath } from "../utils/getDomPath";
 import { readSpreadsheet } from "../utils/readSpreadsheet";
+import { createErrorEvent } from "../utils/createErrorEvent";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   type: event.type,
@@ -123,10 +124,16 @@ const parseEvent = (
 };
 
 function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
-  if (!event.isTrusted) {
-    return;
+  try {
+    if (!event.isTrusted) {
+      return;
+    }
+    Promise.resolve(parseEvent(event, { ...rest })).then((res) =>
+      saveEvent(res)
+    );
+  } catch (e) {
+    saveEvent(createErrorEvent(event.type, e));
   }
-  Promise.resolve(parseEvent(event, { ...rest })).then((res) => saveEvent(res));
 }
 
 function addDOMListeners(args: InitArgs): OnCloseCallback {

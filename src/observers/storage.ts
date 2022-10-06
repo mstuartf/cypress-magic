@@ -1,5 +1,6 @@
 import { InitArgs, StorageEvent } from "../types";
 import storageChanged from "storage-changed";
+import { createErrorEvent } from "../utils/createErrorEvent";
 
 const getSnapshot = () =>
   Object.entries(localStorage)
@@ -27,13 +28,17 @@ const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
   let prev: string = "";
 
   const save = () => {
-    const snapshot = getSnapshot();
-    const snapShotString = JSON.stringify(snapshot);
-    if (snapShotString === prev) {
-      return;
+    try {
+      const snapshot = getSnapshot();
+      const snapShotString = JSON.stringify(snapshot);
+      if (snapShotString === prev) {
+        return;
+      }
+      saveEvent(buildEvent(obfuscate(snapshot)));
+      prev = snapShotString;
+    } catch (e) {
+      saveEvent(createErrorEvent("storage", e));
     }
-    saveEvent(buildEvent(obfuscate(snapshot)));
-    prev = snapShotString;
   };
 
   return { save };

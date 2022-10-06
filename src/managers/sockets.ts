@@ -29,7 +29,6 @@ export const createWsClient = (): EventManager => {
     const data = JSON.parse(msg.data);
     if (data.session_id) {
       sessionId = data.session_id;
-      console.log("session id set");
       uploadQueue();
     }
   };

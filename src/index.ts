@@ -1,7 +1,6 @@
 // Initializes the lib to start listening for events
 
-import { readDomains, readIsTestMode } from "./globals";
-import { version } from "../package.json";
+import { readIsTestMode } from "./globals";
 import { isChrome } from "./utils";
 import {
   initNavObserver,
@@ -14,23 +13,9 @@ import { createPrivacyManager, createWsClient } from "./managers";
 import { InitArgs } from "./types";
 
 const initialize = () => {
-  const domains = readDomains();
-  if (!domains.includes(window.location.hostname)) {
-    console.log("hostname not supported");
+  if (!isChrome() || readIsTestMode()) {
     return;
   }
-
-  if (!isChrome()) {
-    console.log("browser not supported");
-    return;
-  }
-
-  if (readIsTestMode()) {
-    console.log("running in test mode");
-    return;
-  }
-
-  console.log(`td version ${version} active`);
 
   const args: InitArgs = { ...createWsClient(), ...createPrivacyManager() };
 
@@ -41,4 +26,8 @@ const initialize = () => {
   initStorageObserver(args);
 };
 
-initialize();
+try {
+  initialize();
+} catch (e) {
+  console.log("error loading Seasmoke");
+}

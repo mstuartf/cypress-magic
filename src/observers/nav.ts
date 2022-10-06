@@ -1,6 +1,7 @@
 // Listens for navigation events
 
 import { BaseEvent, InitArgs, OnCloseCallback, SaveEvent } from "../types";
+import { createErrorEvent } from "../utils/createErrorEvent";
 
 const getBaseEvent = (): BaseEvent => ({
   type: "urlChange",
@@ -13,40 +14,60 @@ function monkeyPatchHistory(
 ): OnCloseCallback {
   const pushState = history.pushState;
   history.pushState = function (state, unused, url) {
-    saveEvent({ ...getBaseEvent(), url });
+    try {
+      saveEvent({ ...getBaseEvent(), url });
+    } catch (e) {
+      saveEvent(createErrorEvent("urlChange", e));
+    }
     return pushState.apply(history, arguments);
   };
 
   const replaceState = history.replaceState;
   history.replaceState = function (state, unused, url) {
-    saveEvent({ ...getBaseEvent(), url });
+    try {
+      saveEvent({ ...getBaseEvent(), url });
+    } catch (e) {
+      saveEvent(createErrorEvent("urlChange", e));
+    }
     return replaceState.apply(history, arguments);
   };
 
   const back = history.back;
   history.back = function () {
-    saveEvent({
-      ...getBaseEvent(),
-      url: "back",
-    });
+    try {
+      saveEvent({
+        ...getBaseEvent(),
+        url: "back",
+      });
+    } catch (e) {
+      saveEvent(createErrorEvent("urlChange", e));
+    }
     return back.apply(history, arguments);
   };
 
   const forward = history.forward;
   history.forward = function () {
-    saveEvent({
-      ...getBaseEvent(),
-      url: "forward",
-    });
+    try {
+      saveEvent({
+        ...getBaseEvent(),
+        url: "forward",
+      });
+    } catch (e) {
+      saveEvent(createErrorEvent("urlChange", e));
+    }
     return forward.apply(history, arguments);
   };
 
   const go = history.go;
   history.go = function (delta) {
-    saveEvent({
-      ...getBaseEvent(),
-      delta,
-    });
+    try {
+      saveEvent({
+        ...getBaseEvent(),
+        delta,
+      });
+    } catch (e) {
+      saveEvent(createErrorEvent("urlChange", e));
+    }
     return go.apply(history, arguments);
   };
 
