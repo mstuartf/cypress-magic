@@ -147,13 +147,15 @@ const parseEvent = (
 };
 
 function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
+  if (!event.isTrusted) {
+    return;
+  }
   try {
-    if (!event.isTrusted) {
-      return;
-    }
-    Promise.resolve(parseEvent(event, { ...rest })).then((res) =>
-      saveEvent(res)
-    );
+    Promise.resolve(parseEvent(event, { ...rest }))
+      .then((res) => saveEvent(res))
+      .catch((e) => {
+        saveEvent(createErrorEvent(event.type, e));
+      });
   } catch (e) {
     saveEvent(createErrorEvent(event.type, e));
   }

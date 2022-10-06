@@ -80,12 +80,14 @@ export const initRequestsObserver = ({
 
     response: function (response) {
       try {
-        parseResponse(response).then(({ body, ...rest }) => {
-          saveEvent({
-            ...rest,
-            body: body ? obfuscate(body) : body,
-          });
-        });
+        parseResponse(response)
+          .then(({ body, ...rest }) => {
+            saveEvent({
+              ...rest,
+              body: body ? obfuscate(body) : body,
+            });
+          })
+          .catch((e) => saveEvent(createErrorEvent("response", e)));
       } catch (e) {
         saveEvent(createErrorEvent("response", e));
       }
