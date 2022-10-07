@@ -4,14 +4,14 @@ import {
   BaseEvent,
   ChangeEvent,
   ClickEvent,
-  EventType,
-  UserEvent,
-  SubmitEvent,
-  InitArgs,
-  UploadEvent,
   DragDropEvent,
-  Target,
+  EventType,
+  InitArgs,
   OnCloseCallback,
+  SubmitEvent,
+  TargetEvent,
+  UploadEvent,
+  UserEvent,
 } from "../types";
 import { finder } from "@medv/finder";
 import { isHidden } from "../utils/isHidden";
@@ -24,17 +24,20 @@ const getBaseProps = (event: Event): BaseEvent => ({
   timestamp: Date.now(),
 });
 
-const getTargetProps = (target: HTMLElement): Target => ({
-  selectors: [[finder(target)]],
-  tag: target.tagName,
-  isHidden: isHidden(target),
-  type: (target as HTMLInputElement).type,
-  domPath: getDomPath(target),
+const getTargetProps = (target: HTMLElement): TargetEvent => ({
+  pathname: window.location.pathname,
+  target: {
+    selectors: [[finder(target)]],
+    tag: target.tagName,
+    isHidden: isHidden(target),
+    type: (target as HTMLInputElement).type,
+    domPath: getDomPath(target),
+  },
 });
 
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
-  target: getTargetProps(event.target as HTMLElement),
+  ...getTargetProps(event.target as HTMLElement),
   offsetX: event.pageX,
   offsetY: event.pageY,
   href: (event.target as HTMLAnchorElement).href,
@@ -47,7 +50,7 @@ const parseChangeEvent = (
   const { value } = event.target as HTMLInputElement;
   return {
     ...getBaseProps(event),
-    target: getTargetProps(event.target as HTMLElement),
+    ...getTargetProps(event.target as HTMLElement),
     value: typeof value === "string" ? obfuscate(value) : value,
   };
 };
@@ -62,7 +65,7 @@ const parseSpreadsheetUploadEvent = (
       resolve({
         type: "fileUpload",
         timestamp: Date.now(),
-        target: getTargetProps(event.target as HTMLElement),
+        ...getTargetProps(event.target as HTMLElement),
         data: data
           // only take first 10 rows
           .slice(0, 10)
@@ -80,7 +83,7 @@ const parseOtherUploadEvent = (event: Event): UploadEvent => {
   return {
     type: "fileUpload",
     timestamp: Date.now(),
-    target: getTargetProps(event.target as HTMLElement),
+    ...getTargetProps(event.target as HTMLElement),
     data: null,
     mimeType: file.type,
     fileName: file.name,
@@ -89,7 +92,7 @@ const parseOtherUploadEvent = (event: Event): UploadEvent => {
 
 const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getBaseProps(event),
-  target: getTargetProps(event.target as HTMLElement),
+  ...getTargetProps(event.target as HTMLElement),
 });
 
 const isSpreadsheetUpload = (
@@ -117,9 +120,7 @@ const isOtherUpload = (target: Event["target"]): target is HTMLInputElement => {
 
 const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
   ...getBaseProps(event),
-  target: {
-    ...getTargetProps(event.target as HTMLElement),
-  },
+  ...getTargetProps(event.target as HTMLElement),
   destination: {
     clientX: event.clientX,
     clientY: event.clientY,

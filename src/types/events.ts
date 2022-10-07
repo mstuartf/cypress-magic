@@ -46,6 +46,7 @@ export interface Target {
 
 export interface TargetEvent {
   target: Target;
+  pathname: string;
 }
 
 export interface DragDropEvent extends BaseEvent, TargetEvent {
