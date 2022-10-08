@@ -38,7 +38,7 @@ export interface DomPathNode {
 
 export interface Target {
   selectors: string[][]; // todo: remove
-  tag: string;
+  tag: string; // todo: remove
   isHidden: boolean;
   type: string;
   domPath: DomPathNode[];
