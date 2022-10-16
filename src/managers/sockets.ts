@@ -10,6 +10,7 @@ export const createWsClient = (): EventManager => {
 
   const ws = new WebSocket(url);
   let sessionId: string | undefined;
+  let index: number = 0;
 
   let queue: ParsedEvent[] = [];
 
@@ -52,8 +53,10 @@ export const createWsClient = (): EventManager => {
       JSON.stringify({
         sessionId,
         event,
+        index,
       })
     );
+    index++;
   };
 
   const uploadQueue = () => {
