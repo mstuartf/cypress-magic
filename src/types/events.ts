@@ -4,8 +4,8 @@ export interface BaseEvent {
 }
 
 export interface NavigationEvent extends BaseEvent {
-  url?: string | URL;
-  delta?: number;
+  hostname: string;
+  pathname: string;
 }
 
 export interface PerformanceResourceEvent extends BaseEvent {
@@ -106,7 +106,8 @@ export type ParsedEvent =
   | ResponseEvent
   | ViewEvent
   | StorageEvent
-  | PerformanceResourceEvent;
+  | PerformanceResourceEvent
+  | ErrorEvent;
 
 export enum EventType {
   CLICK = "click",
