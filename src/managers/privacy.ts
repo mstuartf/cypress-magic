@@ -47,7 +47,7 @@ const obfuscateByChar = (raw: string): string =>
       if (/^\d+$/.test(char)) {
         return `${getRandomNumber(1)}`;
       }
-      if (char.match(/[a-z]/i)) {
+      if (char.match(/\p{L}/u)) {
         const isUppercase = char === char.toUpperCase();
         const letter = getRandomLetter();
         return isUppercase ? letter.toUpperCase() : letter;
