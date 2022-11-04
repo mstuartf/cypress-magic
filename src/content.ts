@@ -3,7 +3,7 @@ import initialize from "./initialize";
 const manager = () => {
   let deinit: () => void;
   const start = (clientId: string) => {
-    deinit = initialize(clientId);
+    deinit = initialize(clientId, true);
   };
   const stop = () => {
     deinit();

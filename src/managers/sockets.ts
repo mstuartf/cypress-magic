@@ -2,7 +2,10 @@ import { EventManager, OnCloseCallback, ParsedEvent } from "../types";
 import { readBlockUpload, readSocketUrl } from "../globals";
 import { version } from "../../package.json";
 
-export const createWsClient = (clientId: string): EventManager => {
+export const createWsClient = (
+  clientId: string,
+  devMode = false
+): EventManager => {
   const url = readSocketUrl();
   const blockUpload = readBlockUpload();
   const domain = window.location.hostname;
@@ -39,6 +42,7 @@ export const createWsClient = (clientId: string): EventManager => {
         clientId,
         domain,
         version,
+        dev: devMode,
       })
     );
   };
