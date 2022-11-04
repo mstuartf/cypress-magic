@@ -1,13 +1,11 @@
 import initialize from "./initialize";
 
-(window as any).TD_CLIENT_ID = "b7483b7f-bb53-4190-b9c9-8f01dbd29590";
-
 console.log("starting");
 
 const manager = () => {
   let deinit: () => void;
   const start = () => {
-    deinit = initialize();
+    deinit = initialize("b7483b7f-bb53-4190-b9c9-8f01dbd29590");
   };
   const stop = () => {
     deinit();

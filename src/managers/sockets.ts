@@ -1,11 +1,10 @@
-import { EventManager, ParsedEvent, OnCloseCallback } from "../types";
-import { readBlockUpload, readClientId, readSocketUrl } from "../globals";
+import { EventManager, OnCloseCallback, ParsedEvent } from "../types";
+import { readBlockUpload, readSocketUrl } from "../globals";
 import { version } from "../../package.json";
 
-export const createWsClient = (): EventManager => {
+export const createWsClient = (clientId: string): EventManager => {
   const url = readSocketUrl();
   const blockUpload = readBlockUpload();
-  const clientId = readClientId();
   const domain = window.location.hostname;
 
   const ws = new WebSocket(url);

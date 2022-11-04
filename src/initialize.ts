@@ -11,13 +11,13 @@ import {
 } from "./observers";
 import { createPrivacyManager, createWsClient } from "./managers";
 
-const initialize = () => {
+const initialize = (clientId: string) => {
   if (!isChrome() || readIsTestMode()) {
     return;
   }
 
   const { close, clear, ...args } = {
-    ...createWsClient(),
+    ...createWsClient(clientId),
     ...createPrivacyManager(),
   };
 
