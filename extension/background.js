@@ -57,8 +57,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   if (action === "logout") {
     updateState({ email_address: null, client_id: null }).then(() => {
-      chrome.action.setPopup({ popup: "login.html" }).then(() => {
-        sendResponse(true);
+      getActiveTabId().then((tabId) => {
+        chrome.action.setBadgeText({ tabId, text: "OFF" }).then(() => {
+          chrome.action.setPopup({ popup: "login.html" }).then(() => {
+            sendResponse(true);
+          });
+        });
       });
     });
     return true;
