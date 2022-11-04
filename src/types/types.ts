@@ -17,13 +17,16 @@ export interface EventManager {
   saveEvent: SaveEvent;
   // this provides a way to tell listeners to stop listening when the sockets connection closes
   registerOnCloseCallback: RegisterOnCloseCallback;
+  close: () => void;
 }
 
 export interface PrivacyManager {
   obfuscate: ObfuscateFn;
+  clear: () => void;
 }
 
-export type InitArgs = EventManager & PrivacyManager;
+export type InitArgs = Omit<EventManager, "close"> &
+  Omit<PrivacyManager, "clear">;
 
 export interface TDWindow extends Window {
   TD_CLIENT_ID: string;

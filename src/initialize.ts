@@ -10,24 +10,27 @@ import {
   initViewportObserver,
 } from "./observers";
 import { createPrivacyManager, createWsClient } from "./managers";
-import { InitArgs } from "./types";
 
 const initialize = () => {
   if (!isChrome() || readIsTestMode()) {
     return;
   }
 
-  const args: InitArgs = { ...createWsClient(), ...createPrivacyManager() };
+  const { close, clear, ...args } = {
+    ...createWsClient(),
+    ...createPrivacyManager(),
+  };
 
   initUserObserver(args);
   initRequestsObserver(args);
   initNavObserver(args);
   initViewportObserver(args);
   initStorageObserver(args);
+
+  return () => {
+    clear();
+    close();
+  };
 };
 
-try {
-  initialize();
-} catch (e) {
-  console.log("error loading Seasmoke");
-}
+export default initialize;

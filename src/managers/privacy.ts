@@ -58,7 +58,7 @@ const obfuscateByChar = (raw: string): string =>
 
 export const createPrivacyManager = (): PrivacyManager => {
   // this is to keep track of all sensitive strings that should be stripped from html
-  const tracker: { [key: string | number]: string | number } = {};
+  let tracker: { [key: string | number]: string | number } = {};
 
   const obfuscateWithTracker: (
     raw: string | number | boolean
@@ -99,7 +99,12 @@ export const createPrivacyManager = (): PrivacyManager => {
     }
   };
 
+  const clear = () => {
+    tracker = {};
+  };
+
   return {
     obfuscate,
+    clear,
   };
 };

@@ -71,5 +71,9 @@ export const createWsClient = (): EventManager => {
     }
   };
 
-  return { saveEvent, registerOnCloseCallback };
+  const close = () => {
+    ws.close();
+  };
+
+  return { saveEvent, registerOnCloseCallback, close };
 };
