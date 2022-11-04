@@ -1,7 +1,5 @@
 import initialize from "./initialize";
 
-console.log("starting");
-
 const manager = () => {
   let deinit: () => void;
   const start = () => {
@@ -23,7 +21,7 @@ const setActionState = async (isRecording: boolean) => {
 
 const getActionState = async () => {
   const state = await chrome.storage.local.get(["seasmoke"]);
-  return state.seasmoke;
+  return state.seasmoke || {};
 };
 
 chrome.runtime.onMessage.addListener(async function (
@@ -48,9 +46,6 @@ chrome.runtime.onMessage.addListener(async function (
 
 const onLoad = async () => {
   const state = await getActionState();
-  if (!state) {
-    return;
-  }
   const { isRecording, hasReloaded } = state;
   if (isRecording && !hasReloaded) {
     await chrome.storage.local.set({

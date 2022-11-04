@@ -7,12 +7,12 @@ const getActiveTabId = async () => {
 
 const getActionState = async () => {
   const state = await chrome.storage.local.get(["seasmoke"]);
-  return state.seasmoke;
+  return state.seasmoke || {};
 };
 
 const setButtonText = async () => {
   const state = await getActionState();
-  button.innerText = state?.isRecording ? "turn off" : "turn on";
+  button.innerText = state.isRecording ? "turn off" : "turn on";
 };
 
 button.addEventListener("click", async () => {
