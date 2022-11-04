@@ -5,19 +5,67 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+const login = ({ emailAddress }) =>
+  new Promise((resolve) =>
+    resolve({
+      email_address: emailAddress,
+      client_id: "b7483b7f-bb53-4190-b9c9-8f01dbd29590",
+    })
+  );
+
+const getState = async () => {
+  const state = await chrome.storage.local.get(["seasmoke"]);
+  return state.seasmoke || {};
+};
+
+const updateState = async (props) => {
+  const state = await getState();
+  await chrome.storage.local.set({
+    seasmoke: { ...state, ...props },
+  });
+};
+
+const checkAuthStatus = () =>
+  new Promise(async (resolve) => {
+    const state = await getState();
+    resolve(!!state.client_id);
+  });
+
 const getActiveTabId = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab.id;
 };
 
-chrome.runtime.onMessage.addListener(async function (
-  request,
-  sender,
-  sendResponse
-) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const { action, data } = request;
   if (action === "set_badge") {
-    const tabId = await getActiveTabId();
-    await chrome.action.setBadgeText({ tabId, text: data });
+    getActiveTabId().then((tabId) => {
+      chrome.action.setBadgeText({ tabId, text: data });
+    });
   }
+  if (action === "login") {
+    login(data)
+      .then(({ email_address, client_id }) => {
+        updateState({ email_address, client_id }).then(() => {
+          chrome.action.setPopup({ popup: "record.html" }).then(() => {
+            sendResponse(true);
+          });
+        });
+      })
+      .catch((err) => console.log(err));
+    return true;
+  }
+  if (action === "logout") {
+    updateState({ email_address: null, client_id: null }).then(() => {
+      chrome.action.setPopup({ popup: "login.html" }).then(() => {
+        sendResponse(true);
+      });
+    });
+    return true;
+  }
+});
+
+// choose the right template on first load
+checkAuthStatus().then((isLoggedIn) => {
+  chrome.action.setPopup({ popup: isLoggedIn ? "record.html" : "login.html" });
 });
