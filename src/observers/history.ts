@@ -72,7 +72,7 @@ function monkeyPatchHistory(
   };
 }
 
-export const initNavObserver = ({
+export const initHistoryObserver = ({
   saveEvent,
   registerOnCloseCallback,
 }: InitArgs) => {

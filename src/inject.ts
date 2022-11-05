@@ -2,8 +2,8 @@ import initialize from "./initialize";
 import { Observer } from "./observers";
 
 const observers: Observer[] = [
-  "navigation",
-  "storage",
+  "history",
+  "localStorage",
   "fetch",
   "user",
   "viewport",

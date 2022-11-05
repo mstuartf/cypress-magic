@@ -46,7 +46,7 @@ const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
-export const initStorageObserver = ({
+export const initLocalStorageObserver = ({
   registerOnCloseCallback,
   saveEvent,
   obfuscate,

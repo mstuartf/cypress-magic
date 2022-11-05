@@ -3,9 +3,9 @@ import { readClientId } from "./globals";
 import { Observer } from "./observers";
 
 const observers: Observer[] = [
-  "navigation",
+  "history",
   "fetch",
-  "storage",
+  "localStorage",
   "user",
   "viewport",
   "xml",

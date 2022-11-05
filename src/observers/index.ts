@@ -1,14 +1,14 @@
-import { initNavObserver } from "./nav";
+import { initHistoryObserver } from "./history";
 import { initFetchObserver } from "./fetch";
-import { initStorageObserver } from "./storage";
 import { initUserObserver } from "./user";
 import { initViewportObserver } from "./viewport";
 import { initXMLHttpRequestObserver } from "./xml-http-request";
+import { initLocalStorageObserver } from "./local-storage";
 
 export const initializers = {
-  navigation: initNavObserver,
+  history: initHistoryObserver,
   fetch: initFetchObserver,
-  storage: initStorageObserver,
+  localStorage: initLocalStorageObserver,
   user: initUserObserver,
   viewport: initViewportObserver,
   xml: initXMLHttpRequestObserver,
