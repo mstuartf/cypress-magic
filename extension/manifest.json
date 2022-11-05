@@ -24,10 +24,17 @@
   "content_scripts": [
     {
       "matches": ["https://*/*"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_start"
     }
   ],
-  "permissions": ["activeTab", "scripting", "storage"],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["https://*/*"]
+    }
+  ],
+  "permissions": ["activeTab", "scripting", "storage", "webRequest"],
   "commands": {
     "_execute_action": {
       "suggested_key": {
