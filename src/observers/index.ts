@@ -4,12 +4,14 @@ import { initUserObserver } from "./user";
 import { initViewportObserver } from "./viewport";
 import { initXMLHttpRequestObserver } from "./xml-http-request";
 import { initCookieObserver } from "./cookies";
-import { initStorageObserver } from "./storage";
+import { initLocalStorageObserver } from "./localStorage";
+import { initSessionStorageObserver } from "./sessionStorage";
 
 export const initializers = {
   history: initHistoryObserver,
   fetch: initFetchObserver,
-  storage: initStorageObserver,
+  localStorage: initLocalStorageObserver,
+  sessionStorage: initSessionStorageObserver,
   user: initUserObserver,
   viewport: initViewportObserver,
   xml: initXMLHttpRequestObserver,

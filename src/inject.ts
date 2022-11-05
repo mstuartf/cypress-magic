@@ -3,7 +3,8 @@ import { Observer } from "./observers";
 
 const observers: Observer[] = [
   "history",
-  "storage",
+  "localStorage",
+  "sessionStorage",
   "fetch",
   "user",
   "viewport",

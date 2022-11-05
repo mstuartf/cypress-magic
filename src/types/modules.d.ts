@@ -1,4 +1,4 @@
 declare module "storage-changed" {
-  function fn(storage: "local" | "session"): void;
+  function fn(storage: Storage, options?: { eventName: string }): void;
   export default fn;
 }

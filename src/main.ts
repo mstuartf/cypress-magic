@@ -5,7 +5,8 @@ import { Observer } from "./observers";
 const observers: Observer[] = [
   "history",
   "fetch",
-  "storage",
+  "localStorage",
+  "sessionStorage",
   "user",
   "viewport",
   "xml",

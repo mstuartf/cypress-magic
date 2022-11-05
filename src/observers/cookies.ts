@@ -16,7 +16,7 @@ export const initCookieObserver = ({
   obfuscate,
   registerOnSaveEventCallback,
 }: InitArgs) => {
-  let lastCookie = document.cookie;
+  let lastCookie: string | undefined;
 
   const checkCookieChange = () => {
     let cookie = document.cookie;
@@ -31,6 +31,8 @@ export const initCookieObserver = ({
       lastCookie = cookie;
     }
   };
+
+  checkCookieChange();
 
   const onSaveEvent = (event: ParsedEvent) => {
     if (event.type !== "storage") {
