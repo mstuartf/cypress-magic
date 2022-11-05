@@ -5,8 +5,8 @@ const password = document.querySelector("input[type=password]");
 button.addEventListener("click", async () => {
   await chrome.runtime.sendMessage(
     {
-      action: "login",
-      data: {
+      type: "login",
+      payload: {
         emailAddress: emailAddress.value,
         password: password.value,
       },

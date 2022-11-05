@@ -22,7 +22,7 @@ recordBtn.addEventListener("click", async () => {
   const tabId = await getActiveTabId();
   const state = await getState();
   await chrome.tabs.sendMessage(tabId, {
-    action: state?.isRecording ? "stop_recording" : "start_recording",
+    type: state?.isRecording ? "stop_recording" : "start_recording",
   });
   window.close();
 });
@@ -30,7 +30,7 @@ recordBtn.addEventListener("click", async () => {
 logoutBtn.addEventListener("click", async () => {
   await chrome.runtime.sendMessage(
     {
-      action: "logout",
+      type: "logout",
     },
     () => {
       window.close();

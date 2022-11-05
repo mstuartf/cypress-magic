@@ -37,14 +37,14 @@ const getActiveTabId = async () => {
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  const { action, data } = request;
-  if (action === "set_badge") {
+  const { type, payload } = request;
+  if (type === "set_badge") {
     getActiveTabId().then((tabId) => {
-      chrome.action.setBadgeText({ tabId, text: data });
+      chrome.action.setBadgeText({ tabId, text: payload });
     });
   }
-  if (action === "login") {
-    login(data)
+  if (type === "login") {
+    login(payload)
       .then(({ email_address, client_id }) => {
         updateState({ email_address, client_id }).then(() => {
           chrome.action.setPopup({ popup: "record.html" }).then(() => {
@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       .catch((err) => console.log(err));
     return true;
   }
-  if (action === "logout") {
+  if (type === "logout") {
     updateState({ email_address: null, client_id: null }).then(() => {
       getActiveTabId().then((tabId) => {
         chrome.action.setBadgeText({ tabId, text: "OFF" }).then(() => {

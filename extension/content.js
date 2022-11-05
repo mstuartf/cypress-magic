@@ -1,7 +1,7 @@
 const setBadge = async (isRecording) => {
   await chrome.runtime.sendMessage({
-    action: "set_badge",
-    data: isRecording ? "ON" : "OFF",
+    type: "set_badge",
+    payload: isRecording ? "ON" : "OFF",
   });
 };
 
@@ -22,8 +22,8 @@ chrome.runtime.onMessage.addListener(async function (
   sender,
   sendResponse
 ) {
-  const { action } = request;
-  if (action === "stop_recording") {
+  const { type } = request;
+  if (type === "stop_recording") {
     stop();
     await updateState({ isRecording: false, hasReloaded: false });
     await setBadge(false);
@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(async function (
       },
       "*"
     );
-  } else if (action === "start_recording") {
+  } else if (type === "start_recording") {
     await updateState({ isRecording: true, hasReloaded: false });
     location.reload();
   }
