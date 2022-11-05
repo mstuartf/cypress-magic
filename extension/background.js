@@ -5,6 +5,22 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+// https://stackoverflow.com/a/72607832
+chrome.runtime.onInstalled.addListener(async () => {
+  const scripts = [
+    {
+      id: "inject",
+      js: ["inject.js"],
+      matches: ["https://*/*"],
+      runAt: "document_start",
+      world: "MAIN",
+    },
+  ];
+  const ids = scripts.map((s) => s.id);
+  await chrome.scripting.unregisterContentScripts({ ids }).catch(() => {});
+  await chrome.scripting.registerContentScripts(scripts).catch(() => {});
+});
+
 const login = ({ emailAddress }) =>
   new Promise((resolve) =>
     resolve({

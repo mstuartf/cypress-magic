@@ -28,12 +28,6 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": [
-    {
-      "resources": ["inject.js"],
-      "matches": ["https://*/*"]
-    }
-  ],
   "permissions": ["activeTab", "scripting", "storage", "webRequest"],
   "commands": {
     "_execute_action": {

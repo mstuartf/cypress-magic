@@ -41,14 +41,6 @@ chrome.runtime.onMessage.addListener(async function (
 });
 
 const onLoad = async () => {
-  // inject the listener script into the web page context
-  const s = document.createElement("script");
-  s.src = chrome.runtime.getURL("inject.js");
-  // s.onload = function() {
-  //   this.remove();
-  // };
-  (document.head || document.documentElement).appendChild(s);
-
   window.addEventListener("message", function ({ data }) {
     if (!data) {
       return;
