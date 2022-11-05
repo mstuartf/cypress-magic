@@ -97,6 +97,7 @@ export type UserEvent =
 
 export interface StorageEvent extends BaseEvent {
   value: any;
+  storageType: "local" | "session" | "cookie";
 }
 
 export type ParsedEvent =

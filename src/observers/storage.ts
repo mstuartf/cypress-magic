@@ -18,13 +18,20 @@ const getSnapshot = () =>
       };
     }, {});
 
-const buildEvent: (snapshot: any) => StorageEvent = (snapshot) => ({
+const buildEvent: (
+  snapshot: any,
+  storageType: StorageEvent["storageType"]
+) => StorageEvent = (snapshot, storageType) => ({
   type: "storage",
   timestamp: Date.now(),
   value: snapshot,
+  storageType,
 });
 
-const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
+const snapshotManager = (
+  storageType: StorageEvent["storageType"],
+  { saveEvent, obfuscate }: RequiredArgs
+) => {
   let prev: string = "";
 
   const save = () => {
@@ -34,7 +41,7 @@ const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
       if (snapShotString === prev) {
         return;
       }
-      saveEvent(buildEvent(obfuscate(snapshot)));
+      saveEvent(buildEvent(obfuscate(snapshot), storageType));
       prev = snapShotString;
     } catch (e) {
       saveEvent(createErrorEvent("storage", e));
@@ -46,16 +53,27 @@ const snapshotManager = ({ saveEvent, obfuscate }: RequiredArgs) => {
 
 type RequiredArgs = Pick<InitArgs, "saveEvent" | "obfuscate">;
 
-export const initLocalStorageObserver = ({
+export const initStorageObserver = ({
   registerOnCloseCallback,
   saveEvent,
   obfuscate,
 }: InitArgs) => {
-  const { save } = snapshotManager({ saveEvent, obfuscate });
-  save();
+  const { save: saveLocalStorage } = snapshotManager("local", {
+    saveEvent,
+    obfuscate,
+  });
+  const { save: saveSessionStorage } = snapshotManager("session", {
+    saveEvent,
+    obfuscate,
+  });
+  saveLocalStorage();
+  saveSessionStorage();
   storageChanged("local");
-  window.addEventListener("localStorageChanged", save);
+  storageChanged("session");
+  window.addEventListener("localStorageChanged", saveLocalStorage);
+  window.addEventListener("sessionStorageChanged", saveSessionStorage);
   registerOnCloseCallback(() => {
-    window.removeEventListener("localStorageChanged", save);
+    window.removeEventListener("localStorageChanged", saveLocalStorage);
+    window.removeEventListener("sessionStorageChanged", saveSessionStorage);
   });
 };

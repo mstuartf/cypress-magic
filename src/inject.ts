@@ -3,11 +3,12 @@ import { Observer } from "./observers";
 
 const observers: Observer[] = [
   "history",
-  "localStorage",
+  "storage",
   "fetch",
   "user",
   "viewport",
   "xml",
+  "cookies",
 ];
 
 const manager = () => {
