@@ -49,6 +49,16 @@ const onLoad = async () => {
   // };
   (document.head || document.documentElement).appendChild(s);
 
+  window.addEventListener("message", function ({ data }) {
+    if (!data) {
+      return;
+    }
+    const { type, payload } = data;
+    if (type === "save_session") {
+      console.log(`trigger test gen for session ${payload.sessionId}`);
+    }
+  });
+
   const state = await getState();
   const { isRecording, hasReloaded } = state;
   if (isRecording && !hasReloaded) {

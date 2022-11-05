@@ -23,7 +23,7 @@ export const createWsClient = (
   };
 
   ws.onclose = function () {
-    console.warn("Chat socket closed");
+    console.log("Chat socket closed");
     sessionId = undefined;
     onCloseCallbacks.forEach((fn) => fn());
   };
@@ -74,8 +74,9 @@ export const createWsClient = (
     }
   };
 
-  const close = () => {
+  const close = (): string => {
     ws.close();
+    return sessionId;
   };
 
   return { saveEvent, registerOnCloseCallback, close };

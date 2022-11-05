@@ -10,12 +10,19 @@ const observers: Observer[] = [
 ];
 
 const manager = () => {
-  let deinit: () => void;
+  let deinit: () => string;
   const start = (clientId: string) => {
     deinit = initialize(clientId, observers, true);
   };
   const stop = () => {
-    deinit();
+    const sessionId = deinit();
+    window.postMessage(
+      {
+        type: "save_session",
+        payload: { sessionId },
+      },
+      "*"
+    );
   };
   return { start, stop };
 };

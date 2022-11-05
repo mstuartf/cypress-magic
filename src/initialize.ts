@@ -25,7 +25,8 @@ const initialize = (
 
   return () => {
     clear();
-    close();
+    const sessionId = close();
+    return sessionId;
   };
 };
 

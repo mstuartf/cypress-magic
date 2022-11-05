@@ -17,7 +17,7 @@ export interface EventManager {
   saveEvent: SaveEvent;
   // this provides a way to tell listeners to stop listening when the sockets connection closes
   registerOnCloseCallback: RegisterOnCloseCallback;
-  close: () => void;
+  close: () => string;
 }
 
 export interface PrivacyManager {
