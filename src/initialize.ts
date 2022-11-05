@@ -2,16 +2,14 @@
 
 import { readIsTestMode } from "./globals";
 import { isChrome } from "./utils";
-import {
-  initNavObserver,
-  initRequestsObserver,
-  initStorageObserver,
-  initUserObserver,
-  initViewportObserver,
-} from "./observers";
+import { Observer, initializers } from "./observers";
 import { createPrivacyManager, createWsClient } from "./managers";
 
-const initialize = (clientId: string, devMode = false) => {
+const initialize = (
+  clientId: string,
+  observers: Observer[],
+  devMode = false
+) => {
   if (!isChrome() || readIsTestMode()) {
     return;
   }
@@ -21,11 +19,9 @@ const initialize = (clientId: string, devMode = false) => {
     ...createPrivacyManager(),
   };
 
-  initUserObserver(args);
-  initRequestsObserver(args);
-  initNavObserver(args);
-  initViewportObserver(args);
-  initStorageObserver(args);
+  observers.forEach((observer) => {
+    initializers[observer](args);
+  });
 
   return () => {
     clear();

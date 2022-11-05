@@ -1,9 +1,12 @@
 import initialize from "./initialize";
+import { Observer } from "./observers";
+
+const observers: Observer[] = ["navigation", "storage", "user", "viewport"];
 
 const manager = () => {
   let deinit: () => void;
   const start = (clientId: string) => {
-    deinit = initialize(clientId, true);
+    deinit = initialize(clientId, observers, true);
   };
   const stop = () => {
     deinit();
