@@ -4,9 +4,10 @@ import { Observer } from "./observers";
 const observers: Observer[] = [
   "navigation",
   "storage",
-  "requests",
+  "fetch",
   "user",
   "viewport",
+  "xml",
 ];
 
 const manager = () => {

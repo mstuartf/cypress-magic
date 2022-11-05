@@ -4,10 +4,11 @@ import { Observer } from "./observers";
 
 const observers: Observer[] = [
   "navigation",
-  "requests",
+  "fetch",
   "storage",
   "user",
   "viewport",
+  "xml",
 ];
 
 const clientId = readClientId();

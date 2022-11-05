@@ -56,7 +56,7 @@ const getInitialPerformanceData = (): PerformanceResourceEvent => {
   };
 };
 
-export const initRequestsObserver = ({
+export const initFetchObserver = ({
   saveEvent,
   obfuscate,
   registerOnCloseCallback,
