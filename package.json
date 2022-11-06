@@ -31,7 +31,6 @@
     "@types/chrome": "^0.0.200",
     "@types/xlsx": "^0.0.36",
     "dotenv": "^16.0.3",
-    "fetch-intercept": "^2.4.0",
     "uuid": "^8.3.2",
     "whatwg-fetch": "^3.6.2",
     "xlsx": "^0.18.5"
