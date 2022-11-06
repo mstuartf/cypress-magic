@@ -24,10 +24,8 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
   const { type } = request;
   if (type === "stop_recording") {
-    stop();
     await updateState({ isRecording: false, hasReloaded: false });
     await setBadge(false);
-
     window.postMessage(
       {
         type: "stop_recording",
