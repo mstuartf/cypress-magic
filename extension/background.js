@@ -60,15 +60,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     });
   }
   if (type === "login") {
-    login(payload)
-      .then(({ email_address, client_id }) => {
-        updateState({ email_address, client_id }).then(() => {
-          chrome.action.setPopup({ popup: "record.html" }).then(() => {
-            sendResponse(true);
-          });
-        });
-      })
-      .catch((err) => console.log(err));
+    const { email_address, client_id, token } = payload;
+    updateState({ email_address, client_id, token }).then(() => {
+      chrome.action.setPopup({ popup: "record.html" }).then(() => {
+        sendResponse(true);
+      });
+    });
     return true;
   }
   if (type === "logout") {
