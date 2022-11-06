@@ -23,6 +23,7 @@ export function initXMLHttpRequestObserver({
       timestamp: Date.now(),
       url: this.__url,
       method: this.__method,
+      initiator: "xml",
     });
     return _open.apply(this, arguments);
   };

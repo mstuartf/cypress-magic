@@ -31,6 +31,7 @@ const parseRequest = (
     timestamp: Date.now(),
     url,
     method,
+    initiator: "fetch",
   };
 };
 

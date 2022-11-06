@@ -18,6 +18,7 @@ export interface PerformanceResourceEvent extends BaseEvent {
 export interface RequestEvent extends BaseEvent {
   url: string;
   method: string;
+  initiator: "xml" | "fetch";
 }
 
 export interface ResponseEvent extends BaseEvent {
