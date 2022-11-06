@@ -1,9 +1,12 @@
-const button = document.querySelector("button");
-const emailAddress = document.querySelector("input[type=email]");
-const password = document.querySelector("input[type=password]");
+const button: HTMLButtonElement = document.querySelector("button");
+const emailAddress: HTMLInputElement =
+  document.querySelector("input[type=email]");
+const password: HTMLInputElement = document.querySelector(
+  "input[type=password]"
+);
 
-const _fetch = (url, config) => {
-  const { emailAddress, password } = JSON.parse(config.body);
+const _fetch = (url: string, config: RequestInit): Response => {
+  const { emailAddress, password } = JSON.parse(config.body as string);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (emailAddress === "test@mike.com") {
@@ -22,10 +25,10 @@ const _fetch = (url, config) => {
         reject("invalid credentials");
       }
     }, 2000);
-  });
+  }) as unknown as Response;
 };
 
-const loginRequest = async (emailAddress, password) => {
+const loginRequest = async (emailAddress: string, password: string) => {
   const response = await _fetch("todo: login url", {
     method: "POST",
     body: JSON.stringify({ emailAddress, password }),
@@ -34,7 +37,7 @@ const loginRequest = async (emailAddress, password) => {
   return body;
 };
 
-const setLoadingState = (isLoading) => {
+const setLoadingState = (isLoading: boolean) => {
   [button, emailAddress, password].forEach((el) => {
     el.disabled = isLoading;
   });

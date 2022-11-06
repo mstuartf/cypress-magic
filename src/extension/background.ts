@@ -1,4 +1,7 @@
 // The first event our service worker will listen for is runtime.onInstalled().
+import { getActiveTabId, getState, updateState } from "./shared/utils";
+import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.action.setBadgeText({
     text: "OFF",
@@ -7,10 +10,10 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // https://stackoverflow.com/a/72607832
 chrome.runtime.onInstalled.addListener(async () => {
-  const scripts = [
+  const scripts: RegisteredContentScript[] = [
     {
       id: "inject",
-      js: ["inject.js"],
+      js: ["scripts/inject.js"],
       matches: ["https://*/*"],
       runAt: "document_start",
       world: "MAIN",
@@ -21,36 +24,11 @@ chrome.runtime.onInstalled.addListener(async () => {
   await chrome.scripting.registerContentScripts(scripts).catch(() => {});
 });
 
-const login = ({ emailAddress }) =>
-  new Promise((resolve) =>
-    resolve({
-      email_address: emailAddress,
-      client_id: "b7483b7f-bb53-4190-b9c9-8f01dbd29590",
-    })
-  );
-
-const getState = async () => {
-  const state = await chrome.storage.local.get(["seasmoke"]);
-  return state.seasmoke || {};
-};
-
-const updateState = async (props) => {
-  const state = await getState();
-  await chrome.storage.local.set({
-    seasmoke: { ...state, ...props },
-  });
-};
-
 const checkAuthStatus = () =>
   new Promise(async (resolve) => {
     const state = await getState();
     resolve(!!state.client_id);
   });
-
-const getActiveTabId = async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab.id;
-};
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const { type, payload } = request;

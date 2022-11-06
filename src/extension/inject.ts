@@ -1,5 +1,8 @@
-import initialize from "./initialize";
-import { Observer } from "./observers";
+// This script is injected into the MAIN process by the background script.
+// It does not have access to the Chrome extension APIs.
+
+import initialize from "../initialize";
+import { Observer } from "../observers";
 
 const observers: Observer[] = [
   "history",

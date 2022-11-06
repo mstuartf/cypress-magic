@@ -1,16 +1,8 @@
-const recordBtn = document.querySelector("#recordBtn");
-const logoutBtn = document.querySelector("#logoutBtn");
-const email = document.getElementById("email");
+import { getActiveTabId, getState } from "./shared/utils";
 
-const getActiveTabId = async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab.id;
-};
-
-const getState = async () => {
-  const state = await chrome.storage.local.get(["seasmoke"]);
-  return state.seasmoke || {};
-};
+const recordBtn: HTMLElement = document.querySelector("#recordBtn");
+const logoutBtn: HTMLElement = document.querySelector("#logoutBtn");
+const email: HTMLElement = document.getElementById("email");
 
 const setButtonText = async () => {
   const state = await getState();

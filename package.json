@@ -4,8 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build:plugin": "webpack --env filename=main dir=dist && rm dist/main.js.LICENSE.txt",
-    "build:extension": "webpack --env filename=inject dir=extension && rm extension/inject.js.LICENSE.txt",
+    "build:plugin": "webpack --env entry=main dir=dist && rm dist/main.js.LICENSE.txt",
+    "build:extension": "webpack --env entry=extension dir=extension/scripts && rm extension/scripts/inject.js.LICENSE.txt",
     "pretty-quick": "pretty-quick --staged",
     "prepare": "husky install",
     "deploy:prod": "export AWS_PROFILE=default && aws s3 sync ./dist s3://seasmoke --acl public-read --cache-control max-age=120",

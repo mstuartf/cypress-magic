@@ -1,19 +1,9 @@
-const setBadge = async (isRecording) => {
+import { getState, updateState } from "./shared/utils";
+
+const setBadge = async (isRecording: boolean) => {
   await chrome.runtime.sendMessage({
     type: "set_badge",
     payload: isRecording ? "ON" : "OFF",
-  });
-};
-
-const getState = async () => {
-  const state = await chrome.storage.local.get(["seasmoke"]);
-  return state.seasmoke || {};
-};
-
-const updateState = async (props) => {
-  const state = await getState();
-  await chrome.storage.local.set({
-    seasmoke: { ...state, ...props },
   });
 };
 
