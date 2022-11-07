@@ -3,6 +3,7 @@
 
 import initialize from "../initialize";
 import { Observer } from "../observers";
+import { sendWindowMsg, setUpWindowMsgListener } from "./shared/messaging";
 
 const observers: Observer[] = [
   "history",
@@ -22,23 +23,17 @@ const manager = () => {
   };
   const stop = () => {
     const sessionId = deinit();
-    window.postMessage(
-      {
-        type: "save_session",
-        payload: { sessionId },
-      },
-      "*"
-    );
+    sendWindowMsg({
+      type: "save_session",
+      meta: { from: "inject", to: "content" },
+      payload: { sessionId },
+    });
   };
   return { start, stop };
 };
 const { start, stop } = manager();
 
-window.addEventListener("message", function ({ data }) {
-  if (!data) {
-    return;
-  }
-  const { type, payload } = data;
+setUpWindowMsgListener(({ type, meta, payload }) => {
   if (type === "start_recording") {
     start(payload.clientId);
   } else if (type === "stop_recording") {

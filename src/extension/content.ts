@@ -3,6 +3,7 @@ import {
   getState,
   updateState,
 } from "./shared/utils";
+import { setUpWindowMsgListener } from "./shared/messaging";
 
 const setBadge = async (isRecording: boolean) => {
   await chrome.runtime.sendMessage({
@@ -33,11 +34,7 @@ chrome.runtime.onMessage.addListener(async function (
 });
 
 const onLoad = async () => {
-  window.addEventListener("message", async function ({ data }) {
-    if (!data) {
-      return;
-    }
-    const { type, payload } = data;
+  setUpWindowMsgListener(async ({ type, payload }) => {
     if (type === "save_session") {
       console.log(`trigger test gen for session ${payload.sessionId}`);
       await chrome.runtime.sendMessage({
