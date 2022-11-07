@@ -1,4 +1,8 @@
-import { getState, updateState } from "./shared/utils";
+import {
+  getSessionTestFileRequest,
+  getState,
+  updateState,
+} from "./shared/utils";
 
 const setBadge = async (isRecording: boolean) => {
   await chrome.runtime.sendMessage({
@@ -29,13 +33,17 @@ chrome.runtime.onMessage.addListener(async function (
 });
 
 const onLoad = async () => {
-  window.addEventListener("message", function ({ data }) {
+  window.addEventListener("message", async function ({ data }) {
     if (!data) {
       return;
     }
     const { type, payload } = data;
     if (type === "save_session") {
       console.log(`trigger test gen for session ${payload.sessionId}`);
+      await chrome.runtime.sendMessage({
+        type: "get_session_file",
+        payload: { sessionId: payload.sessionId },
+      });
     }
   });
 
