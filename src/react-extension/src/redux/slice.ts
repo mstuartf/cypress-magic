@@ -17,6 +17,9 @@ export const userSlice = createSlice({
     cacheLoaded: false,
   },
   reducers: {
+    loadCache: () => {
+      console.log("loadCache");
+    },
     restoreCache: (state, action) => {
       console.log("restoreCache", action.payload);
       if (action.payload) {
@@ -55,4 +58,5 @@ export const {
   logout,
   startRecording,
   stopRecording,
+  loadCache,
 } = userSlice.actions;

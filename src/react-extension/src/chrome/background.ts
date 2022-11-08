@@ -1,4 +1,3 @@
-import { restoreCache } from "../redux/slice";
 import { store } from "../redux/store";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 
@@ -30,13 +29,5 @@ store.subscribe(async () => {
     seasmoke: { ...store.getState() },
   });
 });
-
-const loadCache = async () => {
-  console.log("dispatching loadCache");
-  const state = await chrome.storage.local.get(["seasmoke"]);
-  store.dispatch(restoreCache(state.seasmoke?.user || null));
-};
-
-loadCache();
 
 export default {};
