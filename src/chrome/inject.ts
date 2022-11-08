@@ -25,8 +25,8 @@ window.addEventListener("message", (event) => {
     deInit = initialize(client_id, observers, true);
   }
   if (event.data.type === "user/stopRecording") {
-    const sessionId = deInit();
-    console.log(`stop: ${sessionId}`);
+    const session_id = deInit();
+    window.postMessage({ type: "user/saveSession", payload: { session_id } });
   }
 });
 

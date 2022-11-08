@@ -1,5 +1,6 @@
 import { store } from "../redux/store";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
+import { saveSession } from "../redux/slice";
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.action.setBadgeText({
@@ -22,6 +23,12 @@ chrome.runtime.onInstalled.addListener(async () => {
   const ids = scripts.map((s) => s.id);
   await chrome.scripting.unregisterContentScripts({ ids }).catch(() => {});
   await chrome.scripting.registerContentScripts(scripts).catch(() => {});
+});
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.type === "user/saveSession") {
+    store.dispatch(saveSession({ session_id: request.payload.session_id }));
+  }
 });
 
 store.subscribe(async () => {

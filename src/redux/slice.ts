@@ -10,6 +10,7 @@ export const userSlice = createSlice({
       email_address: null,
       client_id: null,
       token: null,
+      session_id: null,
     },
     recording: {
       inProgress: false,
@@ -44,6 +45,7 @@ export const userSlice = createSlice({
         email_address: null,
         client_id: null,
         token: null,
+        session_id: null,
       };
     },
     startRecording: (state) => {
@@ -51,6 +53,9 @@ export const userSlice = createSlice({
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;
+    },
+    saveSession: (state, action) => {
+      state.info.session_id = action.payload.session_id;
     },
   },
 });
@@ -63,4 +68,5 @@ export const {
   startRecording,
   stopRecording,
   loadCache,
+  saveSession,
 } = userSlice.actions;

@@ -17,11 +17,23 @@ chrome.runtime.onMessage.addListener(function (request) {
   }
 });
 
+window.addEventListener("message", (event) => {
+  if (!event.data || !event.data.type) {
+    return;
+  }
+  if (event.data.type === "user/saveSession") {
+    console.log(`save session from content: ${event.data.payload.session_id}`);
+    chrome.runtime.sendMessage({
+      type: "user/saveSession",
+      payload: { session_id: event.data.payload.session_id },
+    });
+  }
+});
+
 chrome.storage.sync.get(["forceReload", "client_id"], function (items) {
   const { forceReload, client_id } = items;
   if (forceReload) {
     chrome.storage.sync.set({ forceReload: false }, function () {
-      console.log("sending start message to inject");
       window.postMessage({
         type: "user/startRecording",
         payload: { client_id },

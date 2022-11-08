@@ -5,6 +5,7 @@ import {
   selectEmailAddress,
   selectIsLoggedIn,
   selectRecordingInProgress,
+  selectSessionId,
 } from "../redux/selectors";
 import { logout, startRecording, stopRecording } from "../redux/slice";
 
@@ -14,6 +15,7 @@ const Record = () => {
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const recordingInProgress = useSelector(selectRecordingInProgress);
+  const sessionId = useSelector(selectSessionId);
 
   if (!isLoggedIn) {
     return <Redirect to="/login" />;
@@ -23,6 +25,7 @@ const Record = () => {
     <div>
       Record
       <div>{email}</div>
+      <div>{sessionId}</div>
       <button onClick={() => dispatch(logout())}>Logout</button>
       <button
         onClick={() => {
