@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  loginPending,
-  loginSuccess,
-  selectIsLoggedIn,
-} from "../chrome/background";
+import { loginPending, loginSuccess } from "../redux/slice";
+import { selectIsLoggedIn } from "../redux/selectors";
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { email_address, password } = JSON.parse(config.body as string);

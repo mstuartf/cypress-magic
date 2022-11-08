@@ -5,7 +5,7 @@ import { createMemoryHistory } from "history";
 import Login from "./components/Login";
 import Record from "./components/Record";
 import { useSelector } from "react-redux";
-import { selectCacheLoaded } from "./chrome/background";
+import { selectCacheLoaded } from "./redux/selectors";
 
 const history = createMemoryHistory();
 

@@ -1,11 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  logout,
-  selectEmailAddress,
-  selectIsLoggedIn,
-} from "../chrome/background";
 import { Redirect } from "react-router-dom";
+import { selectEmailAddress, selectIsLoggedIn } from "../redux/selectors";
+import { logout } from "../redux/slice";
 
 const Record = () => {
   const email = useSelector(selectEmailAddress);
