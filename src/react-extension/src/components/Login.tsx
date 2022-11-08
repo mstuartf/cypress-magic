@@ -1,16 +1,22 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loginPending,
+  loginSuccess,
+  selectIsLoggedIn,
+} from "../chrome/background";
 
 const _fetch = (url: string, config: RequestInit): Response => {
-  const { emailAddress, password } = JSON.parse(config.body as string);
+  const { email_address, password } = JSON.parse(config.body as string);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (emailAddress === "test@mike.com") {
+      if (email_address === "test@mike.com") {
         resolve({
           json: () => {
             return new Promise((res, rej) => {
               res({
-                email_address: emailAddress,
+                email_address,
                 client_id: "b7483b7f-bb53-4190-b9c9-8f01dbd29590",
                 token: "ABC!@£",
               });
@@ -24,24 +30,38 @@ const _fetch = (url: string, config: RequestInit): Response => {
   }) as unknown as Response;
 };
 
-const loginRequest = async (emailAddress: string, password: string) => {
+const loginRequest = async (email_address: string, password: string) => {
   const response = await _fetch("todo: login url", {
     method: "POST",
-    body: JSON.stringify({ emailAddress, password }),
+    body: JSON.stringify({ email_address, password }),
   });
   const body = await response.json();
   return body;
 };
 
 const Login = () => {
-  const [emailAddress, setEmailAddress] = useState<string>("");
+  const [email_address, setEmailAddress] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  if (isLoggedIn) {
+    return <Redirect to="/record" />;
+  }
 
   const login = async () => {
+    dispatch(loginPending());
     setIsLoading(true);
-    const res = await loginRequest(emailAddress, password);
+    const { client_id, token } = await loginRequest(email_address, password);
     setIsLoading(false);
+    dispatch(
+      loginSuccess({
+        email_address,
+        client_id,
+        token,
+      })
+    );
   };
   return (
     <div>
@@ -50,7 +70,7 @@ const Login = () => {
         Email address
         <input
           disabled={isLoading}
-          value={emailAddress}
+          value={email_address}
           onChange={({ target: { value } }) => setEmailAddress(value)}
         />
       </label>
