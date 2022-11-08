@@ -5,8 +5,13 @@ const recordBtn: HTMLButtonElement = document.querySelector("#recordBtn");
 const logoutBtn: HTMLButtonElement = document.querySelector("#logoutBtn");
 const email: HTMLElement = document.getElementById("email");
 
-const sendMsgToContent = (msg: Msg) => {};
-const sendMsgToBackground = (msg: Msg) => {};
+const sendMsgToContent = async (msg: Msg) => {
+  const tabId = await getActiveTabId();
+  await chrome.tabs.sendMessage(tabId, msg);
+};
+const sendMsgToBackground = async (msg: Msg, callback?: (res: any) => void) => {
+  await chrome.runtime.sendMessage(msg, callback);
+};
 
 const setButtonText = async () => {
   const state = await getState();
@@ -16,18 +21,19 @@ const setButtonText = async () => {
 
 recordBtn.addEventListener("click", async () => {
   setDisabledState([recordBtn, logoutBtn], true);
-  const tabId = await getActiveTabId();
   const state = await getState();
-  await chrome.tabs.sendMessage(tabId, {
+  await sendMsgToContent({
     type: state?.isRecording ? "stop_recording" : "start_recording",
+    meta: { from: "popup", to: "content" },
   });
   // window.close();
 });
 
 logoutBtn.addEventListener("click", async () => {
-  await chrome.runtime.sendMessage(
+  await sendMsgToBackground(
     {
       type: "logout",
+      meta: { from: "popup", to: "background" },
     },
     () => {
       window.close();

@@ -2,13 +2,18 @@ import { getState, updateState } from "./shared/utils";
 import { Msg, setUpWindowMsgListener, sendWindowMsg } from "./shared/messaging";
 
 const sendMsgToInject = (msg: Msg) => sendWindowMsg(msg);
-const sendMsgToBackground = (msg: Msg) => {};
-const sendMsgToPopup = (msg: Msg) => {};
+const sendMsgToBackground = async (msg: Msg, callback?: (res: any) => void) => {
+  await chrome.runtime.sendMessage(msg, callback);
+};
+const sendMsgToPopup = async (msg: Msg) => {
+  await chrome.runtime.sendMessage(msg);
+};
 
 const setBadge = async (isRecording: boolean) => {
-  await chrome.runtime.sendMessage({
+  await sendMsgToBackground({
     type: "set_badge",
     payload: isRecording ? "ON" : "OFF",
+    meta: { from: "content", to: "background" },
   });
 };
 
@@ -35,9 +40,10 @@ const onLoad = async () => {
   setUpWindowMsgListener(async ({ type, payload }) => {
     if (type === "save_session") {
       console.log(`trigger test gen for session ${payload.sessionId}`);
-      await chrome.runtime.sendMessage({
+      await sendMsgToPopup({
         type: "get_session_file",
         payload: { sessionId: payload.sessionId },
+        meta: { from: "content", to: "popup" },
       });
     }
   });

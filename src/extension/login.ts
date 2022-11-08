@@ -8,7 +8,9 @@ const password: HTMLInputElement = document.querySelector(
 );
 
 const sendMsgToContent = (msg: Msg) => {};
-const sendMsgToBackground = (msg: Msg) => {};
+const sendMsgToBackground = async (msg: Msg, callback?: (res: any) => void) => {
+  await chrome.runtime.sendMessage(msg, callback);
+};
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { emailAddress, password } = JSON.parse(config.body as string);
@@ -52,10 +54,11 @@ button.addEventListener("click", async () => {
   setLoadingState(true);
   try {
     const payload = await loginRequest(emailAddress.value, password.value);
-    await chrome.runtime.sendMessage(
+    await sendMsgToBackground(
       {
         type: "login",
         payload,
+        meta: { from: "popup", to: "background" },
       },
       () => {
         window.location.replace("./record.html");
