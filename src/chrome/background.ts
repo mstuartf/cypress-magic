@@ -26,7 +26,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.runtime.onMessage.addListener((request) => {
-  if (request.type === "user/saveSession") {
+  if (request.type === saveSession.type) {
     store.dispatch(saveSession({ session_id: request.payload.session_id }));
   }
 });
