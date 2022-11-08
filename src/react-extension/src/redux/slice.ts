@@ -10,6 +10,9 @@ export const userSlice = createSlice({
       email_address: null,
       token: null,
     },
+    recording: {
+      inProgress: false,
+    },
     cacheLoaded: false,
   },
   reducers: {
@@ -18,6 +21,7 @@ export const userSlice = createSlice({
       if (action.payload) {
         state.login = { ...action.payload.login };
         state.info = { ...action.payload.info };
+        state.recording = { ...action.payload.recording };
       }
       state.cacheLoaded = true;
     },
@@ -34,8 +38,20 @@ export const userSlice = createSlice({
         token: null,
       };
     },
+    startRecording: (state) => {
+      state.recording.inProgress = true;
+    },
+    stopRecording: (state) => {
+      state.recording.inProgress = false;
+    },
   },
 });
 
-export const { loginPending, loginSuccess, restoreCache, logout } =
-  userSlice.actions;
+export const {
+  loginPending,
+  loginSuccess,
+  restoreCache,
+  logout,
+  startRecording,
+  stopRecording,
+} = userSlice.actions;
