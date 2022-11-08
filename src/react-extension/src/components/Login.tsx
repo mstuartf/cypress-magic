@@ -16,8 +16,6 @@ const _fetch = (url: string, config: RequestInit): Response => {
           json: () => {
             return new Promise((res, rej) => {
               res({
-                email_address,
-                client_id: "b7483b7f-bb53-4190-b9c9-8f01dbd29590",
                 token: "ABC!@£",
               });
             });
@@ -86,7 +84,6 @@ const Login = () => {
       <button disabled={isLoading} onClick={login}>
         Submit
       </button>
-      <Link to="/record">got to record</Link>
     </div>
   );
 };
