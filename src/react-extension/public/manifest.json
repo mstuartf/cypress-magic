@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Seasmoke2",
+  "version": "1.0",
+  "icons": {
+    "16": "logo192.png",
+    "48": "logo192.png",
+    "128": "logo192.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "logo192.png",
+      "48": "logo192.png",
+      "128": "logo192.png"
+    },
+    "default_popup": "index.html",
+    "default_title": "open popup"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["./static/js/content.js"],
+      "all_frames": false,
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "./static/js/background.js"
+  }
+}
