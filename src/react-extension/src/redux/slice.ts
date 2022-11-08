@@ -12,6 +12,7 @@ export const userSlice = createSlice({
     },
     recording: {
       inProgress: false,
+      sessionId: null,
     },
     cacheLoaded: false,
   },

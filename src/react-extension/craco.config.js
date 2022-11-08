@@ -11,6 +11,7 @@ module.exports = {
           ].filter(Boolean),
           content: "./src/chrome/content.ts",
           background: "./src/chrome/background.ts",
+          inject: "./src/chrome/inject.ts",
         },
         output: {
           ...webpackConfig.output,
