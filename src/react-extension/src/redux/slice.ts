@@ -8,6 +8,7 @@ export const userSlice = createSlice({
     },
     info: {
       email_address: null,
+      client_id: null,
       token: null,
     },
     recording: {
@@ -35,10 +36,13 @@ export const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.login.isLoading = false;
       state.info.token = action.payload.token;
+      state.info.email_address = action.payload.email_address;
+      state.info.client_id = action.payload.client_id;
     },
     logout: (state) => {
       state.info = {
         email_address: null,
+        client_id: null,
         token: null,
       };
     },

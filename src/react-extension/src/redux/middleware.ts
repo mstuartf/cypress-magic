@@ -18,15 +18,16 @@ const sendMsgToContent = async (msg: any) => {
 
 export const msgMiddleware: redux.Middleware =
   (store) => (next) => (action) => {
-    console.log("Middleware triggered:", action);
-    if (
-      [
-        "user/startRecording",
-        "user/stopRecording",
-        "user/restoreCache",
-      ].includes(action.type)
-    ) {
-      sendMsgToContent({ type: action.type, payload: action.payload });
+    if (action.type === "user/startRecording") {
+      const {
+        user: {
+          info: { client_id },
+        },
+      } = store.getState();
+      sendMsgToContent({ type: action.type, payload: { client_id } });
+    }
+    if (action.type === "user/stopRecording") {
+      sendMsgToContent({ type: action.type });
     }
     if (action.type === "user/loadCache") {
       chrome.storage.local.get(["seasmoke"]).then((state) => {
