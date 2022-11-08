@@ -1,7 +1,6 @@
 // The first event our service worker will listen for is runtime.onInstalled().
-import { getActiveTabId, getState, updateState } from "./shared/utils";
+import { getActiveTabId, getState, Msg, updateState } from "./shared";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
-import { Msg } from "./shared/messaging";
 
 const sendMsgToPopup = (msg: Msg) => {};
 const sendMsgToContent = (msg: Msg) => {};

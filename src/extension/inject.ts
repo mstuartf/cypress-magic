@@ -3,7 +3,7 @@
 
 import initialize from "../initialize";
 import { Observer } from "../observers";
-import { Msg, sendWindowMsg, setUpWindowMsgListener } from "./shared/messaging";
+import { Msg, sendWindowMsg, setUpWindowMsgListener } from "./shared";
 
 const sendMsgToContent = (msg: Msg) => sendWindowMsg(msg);
 

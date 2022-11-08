@@ -1,5 +1,10 @@
-import { getState, updateState } from "./shared/utils";
-import { Msg, setUpWindowMsgListener, sendWindowMsg } from "./shared/messaging";
+import {
+  getState,
+  Msg,
+  sendWindowMsg,
+  setUpWindowMsgListener,
+  updateState,
+} from "./shared";
 
 const sendMsgToInject = (msg: Msg) => sendWindowMsg(msg);
 const sendMsgToBackground = async (msg: Msg, callback?: (res: any) => void) => {

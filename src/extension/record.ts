@@ -1,5 +1,4 @@
-import { getActiveTabId, getState, setDisabledState } from "./shared/utils";
-import { Msg } from "./shared/messaging";
+import { getActiveTabId, getState, Msg, setDisabledState } from "./shared";
 
 const recordBtn: HTMLButtonElement = document.querySelector("#recordBtn");
 const logoutBtn: HTMLButtonElement = document.querySelector("#logoutBtn");

@@ -1,4 +1,4 @@
-import { Msg } from "./shared/messaging";
+import { Msg } from "./shared";
 
 const button: HTMLButtonElement = document.querySelector("button");
 const emailAddress: HTMLInputElement =
