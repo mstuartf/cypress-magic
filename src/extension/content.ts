@@ -1,9 +1,9 @@
-import {
-  getSessionTestFileRequest,
-  getState,
-  updateState,
-} from "./shared/utils";
-import { setUpWindowMsgListener } from "./shared/messaging";
+import { getState, updateState } from "./shared/utils";
+import { Msg, setUpWindowMsgListener, sendWindowMsg } from "./shared/messaging";
+
+const sendMsgToInject = (msg: Msg) => sendWindowMsg(msg);
+const sendMsgToBackground = (msg: Msg) => {};
+const sendMsgToPopup = (msg: Msg) => {};
 
 const setBadge = async (isRecording: boolean) => {
   await chrome.runtime.sendMessage({
@@ -21,12 +21,10 @@ chrome.runtime.onMessage.addListener(async function (
   if (type === "stop_recording") {
     await updateState({ isRecording: false, hasReloaded: false });
     await setBadge(false);
-    window.postMessage(
-      {
-        type: "stop_recording",
-      },
-      "*"
-    );
+    sendMsgToInject({
+      type: "stop_recording",
+      meta: { from: "content", to: "inject" },
+    });
   } else if (type === "start_recording") {
     await updateState({ isRecording: true, hasReloaded: false });
     location.reload();
@@ -49,16 +47,13 @@ const onLoad = async () => {
   if (isRecording && !hasReloaded) {
     const state = await getState();
     await updateState({ isRecording: true, hasReloaded: true });
-    window.postMessage(
-      {
-        type: "start_recording",
-        payload: {
-          clientId: state.client_id,
-        },
+    sendMsgToInject({
+      type: "start_recording",
+      meta: { from: "content", to: "inject" },
+      payload: {
+        clientId: state.client_id,
       },
-      "*"
-    );
-
+    });
     await setBadge(true);
   } else if (isRecording) {
     await updateState({ isRecording: false, hasReloaded: false });

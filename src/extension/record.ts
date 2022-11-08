@@ -1,13 +1,12 @@
-import {
-  getActiveTabId,
-  getSessionTestFileRequest,
-  getState,
-  setDisabledState,
-} from "./shared/utils";
+import { getActiveTabId, getState, setDisabledState } from "./shared/utils";
+import { Msg } from "./shared/messaging";
 
 const recordBtn: HTMLButtonElement = document.querySelector("#recordBtn");
 const logoutBtn: HTMLButtonElement = document.querySelector("#logoutBtn");
 const email: HTMLElement = document.getElementById("email");
+
+const sendMsgToContent = (msg: Msg) => {};
+const sendMsgToBackground = (msg: Msg) => {};
 
 const setButtonText = async () => {
   const state = await getState();

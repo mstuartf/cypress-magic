@@ -1,9 +1,14 @@
+import { Msg } from "./shared/messaging";
+
 const button: HTMLButtonElement = document.querySelector("button");
 const emailAddress: HTMLInputElement =
   document.querySelector("input[type=email]");
 const password: HTMLInputElement = document.querySelector(
   "input[type=password]"
 );
+
+const sendMsgToContent = (msg: Msg) => {};
+const sendMsgToBackground = (msg: Msg) => {};
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { emailAddress, password } = JSON.parse(config.body as string);

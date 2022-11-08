@@ -1,6 +1,10 @@
 // The first event our service worker will listen for is runtime.onInstalled().
 import { getActiveTabId, getState, updateState } from "./shared/utils";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
+import { Msg } from "./shared/messaging";
+
+const sendMsgToPopup = (msg: Msg) => {};
+const sendMsgToContent = (msg: Msg) => {};
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.action.setBadgeText({

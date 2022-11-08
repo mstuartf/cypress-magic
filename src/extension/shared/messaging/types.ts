@@ -16,5 +16,5 @@ export interface Msg<T = any> {
     from: ScriptType;
     to: ScriptType;
   };
-  payload: T;
+  payload?: T;
 }

@@ -3,7 +3,9 @@
 
 import initialize from "../initialize";
 import { Observer } from "../observers";
-import { sendWindowMsg, setUpWindowMsgListener } from "./shared/messaging";
+import { Msg, sendWindowMsg, setUpWindowMsgListener } from "./shared/messaging";
+
+const sendMsgToContent = (msg: Msg) => sendWindowMsg(msg);
 
 const observers: Observer[] = [
   "history",
@@ -23,7 +25,7 @@ const manager = () => {
   };
   const stop = () => {
     const sessionId = deinit();
-    sendWindowMsg({
+    sendMsgToContent({
       type: "save_session",
       meta: { from: "inject", to: "content" },
       payload: { sessionId },
