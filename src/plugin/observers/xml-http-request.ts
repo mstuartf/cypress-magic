@@ -16,16 +16,16 @@ export function initXMLHttpRequestObserver({
   const _open = window.XMLHttpRequest.prototype.open;
   window.XMLHttpRequest.prototype.open = function () {
     // cache these so they are available in onreadystatechange
-    this.__method = arguments[0].toUpperCase();
-    this.__url = arguments[1];
+    (this as any).__method = arguments[0].toUpperCase();
+    (this as any).__url = arguments[1];
     saveEvent({
       type: "request",
       timestamp: Date.now(),
-      url: this.__url,
-      method: this.__method,
+      url: (this as any).__url,
+      method: (this as any).__method,
       initiator: "xml",
     });
-    return _open.apply(this, arguments);
+    return _open.apply(this, arguments as any);
   };
 
   const _send = window.XMLHttpRequest.prototype.send;
@@ -37,16 +37,16 @@ export function initXMLHttpRequestObserver({
           saveEvent({
             type: "response",
             timestamp: Date.now(),
-            url: this.__url,
-            method: this.__method,
+            url: (this as any).__url,
+            method: (this as any).__method,
             status: this.status,
             body: parseBody(this.response, obfuscate),
           });
         }
-        return _onreadystatechange.apply(this, arguments);
+        return _onreadystatechange.apply(this, arguments as any);
       };
     }
-    return _send.apply(this, arguments);
+    return _send.apply(this, arguments as any);
   };
 
   const removePatch = () => {

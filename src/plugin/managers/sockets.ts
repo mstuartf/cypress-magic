@@ -5,7 +5,6 @@ import {
   ParsedEvent,
 } from "../types";
 import { readBlockUpload, readSocketUrl } from "../globals";
-import { version } from "../../package.json";
 
 export const createWsClient = (
   clientId: string,
@@ -49,7 +48,7 @@ export const createWsClient = (
       JSON.stringify({
         clientId,
         domain,
-        version,
+        version: "react",
         dev: devMode,
       })
     );
@@ -85,7 +84,7 @@ export const createWsClient = (
 
   const close = (): string => {
     ws.close();
-    return sessionId;
+    return sessionId!;
   };
 
   return {

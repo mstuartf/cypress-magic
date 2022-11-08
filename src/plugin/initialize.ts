@@ -10,9 +10,9 @@ const initialize = (
   observers: Observer[],
   devMode = false
 ) => {
-  if (!isChrome() || readIsTestMode()) {
-    return;
-  }
+  // if (!isChrome() || readIsTestMode()) {
+  //   return;
+  // }
 
   const { close, clear, ...args } = {
     ...createWsClient(clientId, devMode),

@@ -60,7 +60,7 @@ const parseSpreadsheetUploadEvent = (
   obfuscate: InitArgs["obfuscate"]
 ): Promise<UploadEvent> => {
   return new Promise((resolve, reject) => {
-    const file = (event.target as HTMLInputElement).files[0];
+    const file = (event.target! as HTMLInputElement)!.files![0];
     readSpreadsheet(file).then((data) => {
       resolve({
         type: "fileUpload",
@@ -79,7 +79,7 @@ const parseSpreadsheetUploadEvent = (
 };
 
 const parseOtherUploadEvent = (event: Event): UploadEvent => {
-  const file = (event.target as HTMLInputElement).files[0];
+  const file = (event.target! as HTMLInputElement)!.files![0];
   return {
     type: "fileUpload",
     timestamp: Date.now(),
@@ -99,22 +99,22 @@ const isSpreadsheetUpload = (
   target: Event["target"]
 ): target is HTMLInputElement => {
   return (
-    target &&
+    !!target &&
     target instanceof HTMLInputElement &&
     target.type === "file" &&
-    !!target.files[0] &&
+    !!target.files![0] &&
     ["xlsx", "xlsb", "xlsm", "xls", "csv"].some((extension) =>
-      target.files[0].name.includes(extension)
+      target.files![0].name.includes(extension)
     )
   );
 };
 
 const isOtherUpload = (target: Event["target"]): target is HTMLInputElement => {
   return (
-    target &&
+    !!target &&
     target instanceof HTMLInputElement &&
     target.type === "file" &&
-    !!target.files[0]
+    !!target.files![0]
   );
 };
 
@@ -131,7 +131,7 @@ const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
 const parseEvent = (
   event: Event,
   { obfuscate }: Pick<InitArgs, "obfuscate">
-): UserEvent | Promise<UserEvent> => {
+): UserEvent | Promise<UserEvent> | undefined => {
   if (event.type === "click" || event.type === "dblclick") {
     return parseClickEvent(event as MouseEvent);
   } else if (event.type === "change" && isSpreadsheetUpload(event.target)) {
@@ -153,12 +153,16 @@ function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   }
   try {
     Promise.resolve(parseEvent(event, { ...rest }))
-      .then((res) => saveEvent(res))
+      .then((res) => {
+        if (res) {
+          saveEvent(res);
+        }
+      })
       .catch((e) => {
         saveEvent(createErrorEvent(event.type, e));
       });
   } catch (e) {
-    saveEvent(createErrorEvent(event.type, e));
+    saveEvent(createErrorEvent(event.type, e as any));
   }
 }
 

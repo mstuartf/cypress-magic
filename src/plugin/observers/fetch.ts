@@ -20,10 +20,10 @@ const parseRequest = (
     method = input.method;
   } else if (isURL(input)) {
     url = input.toString();
-    method = init ? init.method : "GET";
+    method = init ? init.method! : "GET";
   } else {
     url = input;
-    method = init ? init.method : "GET";
+    method = init ? init.method! : "GET";
   }
 
   return {

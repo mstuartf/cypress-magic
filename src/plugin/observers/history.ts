@@ -35,10 +35,10 @@ function monkeyPatchHistory(
         const { pathname, hostname } = getPathAndHost(url);
         saveEvent({ ...getBaseEvent(), pathname, hostname });
       } catch (e) {
-        saveEvent(createErrorEvent("navigation", e));
+        saveEvent(createErrorEvent("navigation", e as any));
       }
     }
-    return pushState.apply(history, arguments);
+    return pushState.apply(history, arguments as any);
   };
 
   const replaceState = history.replaceState;
@@ -48,10 +48,10 @@ function monkeyPatchHistory(
         const { pathname, hostname } = getPathAndHost(url);
         saveEvent({ ...getBaseEvent(), pathname, hostname });
       } catch (e) {
-        saveEvent(createErrorEvent("navigation", e));
+        saveEvent(createErrorEvent("navigation", e as any));
       }
     }
-    return replaceState.apply(history, arguments);
+    return replaceState.apply(history, arguments as any);
   };
 
   // listen to popstate for back, forward and go (async)
@@ -60,7 +60,7 @@ function monkeyPatchHistory(
       const { hostname, pathname } = window.location;
       saveEvent({ ...getBaseEvent(), pathname, hostname });
     } catch (e) {
-      saveEvent(createErrorEvent("navigation", e));
+      saveEvent(createErrorEvent("navigation", e as any));
     }
   };
   window.addEventListener("popstate", listener);

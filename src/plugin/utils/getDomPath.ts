@@ -19,8 +19,8 @@ export function getDomPath(el: HTMLElement): DomPathNode[] {
       siblingCount: sibCount,
       siblingIndex: sibIndex,
       id: el.id,
-      dataCy: el.dataset.cy,
-      dataTestId: el.dataset.testId,
+      dataCy: el.dataset.cy!,
+      dataTestId: el.dataset.testId!,
     };
     stack.unshift(domPathNode);
     el = el.parentNode as HTMLElement;

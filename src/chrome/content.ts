@@ -2,7 +2,6 @@ chrome.runtime.onMessage.addListener(function (request) {
   if (!request) {
     return;
   }
-  console.log(request.type, request.payload);
   if (request.type === "user/startRecording") {
     chrome.storage.sync.set(
       { forceReload: true, client_id: request.payload.client_id },
@@ -20,7 +19,6 @@ chrome.runtime.onMessage.addListener(function (request) {
 
 chrome.storage.sync.get(["forceReload", "client_id"], function (items) {
   const { forceReload, client_id } = items;
-  console.log(forceReload, client_id);
   if (forceReload) {
     chrome.storage.sync.set({ forceReload: false }, function () {
       console.log("sending start message to inject");
