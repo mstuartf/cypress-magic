@@ -6,6 +6,7 @@ import { selectIsLoggedIn } from "../redux/selectors";
 import Input from "./Input";
 import Button from "./Button";
 import Link from "./Link";
+import Icon from "./Icon";
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { email_address, password } = JSON.parse(config.body as string);
@@ -66,6 +67,12 @@ const Login = () => {
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="w-80">
+        <div className="mb-4 text-lg font-semibold text-gray-700 text-center flex items-center">
+          <div className="h-6 w-6 flex items-center justify-center">
+            <Icon />
+          </div>
+          <div className="ml-2">Seasmoke</div>
+        </div>
         <div className="mb-4">
           <Input
             placeholder="Email address"
