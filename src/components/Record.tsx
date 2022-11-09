@@ -49,6 +49,7 @@ const Record = () => {
   return (
     <div>
       Record
+      <div>{sessionId}</div>
       <div>{email}</div>
       <button onClick={() => dispatch(logout())}>Logout</button>
       {recordingInProgress && <div>Recording...</div>}

@@ -50,8 +50,11 @@ export const userSlice = createSlice({
       };
     },
     startRecording: (state) => {
-      state.recording.inProgress = true;
-      state.recording.session_id = null;
+      state.recording = {
+        inProgress: true,
+        session_id: null,
+        session_url: null,
+      };
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;
