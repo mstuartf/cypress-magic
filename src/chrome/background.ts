@@ -1,11 +1,10 @@
 import { store } from "../redux/store";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 import { saveSession } from "../redux/slice";
+import { setBadgeText, updateCache } from "./utils";
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.action.setBadgeText({
-    text: "OFF",
-  });
+  setBadgeText("OFF");
 });
 
 // https://stackoverflow.com/a/72607832
@@ -33,9 +32,7 @@ chrome.runtime.onMessage.addListener((request) => {
 });
 
 store.subscribe(async () => {
-  await chrome.storage.local.set({
-    seasmoke: { ...store.getState() },
-  });
+  await updateCache({ ...store.getState() });
 });
 
 export default {};

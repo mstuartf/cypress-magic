@@ -5,16 +5,7 @@ import {
   startRecording,
   stopRecording,
 } from "./slice";
-
-export const getActiveTabId = async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab.id!;
-};
-
-const sendMsgToContent = async (msg: any) => {
-  const tabId = await getActiveTabId();
-  await chrome.tabs.sendMessage(tabId, msg);
-};
+import { readCache, sendMsgToContent, setBadgeText } from "../chrome/utils";
 
 export const msgMiddleware: redux.Middleware =
   (store) => (next) => (action) => {
@@ -24,13 +15,21 @@ export const msgMiddleware: redux.Middleware =
           info: { client_id },
         },
       } = store.getState();
-      sendMsgToContent({ type: action.type, payload: { client_id } });
+      setBadgeText("ON").then(() => {
+        sendMsgToContent({ type: action.type, payload: { client_id } }).then(
+          () => {
+            window.close(); // close the popup when the recording starts
+          }
+        );
+      });
     }
     if (action.type === stopRecording.type) {
-      sendMsgToContent({ type: action.type });
+      setBadgeText("OFF").then(() => {
+        sendMsgToContent({ type: action.type });
+      });
     }
     if (action.type === loadCache.type) {
-      chrome.storage.local.get(["seasmoke"]).then((state) => {
+      readCache().then((state) => {
         store.dispatch(restoreCache(state.seasmoke?.user || null));
       });
     }
