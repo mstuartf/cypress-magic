@@ -91,7 +91,10 @@ const Login = () => {
           />
         </div>
         <div className="flex items-center justify-between">
-          <Button disabled={isLoading} onClick={login}>
+          <Button
+            disabled={isLoading || !email_address || !password}
+            onClick={login}
+          >
             Login
           </Button>
           <div>
