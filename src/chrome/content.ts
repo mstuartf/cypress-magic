@@ -1,17 +1,10 @@
 import { saveSession, startRecording, stopRecording } from "../redux/slice";
+import { readCache } from "./utils";
 
 // send messages to inject script
 chrome.runtime.onMessage.addListener(function (request) {
   if (!request) {
     return;
-  }
-  if (request.type === startRecording.type) {
-    chrome.storage.sync.set(
-      { forceReload: true, client_id: request.payload.client_id },
-      function () {
-        window.location.reload();
-      }
-    );
   }
   if (request.type === stopRecording.type) {
     window.postMessage({
@@ -33,16 +26,25 @@ window.addEventListener("message", (event) => {
   }
 });
 
-chrome.storage.sync.get(["forceReload", "client_id"], function (items) {
-  const { forceReload, client_id } = items;
-  if (forceReload) {
-    chrome.storage.sync.set({ forceReload: false }, function () {
-      window.postMessage({
-        type: startRecording.type,
-        payload: { client_id },
-      });
-    });
-  }
-});
+const onLoad = () => {
+  readCache(
+    ({
+      user: {
+        recording: { inProgress },
+        info: { client_id },
+      },
+    }) => {
+      if (inProgress) {
+        console.log("dispathcing from conetnet");
+        window.postMessage({
+          type: startRecording.type,
+          payload: { client_id },
+        });
+      }
+    }
+  );
+};
+
+onLoad();
 
 export default {};

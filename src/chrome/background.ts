@@ -1,7 +1,17 @@
 import { store } from "../redux/store";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
-import { saveSession } from "../redux/slice";
-import { setBadgeText, updateCache } from "./utils";
+import {
+  cancelRecording,
+  restoreCache,
+  saveSession,
+  startRecording,
+} from "../redux/slice";
+import {
+  readCache,
+  sendMsgToContent,
+  setBadgeText,
+  updateCache,
+} from "./utils";
 
 chrome.runtime.onInstalled.addListener(() => {
   setBadgeText("OFF");
@@ -33,6 +43,10 @@ chrome.runtime.onMessage.addListener((request) => {
 
 store.subscribe(async () => {
   await updateCache({ ...store.getState() });
+});
+
+readCache((state) => {
+  store.dispatch(restoreCache(state.user));
 });
 
 export default {};

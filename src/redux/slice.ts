@@ -1,25 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export const getInitialUserState = () => ({
+  login: {
+    isLoading: false,
+  },
+  info: {
+    email_address: null,
+    client_id: null,
+    token: null,
+  },
+  recording: {
+    inProgress: false,
+    session_id: null,
+    session_url: null,
+  },
+  cacheLoaded: false,
+});
+
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    login: {
-      isLoading: false,
-    },
-    info: {
-      email_address: null,
-      client_id: null,
-      token: null,
-    },
-    recording: {
-      inProgress: false,
-      session_id: null,
-      session_url: null,
-    },
-    cacheLoaded: false,
-  },
+  initialState: getInitialUserState(),
   reducers: {
-    loadCache: () => {},
     restoreCache: (state, action) => {
       if (action.payload) {
         state.login = { ...action.payload.login };
@@ -50,11 +51,10 @@ export const userSlice = createSlice({
       };
     },
     startRecording: (state) => {
-      state.recording = {
-        inProgress: true,
-        session_id: null,
-        session_url: null,
-      };
+      state.recording.inProgress = true;
+    },
+    cancelRecording: (state) => {
+      state.recording.inProgress = false;
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;
@@ -73,9 +73,9 @@ export const {
   loginSuccess,
   restoreCache,
   logout,
-  startRecording,
   stopRecording,
-  loadCache,
   saveSession,
   getSessionUrl,
+  startRecording,
+  cancelRecording,
 } = userSlice.actions;
