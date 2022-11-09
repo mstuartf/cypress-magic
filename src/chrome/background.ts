@@ -25,6 +25,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   await chrome.scripting.registerContentScripts(scripts).catch(() => {});
 });
 
+// this message comes from inject -> content -> background
 chrome.runtime.onMessage.addListener((request) => {
   if (request.type === saveSession.type) {
     store.dispatch(saveSession({ session_id: request.payload.session_id }));

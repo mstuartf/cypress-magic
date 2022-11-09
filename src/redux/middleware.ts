@@ -1,5 +1,4 @@
 import * as redux from "redux";
-import { store } from "./store";
 import {
   loadCache,
   restoreCache,
@@ -16,10 +15,6 @@ const sendMsgToContent = async (msg: any) => {
   const tabId = await getActiveTabId();
   await chrome.tabs.sendMessage(tabId, msg);
 };
-
-// const sendMsgToBackground = async (msg: any, callback?: (res: any) => void) => {
-//   await chrome.runtime.sendMessage(msg, callback);
-// };
 
 export const msgMiddleware: redux.Middleware =
   (store) => (next) => (action) => {

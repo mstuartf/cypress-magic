@@ -1,5 +1,6 @@
 import { saveSession, startRecording, stopRecording } from "../redux/slice";
 
+// send messages to inject script
 chrome.runtime.onMessage.addListener(function (request) {
   if (!request) {
     return;
@@ -19,12 +20,12 @@ chrome.runtime.onMessage.addListener(function (request) {
   }
 });
 
+// receive messages from inject script
 window.addEventListener("message", (event) => {
   if (!event.data || !event.data.type) {
     return;
   }
   if (event.data.type === saveSession.type) {
-    console.log(`save session from content: ${event.data.payload.session_id}`);
     chrome.runtime.sendMessage({
       type: saveSession.type,
       payload: { session_id: event.data.payload.session_id },

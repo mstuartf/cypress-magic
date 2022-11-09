@@ -10,20 +10,17 @@ export const userSlice = createSlice({
       email_address: null,
       client_id: null,
       token: null,
-      session_id: null,
     },
     recording: {
       inProgress: false,
-      sessionId: null,
+      session_id: null,
+      session_url: null,
     },
     cacheLoaded: false,
   },
   reducers: {
-    loadCache: () => {
-      console.log("loadCache");
-    },
+    loadCache: () => {},
     restoreCache: (state, action) => {
-      console.log("restoreCache", action.payload);
       if (action.payload) {
         state.login = { ...action.payload.login };
         state.info = { ...action.payload.info };
@@ -45,17 +42,25 @@ export const userSlice = createSlice({
         email_address: null,
         client_id: null,
         token: null,
+      };
+      state.recording = {
+        inProgress: false,
         session_id: null,
+        session_url: null,
       };
     },
     startRecording: (state) => {
       state.recording.inProgress = true;
+      state.recording.session_id = null;
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;
     },
     saveSession: (state, action) => {
-      state.info.session_id = action.payload.session_id;
+      state.recording.session_id = action.payload.session_id;
+    },
+    getSessionUrl: (state, action) => {
+      state.recording.session_url = action.payload.session_url;
     },
   },
 });
@@ -69,4 +74,5 @@ export const {
   stopRecording,
   loadCache,
   saveSession,
+  getSessionUrl,
 } = userSlice.actions;
