@@ -14,6 +14,7 @@ export const getInitialUserState = () => ({
     session_id: null,
     session_url: null,
     triggerInjectScript: false,
+    lastAborted: false,
   },
   cacheLoaded: false,
 });
@@ -50,6 +51,7 @@ export const userSlice = createSlice({
         session_id: null,
         session_url: null,
         triggerInjectScript: false,
+        lastAborted: false,
       };
     },
     startRecording: (state) => {
@@ -58,6 +60,7 @@ export const userSlice = createSlice({
         session_id: null,
         session_url: null,
         triggerInjectScript: true,
+        lastAborted: false,
       };
     },
     injectScriptTriggered: (state) => {
@@ -65,6 +68,7 @@ export const userSlice = createSlice({
     },
     cancelRecording: (state) => {
       state.recording.inProgress = false;
+      state.recording.lastAborted = true;
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;

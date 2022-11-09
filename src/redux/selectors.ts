@@ -10,3 +10,5 @@ export const selectEmailAddress = (state: RootState) =>
   state.user.info.email_address;
 export const selectRecordingInProgress = (state: RootState) =>
   state.user.recording.inProgress;
+export const selectLastRecordingAborted = (state: RootState) =>
+  state.user.recording.lastAborted;

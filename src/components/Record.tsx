@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import {
   selectEmailAddress,
   selectIsLoggedIn,
+  selectLastRecordingAborted,
   selectRecordingInProgress,
   selectSessionId,
   selectSessionUrl,
@@ -36,6 +37,7 @@ const Record = () => {
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const recordingInProgress = useSelector(selectRecordingInProgress);
+  const lastAborted = useSelector(selectLastRecordingAborted);
   const sessionId = useSelector(selectSessionId);
   const sessionUrl = useSelector(selectSessionUrl);
 
@@ -61,7 +63,7 @@ const Record = () => {
           </GrayLinkButton>
         </div>
       </div>
-      <div className="h-24 w-full flex items-center justify-center">
+      <div className="h-24 w-full flex items-center justify-center text-gray-700">
         {recordingInProgress && (
           <div className="flex items-center">
             <Spinner />
@@ -79,9 +81,10 @@ const Record = () => {
             Download recording
           </Link>
         )}
-        {!recordingInProgress && !sessionId && (
+        {!recordingInProgress && !sessionId && !lastAborted && (
           <div>No existing recordings.</div>
         )}
+        {lastAborted && <div>Last recording stopped due to page refresh.</div>}
       </div>
       <div className="flex justify-center">
         <Button
