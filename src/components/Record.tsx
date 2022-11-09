@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
-  selectEmailAddress,
   selectIsLoggedIn,
   selectLastRecordingAborted,
   selectRecordingInProgress,
@@ -32,7 +31,6 @@ const sessionUrlRequest = async (
 };
 
 const Record = () => {
-  const email = useSelector(selectEmailAddress);
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -40,6 +38,19 @@ const Record = () => {
   const lastAborted = useSelector(selectLastRecordingAborted);
   const sessionId = useSelector(selectSessionId);
   const sessionUrl = useSelector(selectSessionUrl);
+
+  // this is just to explain why the page is being reset
+  const [resetting, setResetting] = useState(false);
+  useEffect(() => {
+    if (recordingInProgress) {
+      setResetting(true);
+      setTimeout(() => {
+        setResetting(false);
+      }, 2000);
+    } else {
+      setResetting(false);
+    }
+  }, [recordingInProgress]);
 
   useEffect(() => {
     if (!!sessionId && !sessionUrl) {
@@ -67,7 +78,9 @@ const Record = () => {
         {recordingInProgress && (
           <div className="flex items-center">
             <Spinner />
-            <div className="ml-4">Recording...</div>
+            <div className="ml-4">
+              {!resetting ? "Recording" : "Resetting page state"}...
+            </div>
           </div>
         )}
         {!!sessionId && !sessionUrl && (
