@@ -1,18 +1,12 @@
 import { store } from "../redux/store";
-import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 import {
   cancelRecording,
   injectScriptTriggered,
   restoreCache,
   saveSession,
-  startRecording,
 } from "../redux/slice";
-import {
-  readCache,
-  sendMsgToContent,
-  setBadgeText,
-  updateCache,
-} from "./utils";
+import { readCache, setBadgeText, updateCache } from "./utils";
+import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 
 chrome.runtime.onInstalled.addListener(() => {
   setBadgeText("OFF");
@@ -51,25 +45,14 @@ chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
         info: { client_id },
       },
     } = store.getState();
-    console.log("received", origin, triggerInjectScript, inProgress);
     if (triggerInjectScript) {
       store.dispatch(injectScriptTriggered());
-      const {
-        user: {
-          recording: { triggerInjectScript, inProgress },
-        },
-      } = store.getState();
-      console.log("injectScriptTriggered", triggerInjectScript, inProgress);
       sendResponse(client_id);
     } else if (inProgress) {
       store.dispatch(cancelRecording());
-      const {
-        user: {
-          recording: { triggerInjectScript, inProgress },
-        },
-      } = store.getState();
-      console.log("cancelRecording", triggerInjectScript, inProgress);
       sendResponse(null);
+      // for some reason this doesn't work in middleware
+      setBadgeText("OFF");
     }
   }
 });

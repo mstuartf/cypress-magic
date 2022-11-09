@@ -23,7 +23,7 @@ export const updateCache = async (state: object) =>
     seasmoke: { ...state },
   });
 
-export const setBadgeText = async (text: string) =>
+export const setBadgeText = async (text: "ON" | "OFF") =>
   chrome.action.setBadgeText({
     text,
   });
