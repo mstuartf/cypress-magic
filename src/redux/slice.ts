@@ -13,6 +13,7 @@ export const getInitialUserState = () => ({
     inProgress: false,
     session_id: null,
     session_url: null,
+    triggerInjectScript: false,
   },
   cacheLoaded: false,
 });
@@ -48,10 +49,19 @@ export const userSlice = createSlice({
         inProgress: false,
         session_id: null,
         session_url: null,
+        triggerInjectScript: false,
       };
     },
     startRecording: (state) => {
-      state.recording.inProgress = true;
+      state.recording = {
+        inProgress: true,
+        session_id: null,
+        session_url: null,
+        triggerInjectScript: true,
+      };
+    },
+    injectScriptTriggered: (state) => {
+      state.recording.triggerInjectScript = false;
     },
     cancelRecording: (state) => {
       state.recording.inProgress = false;
@@ -78,4 +88,5 @@ export const {
   getSessionUrl,
   startRecording,
   cancelRecording,
+  injectScriptTriggered,
 } = userSlice.actions;

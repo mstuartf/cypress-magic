@@ -2,6 +2,7 @@ import { store } from "../redux/store";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 import {
   cancelRecording,
+  injectScriptTriggered,
   restoreCache,
   saveSession,
   startRecording,
@@ -35,9 +36,41 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // this message comes from inject -> content -> background
-chrome.runtime.onMessage.addListener((request) => {
+chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
   if (request.type === saveSession.type) {
     store.dispatch(saveSession({ session_id: request.payload.session_id }));
+  }
+  // for some reason this message is sent when the popup opens, use origin to filter those
+  if (
+    request.type === "shall_start" &&
+    !origin?.startsWith("chrome-extension")
+  ) {
+    const {
+      user: {
+        recording: { triggerInjectScript, inProgress },
+        info: { client_id },
+      },
+    } = store.getState();
+    console.log("received", origin, triggerInjectScript, inProgress);
+    if (triggerInjectScript) {
+      store.dispatch(injectScriptTriggered());
+      const {
+        user: {
+          recording: { triggerInjectScript, inProgress },
+        },
+      } = store.getState();
+      console.log("injectScriptTriggered", triggerInjectScript, inProgress);
+      sendResponse(client_id);
+    } else if (inProgress) {
+      store.dispatch(cancelRecording());
+      const {
+        user: {
+          recording: { triggerInjectScript, inProgress },
+        },
+      } = store.getState();
+      console.log("cancelRecording", triggerInjectScript, inProgress);
+      sendResponse(null);
+    }
   }
 });
 

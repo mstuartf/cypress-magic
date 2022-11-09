@@ -1,5 +1,5 @@
 import * as redux from "redux";
-import { startRecording, stopRecording } from "./slice";
+import { cancelRecording, startRecording, stopRecording } from "./slice";
 import { sendMsgToContent, setBadgeText } from "../chrome/utils";
 
 export const msgMiddleware: redux.Middleware =
@@ -13,6 +13,9 @@ export const msgMiddleware: redux.Middleware =
       setBadgeText("OFF").then(() => {
         sendMsgToContent({ type: action.type });
       });
+    }
+    if (action.type === cancelRecording.type) {
+      setBadgeText("OFF");
     }
     next(action);
   };
