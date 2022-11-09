@@ -8,6 +8,7 @@ import Button from "./Button";
 import Link from "./Link";
 import Icon from "./Icon";
 import Spinner from "./Spinner";
+import Header from "./Header";
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { email_address, password } = JSON.parse(config.body as string);
@@ -66,50 +67,45 @@ const Login = () => {
     );
   };
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-80">
-        <div className="mb-4 text-lg font-semibold text-gray-700 text-center flex items-center">
-          <div className="h-6 w-6 flex items-center justify-center">
-            <Icon />
-          </div>
-          <div className="ml-2">Seasmoke</div>
+    <div>
+      <div className="mb-4">
+        <Header />
+      </div>
+      <div className="mb-4">
+        <Input
+          placeholder="Email address"
+          disabled={isLoading}
+          value={email_address}
+          onChange={({ target: { value } }) => setEmailAddress(value)}
+        />
+      </div>
+      <div className="mb-4">
+        <Input
+          placeholder="Password"
+          disabled={isLoading}
+          type="password"
+          value={password}
+          onChange={({ target: { value } }) => setPassword(value)}
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Button
+            disabled={isLoading || !email_address || !password}
+            onClick={login}
+          >
+            Login
+          </Button>
+          {isLoading && (
+            <div className="ml-4">
+              <Spinner />
+            </div>
+          )}
         </div>
-        <div className="mb-4">
-          <Input
-            placeholder="Email address"
-            disabled={isLoading}
-            value={email_address}
-            onChange={({ target: { value } }) => setEmailAddress(value)}
-          />
-        </div>
-        <div className="mb-4">
-          <Input
-            placeholder="Password"
-            disabled={isLoading}
-            type="password"
-            value={password}
-            onChange={({ target: { value } }) => setPassword(value)}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Button
-              disabled={isLoading || !email_address || !password}
-              onClick={login}
-            >
-              Login
-            </Button>
-            {isLoading && (
-              <div className="ml-4">
-                <Spinner />
-              </div>
-            )}
-          </div>
-          <div>
-            <Link target="_blank" href="https://www.google.com">
-              Don't have an account?
-            </Link>
-          </div>
+        <div>
+          <Link target="_blank" href="https://www.google.com">
+            Don't have an account?
+          </Link>
         </div>
       </div>
     </div>

@@ -16,20 +16,22 @@ function App() {
   }
 
   return (
-    <div className="w-full h-full">
-      <Router history={history}>
-        <Switch>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route path="/record">
-            <Record />
-          </Route>
-          <Route path="*">
-            <Redirect to="/login" />
-          </Route>
-        </Switch>
-      </Router>
+    <div className="w-full h-full px-8 py-6">
+      <div className="h-full w-full">
+        <Router history={history}>
+          <Switch>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route path="/record">
+              <Record />
+            </Route>
+            <Route path="*">
+              <Redirect to="/login" />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
     </div>
   );
 }

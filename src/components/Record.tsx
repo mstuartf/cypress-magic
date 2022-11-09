@@ -14,6 +14,11 @@ import {
   startRecording,
   stopRecording,
 } from "../redux/slice";
+import Header from "./Header";
+import Button from "./Button";
+import Spinner from "./Spinner";
+import Link from "./Link";
+import GrayLinkButton from "./GrayLinkButton";
 
 const sessionUrlRequest = async (
   session_id: string
@@ -48,28 +53,52 @@ const Record = () => {
 
   return (
     <div>
-      Record
-      <div>{sessionId}</div>
-      <div>{email}</div>
-      <button onClick={() => dispatch(logout())}>Logout</button>
-      {recordingInProgress && <div>Recording...</div>}
-      {!!sessionId && !sessionUrl && <div>Saving...</div>}
-      {!!sessionUrl && (
-        <a href={sessionUrl} download>
-          Download file
-        </a>
-      )}
-      <button
-        onClick={() => {
-          if (recordingInProgress) {
-            dispatch(stopRecording());
-          } else {
-            dispatch(startRecording());
-          }
-        }}
-      >
-        {recordingInProgress ? "Stop recording" : "Start recording"}
-      </button>
+      <div className="flex items-center justify-between mb-4">
+        <Header />
+        <div>
+          <GrayLinkButton onClick={() => dispatch(logout())}>
+            Logout
+          </GrayLinkButton>
+        </div>
+      </div>
+      <div className="h-24 w-full flex items-center justify-center">
+        {recordingInProgress && (
+          <div className="flex items-center">
+            <Spinner />
+            <div className="ml-4">Recording...</div>
+          </div>
+        )}
+        {!!sessionId && !sessionUrl && (
+          <div className="flex items-center">
+            <Spinner />
+            <div className="ml-4">Saving...</div>
+          </div>
+        )}
+        {!!sessionUrl && (
+          <Link href={sessionUrl} download>
+            Download recording
+          </Link>
+        )}
+        {!recordingInProgress && !sessionId && (
+          <div>No existing recordings.</div>
+        )}
+      </div>
+      <div className="flex justify-center">
+        <Button
+          disabled={!!sessionId && !sessionUrl}
+          onClick={() => {
+            if (recordingInProgress) {
+              dispatch(stopRecording());
+            } else {
+              dispatch(startRecording());
+            }
+          }}
+        >
+          {recordingInProgress || (!!sessionId && !sessionUrl)
+            ? "Finish recording"
+            : "New recording"}
+        </Button>
+      </div>
     </div>
   );
 };
