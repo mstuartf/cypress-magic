@@ -16,7 +16,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="w-full h-full">
       <Router history={history}>
         <Switch>
           <Route exact path="/login">

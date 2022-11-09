@@ -3,6 +3,9 @@ import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginPending, loginSuccess } from "../redux/slice";
 import { selectIsLoggedIn } from "../redux/selectors";
+import Input from "./Input";
+import Button from "./Button";
+import Link from "./Link";
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { email_address, password } = JSON.parse(config.body as string);
@@ -61,28 +64,34 @@ const Login = () => {
     );
   };
   return (
-    <div>
-      <div>Login</div>
-      <label>
-        Email address
-        <input
-          disabled={isLoading}
-          value={email_address}
-          onChange={({ target: { value } }) => setEmailAddress(value)}
-        />
-      </label>
-      <label>
-        Password
-        <input
-          disabled={isLoading}
-          type="password"
-          value={password}
-          onChange={({ target: { value } }) => setPassword(value)}
-        />
-      </label>
-      <button disabled={isLoading} onClick={login}>
-        Submit
-      </button>
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-80">
+        <div className="mb-4">
+          <Input
+            placeholder="Email address"
+            disabled={isLoading}
+            value={email_address}
+            onChange={({ target: { value } }) => setEmailAddress(value)}
+          />
+        </div>
+        <div className="mb-4">
+          <Input
+            placeholder="Password"
+            disabled={isLoading}
+            type="password"
+            value={password}
+            onChange={({ target: { value } }) => setPassword(value)}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <Button disabled={isLoading} onClick={login}>
+            Login
+          </Button>
+          <div>
+            <Link target="_blank">Don't have an account?</Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
