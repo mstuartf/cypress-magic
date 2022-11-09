@@ -7,6 +7,7 @@ import Input from "./Input";
 import Button from "./Button";
 import Link from "./Link";
 import Icon from "./Icon";
+import Spinner from "./Spinner";
 
 const _fetch = (url: string, config: RequestInit): Response => {
   const { email_address, password } = JSON.parse(config.body as string);
@@ -91,14 +92,23 @@ const Login = () => {
           />
         </div>
         <div className="flex items-center justify-between">
-          <Button
-            disabled={isLoading || !email_address || !password}
-            onClick={login}
-          >
-            Login
-          </Button>
+          <div className="flex items-center">
+            <Button
+              disabled={isLoading || !email_address || !password}
+              onClick={login}
+            >
+              Login
+            </Button>
+            {isLoading && (
+              <div className="ml-4">
+                <Spinner />
+              </div>
+            )}
+          </div>
           <div>
-            <Link target="_blank">Don't have an account?</Link>
+            <Link target="_blank" href="https://www.google.com">
+              Don't have an account?
+            </Link>
           </div>
         </div>
       </div>
