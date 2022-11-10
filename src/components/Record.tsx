@@ -19,16 +19,7 @@ import Button from "./Button";
 import Spinner from "./Spinner";
 import Link from "./Link";
 import GrayLinkButton from "./GrayLinkButton";
-
-const sessionUrlRequest = async (
-  session_id: string
-): Promise<{ url: string }> => {
-  const response = await fetch(
-    `https://api.seasmoke.io/events/session/${session_id}/test-file`
-  );
-  const body = await response.json();
-  return body;
-};
+import { sessionUrlRequest } from "../requests";
 
 const Record = () => {
   const dispatch = useDispatch();

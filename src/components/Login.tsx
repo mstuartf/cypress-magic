@@ -6,41 +6,9 @@ import { selectIsLoggedIn } from "../redux/selectors";
 import Input from "./Input";
 import Button from "./Button";
 import Link from "./Link";
-import Icon from "./Icon";
 import Spinner from "./Spinner";
 import Header from "./Header";
-
-const _fetch = (url: string, config: RequestInit): Response => {
-  const { email_address, password } = JSON.parse(config.body as string);
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email_address === "test@mike.com") {
-        resolve({
-          json: () => {
-            return new Promise((res, rej) => {
-              res({
-                email_address: "mike@test.com",
-                client_id: "b7483b7f-bb53-4190-b9c9-8f01dbd29590",
-                token: "ABC!@£",
-              });
-            });
-          },
-        });
-      } else {
-        reject("invalid credentials");
-      }
-    }, 2000);
-  }) as unknown as Response;
-};
-
-const loginRequest = async (email_address: string, password: string) => {
-  const response = await _fetch("todo: login url", {
-    method: "POST",
-    body: JSON.stringify({ email_address, password }),
-  });
-  const body = await response.json();
-  return body;
-};
+import { getUserRequest, loginRequest } from "../requests";
 
 const Login = () => {
   const [email_address, setEmailAddress] = useState<string>("");
@@ -56,11 +24,15 @@ const Login = () => {
   const login = async () => {
     dispatch(loginPending());
     setIsLoading(true);
-    const { client_id, token } = await loginRequest(email_address, password);
+    const { token } = await loginRequest(email_address, password);
+    const {
+      username,
+      user_profile: { client_id },
+    } = await getUserRequest(token);
     setIsLoading(false);
     dispatch(
       loginSuccess({
-        email_address,
+        email_address: username,
         client_id,
         token,
       })
