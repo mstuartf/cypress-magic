@@ -1,8 +1,8 @@
 import { TDWindow } from "./types";
 
 const w = window as unknown as TDWindow;
-const SOCKET_URL = "wss://127.0.0.1:1337/ws/events/";
-// const SOCKET_URL = "wss://api.seasmoke.io/ws/events/";
+// const SOCKET_URL = "wss://127.0.0.1:1337/ws/events/";
+const SOCKET_URL = "wss://api.seasmoke.io/ws/events/";
 
 export const readClientId = (): string => w.TD_CLIENT_ID as string;
 export const readSocketUrl = (): string => w.TD_SOCKET_URL || SOCKET_URL;

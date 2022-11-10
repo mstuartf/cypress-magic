@@ -1,5 +1,5 @@
-const BASE_URL = "http://127.0.0.1:1337";
-// const BASE_URL = "https://api.seasmoke.io";
+// const BASE_URL = "http://127.0.0.1:1337";
+const BASE_URL = "https://api.seasmoke.io";
 
 export const loginRequest = async (
   username: string,
