@@ -1,6 +1,6 @@
 import { RootState } from "./store";
 
-export const selectIsLoggedIn = (state: RootState) => !!state.user.info.token;
+export const selectToken = (state: RootState) => state.user.info.token;
 export const selectSessionId = (state: RootState) =>
   state.user.recording.session_id;
 export const selectSessionUrl = (state: RootState) =>

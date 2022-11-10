@@ -4,6 +4,9 @@ export const getInitialUserState = () => ({
   login: {
     isLoading: false,
   },
+  getUser: {
+    isLoading: false,
+  },
   info: {
     email_address: null,
     client_id: null,
@@ -37,8 +40,18 @@ export const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.login.isLoading = false;
       state.info.token = action.payload.token;
+    },
+    getUserPending: (state) => {
+      state.getUser.isLoading = true;
+    },
+    getUserSuccess: (state, action) => {
+      state.getUser.isLoading = false;
       state.info.email_address = action.payload.email_address;
       state.info.client_id = action.payload.client_id;
+    },
+    getUserFailure: (state) => {
+      state.getUser.isLoading = false;
+      state.info.token = null;
     },
     logout: (state) => {
       state.info = {
@@ -93,4 +106,7 @@ export const {
   startRecording,
   cancelRecording,
   injectScriptTriggered,
+  getUserPending,
+  getUserSuccess,
+  getUserFailure,
 } = userSlice.actions;

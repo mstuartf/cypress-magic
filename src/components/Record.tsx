@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
-  selectIsLoggedIn,
+  selectToken,
   selectLastRecordingAborted,
   selectRecordingInProgress,
   selectSessionId,
   selectSessionUrl,
+  selectEmailAddress,
 } from "../redux/selectors";
 import {
   getSessionUrl,
+  getUserFailure,
+  getUserPending,
+  getUserSuccess,
   logout,
   startRecording,
   stopRecording,
@@ -19,16 +23,17 @@ import Button from "./Button";
 import Spinner from "./Spinner";
 import Link from "./Link";
 import GrayLinkButton from "./GrayLinkButton";
-import { sessionUrlRequest } from "../requests";
+import { getUserRequest, sessionUrlRequest } from "../requests";
 
 const Record = () => {
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const token = useSelector(selectToken);
   const recordingInProgress = useSelector(selectRecordingInProgress);
   const lastAborted = useSelector(selectLastRecordingAborted);
   const sessionId = useSelector(selectSessionId);
   const sessionUrl = useSelector(selectSessionUrl);
+  const emailAddress = useSelector(selectEmailAddress);
 
   // this is just to explain why the page is being reset
   const [resetting, setResetting] = useState(false);
@@ -44,28 +49,34 @@ const Record = () => {
   }, [recordingInProgress]);
 
   useEffect(() => {
-    if (!!sessionId && !sessionUrl) {
-      sessionUrlRequest(sessionId).then(({ url: session_url }) => {
+    if (!!sessionId && !sessionUrl && !!token) {
+      sessionUrlRequest(sessionId, token).then(({ url: session_url }) => {
         dispatch(getSessionUrl({ session_url }));
       });
     }
-  }, [sessionId, sessionUrl]);
+  }, [sessionId, sessionUrl, token]);
 
-  if (!isLoggedIn) {
+  useEffect(() => {
+    if (token) {
+      dispatch(getUserPending());
+      getUserRequest(token)
+        .then(({ username, user_profile: { client_id } }) => {
+          dispatch(getUserSuccess({ email_address: username, client_id }));
+        })
+        .catch(() => {
+          dispatch(getUserFailure());
+        });
+    }
+  }, [token]);
+
+  if (!token) {
     return <Redirect to="/login" />;
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <Header />
-        <div>
-          <GrayLinkButton onClick={() => dispatch(logout())}>
-            Logout
-          </GrayLinkButton>
-        </div>
-      </div>
-      <div className="h-24 w-full flex items-center justify-center text-gray-700">
+    <div className="h-full flex flex-col">
+      <Header />
+      <div className="h-20 w-full flex items-center justify-center text-gray-700">
         {recordingInProgress && (
           <div className="flex items-center">
             <Spinner />
@@ -105,6 +116,12 @@ const Record = () => {
             ? "Finish recording"
             : "New recording"}
         </Button>
+      </div>
+      <div className="flex flex-grow justify-between items-end text-xs">
+        <div className="text-gray-400">{emailAddress}</div>
+        <GrayLinkButton onClick={() => dispatch(logout())}>
+          Logout
+        </GrayLinkButton>
       </div>
     </div>
   );

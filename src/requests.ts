@@ -1,4 +1,5 @@
 const BASE_URL = "http://127.0.0.1:1337";
+// const BASE_URL = "https://api.seasmoke.io";
 
 export const loginRequest = async (
   username: string,
@@ -28,10 +29,16 @@ export const getUserRequest = async (
 };
 
 export const sessionUrlRequest = async (
-  session_id: string
+  session_id: string,
+  token: string
 ): Promise<{ url: string }> => {
   const response = await fetch(
-    `https://api.seasmoke.io/events/session/${session_id}/test-file`
+    `${BASE_URL}/events/session/${session_id}/test-file`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
   const body = await response.json();
   return body;

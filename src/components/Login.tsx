@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginPending, loginSuccess } from "../redux/slice";
-import { selectIsLoggedIn } from "../redux/selectors";
+import { selectToken } from "../redux/selectors";
 import Input from "./Input";
 import Button from "./Button";
 import Link from "./Link";
 import Spinner from "./Spinner";
 import Header from "./Header";
-import { getUserRequest, loginRequest } from "../requests";
+import { loginRequest } from "../requests";
 
 const Login = () => {
   const [email_address, setEmailAddress] = useState<string>("");
@@ -16,8 +16,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  if (isLoggedIn) {
+  const token = useSelector(selectToken);
+  if (!!token) {
     return <Redirect to="/record" />;
   }
 
@@ -25,24 +25,13 @@ const Login = () => {
     dispatch(loginPending());
     setIsLoading(true);
     const { token } = await loginRequest(email_address, password);
-    const {
-      username,
-      user_profile: { client_id },
-    } = await getUserRequest(token);
     setIsLoading(false);
-    dispatch(
-      loginSuccess({
-        email_address: username,
-        client_id,
-        token,
-      })
-    );
+    dispatch(loginSuccess({ token }));
   };
+
   return (
     <div>
-      <div className="mb-4">
-        <Header />
-      </div>
+      <Header />
       <div className="mb-4">
         <Input
           placeholder="Email address"
