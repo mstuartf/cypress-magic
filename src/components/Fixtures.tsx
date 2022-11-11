@@ -3,18 +3,23 @@ import { useSelector } from "react-redux";
 import { selectFixtures } from "../redux/selectors";
 import JSZip from "jszip";
 import Link from "./Link";
+import { sessionFileRequest } from "../requests";
+import Spinner from "./Spinner";
 
-const Fixtures = () => {
+const Fixtures = ({ testFileUrl }: { testFileUrl: string }) => {
   const fixtures = useSelector(selectFixtures);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    const zip = new JSZip();
-    Object.entries(fixtures).forEach(([path, value]) => {
-      zip.file(path, JSON.stringify(value));
-    });
-    zip.generateAsync({ type: "base64" }).then((content) => {
-      setDownloadUrl(`data:application/zip;base64,${content}`);
+    sessionFileRequest(testFileUrl).then((res) => {
+      const zip = new JSZip();
+      zip.file("test.spec.js", res);
+      Object.entries(fixtures).forEach(([path, value]) => {
+        zip.file(`/fixtures${path}`, JSON.stringify(value));
+      });
+      zip.generateAsync({ type: "base64" }).then((content) => {
+        setDownloadUrl(`data:application/zip;base64,${content}`);
+      });
     });
   }, []);
 
@@ -22,9 +27,14 @@ const Fixtures = () => {
     <>
       {downloadUrl ? (
         <Link href={downloadUrl} download>
-          Download fixtures
+          Download test assets
         </Link>
-      ) : null}
+      ) : (
+        <div className="flex items-center">
+          <Spinner />
+          <div className="ml-4">Zipping...</div>
+        </div>
+      )}
     </>
   );
 };

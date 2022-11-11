@@ -92,14 +92,7 @@ const Record = () => {
             <div className="ml-4">Saving...</div>
           </div>
         )}
-        {!!sessionUrl && (
-          <div>
-            <Link href={sessionUrl} download>
-              Download test file
-            </Link>
-            <Fixtures />
-          </div>
-        )}
+        {!!sessionUrl && <Fixtures testFileUrl={sessionUrl} />}
         {!recordingInProgress && !sessionId && !lastAborted && (
           <div>No existing recordings.</div>
         )}

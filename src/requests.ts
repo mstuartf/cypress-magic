@@ -43,3 +43,11 @@ export const sessionUrlRequest = async (
   const body = await response.json();
   return body;
 };
+
+export const sessionFileRequest = async (
+  file_download_url: string
+): Promise<string> => {
+  const response = await fetch(file_download_url);
+  const body = await response.text();
+  return body;
+};
