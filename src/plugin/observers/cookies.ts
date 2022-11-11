@@ -1,4 +1,4 @@
-import { InitArgs, ParsedEvent, StorageEvent } from "../types";
+import { InitArgs, StorageEvent } from "../types";
 
 const parseCookie = (cookie: string): { [key: string]: string } =>
   cookie.split("; ").reduce((prev, next) => {
@@ -9,12 +9,8 @@ const parseCookie = (cookie: string): { [key: string]: string } =>
     };
   }, {});
 
-// no way to listen for changes, so instead check value against cached value whenever
-// another event is saved
-export const initCookieObserver = ({
-  saveEvent,
-  registerOnSaveEventCallback,
-}: InitArgs) => {
+// only need initial cookie state
+export const initCookieObserver = ({ saveEvent }: InitArgs) => {
   let lastCookie: string | undefined;
 
   const checkCookieChange = () => {
@@ -32,12 +28,4 @@ export const initCookieObserver = ({
   };
 
   checkCookieChange();
-
-  const onSaveEvent = (event: ParsedEvent) => {
-    if (event.type !== "storage") {
-      checkCookieChange();
-    }
-  };
-
-  registerOnSaveEventCallback(onSaveEvent);
 };

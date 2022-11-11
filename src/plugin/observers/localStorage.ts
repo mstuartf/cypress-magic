@@ -1,4 +1,4 @@
-import { InitArgs, ParsedEvent, StorageEvent } from "../types";
+import { InitArgs, StorageEvent } from "../types";
 
 const parseValue = (value: object) =>
   Object.entries(value)
@@ -16,12 +16,8 @@ const parseValue = (value: object) =>
       };
     }, {});
 
-// no way to listen for changes, so instead check value against cached value whenever
-// another event is saved
-export const initLocalStorageObserver = ({
-  saveEvent,
-  registerOnSaveEventCallback,
-}: InitArgs) => {
+// only need initial local storage state
+export const initLocalStorageObserver = ({ saveEvent }: InitArgs) => {
   let lastValueStr: string | undefined;
 
   const checkStorageChange = () => {
@@ -40,12 +36,4 @@ export const initLocalStorageObserver = ({
   };
 
   checkStorageChange();
-
-  const onSaveEvent = (event: ParsedEvent) => {
-    if (event.type !== "storage") {
-      checkStorageChange();
-    }
-  };
-
-  registerOnSaveEventCallback(onSaveEvent);
 };
