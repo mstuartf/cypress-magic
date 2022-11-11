@@ -26,19 +26,13 @@ export interface EventManager {
   close: () => string;
 }
 
-export interface PrivacyManager {
-  obfuscate: ObfuscateFn;
-  clear: () => void;
-}
-
 export type Fixture = any;
 export type SaveFixture = (name: string, value: Fixture) => void;
 
-export type InitArgs = Omit<EventManager, "close"> &
-  Omit<PrivacyManager, "clear"> & {
-    saveFixture: SaveFixture;
-    buildAlias: AliasBuilder;
-  };
+export type InitArgs = Omit<EventManager, "close"> & {
+  saveFixture: SaveFixture;
+  buildAlias: AliasBuilder;
+};
 
 export interface TDWindow extends Window {
   TD_CLIENT_ID: string;

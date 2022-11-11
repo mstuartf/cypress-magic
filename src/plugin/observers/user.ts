@@ -43,15 +43,12 @@ const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   href: (event.target as HTMLAnchorElement).href,
 });
 
-const parseChangeEvent = (
-  event: Event,
-  obfuscate: InitArgs["obfuscate"]
-): ChangeEvent => {
+const parseChangeEvent = (event: Event): ChangeEvent => {
   const { value } = event.target as HTMLInputElement;
   return {
     ...getBaseProps(event),
     ...getTargetProps(event.target as HTMLElement),
-    value: typeof value === "string" ? obfuscate(value) : value,
+    value,
   };
 };
 
@@ -96,14 +93,14 @@ const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
 
 const parseEvent = (
   event: Event,
-  { obfuscate, saveFixture }: Omit<InitArgs, "saveEvent">
+  { saveFixture }: Omit<InitArgs, "saveEvent">
 ): UserEvent | Promise<UserEvent> | undefined => {
   if (event.type === "click" || event.type === "dblclick") {
     return parseClickEvent(event as MouseEvent);
   } else if (event.type === "change" && isUploadEvent(event.target)) {
     return parseUploadEvent(event, saveFixture);
   } else if (event.type === "change") {
-    return parseChangeEvent(event, obfuscate);
+    return parseChangeEvent(event);
   } else if (event.type === "submit") {
     return parseSubmitEvent(event);
   } else if (event.type === "dragend") {

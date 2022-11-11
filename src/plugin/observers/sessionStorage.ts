@@ -20,7 +20,6 @@ const parseValue = (value: object) =>
 // another event is saved
 export const initSessionStorageObserver = ({
   saveEvent,
-  obfuscate,
   registerOnSaveEventCallback,
 }: InitArgs) => {
   let lastValueStr: string | undefined;
@@ -33,7 +32,7 @@ export const initSessionStorageObserver = ({
         type: "storage",
         timestamp: Date.now(),
         storageType: "session",
-        value: obfuscate(nextValue),
+        value: nextValue,
       };
       saveEvent(event);
       lastValueStr = nextValueStr;

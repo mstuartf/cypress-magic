@@ -1,7 +1,7 @@
 // Initializes the lib to start listening for events
 
 import { initializers, Observer } from "./observers";
-import { createPrivacyManager, createWsClient } from "./managers";
+import { createWsClient } from "./managers";
 import { SaveFixture } from "./types";
 import { aliasTracker } from "./utils/aliases";
 
@@ -13,9 +13,8 @@ const initialize = (
 ) => {
   const buildAlias = aliasTracker();
 
-  const { close, clear, ...args } = {
+  const { close, ...args } = {
     ...createWsClient(clientId, devMode),
-    ...createPrivacyManager(),
     saveFixture,
     buildAlias,
   };
@@ -25,7 +24,6 @@ const initialize = (
   });
 
   return () => {
-    clear();
     const sessionId = close();
     return sessionId;
   };

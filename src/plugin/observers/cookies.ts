@@ -13,7 +13,6 @@ const parseCookie = (cookie: string): { [key: string]: string } =>
 // another event is saved
 export const initCookieObserver = ({
   saveEvent,
-  obfuscate,
   registerOnSaveEventCallback,
 }: InitArgs) => {
   let lastCookie: string | undefined;
@@ -25,7 +24,7 @@ export const initCookieObserver = ({
         type: "storage",
         timestamp: Date.now(),
         storageType: "cookie",
-        value: obfuscate(parseCookie(cookie)),
+        value: parseCookie(cookie),
       };
       saveEvent(event);
       lastCookie = cookie;
