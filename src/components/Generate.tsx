@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import Button from "./Button";
-import { logout } from "../redux/slice";
+import {
+  logout,
+  setDownloadUrl,
+  setTestName,
+  startRecording,
+} from "../redux/slice";
 import GrayLinkButton from "./GrayLinkButton";
 import { sessionFileRequest, sessionUrlRequest } from "../requests";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectDownloadUrl,
   selectEmailAddress,
   selectFixtures,
   selectSessionId,
-  selectSessionUrl,
+  selectTestName,
   selectToken,
 } from "../redux/selectors";
 import Input from "./Input";
@@ -21,19 +27,21 @@ import { Redirect } from "react-router-dom";
 const Generate = () => {
   const dispatch = useDispatch();
 
-  const [testName, setTestName] = useState<string>("");
+  const [localTestName, setLocalTestName] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   const fixtures = useSelector(selectFixtures);
   const token = useSelector(selectToken);
   const sessionId = useSelector(selectSessionId);
   const emailAddress = useSelector(selectEmailAddress);
+  const downloadUrl = useSelector(selectDownloadUrl);
+  const testName = useSelector(selectTestName);
 
   const generateTestAssets = () => {
     setIsGenerating(true);
-    sessionUrlRequest(sessionId!, testName, token!)
+    sessionUrlRequest(sessionId!, localTestName, token!)
       .then(({ url }) => {
+        dispatch(setTestName(localTestName));
         sessionFileRequest(url)
           .then((res) => {
             const zip = new JSZip();
@@ -42,7 +50,9 @@ const Generate = () => {
               zip.file(`fixtures/${path}`, JSON.stringify(value));
             });
             zip.generateAsync({ type: "base64" }).then((content) => {
-              setDownloadUrl(`data:application/zip;base64,${content}`);
+              dispatch(
+                setDownloadUrl(`data:application/zip;base64,${content}`)
+              );
             });
           })
           .catch(() => setIsGenerating(false));
@@ -54,6 +64,10 @@ const Generate = () => {
     return <Redirect to="/login" />;
   }
 
+  if (!sessionId) {
+    return <Redirect to="/record" />;
+  }
+
   return (
     <div className="h-full flex flex-col">
       <Header />
@@ -62,8 +76,8 @@ const Generate = () => {
           <Input
             placeholder="Enter test name (e.g. login)"
             disabled={isGenerating}
-            value={testName}
-            onChange={({ target: { value } }) => setTestName(value)}
+            value={localTestName}
+            onChange={({ target: { value } }) => setLocalTestName(value)}
           />
         )}
         {!downloadUrl && isGenerating && (
@@ -74,13 +88,22 @@ const Generate = () => {
         )}
         {!!downloadUrl && (
           <Link href={downloadUrl} download>
-            Download test assets
+            Download '{testName}' test assets
           </Link>
         )}
       </div>
       <div className="flex justify-center">
-        <Button disabled={!testName} onClick={generateTestAssets}>
-          Generate test assets
+        <Button
+          disabled={!localTestName && !testName}
+          onClick={() => {
+            if (!downloadUrl) {
+              generateTestAssets();
+            } else {
+              dispatch(startRecording());
+            }
+          }}
+        >
+          {!downloadUrl ? "Generate test assets" : "New recording"}
         </Button>
       </div>
       <div className="flex flex-grow justify-between items-end text-xs">

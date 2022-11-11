@@ -3,8 +3,10 @@ import { RootState } from "./store";
 export const selectToken = (state: RootState) => state.user.info.token;
 export const selectSessionId = (state: RootState) =>
   state.user.recording.session_id;
-export const selectSessionUrl = (state: RootState) =>
-  state.user.recording.session_url;
+export const selectTestName = (state: RootState) =>
+  state.user.recording.test_name;
+export const selectDownloadUrl = (state: RootState) =>
+  state.user.recording.download_url;
 export const selectCacheLoaded = (state: RootState) => state.user.cacheLoaded;
 export const selectEmailAddress = (state: RootState) =>
   state.user.info.email_address;

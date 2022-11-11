@@ -16,6 +16,8 @@ export const getInitialUserState = () => ({
     inProgress: false,
     session_id: null,
     session_url: null,
+    download_url: null,
+    test_name: null,
     triggerInjectScript: false,
     lastAborted: false,
     fixtures: {} as { [path: string]: any },
@@ -61,6 +63,8 @@ export const userSlice = createSlice({
         inProgress: false,
         session_id: null,
         session_url: null,
+        download_url: null,
+        test_name: null,
         triggerInjectScript: false,
         lastAborted: false,
         fixtures: {},
@@ -76,6 +80,8 @@ export const userSlice = createSlice({
         inProgress: false,
         session_id: null,
         session_url: null,
+        download_url: null,
+        test_name: null,
         triggerInjectScript: false,
         lastAborted: false,
         fixtures: {},
@@ -86,6 +92,8 @@ export const userSlice = createSlice({
         inProgress: true,
         session_id: null,
         session_url: null,
+        download_url: null,
+        test_name: null,
         triggerInjectScript: true,
         lastAborted: false,
         fixtures: {},
@@ -108,6 +116,12 @@ export const userSlice = createSlice({
     saveSession: (state, action) => {
       state.recording.session_id = action.payload.session_id;
     },
+    setDownloadUrl: (state, action) => {
+      state.recording.download_url = action.payload;
+    },
+    setTestName: (state, action) => {
+      state.recording.test_name = action.payload;
+    },
   },
 });
 
@@ -125,4 +139,6 @@ export const {
   getUserSuccess,
   getUserFailure,
   saveFixture,
+  setDownloadUrl,
+  setTestName,
 } = userSlice.actions;

@@ -78,7 +78,7 @@ const Record = () => {
           </div>
         )}
         {!recordingInProgress && !sessionId && !lastAborted && (
-          <div>No existing recordings.</div>
+          <div>Click below to record a test.</div>
         )}
         {lastAborted && <div>Last recording stopped due to page refresh.</div>}
       </div>
