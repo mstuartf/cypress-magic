@@ -8,6 +8,7 @@ import {
   EventType,
   InitArgs,
   OnCloseCallback,
+  SaveFixture,
   SubmitEvent,
   TargetEvent,
   UploadEvent,
@@ -16,7 +17,6 @@ import {
 import { finder } from "@medv/finder";
 import { isHidden } from "../utils/isHidden";
 import { getDomPath } from "../utils/getDomPath";
-import { readSpreadsheet } from "../utils/readSpreadsheet";
 import { createErrorEvent } from "../utils/createErrorEvent";
 
 const getBaseProps = (event: Event): BaseEvent => ({
@@ -55,36 +55,16 @@ const parseChangeEvent = (
   };
 };
 
-const parseSpreadsheetUploadEvent = (
+const parseUploadEvent = (
   event: Event,
-  obfuscate: InitArgs["obfuscate"]
-): Promise<UploadEvent> => {
-  return new Promise((resolve, reject) => {
-    const file = (event.target! as HTMLInputElement)!.files![0];
-    readSpreadsheet(file).then((data) => {
-      resolve({
-        type: "fileUpload",
-        timestamp: Date.now(),
-        ...getTargetProps(event.target as HTMLElement),
-        data: data
-          // only take first 10 rows
-          .slice(0, 10)
-          // obfuscate contents
-          .map((row) => row.map((col) => obfuscate(col))),
-        mimeType: file.type,
-        fileName: file.name,
-      });
-    });
-  });
-};
-
-const parseOtherUploadEvent = (event: Event): UploadEvent => {
+  saveFixture: SaveFixture
+): UploadEvent => {
   const file = (event.target! as HTMLInputElement)!.files![0];
+  saveFixture(file.name, file);
   return {
     type: "fileUpload",
     timestamp: Date.now(),
     ...getTargetProps(event.target as HTMLElement),
-    data: null,
     mimeType: file.type,
     fileName: file.name,
   };
@@ -95,21 +75,7 @@ const parseSubmitEvent = (event: Event): SubmitEvent => ({
   ...getTargetProps(event.target as HTMLElement),
 });
 
-const isSpreadsheetUpload = (
-  target: Event["target"]
-): target is HTMLInputElement => {
-  return (
-    !!target &&
-    target instanceof HTMLInputElement &&
-    target.type === "file" &&
-    !!target.files![0] &&
-    ["xlsx", "xlsb", "xlsm", "xls", "csv"].some((extension) =>
-      target.files![0].name.includes(extension)
-    )
-  );
-};
-
-const isOtherUpload = (target: Event["target"]): target is HTMLInputElement => {
+const isUploadEvent = (target: Event["target"]): target is HTMLInputElement => {
   return (
     !!target &&
     target instanceof HTMLInputElement &&
@@ -130,14 +96,12 @@ const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
 
 const parseEvent = (
   event: Event,
-  { obfuscate }: Pick<InitArgs, "obfuscate">
+  { obfuscate, saveFixture }: Omit<InitArgs, "saveEvent">
 ): UserEvent | Promise<UserEvent> | undefined => {
   if (event.type === "click" || event.type === "dblclick") {
     return parseClickEvent(event as MouseEvent);
-  } else if (event.type === "change" && isSpreadsheetUpload(event.target)) {
-    return parseSpreadsheetUploadEvent(event, obfuscate);
-  } else if (event.type === "change" && isOtherUpload(event.target)) {
-    return parseOtherUploadEvent(event);
+  } else if (event.type === "change" && isUploadEvent(event.target)) {
+    return parseUploadEvent(event, saveFixture);
   } else if (event.type === "change") {
     return parseChangeEvent(event, obfuscate);
   } else if (event.type === "submit") {

@@ -63,7 +63,6 @@ export interface ChangeEvent extends BaseEvent, TargetEvent {
 }
 
 export interface UploadEvent extends BaseEvent, TargetEvent {
-  data: any;
   mimeType: string;
   fileName: string;
 }
