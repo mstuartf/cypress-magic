@@ -10,22 +10,15 @@ const parseCookie = (cookie: string): { [key: string]: string } =>
   }, {});
 
 // only need initial cookie state
-export const initCookieObserver = ({ saveEvent }: InitArgs) => {
-  let lastCookie: string | undefined;
-
-  const checkCookieChange = () => {
-    let cookie = document.cookie;
-    if (cookie !== lastCookie) {
-      const event: StorageEvent = {
-        type: "storage",
-        timestamp: Date.now(),
-        storageType: "cookie",
-        value: parseCookie(cookie),
-      };
-      saveEvent(event);
-      lastCookie = cookie;
-    }
+export const initCookieObserver = ({ saveEvent, saveFixture }: InitArgs) => {
+  const fixture = "local-storage.json";
+  const value = parseCookie(document.cookie);
+  const event: StorageEvent = {
+    type: "storage",
+    timestamp: Date.now(),
+    storageType: "cookie",
+    fixture,
   };
-
-  checkCookieChange();
+  saveEvent(event);
+  saveFixture(fixture, value);
 };

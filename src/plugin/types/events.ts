@@ -97,7 +97,7 @@ export type UserEvent =
   | UploadEvent;
 
 export interface StorageEvent extends BaseEvent {
-  value: any;
+  fixture: string;
   storageType: "local" | "session" | "cookie";
 }
 
