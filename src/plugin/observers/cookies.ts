@@ -11,7 +11,7 @@ const parseCookie = (cookie: string): { [key: string]: string } =>
 
 // only need initial cookie state
 export const initCookieObserver = ({ saveEvent, saveFixture }: InitArgs) => {
-  const fixture = "local-storage.json";
+  const fixture = "/storage/cookie.json";
   const value = parseCookie(document.cookie);
   const event: StorageEvent = {
     type: "storage",

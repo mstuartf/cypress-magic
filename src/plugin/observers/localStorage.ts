@@ -6,7 +6,7 @@ export const initLocalStorageObserver = ({
   saveEvent,
   saveFixture,
 }: InitArgs) => {
-  const fixture = "local-storage.json";
+  const fixture = "/storage/local.json";
   const value = parseStorageObject(localStorage);
   const event: StorageEvent = {
     type: "storage",

@@ -2,7 +2,12 @@
 // It does not have access to the Chrome extension APIs.
 import initialize from "../plugin/initialize";
 import { Observer } from "../plugin/observers";
-import { saveSession, startRecording, stopRecording } from "../redux/slice";
+import {
+  saveSession,
+  startRecording,
+  stopRecording,
+  saveFixture,
+} from "../redux/slice";
 import { SaveFixture } from "../plugin/types";
 
 const observers: Observer[] = [
@@ -18,8 +23,8 @@ const observers: Observer[] = [
 
 let deInit: () => string;
 
-const saveFixture: SaveFixture = (name, value) => {
-  console.log(name, value);
+const sendFixtureToSave: SaveFixture = (name, value) => {
+  window.postMessage({ type: saveFixture.type, payload: { name, value } });
 };
 
 window.addEventListener("message", (event) => {
@@ -28,7 +33,7 @@ window.addEventListener("message", (event) => {
   }
   if (event.data.type === startRecording.type) {
     const { client_id } = event.data.payload;
-    deInit = initialize(client_id, observers, saveFixture, true);
+    deInit = initialize(client_id, observers, sendFixtureToSave, true);
   }
   if (event.data.type === stopRecording.type) {
     const session_id = deInit();

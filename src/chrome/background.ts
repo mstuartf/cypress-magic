@@ -4,6 +4,7 @@ import {
   injectScriptTriggered,
   restoreCache,
   saveSession,
+  saveFixture,
 } from "../redux/slice";
 import { readCache, setBadgeText, updateCache } from "./utils";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
@@ -54,6 +55,14 @@ chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
       // for some reason this doesn't work in middleware
       setBadgeText("OFF");
     }
+  }
+  if (request.type === saveFixture.type) {
+    store.dispatch(
+      saveFixture({
+        name: request.payload.name,
+        value: request.payload.value,
+      })
+    );
   }
 });
 

@@ -18,6 +18,7 @@ export const getInitialUserState = () => ({
     session_url: null,
     triggerInjectScript: false,
     lastAborted: false,
+    fixtures: {} as { [path: string]: any },
   },
   cacheLoaded: false,
 });
@@ -65,6 +66,7 @@ export const userSlice = createSlice({
         session_url: null,
         triggerInjectScript: false,
         lastAborted: false,
+        fixtures: {},
       };
     },
     startRecording: (state) => {
@@ -74,7 +76,12 @@ export const userSlice = createSlice({
         session_url: null,
         triggerInjectScript: true,
         lastAborted: false,
+        fixtures: {},
       };
+    },
+    saveFixture: (state, action) => {
+      state.recording.fixtures[action.payload.name] = action.payload.value;
+      console.log(Object.keys(state.recording.fixtures));
     },
     injectScriptTriggered: (state) => {
       state.recording.triggerInjectScript = false;
@@ -109,4 +116,5 @@ export const {
   getUserPending,
   getUserSuccess,
   getUserFailure,
+  saveFixture,
 } = userSlice.actions;

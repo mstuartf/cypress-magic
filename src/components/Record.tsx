@@ -24,6 +24,7 @@ import Spinner from "./Spinner";
 import Link from "./Link";
 import GrayLinkButton from "./GrayLinkButton";
 import { getUserRequest, sessionUrlRequest } from "../requests";
+import Fixtures from "./Fixtures";
 
 const Record = () => {
   const dispatch = useDispatch();
@@ -92,9 +93,12 @@ const Record = () => {
           </div>
         )}
         {!!sessionUrl && (
-          <Link href={sessionUrl} download>
-            Download recording
-          </Link>
+          <div>
+            <Link href={sessionUrl} download>
+              Download test file
+            </Link>
+            <Fixtures />
+          </div>
         )}
         {!recordingInProgress && !sessionId && !lastAborted && (
           <div>No existing recordings.</div>

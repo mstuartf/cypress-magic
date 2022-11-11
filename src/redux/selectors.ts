@@ -12,3 +12,5 @@ export const selectRecordingInProgress = (state: RootState) =>
   state.user.recording.inProgress;
 export const selectLastRecordingAborted = (state: RootState) =>
   state.user.recording.lastAborted;
+export const selectFixtures = (state: RootState) =>
+  state.user.recording.fixtures;

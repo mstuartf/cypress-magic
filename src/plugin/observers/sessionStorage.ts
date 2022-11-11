@@ -6,7 +6,7 @@ export const initSessionStorageObserver = ({
   saveEvent,
   saveFixture,
 }: InitArgs) => {
-  const fixture = "session-storage.json";
+  const fixture = "/storage/session.json";
   const value = parseStorageObject(sessionStorage);
   const event: StorageEvent = {
     type: "storage",
