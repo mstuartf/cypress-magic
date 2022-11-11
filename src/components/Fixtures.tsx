@@ -15,7 +15,7 @@ const Fixtures = ({ testFileUrl }: { testFileUrl: string }) => {
       const zip = new JSZip();
       zip.file("test.spec.js", res);
       Object.entries(fixtures).forEach(([path, value]) => {
-        zip.file(`/fixtures${path}`, JSON.stringify(value));
+        zip.file(`fixtures/${path}`, JSON.stringify(value));
       });
       zip.generateAsync({ type: "base64" }).then((content) => {
         setDownloadUrl(`data:application/zip;base64,${content}`);

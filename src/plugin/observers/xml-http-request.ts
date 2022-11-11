@@ -31,7 +31,7 @@ export function initXMLHttpRequestObserver({
           const method = (this as any).__method;
           const status = this.status;
           const alias = buildAlias(url, method, status);
-          const fixture = `/api${alias}.json`;
+          const fixture = `api${alias}.json`;
           saveEvent({
             type: "response",
             timestamp: Date.now(),

@@ -45,7 +45,7 @@ const parseResponse = (
   return new Promise((resolve, reject) => {
     const { url, status } = response;
     const alias = buildAlias(url, method, status);
-    const fixture = `/api${alias}.json`;
+    const fixture = `api${alias}.json`;
     const event: Omit<ResponseEvent, "body"> = {
       type: "response",
       timestamp: Date.now(),
