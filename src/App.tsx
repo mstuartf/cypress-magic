@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Record from "./components/Record";
 import { useSelector } from "react-redux";
 import { selectCacheLoaded } from "./redux/selectors";
+import Generate from "./components/Generate";
 
 const history = createMemoryHistory();
 
@@ -25,6 +26,9 @@ function App() {
             </Route>
             <Route path="/record">
               <Record />
+            </Route>
+            <Route path="/generate">
+              <Generate />
             </Route>
             <Route path="*">
               <Redirect to="/login" />

@@ -30,10 +30,11 @@ export const getUserRequest = async (
 
 export const sessionUrlRequest = async (
   session_id: string,
+  test_name: string,
   token: string
 ): Promise<{ url: string }> => {
   const response = await fetch(
-    `${BASE_URL}/events/session/${session_id}/test-file`,
+    `${BASE_URL}/events/session/${session_id}/test-file?test_name=${test_name}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

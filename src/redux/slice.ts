@@ -52,7 +52,19 @@ export const userSlice = createSlice({
     },
     getUserFailure: (state) => {
       state.getUser.isLoading = false;
-      state.info.token = null;
+      state.info = {
+        email_address: null,
+        client_id: null,
+        token: null,
+      };
+      state.recording = {
+        inProgress: false,
+        session_id: null,
+        session_url: null,
+        triggerInjectScript: false,
+        lastAborted: false,
+        fixtures: {},
+      };
     },
     logout: (state) => {
       state.info = {
@@ -96,9 +108,6 @@ export const userSlice = createSlice({
     saveSession: (state, action) => {
       state.recording.session_id = action.payload.session_id;
     },
-    getSessionUrl: (state, action) => {
-      state.recording.session_url = action.payload.session_url;
-    },
   },
 });
 
@@ -109,7 +118,6 @@ export const {
   logout,
   stopRecording,
   saveSession,
-  getSessionUrl,
   startRecording,
   cancelRecording,
   injectScriptTriggered,

@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
-  selectToken,
+  selectEmailAddress,
   selectLastRecordingAborted,
   selectRecordingInProgress,
   selectSessionId,
-  selectSessionUrl,
-  selectEmailAddress,
+  selectToken,
 } from "../redux/selectors";
 import {
-  getSessionUrl,
   getUserFailure,
   getUserPending,
   getUserSuccess,
@@ -21,10 +19,8 @@ import {
 import Header from "./Header";
 import Button from "./Button";
 import Spinner from "./Spinner";
-import Link from "./Link";
 import GrayLinkButton from "./GrayLinkButton";
-import { getUserRequest, sessionUrlRequest } from "../requests";
-import Fixtures from "./Fixtures";
+import { getUserRequest } from "../requests";
 
 const Record = () => {
   const dispatch = useDispatch();
@@ -33,7 +29,6 @@ const Record = () => {
   const recordingInProgress = useSelector(selectRecordingInProgress);
   const lastAborted = useSelector(selectLastRecordingAborted);
   const sessionId = useSelector(selectSessionId);
-  const sessionUrl = useSelector(selectSessionUrl);
   const emailAddress = useSelector(selectEmailAddress);
 
   // this is just to explain why the page is being reset
@@ -50,14 +45,6 @@ const Record = () => {
   }, [recordingInProgress]);
 
   useEffect(() => {
-    if (!!sessionId && !sessionUrl && !!token) {
-      sessionUrlRequest(sessionId, token).then(({ url: session_url }) => {
-        dispatch(getSessionUrl({ session_url }));
-      });
-    }
-  }, [sessionId, sessionUrl, token]);
-
-  useEffect(() => {
     if (token) {
       dispatch(getUserPending());
       getUserRequest(token)
@@ -69,6 +56,10 @@ const Record = () => {
         });
     }
   }, [token]);
+
+  if (!!sessionId) {
+    return <Redirect to="/generate" />;
+  }
 
   if (!token) {
     return <Redirect to="/login" />;
@@ -86,13 +77,6 @@ const Record = () => {
             </div>
           </div>
         )}
-        {!!sessionId && !sessionUrl && (
-          <div className="flex items-center">
-            <Spinner />
-            <div className="ml-4">Saving...</div>
-          </div>
-        )}
-        {!!sessionUrl && <Fixtures testFileUrl={sessionUrl} />}
         {!recordingInProgress && !sessionId && !lastAborted && (
           <div>No existing recordings.</div>
         )}
@@ -100,7 +84,6 @@ const Record = () => {
       </div>
       <div className="flex justify-center">
         <Button
-          disabled={!!sessionId && !sessionUrl}
           onClick={() => {
             if (recordingInProgress) {
               dispatch(stopRecording());
@@ -109,9 +92,7 @@ const Record = () => {
             }
           }}
         >
-          {recordingInProgress || (!!sessionId && !sessionUrl)
-            ? "Finish recording"
-            : "New recording"}
+          {recordingInProgress ? "Finish recording" : "New recording"}
         </Button>
       </div>
       <div className="flex flex-grow justify-between items-end text-xs">
