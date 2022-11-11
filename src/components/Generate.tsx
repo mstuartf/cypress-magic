@@ -45,9 +45,12 @@ const Generate = () => {
         sessionFileRequest(url)
           .then((res) => {
             const zip = new JSZip();
-            zip.file("test.spec.js", res);
+            zip.file(`${localTestName}.spec.js`, res);
             Object.entries(fixtures).forEach(([path, value]) => {
-              zip.file(`fixtures/${path}`, JSON.stringify(value));
+              zip.file(
+                `${localTestName}_fixtures/${path}`,
+                JSON.stringify(value)
+              );
             });
             zip.generateAsync({ type: "base64" }).then((content) => {
               dispatch(
