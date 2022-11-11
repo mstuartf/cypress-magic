@@ -14,12 +14,13 @@ function isURL(url: string | URL): url is URL {
 
 const getPathAndHost = (
   url: string | URL
-): { pathname: string; hostname: string } => {
+): { pathname: string; hostname: string; protocol: string } => {
   if (isURL(url)) {
     return url;
   }
   return {
     hostname: window.location.hostname,
+    protocol: window.location.protocol,
     pathname: url,
   };
 };
@@ -32,8 +33,8 @@ function monkeyPatchHistory(
   history.pushState = function (state, unused, url) {
     if (url) {
       try {
-        const { pathname, hostname } = getPathAndHost(url);
-        saveEvent({ ...getBaseEvent(), pathname, hostname });
+        const { pathname, hostname, protocol } = getPathAndHost(url);
+        saveEvent({ ...getBaseEvent(), pathname, hostname, protocol });
       } catch (e) {
         saveEvent(createErrorEvent("navigation", e as any));
       }
@@ -45,8 +46,8 @@ function monkeyPatchHistory(
   history.replaceState = function (state, unused, url) {
     if (url) {
       try {
-        const { pathname, hostname } = getPathAndHost(url);
-        saveEvent({ ...getBaseEvent(), pathname, hostname });
+        const { pathname, hostname, protocol } = getPathAndHost(url);
+        saveEvent({ ...getBaseEvent(), pathname, hostname, protocol });
       } catch (e) {
         saveEvent(createErrorEvent("navigation", e as any));
       }
@@ -57,8 +58,8 @@ function monkeyPatchHistory(
   // listen to popstate for back, forward and go (async)
   const listener: EventListener = (event) => {
     try {
-      const { hostname, pathname } = window.location;
-      saveEvent({ ...getBaseEvent(), pathname, hostname });
+      const { hostname, pathname, protocol } = window.location;
+      saveEvent({ ...getBaseEvent(), pathname, hostname, protocol });
     } catch (e) {
       saveEvent(createErrorEvent("navigation", e as any));
     }
@@ -77,11 +78,12 @@ export const initHistoryObserver = ({
   registerOnCloseCallback,
 }: InitArgs) => {
   const removePatch = monkeyPatchHistory(window.history, saveEvent);
-  const { pathname, hostname } = new URL(window.location.href);
+  const { pathname, hostname, protocol } = new URL(window.location.href);
   saveEvent({
     ...getBaseEvent(),
     pathname,
     hostname,
+    protocol,
   });
   registerOnCloseCallback(removePatch);
 };

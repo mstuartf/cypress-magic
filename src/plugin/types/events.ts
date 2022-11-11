@@ -5,6 +5,7 @@ export interface BaseEvent {
 
 export interface NavigationEvent extends BaseEvent {
   hostname: string;
+  protocol: string;
   pathname: string;
 }
 
