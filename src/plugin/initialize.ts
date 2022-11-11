@@ -1,22 +1,23 @@
 // Initializes the lib to start listening for events
 
-import { readIsTestMode } from "./globals";
-import { isChrome } from "./utils";
-import { Observer, initializers } from "./observers";
+import { initializers, Observer } from "./observers";
 import { createPrivacyManager, createWsClient } from "./managers";
+import { SaveFixture } from "./types";
+import { aliasTracker } from "./utils/aliases";
 
 const initialize = (
   clientId: string,
   observers: Observer[],
+  saveFixture: SaveFixture,
   devMode = false
 ) => {
-  // if (!isChrome() || readIsTestMode()) {
-  //   return;
-  // }
+  const buildAlias = aliasTracker();
 
   const { close, clear, ...args } = {
     ...createWsClient(clientId, devMode),
     ...createPrivacyManager(),
+    saveFixture,
+    buildAlias,
   };
 
   observers.forEach((observer) => {

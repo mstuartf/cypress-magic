@@ -14,4 +14,4 @@ const observers: Observer[] = [
 ];
 
 const clientId = readClientId();
-initialize(clientId, observers);
+// initialize(clientId, observers);

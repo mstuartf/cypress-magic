@@ -1,4 +1,5 @@
-import { InitArgs, ObfuscateFn, RequestEvent, ResponseEvent } from "../types";
+import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
+import { AliasBuilder } from "../utils/aliases";
 
 const isRequestObj = (input: RequestInfo | URL): input is Request => {
   return (input as Request).method !== undefined;
@@ -38,31 +39,44 @@ const parseRequest = (
 const parseResponse = (
   response: Response,
   method: string,
-  obfuscate: ObfuscateFn
+  buildAlias: AliasBuilder,
+  saveFixture: SaveFixture
 ): Promise<ResponseEvent> => {
   return new Promise((resolve, reject) => {
     const { url, status } = response;
-    const shared: Omit<ResponseEvent, "body"> = {
+    const alias = buildAlias(url, method, status);
+    const fixture = `${alias}.json`;
+    const event: Omit<ResponseEvent, "body"> = {
       type: "response",
       timestamp: Date.now(),
       method,
       url,
       status,
+      alias,
+      fixture,
     };
     response
       .clone()
       .json()
-      .then((body) => resolve({ ...shared, body: obfuscate(body) }))
-      .catch(() => resolve({ ...shared, body: null }));
+      .then((body) => {
+        saveFixture(fixture, body);
+        resolve(event);
+      })
+      .catch(() => {
+        // todo: non-json fixtures?
+        resolve(event);
+      });
   });
 };
 
 export function initFetchObserver({
   saveEvent,
-  obfuscate,
   registerOnCloseCallback,
+  saveFixture,
+  buildAlias,
 }: InitArgs) {
   const { fetch: originalFetch } = window;
+
   window.fetch = async (...args) => {
     const requestEvent = parseRequest(...args);
     saveEvent(requestEvent);
@@ -72,7 +86,8 @@ export function initFetchObserver({
     const responseEvent = await parseResponse(
       response,
       requestEvent.method,
-      obfuscate
+      buildAlias,
+      saveFixture
     );
     saveEvent(responseEvent);
 

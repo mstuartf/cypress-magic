@@ -1,4 +1,5 @@
 import { ParsedEvent } from "./events";
+import { AliasBuilder } from "../utils/aliases";
 
 export type SaveEvent = (event: ParsedEvent) => void;
 
@@ -30,8 +31,14 @@ export interface PrivacyManager {
   clear: () => void;
 }
 
+export type Fixture = any;
+export type SaveFixture = (name: string, value: Fixture) => void;
+
 export type InitArgs = Omit<EventManager, "close"> &
-  Omit<PrivacyManager, "clear">;
+  Omit<PrivacyManager, "clear"> & {
+    saveFixture: SaveFixture;
+    buildAlias: AliasBuilder;
+  };
 
 export interface TDWindow extends Window {
   TD_CLIENT_ID: string;

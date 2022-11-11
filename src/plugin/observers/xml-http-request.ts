@@ -1,16 +1,9 @@
-import { InitArgs, ObfuscateFn } from "../types";
-
-const parseBody = (body: any, obfuscate: ObfuscateFn) => {
-  try {
-    return obfuscate(JSON.parse(body));
-  } catch {
-    return null;
-  }
-};
+import { InitArgs } from "../types";
 
 export function initXMLHttpRequestObserver({
   saveEvent,
-  obfuscate,
+  saveFixture,
+  buildAlias,
   registerOnCloseCallback,
 }: InitArgs) {
   const _open = window.XMLHttpRequest.prototype.open;
@@ -34,14 +27,25 @@ export function initXMLHttpRequestObserver({
     if (_onreadystatechange) {
       this.onreadystatechange = function () {
         if (this.readyState === 4) {
+          const url = (this as any).__url;
+          const method = (this as any).__method;
+          const status = this.status;
+          const alias = buildAlias(url, method, status);
+          const fixture = `${alias}.json`;
           saveEvent({
             type: "response",
             timestamp: Date.now(),
-            url: (this as any).__url,
-            method: (this as any).__method,
-            status: this.status,
-            body: parseBody(this.response, obfuscate),
+            url,
+            method,
+            status,
+            alias,
+            fixture,
           });
+          try {
+            saveFixture(fixture, JSON.parse(this.response));
+          } catch (e) {
+            // todo: non-json fixtures
+          }
         }
         return _onreadystatechange.apply(this, arguments as any);
       };
