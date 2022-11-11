@@ -24,6 +24,12 @@ import Link from "./Link";
 import Spinner from "./Spinner";
 import { Redirect } from "react-router-dom";
 
+const kebabCase = (raw: string) =>
+  raw
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, "-")
+    .toLowerCase();
+
 const Generate = () => {
   const dispatch = useDispatch();
 
@@ -38,19 +44,18 @@ const Generate = () => {
   const testName = useSelector(selectTestName);
 
   const generateTestAssets = () => {
+    const kebabName = kebabCase(localTestName);
     setIsGenerating(true);
-    sessionUrlRequest(sessionId!, localTestName, token!)
+    sessionUrlRequest(sessionId!, kebabName, token!)
       .then(({ url }) => {
-        dispatch(setTestName(localTestName));
+        // todo: snake case the name
+        dispatch(setTestName(kebabName));
         sessionFileRequest(url)
           .then((res) => {
             const zip = new JSZip();
-            zip.file(`${localTestName}.spec.js`, res);
+            zip.file(`${kebabName}.spec.js`, res);
             Object.entries(fixtures).forEach(([path, value]) => {
-              zip.file(
-                `${localTestName}_fixtures/${path}`,
-                JSON.stringify(value)
-              );
+              zip.file(`${kebabName}_fixtures/${path}`, JSON.stringify(value));
             });
             zip.generateAsync({ type: "base64" }).then((content) => {
               dispatch(
