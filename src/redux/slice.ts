@@ -18,7 +18,7 @@ export const getInitialUserState = () => ({
     session_url: null,
     download_url: null,
     test_name: null,
-    triggerInjectScript: false,
+    pageResetRequired: false,
     resetPageState: false,
     lastAborted: false,
     fixtures: {} as { [path: string]: any },
@@ -66,7 +66,7 @@ export const userSlice = createSlice({
         session_url: null,
         download_url: null,
         test_name: null,
-        triggerInjectScript: false,
+        pageResetRequired: false,
         resetPageState: false,
         lastAborted: false,
         fixtures: {},
@@ -84,7 +84,7 @@ export const userSlice = createSlice({
         session_url: null,
         download_url: null,
         test_name: null,
-        triggerInjectScript: false,
+        pageResetRequired: false,
         resetPageState: false,
         lastAborted: false,
         fixtures: {},
@@ -97,14 +97,14 @@ export const userSlice = createSlice({
         session_url: null,
         download_url: null,
         test_name: null,
-        triggerInjectScript: true,
+        pageResetRequired: true,
         resetPageState: true,
         lastAborted: false,
         fixtures: {},
       };
     },
-    injectScriptTriggered: (state) => {
-      state.recording.triggerInjectScript = false;
+    pageLoadComplete: (state) => {
+      state.recording.pageResetRequired = false;
     },
     resetPageState: (state) => {
       state.recording.resetPageState = false;
@@ -140,7 +140,7 @@ export const {
   saveSession,
   startRecording,
   cancelRecording,
-  injectScriptTriggered,
+  pageLoadComplete,
   getUserPending,
   getUserSuccess,
   getUserFailure,

@@ -3,6 +3,7 @@ import {
   startRecording,
   stopRecording,
   saveFixture,
+  pageLoadComplete,
 } from "../redux/slice";
 
 // send messages to inject script
@@ -42,14 +43,17 @@ window.addEventListener("message", (event) => {
 const onLoad = () => {
   chrome.runtime
     .sendMessage({
-      type: "shall_start",
+      type: pageLoadComplete.type,
     })
     .then((client_id) => {
       if (client_id) {
+        console.log("triggering start");
         window.postMessage({
           type: startRecording.type,
           payload: { client_id },
         });
+      } else {
+        console.log("NOT triggering start");
       }
     });
 };

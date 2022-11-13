@@ -1,7 +1,7 @@
 import { store } from "../redux/store";
 import {
   cancelRecording,
-  injectScriptTriggered,
+  pageLoadComplete,
   restoreCache,
   saveSession,
   saveFixture,
@@ -37,18 +37,18 @@ chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
   }
   // for some reason this message is sent when the popup opens, use origin to filter those
   if (
-    request.type === "shall_start" &&
+    request.type === pageLoadComplete.type &&
     !origin?.startsWith("chrome-extension")
   ) {
     const {
       user: {
-        recording: { triggerInjectScript, inProgress },
+        recording: { pageResetRequired, inProgress },
         info: { client_id },
       },
     } = store.getState();
-    if (triggerInjectScript) {
+    if (inProgress && pageResetRequired) {
       sendResponse(client_id);
-      store.dispatch(injectScriptTriggered());
+      store.dispatch(pageLoadComplete());
     } else if (inProgress) {
       sendResponse(null);
       store.dispatch(cancelRecording());
