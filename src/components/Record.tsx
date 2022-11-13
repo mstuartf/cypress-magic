@@ -5,6 +5,7 @@ import {
   selectEmailAddress,
   selectLastRecordingAborted,
   selectRecordingInProgress,
+  selectResetPageState,
   selectSessionId,
   selectToken,
 } from "../redux/selectors";
@@ -13,6 +14,7 @@ import {
   getUserPending,
   getUserSuccess,
   logout,
+  resetPageState,
   startRecording,
   stopRecording,
 } from "../redux/slice";
@@ -30,17 +32,13 @@ const Record = () => {
   const lastAborted = useSelector(selectLastRecordingAborted);
   const sessionId = useSelector(selectSessionId);
   const emailAddress = useSelector(selectEmailAddress);
+  const resetPageStateRequired = useSelector(selectResetPageState);
 
-  // this is just to explain why the page is being reset
-  const [resetting, setResetting] = useState(false);
   useEffect(() => {
     if (recordingInProgress) {
-      setResetting(true);
       setTimeout(() => {
-        setResetting(false);
+        dispatch(resetPageState());
       }, 2000);
-    } else {
-      setResetting(false);
     }
   }, [recordingInProgress]);
 
@@ -73,7 +71,8 @@ const Record = () => {
           <div className="flex items-center">
             <Spinner />
             <div className="ml-4">
-              {!resetting ? "Recording" : "Resetting page state"}...
+              {!resetPageStateRequired ? "Recording" : "Resetting page state"}
+              ...
             </div>
           </div>
         )}

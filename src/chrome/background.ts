@@ -47,11 +47,11 @@ chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
       },
     } = store.getState();
     if (triggerInjectScript) {
-      store.dispatch(injectScriptTriggered());
       sendResponse(client_id);
+      store.dispatch(injectScriptTriggered());
     } else if (inProgress) {
-      store.dispatch(cancelRecording());
       sendResponse(null);
+      store.dispatch(cancelRecording());
       // for some reason this doesn't work in middleware
       setBadgeText("OFF");
     }

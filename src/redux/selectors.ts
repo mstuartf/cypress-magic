@@ -16,3 +16,5 @@ export const selectLastRecordingAborted = (state: RootState) =>
   state.user.recording.lastAborted;
 export const selectFixtures = (state: RootState) =>
   state.user.recording.fixtures;
+export const selectResetPageState = (state: RootState) =>
+  state.user.recording.resetPageState;

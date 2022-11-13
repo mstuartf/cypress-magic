@@ -19,6 +19,7 @@ export const getInitialUserState = () => ({
     download_url: null,
     test_name: null,
     triggerInjectScript: false,
+    resetPageState: false,
     lastAborted: false,
     fixtures: {} as { [path: string]: any },
   },
@@ -66,6 +67,7 @@ export const userSlice = createSlice({
         download_url: null,
         test_name: null,
         triggerInjectScript: false,
+        resetPageState: false,
         lastAborted: false,
         fixtures: {},
       };
@@ -83,6 +85,7 @@ export const userSlice = createSlice({
         download_url: null,
         test_name: null,
         triggerInjectScript: false,
+        resetPageState: false,
         lastAborted: false,
         fixtures: {},
       };
@@ -95,16 +98,19 @@ export const userSlice = createSlice({
         download_url: null,
         test_name: null,
         triggerInjectScript: true,
+        resetPageState: true,
         lastAborted: false,
         fixtures: {},
       };
     },
-    saveFixture: (state, action) => {
-      state.recording.fixtures[action.payload.name] = action.payload.value;
-      console.log(Object.keys(state.recording.fixtures));
-    },
     injectScriptTriggered: (state) => {
       state.recording.triggerInjectScript = false;
+    },
+    resetPageState: (state) => {
+      state.recording.resetPageState = false;
+    },
+    saveFixture: (state, action) => {
+      state.recording.fixtures[action.payload.name] = action.payload.value;
     },
     cancelRecording: (state) => {
       state.recording.inProgress = false;
@@ -141,4 +147,5 @@ export const {
   saveFixture,
   setDownloadUrl,
   setTestName,
+  resetPageState,
 } = userSlice.actions;
