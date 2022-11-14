@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginPending, loginSuccess } from "../redux/slice";
-import { selectToken } from "../redux/selectors";
-import Input from "./Input";
-import Button from "./Button";
-import Link from "./Link";
-import Spinner from "./Spinner";
-import Header from "./Header";
-import { loginRequest } from "../requests";
+import { loginPending, loginSuccess } from "../../redux/slice";
+import { selectToken } from "../../redux/selectors";
+import Input from "../Input";
+import Button from "../Button";
+import Link from "../Link";
+import Spinner from "../Spinner";
+import Header from "../Header";
+import { loginRequest } from "../../requests";
 
 const Login = () => {
   const [email_address, setEmailAddress] = useState<string>("");

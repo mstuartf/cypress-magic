@@ -7,21 +7,20 @@ import {
   selectResetPageState,
   selectSessionId,
   selectToken,
-} from "../redux/selectors";
+} from "../../redux/selectors";
 import {
   getUserFailure,
   getUserPending,
   getUserSuccess,
   logout,
   resetPageState,
-  startRecording,
-  stopRecording,
-} from "../redux/slice";
-import Header from "./Header";
-import Button from "./Button";
-import Spinner from "./Spinner";
-import GrayLinkButton from "./GrayLinkButton";
-import { getUserRequest } from "../requests";
+} from "../../redux/slice";
+import Header from "../Header";
+import Spinner from "../Spinner";
+import GrayLinkButton from "../GrayLinkButton";
+import { getUserRequest } from "../../requests";
+import StopRecordingBtn from "../StopRecordingBtn";
+import NewRecordingBtn from "../NewRecordingBtn";
 
 const Record = () => {
   const dispatch = useDispatch();
@@ -79,17 +78,7 @@ const Record = () => {
         )}
       </div>
       <div className="flex justify-center">
-        <Button
-          onClick={() => {
-            if (recordingInProgress) {
-              dispatch(stopRecording());
-            } else {
-              dispatch(startRecording());
-            }
-          }}
-        >
-          {recordingInProgress ? "Finish recording" : "New recording"}
-        </Button>
+        {recordingInProgress ? <StopRecordingBtn /> : <NewRecordingBtn />}
       </div>
       <div className="flex flex-grow justify-between items-end text-xs">
         <div className="text-gray-400">{emailAddress}</div>

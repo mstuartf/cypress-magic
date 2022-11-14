@@ -2,11 +2,11 @@ import React from "react";
 import "./App.css";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import Login from "./components/Login";
-import Record from "./components/Record";
+import Login from "./components/views/Login";
+import Record from "./components/views/Record";
 import { useSelector } from "react-redux";
 import { selectCacheLoaded } from "./redux/selectors";
-import Generate from "./components/Generate";
+import Generate from "./components/views/Generate";
 
 const history = createMemoryHistory();
 

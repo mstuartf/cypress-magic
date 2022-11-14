@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import Button from "./Button";
-import {
-  logout,
-  setDownloadUrl,
-  setTestName,
-  startRecording,
-} from "../redux/slice";
-import GrayLinkButton from "./GrayLinkButton";
-import { sessionFileRequest, sessionUrlRequest } from "../requests";
+import Header from "../Header";
+import Button from "../Button";
+import { logout, setDownloadUrl, setTestName } from "../../redux/slice";
+import GrayLinkButton from "../GrayLinkButton";
+import { sessionFileRequest, sessionUrlRequest } from "../../requests";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectDownloadUrl,
@@ -17,12 +12,13 @@ import {
   selectSessionId,
   selectTestName,
   selectToken,
-} from "../redux/selectors";
-import Input from "./Input";
+} from "../../redux/selectors";
+import Input from "../Input";
 import JSZip from "jszip";
-import Link from "./Link";
-import Spinner from "./Spinner";
+import Link from "../Link";
+import Spinner from "../Spinner";
 import { Redirect } from "react-router-dom";
+import NewRecordingBtn from "../NewRecordingBtn";
 
 const kebabCase = (raw: string) =>
   raw
@@ -101,18 +97,18 @@ const Generate = () => {
         )}
       </div>
       <div className="flex justify-center">
-        <Button
-          disabled={!localTestName && !testName}
-          onClick={() => {
-            if (!downloadUrl) {
-              generateTestAssets();
-            } else {
-              dispatch(startRecording());
-            }
-          }}
-        >
-          {!downloadUrl ? "Generate test assets" : "New recording"}
-        </Button>
+        {!downloadUrl ? (
+          <>
+            <Button
+              disabled={!localTestName && !testName}
+              onClick={generateTestAssets}
+            >
+              Generate tests
+            </Button>
+          </>
+        ) : (
+          <NewRecordingBtn disabled={!localTestName && !testName} />
+        )}
       </div>
       <div className="flex flex-grow justify-between items-end text-xs">
         <div className="text-gray-400">{emailAddress}</div>
