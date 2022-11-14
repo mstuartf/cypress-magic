@@ -48,7 +48,7 @@ const Generate = () => {
         // todo: snake case the name
         dispatch(setTestName(kebabName));
         const zip = new JSZip();
-        zip.file(`${kebabName}-mocked.spec.js`, mocked);
+        zip.file(`${kebabName}-mocked.cy.js`, mocked);
         Object.entries(fixtures).forEach(([path, value]) => {
           zip.file(`${kebabName}_fixtures/${path}`, JSON.stringify(value));
         });
