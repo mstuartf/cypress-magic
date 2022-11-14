@@ -21,12 +21,8 @@ export const createWsClient = (
   let queue: ParsedEvent[] = [];
 
   const onCloseCallbacks: OnCloseCallback[] = [];
-  const onSendEventCallbacks: OnSaveEventCallback[] = [];
   const registerOnCloseCallback = (fn: OnCloseCallback) => {
     onCloseCallbacks.push(fn);
-  };
-  const registerOnSaveEventCallback = (fn: OnSaveEventCallback) => {
-    onSendEventCallbacks.push(fn);
   };
 
   ws.onclose = function () {
@@ -78,7 +74,6 @@ export const createWsClient = (
     queue.push(event);
     if (sessionId) {
       uploadQueue();
-      onSendEventCallbacks.forEach((fn) => fn(event));
     }
   };
 
@@ -90,7 +85,5 @@ export const createWsClient = (
   return {
     saveEvent,
     registerOnCloseCallback,
-    close,
-    registerOnSaveEventCallback,
   };
 };

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ParsedEvent } from "../plugin/types";
 
 export const getInitialUserState = () => ({
   login: {
@@ -20,6 +21,7 @@ export const getInitialUserState = () => ({
     test_name: null,
     resetPageState: false,
     fixtures: {} as { [path: string]: any },
+    events: [] as ParsedEvent[],
   },
   cacheLoaded: false,
 });
@@ -66,6 +68,7 @@ export const userSlice = createSlice({
         test_name: null,
         resetPageState: false,
         fixtures: {},
+        events: [],
       };
     },
     logout: (state) => {
@@ -82,6 +85,7 @@ export const userSlice = createSlice({
         test_name: null,
         resetPageState: false,
         fixtures: {},
+        events: [],
       };
     },
     startRecording: (state) => {
@@ -93,19 +97,21 @@ export const userSlice = createSlice({
         test_name: null,
         resetPageState: true,
         fixtures: {},
+        events: [],
       };
     },
     resetPageState: (state) => {
       state.recording.resetPageState = false;
+    },
+    saveEvent: (state, action) => {
+      console.log("saveEvent", action.payload);
+      state.recording.events.push(action.payload);
     },
     saveFixture: (state, action) => {
       state.recording.fixtures[action.payload.name] = action.payload.value;
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;
-    },
-    saveSession: (state, action) => {
-      state.recording.session_id = action.payload.session_id;
     },
     setDownloadUrl: (state, action) => {
       state.recording.download_url = action.payload;
@@ -122,7 +128,6 @@ export const {
   restoreCache,
   logout,
   stopRecording,
-  saveSession,
   startRecording,
   getUserPending,
   getUserSuccess,
@@ -131,4 +136,5 @@ export const {
   setDownloadUrl,
   setTestName,
   resetPageState,
+  saveEvent,
 } = userSlice.actions;

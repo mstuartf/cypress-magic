@@ -1,18 +1,10 @@
 import {
+  saveEvent,
   saveFixture,
-  saveSession,
   startRecording,
   stopRecording,
 } from "../redux/slice";
-
-// manage a separate cache here because passing messages around reload is unreliable
-const CONTENT_KEY = "__ss_content";
-const setClientId = async (client_id: string | null): Promise<void> =>
-  chrome.storage.local.set({ [CONTENT_KEY]: { client_id } });
-const getClientId = async (): Promise<string> =>
-  chrome.storage.local
-    .get(CONTENT_KEY)
-    .then((items) => items[CONTENT_KEY]?.client_id);
+import { readCache } from "./utils";
 
 // send messages to inject script
 chrome.runtime.onMessage.addListener(function (request) {
@@ -24,23 +16,12 @@ chrome.runtime.onMessage.addListener(function (request) {
       type: request.type,
     });
   }
-  if (request.type === startRecording.type) {
-    setClientId(request.payload.client_id).then(() => {
-      window.location.reload();
-    });
-  }
 });
 
 // receive messages from inject script
 window.addEventListener("message", (event) => {
   if (!event.data || !event.data.type) {
     return;
-  }
-  if (event.data.type === saveSession.type) {
-    chrome.runtime.sendMessage({
-      type: saveSession.type,
-      payload: { session_id: event.data.payload.session_id },
-    });
   }
   if (event.data.type === saveFixture.type) {
     chrome.runtime.sendMessage({
@@ -51,22 +32,26 @@ window.addEventListener("message", (event) => {
       },
     });
   }
+  if (event.data.type === saveEvent.type) {
+    chrome.runtime.sendMessage({
+      type: saveEvent.type,
+      payload: event.data.payload,
+    });
+  }
 });
 
-const onLoad = () => {
-  getClientId().then((client_id) => {
-    if (!client_id) {
-      return;
-    }
-    setClientId(null).then(() => {
+readCache(
+  ({
+    user: {
+      recording: { inProgress },
+    },
+  }) => {
+    if (inProgress) {
       window.postMessage({
         type: startRecording.type,
-        payload: { client_id },
       });
-    });
-  });
-};
-
-onLoad();
+    }
+  }
+);
 
 export default {};

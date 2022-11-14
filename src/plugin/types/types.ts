@@ -14,22 +14,16 @@ export interface NestedObj {
   [key: string]: NestedOption | Array<NestedOption>;
 }
 
-export type ObfuscateFn = (v: NestedOption | Array<NestedOption>) => any;
-
 export interface EventManager {
   saveEvent: SaveEvent;
   // this provides a way to tell listeners to stop listening when the sockets connection closes
   registerOnCloseCallback: RegisterOnCloseCallback;
-  // this provides a way for listeners to know when other listeners have saved events
-  // (useful for things like cookies that don't have in build change handlers)
-  registerOnSaveEventCallback: RegisterOnSaveEventCallback;
-  close: () => string;
 }
 
 export type Fixture = any;
 export type SaveFixture = (name: string, value: Fixture) => void;
 
-export type InitArgs = Omit<EventManager, "close"> & {
+export type InitArgs = EventManager & {
   saveFixture: SaveFixture;
   buildAlias: AliasBuilder;
 };

@@ -1,5 +1,5 @@
 import { store } from "../redux/store";
-import { restoreCache, saveFixture, saveSession } from "../redux/slice";
+import { restoreCache, saveEvent, saveFixture } from "../redux/slice";
 import { readCache, setBadgeText, updateCache } from "./utils";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 
@@ -26,10 +26,6 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 // this message comes from inject -> content -> background
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // todo: check the tab ID is the same as where the recording is taking place?
-  if (request.type === saveSession.type) {
-    store.dispatch(saveSession({ session_id: request.payload.session_id }));
-  }
   if (request.type === saveFixture.type) {
     store.dispatch(
       saveFixture({
@@ -37,6 +33,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         value: request.payload.value,
       })
     );
+  }
+  if (request.type === saveEvent.type) {
+    store.dispatch(saveEvent(request.payload));
   }
 });
 
