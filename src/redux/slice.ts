@@ -1,6 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ParsedEvent } from "../plugin/types";
 
+const initialInfoState = () => ({
+  email_address: null,
+  client_id: null,
+  token: null,
+});
+
+const initialRecordingState = () => ({
+  inProgress: false,
+  session_id: null,
+  session_url: null,
+  download_url: null,
+  test_name: null,
+  resetPageState: false,
+  fixtures: {} as { [path: string]: any },
+  events: [] as ParsedEvent[],
+});
+
 export const getInitialUserState = () => ({
   login: {
     isLoading: false,
@@ -8,21 +25,8 @@ export const getInitialUserState = () => ({
   getUser: {
     isLoading: false,
   },
-  info: {
-    email_address: null,
-    client_id: null,
-    token: null,
-  },
-  recording: {
-    inProgress: false,
-    session_id: null,
-    session_url: null,
-    download_url: null,
-    test_name: null,
-    resetPageState: false,
-    fixtures: {} as { [path: string]: any },
-    events: [] as ParsedEvent[],
-  },
+  info: initialInfoState(),
+  recording: initialRecordingState(),
   cacheLoaded: false,
 });
 
@@ -55,62 +59,19 @@ export const userSlice = createSlice({
     },
     getUserFailure: (state) => {
       state.getUser.isLoading = false;
-      state.info = {
-        email_address: null,
-        client_id: null,
-        token: null,
-      };
-      state.recording = {
-        inProgress: false,
-        session_id: null,
-        session_url: null,
-        download_url: null,
-        test_name: null,
-        resetPageState: false,
-        fixtures: {},
-        events: [],
-      };
+      state.info = initialInfoState();
+      state.recording = initialRecordingState();
     },
     logout: (state) => {
-      state.info = {
-        email_address: null,
-        client_id: null,
-        token: null,
-      };
-      state.recording = {
-        inProgress: false,
-        session_id: null,
-        session_url: null,
-        download_url: null,
-        test_name: null,
-        resetPageState: false,
-        fixtures: {},
-        events: [],
-      };
+      state.info = initialInfoState();
+      state.recording = initialRecordingState();
     },
     startRecording: (state) => {
-      state.recording = {
-        inProgress: true,
-        session_id: null,
-        session_url: null,
-        download_url: null,
-        test_name: null,
-        resetPageState: true,
-        fixtures: {},
-        events: [],
-      };
+      state.recording = initialRecordingState();
+      state.recording.inProgress = true;
     },
     cancelRecording: (state) => {
-      state.recording = {
-        inProgress: false,
-        session_id: null,
-        session_url: null,
-        download_url: null,
-        test_name: null,
-        resetPageState: true,
-        fixtures: {},
-        events: [],
-      };
+      state.recording = initialRecordingState();
     },
     resetPageState: (state) => {
       state.recording.resetPageState = false;
