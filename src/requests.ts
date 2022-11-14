@@ -32,7 +32,7 @@ export const sessionUrlRequest = async (
   session_id: string,
   test_name: string,
   token: string
-): Promise<{ url: string }> => {
+): Promise<{ mocked: string }> => {
   const response = await fetch(
     `${BASE_URL}/events/session/${session_id}/test-file?test_name=${test_name}`,
     {
@@ -42,13 +42,5 @@ export const sessionUrlRequest = async (
     }
   );
   const body = await response.json();
-  return body;
-};
-
-export const sessionFileRequest = async (
-  file_download_url: string
-): Promise<string> => {
-  const response = await fetch(file_download_url);
-  const body = await response.text();
   return body;
 };

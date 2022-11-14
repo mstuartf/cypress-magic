@@ -3,7 +3,7 @@ import Header from "../Header";
 import PrimaryButton from "../PrimaryButton";
 import { logout, setDownloadUrl, setTestName } from "../../redux/slice";
 import GrayLinkButton from "../GrayLinkButton";
-import { sessionFileRequest, sessionUrlRequest } from "../../requests";
+import { sessionUrlRequest } from "../../requests";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectDownloadUrl,
@@ -44,23 +44,17 @@ const Generate = () => {
     const kebabName = kebabCase(localTestName);
     setIsGenerating(true);
     sessionUrlRequest(sessionId!, kebabName, token!)
-      .then(({ url }) => {
+      .then(({ mocked }) => {
         // todo: snake case the name
         dispatch(setTestName(kebabName));
-        sessionFileRequest(url)
-          .then((res) => {
-            const zip = new JSZip();
-            zip.file(`${kebabName}.spec.js`, res);
-            Object.entries(fixtures).forEach(([path, value]) => {
-              zip.file(`${kebabName}_fixtures/${path}`, JSON.stringify(value));
-            });
-            zip.generateAsync({ type: "base64" }).then((content) => {
-              dispatch(
-                setDownloadUrl(`data:application/zip;base64,${content}`)
-              );
-            });
-          })
-          .catch(() => setIsGenerating(false));
+        const zip = new JSZip();
+        zip.file(`${kebabName}-mocked.spec.js`, mocked);
+        Object.entries(fixtures).forEach(([path, value]) => {
+          zip.file(`${kebabName}_fixtures/${path}`, JSON.stringify(value));
+        });
+        zip.generateAsync({ type: "base64" }).then((content) => {
+          dispatch(setDownloadUrl(`data:application/zip;base64,${content}`));
+        });
       })
       .catch(() => setIsGenerating(false));
   };
