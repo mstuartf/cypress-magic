@@ -34,12 +34,8 @@ window.addEventListener("message", (event) => {
   if (event.data.type === startRecording.type) {
     const { client_id } = event.data.payload;
     deInit = initialize(client_id, observers, sendFixtureToSave, true);
-    console.log("start recording");
-    console.log(deInit);
   }
   if (event.data.type === stopRecording.type) {
-    console.log("stop recording");
-    console.log(deInit);
     const session_id = deInit();
     window.postMessage({ type: saveSession.type, payload: { session_id } });
   }
