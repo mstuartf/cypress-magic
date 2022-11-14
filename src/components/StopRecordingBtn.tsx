@@ -1,14 +1,14 @@
 import React, { ButtonHTMLAttributes } from "react";
 import { useDispatch } from "react-redux";
-import Button from "./Button";
+import PrimaryButton from "./PrimaryButton";
 import { stopRecording } from "../redux/slice";
 
 const StopRecordingBtn = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
   const dispatch = useDispatch();
   return (
-    <Button onClick={() => dispatch(stopRecording())} {...props}>
+    <PrimaryButton onClick={() => dispatch(stopRecording())} {...props}>
       Finish recording
-    </Button>
+    </PrimaryButton>
   );
 };
 

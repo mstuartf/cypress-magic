@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Header from "../Header";
-import Button from "../Button";
+import PrimaryButton from "../PrimaryButton";
 import { logout, setDownloadUrl, setTestName } from "../../redux/slice";
 import GrayLinkButton from "../GrayLinkButton";
 import { sessionFileRequest, sessionUrlRequest } from "../../requests";
@@ -19,6 +19,7 @@ import Link from "../Link";
 import Spinner from "../Spinner";
 import { Redirect } from "react-router-dom";
 import NewRecordingBtn from "../NewRecordingBtn";
+import CancelRecordingBtn from "../CancelRecordingBtn";
 
 const kebabCase = (raw: string) =>
   raw
@@ -77,12 +78,17 @@ const Generate = () => {
       <Header />
       <div className="h-20 w-full flex items-center justify-center text-gray-700">
         {!downloadUrl && !isGenerating && (
-          <Input
-            placeholder="Enter test name (e.g. login)"
-            disabled={isGenerating}
-            value={localTestName}
-            onChange={({ target: { value } }) => setLocalTestName(value)}
-          />
+          <div className="w-full">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Generate test files
+            </label>
+            <Input
+              placeholder="Enter test name (e.g. login)"
+              disabled={isGenerating}
+              value={localTestName}
+              onChange={({ target: { value } }) => setLocalTestName(value)}
+            />
+          </div>
         )}
         {!downloadUrl && isGenerating && (
           <div className="flex items-center">
@@ -96,20 +102,21 @@ const Generate = () => {
           </Link>
         )}
       </div>
-      <div className="flex justify-center">
-        {!downloadUrl ? (
-          <>
-            <Button
-              disabled={!localTestName && !testName}
-              onClick={generateTestAssets}
-            >
-              Generate tests
-            </Button>
-          </>
-        ) : (
+      {!downloadUrl ? (
+        <div className="grid grid-cols-2 gap-4 w-full">
+          <CancelRecordingBtn />
+          <PrimaryButton
+            disabled={!localTestName && !testName}
+            onClick={generateTestAssets}
+          >
+            Generate
+          </PrimaryButton>
+        </div>
+      ) : (
+        <div className="flex justify-center">
           <NewRecordingBtn disabled={!localTestName && !testName} />
-        )}
-      </div>
+        </div>
+      )}
       <div className="flex flex-grow justify-between items-end text-xs">
         <div className="text-gray-400">{emailAddress}</div>
         <GrayLinkButton onClick={() => dispatch(logout())}>

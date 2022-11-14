@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginPending, loginSuccess } from "../../redux/slice";
 import { selectToken } from "../../redux/selectors";
 import Input from "../Input";
-import Button from "../Button";
+import PrimaryButton from "../PrimaryButton";
 import Link from "../Link";
 import Spinner from "../Spinner";
 import Header from "../Header";
@@ -51,12 +51,12 @@ const Login = () => {
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Button
+          <PrimaryButton
             disabled={isLoading || !email_address || !password}
             onClick={login}
           >
             Login
-          </Button>
+          </PrimaryButton>
           {isLoading && (
             <div className="ml-4">
               <Spinner />

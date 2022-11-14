@@ -100,6 +100,18 @@ export const userSlice = createSlice({
         events: [],
       };
     },
+    cancelRecording: (state) => {
+      state.recording = {
+        inProgress: false,
+        session_id: null,
+        session_url: null,
+        download_url: null,
+        test_name: null,
+        resetPageState: true,
+        fixtures: {},
+        events: [],
+      };
+    },
     resetPageState: (state) => {
       state.recording.resetPageState = false;
     },
@@ -140,4 +152,5 @@ export const {
   resetPageState,
   saveEvent,
   saveSessionId,
+  cancelRecording,
 } = userSlice.actions;
