@@ -18,9 +18,7 @@ export const getInitialUserState = () => ({
     session_url: null,
     download_url: null,
     test_name: null,
-    pageResetRequired: false,
     resetPageState: false,
-    lastAborted: false,
     fixtures: {} as { [path: string]: any },
   },
   cacheLoaded: false,
@@ -66,9 +64,7 @@ export const userSlice = createSlice({
         session_url: null,
         download_url: null,
         test_name: null,
-        pageResetRequired: false,
         resetPageState: false,
-        lastAborted: false,
         fixtures: {},
       };
     },
@@ -84,9 +80,7 @@ export const userSlice = createSlice({
         session_url: null,
         download_url: null,
         test_name: null,
-        pageResetRequired: false,
         resetPageState: false,
-        lastAborted: false,
         fixtures: {},
       };
     },
@@ -97,24 +91,15 @@ export const userSlice = createSlice({
         session_url: null,
         download_url: null,
         test_name: null,
-        pageResetRequired: true,
         resetPageState: true,
-        lastAborted: false,
         fixtures: {},
       };
-    },
-    pageLoadComplete: (state) => {
-      state.recording.pageResetRequired = false;
     },
     resetPageState: (state) => {
       state.recording.resetPageState = false;
     },
     saveFixture: (state, action) => {
       state.recording.fixtures[action.payload.name] = action.payload.value;
-    },
-    cancelRecording: (state) => {
-      state.recording.inProgress = false;
-      state.recording.lastAborted = true;
     },
     stopRecording: (state) => {
       state.recording.inProgress = false;
@@ -139,8 +124,6 @@ export const {
   stopRecording,
   saveSession,
   startRecording,
-  cancelRecording,
-  pageLoadComplete,
   getUserPending,
   getUserSuccess,
   getUserFailure,

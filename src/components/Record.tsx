@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
   selectEmailAddress,
-  selectLastRecordingAborted,
   selectRecordingInProgress,
   selectResetPageState,
   selectSessionId,
@@ -29,7 +28,6 @@ const Record = () => {
 
   const token = useSelector(selectToken);
   const recordingInProgress = useSelector(selectRecordingInProgress);
-  const lastAborted = useSelector(selectLastRecordingAborted);
   const sessionId = useSelector(selectSessionId);
   const emailAddress = useSelector(selectEmailAddress);
   const resetPageStateRequired = useSelector(selectResetPageState);
@@ -76,10 +74,9 @@ const Record = () => {
             </div>
           </div>
         )}
-        {!recordingInProgress && !sessionId && !lastAborted && (
+        {!recordingInProgress && !sessionId && (
           <div>Click below to record a test.</div>
         )}
-        {lastAborted && <div>Last recording stopped due to page refresh.</div>}
       </div>
       <div className="flex justify-center">
         <Button

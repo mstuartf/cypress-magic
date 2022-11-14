@@ -1,10 +1,18 @@
 import {
+  saveFixture,
   saveSession,
   startRecording,
   stopRecording,
-  saveFixture,
-  pageLoadComplete,
 } from "../redux/slice";
+
+// manage a separate cache here because passing messages around reload is unreliable
+const CONTENT_KEY = "__ss_content";
+const setClientId = async (client_id: string | null): Promise<void> =>
+  chrome.storage.local.set({ [CONTENT_KEY]: { client_id } });
+const getClientId = async (): Promise<string> =>
+  chrome.storage.local
+    .get(CONTENT_KEY)
+    .then((items) => items[CONTENT_KEY]?.client_id);
 
 // send messages to inject script
 chrome.runtime.onMessage.addListener(function (request) {
@@ -14,6 +22,11 @@ chrome.runtime.onMessage.addListener(function (request) {
   if (request.type === stopRecording.type) {
     window.postMessage({
       type: request.type,
+    });
+  }
+  if (request.type === startRecording.type) {
+    setClientId(request.payload.client_id).then(() => {
+      window.location.reload();
     });
   }
 });
@@ -41,21 +54,17 @@ window.addEventListener("message", (event) => {
 });
 
 const onLoad = () => {
-  chrome.runtime
-    .sendMessage({
-      type: pageLoadComplete.type,
-    })
-    .then((client_id) => {
-      if (client_id) {
-        console.log("triggering start");
-        window.postMessage({
-          type: startRecording.type,
-          payload: { client_id },
-        });
-      } else {
-        console.log("NOT triggering start");
-      }
+  getClientId().then((client_id) => {
+    if (!client_id) {
+      return;
+    }
+    setClientId(null).then(() => {
+      window.postMessage({
+        type: startRecording.type,
+        payload: { client_id },
+      });
     });
+  });
 };
 
 onLoad();

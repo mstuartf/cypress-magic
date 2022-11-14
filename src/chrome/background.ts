@@ -1,11 +1,5 @@
 import { store } from "../redux/store";
-import {
-  cancelRecording,
-  pageLoadComplete,
-  restoreCache,
-  saveSession,
-  saveFixture,
-} from "../redux/slice";
+import { restoreCache, saveFixture, saveSession } from "../redux/slice";
 import { readCache, setBadgeText, updateCache } from "./utils";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
 
@@ -31,30 +25,10 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // this message comes from inject -> content -> background
-chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // todo: check the tab ID is the same as where the recording is taking place?
   if (request.type === saveSession.type) {
     store.dispatch(saveSession({ session_id: request.payload.session_id }));
-  }
-  // for some reason this message is sent when the popup opens, use origin to filter those
-  if (
-    request.type === pageLoadComplete.type &&
-    !origin?.startsWith("chrome-extension")
-  ) {
-    const {
-      user: {
-        recording: { pageResetRequired, inProgress },
-        info: { client_id },
-      },
-    } = store.getState();
-    if (inProgress && pageResetRequired) {
-      sendResponse(client_id);
-      store.dispatch(pageLoadComplete());
-    } else if (inProgress) {
-      sendResponse(null);
-      store.dispatch(cancelRecording());
-      // for some reason this doesn't work in middleware
-      setBadgeText("OFF");
-    }
   }
   if (request.type === saveFixture.type) {
     store.dispatch(
