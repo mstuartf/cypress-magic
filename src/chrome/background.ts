@@ -3,6 +3,7 @@ import {
   restoreCache,
   saveEvent,
   saveFixture,
+  saveSessionId,
   startRecording,
   stopRecording,
 } from "../redux/slice";
@@ -51,7 +52,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     request.type === "chromex.dispatch" &&
     request.payload.type === stopRecording.type
   ) {
-    ws.close();
+    const sessionId = ws.close();
+    store.dispatch(saveSessionId(sessionId));
   }
   if (request.type === saveFixture.type) {
     store.dispatch(

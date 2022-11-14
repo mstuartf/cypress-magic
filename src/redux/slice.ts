@@ -109,6 +109,9 @@ export const userSlice = createSlice({
     saveFixture: (state, action) => {
       state.recording.fixtures[action.payload.name] = action.payload.value;
     },
+    saveSessionId: (state, action) => {
+      state.recording.session_id = action.payload;
+    },
     stopRecording: (state) => {
       state.recording.inProgress = false;
     },
@@ -136,4 +139,5 @@ export const {
   setTestName,
   resetPageState,
   saveEvent,
+  saveSessionId,
 } = userSlice.actions;

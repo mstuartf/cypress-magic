@@ -14,7 +14,7 @@ export interface NestedObj {
 
 export interface EventManager {
   saveEvent: SaveEvent;
-  close: () => void;
+  close: () => string;
 }
 
 export type Fixture = any;

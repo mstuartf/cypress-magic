@@ -54,7 +54,10 @@ export const createWsClient = (clientId: string): EventManager => {
     }
   };
 
-  const close = (): void => ws.close();
+  const close = (): string => {
+    ws.close();
+    return sessionId!;
+  };
 
   return {
     close,
