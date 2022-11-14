@@ -1,7 +1,15 @@
-import { store } from "../redux/store";
-import { restoreCache, saveEvent, saveFixture } from "../redux/slice";
+import { RootState, store } from "../redux/store";
+import {
+  restoreCache,
+  saveEvent,
+  saveFixture,
+  startRecording,
+  stopRecording,
+} from "../redux/slice";
 import { readCache, setBadgeText, updateCache } from "./utils";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
+import { EventManager } from "../plugin/types";
+import { createWsClient } from "../plugin/managers";
 
 chrome.runtime.onInstalled.addListener(() => {
   setBadgeText("OFF");
@@ -24,8 +32,27 @@ chrome.runtime.onInstalled.addListener(async () => {
   await chrome.scripting.registerContentScripts(scripts).catch(() => {});
 });
 
-// this message comes from inject -> content -> background
+let ws: EventManager;
+
+// have to handle sockets stuff here (rather than in middleware) for betting logging
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (
+    request.type === "chromex.dispatch" &&
+    request.payload.type === startRecording.type
+  ) {
+    const {
+      user: {
+        info: { client_id },
+      },
+    }: RootState = store.getState();
+    ws = createWsClient(client_id!);
+  }
+  if (
+    request.type === "chromex.dispatch" &&
+    request.payload.type === stopRecording.type
+  ) {
+    ws.close();
+  }
   if (request.type === saveFixture.type) {
     store.dispatch(
       saveFixture({
@@ -36,6 +63,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   if (request.type === saveEvent.type) {
     store.dispatch(saveEvent(request.payload));
+    ws.saveEvent(request.payload);
   }
 });
 

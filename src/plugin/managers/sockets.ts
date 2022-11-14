@@ -1,34 +1,15 @@
-import {
-  EventManager,
-  OnCloseCallback,
-  OnSaveEventCallback,
-  ParsedEvent,
-} from "../types";
-import { readBlockUpload, readSocketUrl } from "../globals";
+import { EventManager, ParsedEvent } from "../types";
 
-export const createWsClient = (
-  clientId: string,
-  devMode = false
-): EventManager => {
-  const url = readSocketUrl();
-  const blockUpload = readBlockUpload();
-  const domain = window.location.hostname;
-
-  const ws = new WebSocket(url);
+export const createWsClient = (clientId: string): EventManager => {
+  const ws = new WebSocket("wss://api.seasmoke.io/ws/events/");
   let sessionId: string | undefined;
   let index: number = 0;
 
   let queue: ParsedEvent[] = [];
 
-  const onCloseCallbacks: OnCloseCallback[] = [];
-  const registerOnCloseCallback = (fn: OnCloseCallback) => {
-    onCloseCallbacks.push(fn);
-  };
-
   ws.onclose = function () {
-    console.log("Chat socket closed");
     sessionId = undefined;
-    onCloseCallbacks.forEach((fn) => fn());
+    // todo: dispatch closed action here
   };
 
   ws.onmessage = function (msg: MessageEvent) {
@@ -43,18 +24,14 @@ export const createWsClient = (
     ws.send(
       JSON.stringify({
         clientId,
-        domain,
+        domain: "chrome-extension",
         version: "react",
-        dev: devMode,
+        dev: true,
       })
     );
   };
 
   const sendWithSessionId = (event: ParsedEvent) => {
-    if (blockUpload) {
-      console.log("not uploading", event);
-      return;
-    }
     ws.send(
       JSON.stringify({
         sessionId,
@@ -77,13 +54,10 @@ export const createWsClient = (
     }
   };
 
-  const close = (): string => {
-    ws.close();
-    return sessionId!;
-  };
+  const close = (): void => ws.close();
 
   return {
+    close,
     saveEvent,
-    registerOnCloseCallback,
   };
 };

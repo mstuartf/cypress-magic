@@ -104,7 +104,6 @@ export const userSlice = createSlice({
       state.recording.resetPageState = false;
     },
     saveEvent: (state, action) => {
-      console.log("saveEvent", action.payload);
       state.recording.events.push(action.payload);
     },
     saveFixture: (state, action) => {
