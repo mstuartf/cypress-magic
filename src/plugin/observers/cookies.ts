@@ -1,4 +1,5 @@
 import { InitArgs, StorageEvent } from "../types";
+import { blobify, pickleBlob } from "../utils/pickleBlob";
 
 const parseCookie = (cookie: string): { [key: string]: string } =>
   cookie.split("; ").reduce((prev, next) => {
@@ -19,6 +20,9 @@ export const initCookieObserver = ({ saveEvent, saveFixture }: InitArgs) => {
     storageType: "cookie",
     fixture,
   };
-  saveEvent(event);
-  saveFixture(fixture, value);
+  const blob = blobify(value);
+  pickleBlob(blob).then((pickle) => {
+    saveEvent(event);
+    saveFixture(fixture, pickle);
+  });
 };

@@ -20,6 +20,7 @@ import Spinner from "../Spinner";
 import { Redirect } from "react-router-dom";
 import NewRecordingBtn from "../NewRecordingBtn";
 import CancelRecordingBtn from "../CancelRecordingBtn";
+import { unPickleBlob, unPickleFixtures } from "../../plugin/utils/pickleBlob";
 
 const kebabCase = (raw: string) =>
   raw
@@ -45,15 +46,18 @@ const Generate = () => {
     setIsGenerating(true);
     sessionUrlRequest(sessionId!, kebabName, token!)
       .then(({ mocked }) => {
+        console.log("api call successful");
         // todo: snake case the name
         dispatch(setTestName(kebabName));
         const zip = new JSZip();
         zip.file(`${kebabName}-mocked.cy.js`, mocked);
-        Object.entries(fixtures).forEach(([path, value]) => {
-          zip.file(`${kebabName}_fixtures/${path}`, JSON.stringify(value));
-        });
-        zip.generateAsync({ type: "base64" }).then((content) => {
-          dispatch(setDownloadUrl(`data:application/zip;base64,${content}`));
+        unPickleFixtures(fixtures).then((values) => {
+          values.forEach(({ name: path, blob }) => {
+            zip.file(`${kebabName}_fixtures/${path}`, blob);
+          });
+          zip.generateAsync({ type: "base64" }).then((content) => {
+            dispatch(setDownloadUrl(`data:application/zip;base64,${content}`));
+          });
         });
       })
       .catch(() => setIsGenerating(false));

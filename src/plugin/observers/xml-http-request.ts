@@ -1,4 +1,6 @@
-import { InitArgs } from "../types";
+import { InitArgs, ResponseEvent } from "../types";
+import mimeDb from "mime-db";
+import { pickleBlob } from "../utils/pickleBlob";
 
 export function initXMLHttpRequestObserver({
   saveEvent,
@@ -31,20 +33,37 @@ export function initXMLHttpRequestObserver({
           const method = (this as any).__method;
           const status = this.status;
           const alias = buildAlias(url, method, status);
-          const fixture = `api${alias}.json`;
-          saveEvent({
+          const event: Omit<ResponseEvent, "body" | "fixture"> = {
             type: "response",
             timestamp: Date.now(),
-            url,
             method,
+            url,
             status,
             alias,
-            fixture,
-          });
+          };
           try {
-            saveFixture(fixture, JSON.parse(this.response));
+            const contentType =
+              this.getResponseHeader("Content-Type") || "application/json";
+            const blobType = contentType.split(";")[0]; // handle e.g. application/json; charset=utf-8
+            const blob = new Blob([this.response], { type: blobType });
+            const { extensions } = mimeDb[blob.type];
+            pickleBlob(blob)
+              .then((pickle) => {
+                const fixture = `api${alias}.${extensions![0]}`;
+                saveFixture(fixture, pickle);
+                saveEvent({ ...event, fixture });
+              })
+              .catch((e) => {
+                console.log(url);
+                console.log(this.getResponseHeader("Content-Type"));
+                console.log(e);
+                saveEvent({ ...event, fixture: "error.json" });
+              });
           } catch (e) {
-            // todo: non-json fixtures
+            console.log(url);
+            console.log(this.getResponseHeader("Content-Type"));
+            console.log(e);
+            saveEvent({ ...event, fixture: "error.json" });
           }
         }
         return _onreadystatechange.apply(this, arguments as any);

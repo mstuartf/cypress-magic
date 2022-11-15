@@ -1,5 +1,7 @@
 import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
 import { AliasBuilder } from "../utils/aliases";
+import { pickleBlob } from "../utils/pickleBlob";
+import mimeDb from "mime-db";
 
 const isRequestObj = (input: RequestInfo | URL): input is Request => {
   return (input as Request).method !== undefined;
@@ -45,26 +47,35 @@ const parseResponse = (
   return new Promise((resolve, reject) => {
     const { url, status } = response;
     const alias = buildAlias(url, method, status);
-    const fixture = `api${alias}.json`;
-    const event: Omit<ResponseEvent, "body"> = {
+    const event: Omit<ResponseEvent, "body" | "fixture"> = {
       type: "response",
       timestamp: Date.now(),
       method,
       url,
       status,
       alias,
-      fixture,
     };
     response
       .clone()
-      .json()
-      .then((body) => {
-        saveFixture(fixture, body);
-        resolve(event);
+      .blob()
+      .then((blob) => {
+        const { extensions } = mimeDb[blob.type];
+        pickleBlob(blob)
+          .then((pickle) => {
+            const fixture = `api${alias}.${extensions![0]}`;
+            saveFixture(fixture, pickle);
+            resolve({ ...event, fixture });
+          })
+          .catch((e) => {
+            console.log(e);
+            console.log(response);
+            resolve({ ...event, fixture: "error.json" });
+          });
       })
-      .catch(() => {
-        // todo: non-json fixtures?
-        resolve(event);
+      .catch((e) => {
+        console.log(e);
+        console.log(response);
+        resolve({ ...event, fixture: "error.json" });
       });
   });
 };
