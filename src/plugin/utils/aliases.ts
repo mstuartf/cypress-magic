@@ -5,7 +5,7 @@ export type AliasBuilder = (
 ) => string;
 
 export const buildRawAlias: AliasBuilder = (url, method, status) =>
-  `${new URL(url).pathname}${method}_${status}`;
+  `${new URL(url).pathname.replace(/\/?$/, "/")}${method}_${status}`;
 
 export const aliasTracker = (): AliasBuilder => {
   const aliasTracker: { [rawAlias: string]: number } = {};
