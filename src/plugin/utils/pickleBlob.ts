@@ -22,9 +22,9 @@ export const unPickleBlob = (
     );
   });
 
-export const unPickleFixtures = (fixtures: {
-  [path: string]: string;
-}): Promise<{ name: string; blob: Blob }[]> => {
-  const promises = Object.entries(fixtures).map(([k, v]) => unPickleBlob(k, v));
+export const unPickleFixtures = (
+  fixtures: [string, string][]
+): Promise<{ name: string; blob: Blob }[]> => {
+  const promises = fixtures.map(([k, v]) => unPickleBlob(k, v));
   return Promise.all(promises);
 };

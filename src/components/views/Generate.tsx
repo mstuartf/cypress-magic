@@ -3,7 +3,7 @@ import Header from "../Header";
 import PrimaryButton from "../PrimaryButton";
 import { logout, setDownloadUrl, setTestName } from "../../redux/slice";
 import GrayLinkButton from "../GrayLinkButton";
-import { sessionUrlRequest } from "../../requests";
+import { generateTestFileRequest } from "../../requests";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectDownloadUrl,
@@ -20,7 +20,7 @@ import Spinner from "../Spinner";
 import { Redirect } from "react-router-dom";
 import NewRecordingBtn from "../NewRecordingBtn";
 import CancelRecordingBtn from "../CancelRecordingBtn";
-import { unPickleBlob, unPickleFixtures } from "../../plugin/utils/pickleBlob";
+import { unPickleFixtures } from "../../plugin/utils/pickleBlob";
 
 const kebabCase = (raw: string) =>
   raw
@@ -44,14 +44,15 @@ const Generate = () => {
   const generateTestAssets = () => {
     const kebabName = kebabCase(localTestName);
     setIsGenerating(true);
-    sessionUrlRequest(sessionId!, kebabName, token!)
-      .then(({ mocked }) => {
-        console.log("api call successful");
-        // todo: snake case the name
+    generateTestFileRequest(sessionId!, kebabName, token!)
+      .then(({ mocked, fixtures: finalFixtureNames }) => {
         dispatch(setTestName(kebabName));
         const zip = new JSZip();
         zip.file(`${kebabName}-mocked.cy.js`, mocked);
-        unPickleFixtures(fixtures).then((values) => {
+        const finalFixtures = Object.entries(fixtures).filter(
+          ([path, pickle]) => finalFixtureNames.includes(path)
+        );
+        unPickleFixtures(finalFixtures).then((values) => {
           values.forEach(({ name: path, blob }) => {
             zip.file(`${kebabName}_fixtures/${path}`, blob);
           });

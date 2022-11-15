@@ -28,11 +28,11 @@ export const getUserRequest = async (
   return body;
 };
 
-export const sessionUrlRequest = async (
+export const generateTestFileRequest = async (
   session_id: string,
   test_name: string,
   token: string
-): Promise<{ mocked: string }> => {
+): Promise<{ mocked: string; fixtures: string[] }> => {
   const response = await fetch(
     `${BASE_URL}/events/session/${session_id}/test-file?test_name=${test_name}`,
     {
