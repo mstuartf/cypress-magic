@@ -45,10 +45,11 @@ const Generate = () => {
     const kebabName = kebabCase(localTestName);
     setIsGenerating(true);
     generateTestFileRequest(sessionId!, kebabName, token!)
-      .then(({ mocked, fixtures: finalFixtureNames }) => {
+      .then(({ mocked, live, fixtures: finalFixtureNames }) => {
         dispatch(setTestName(kebabName));
         const zip = new JSZip();
         zip.file(`${kebabName}-mocked.cy.js`, mocked);
+        zip.file(`${kebabName}-live.cy.js`, live);
         const finalFixtures = Object.entries(fixtures).filter(
           ([path, pickle]) => finalFixtureNames.includes(path)
         );

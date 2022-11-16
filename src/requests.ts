@@ -32,7 +32,7 @@ export const generateTestFileRequest = async (
   session_id: string,
   test_name: string,
   token: string
-): Promise<{ mocked: string; fixtures: string[] }> => {
+): Promise<{ mocked: string; live: string; fixtures: string[] }> => {
   const response = await fetch(
     `${BASE_URL}/events/session/${session_id}/test-file?test_name=${test_name}`,
     {
