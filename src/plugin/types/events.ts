@@ -27,7 +27,7 @@ export interface ResponseEvent extends BaseEvent {
   method: string;
   status: number;
   alias: string;
-  fixture: string;
+  fixture: string | null;
 }
 
 export interface DomPathNode {

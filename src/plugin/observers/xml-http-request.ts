@@ -42,6 +42,10 @@ export function initXMLHttpRequestObserver({
           alias,
         };
         try {
+          if (status === 204) {
+            saveEvent({ ...event, fixture: null });
+            return;
+          }
           const contentType =
             this.getResponseHeader("Content-Type") || "application/json";
           const blobType = contentType.split(";")[0]; // handle e.g. application/json; charset=utf-8

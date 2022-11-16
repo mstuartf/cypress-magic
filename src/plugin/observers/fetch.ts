@@ -48,7 +48,7 @@ const parseResponse = (
   return new Promise((resolve, reject) => {
     const { url, status } = response;
     const alias = buildAlias(url, method, status);
-    const event: Omit<ResponseEvent, "body" | "fixture"> = {
+    const event: Omit<ResponseEvent, "fixture"> = {
       type: "response",
       timestamp: Date.now(),
       method,
@@ -56,6 +56,13 @@ const parseResponse = (
       status,
       alias,
     };
+    if (status === 204) {
+      resolve({
+        ...event,
+        fixture: null,
+      });
+      return;
+    }
     response
       .clone()
       .blob()
