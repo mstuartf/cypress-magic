@@ -2,6 +2,7 @@ import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
 import { AliasBuilder } from "../utils/aliases";
 import { pickleBlob } from "../utils/pickleBlob";
 import mimeDb from "mime-db";
+import { getAbsoluteUrl } from "../utils/absoluteUrls";
 
 const isRequestObj = (input: RequestInfo | URL): input is Request => {
   return (input as Request).method !== undefined;
@@ -32,7 +33,7 @@ const parseRequest = (
   return {
     type: "request",
     timestamp: Date.now(),
-    url,
+    url: getAbsoluteUrl(url),
     method,
     initiator: "fetch",
   };

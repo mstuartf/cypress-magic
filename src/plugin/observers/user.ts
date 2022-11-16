@@ -57,6 +57,7 @@ const parseUploadEvent = (
   saveFixture: SaveFixture
 ): UploadEvent => {
   const file = (event.target! as HTMLInputElement)!.files![0];
+  // todo: blobify
   saveFixture(file.name, file);
   return {
     type: "fileUpload",
