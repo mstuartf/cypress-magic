@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import Header from "../Header";
 import PrimaryButton from "../PrimaryButton";
-import { logout, setDownloadUrl, setTestName } from "../../redux/slice";
+import {
+  logout,
+  setDownloadUrl,
+  setDownloadUrlFailure,
+  setDownloadUrlPending,
+  setTestName,
+} from "../../redux/slice";
 import GrayLinkButton from "../GrayLinkButton";
 import { generateTestFileRequest } from "../../requests";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +15,7 @@ import {
   selectDownloadUrl,
   selectEmailAddress,
   selectFixtures,
+  selectIsGenerating,
   selectSessionId,
   selectTestName,
   selectToken,
@@ -33,7 +40,6 @@ const Generate = () => {
 
   const [localTestName, setLocalTestName] = useState<string>("");
   const [genError, setGenError] = useState<string>("");
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const fixtures = useSelector(selectFixtures);
   const token = useSelector(selectToken);
@@ -41,10 +47,11 @@ const Generate = () => {
   const emailAddress = useSelector(selectEmailAddress);
   const downloadUrl = useSelector(selectDownloadUrl);
   const testName = useSelector(selectTestName);
+  const isGenerating = useSelector(selectIsGenerating);
 
   const generateTestAssets = () => {
     const kebabName = kebabCase(localTestName);
-    setIsGenerating(true);
+    dispatch(setDownloadUrlPending());
     generateTestFileRequest(sessionId!, kebabName, token!)
       .then(({ mocked, live, fixtures: finalFixtureNames }) => {
         dispatch(setTestName(kebabName));
@@ -67,10 +74,10 @@ const Generate = () => {
           })
           .catch((e) => {
             setGenError(e);
-            setIsGenerating(false);
+            dispatch(setDownloadUrlFailure());
           });
       })
-      .catch(() => setIsGenerating(false));
+      .catch(() => dispatch(setDownloadUrlFailure()));
   };
 
   if (!token) {

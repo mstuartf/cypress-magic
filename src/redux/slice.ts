@@ -11,6 +11,7 @@ const initialRecordingState = () => ({
   inProgress: false,
   session_id: null,
   session_url: null,
+  isGenerating: false,
   download_url: null,
   test_name: null,
   resetPageState: false,
@@ -88,8 +89,15 @@ export const userSlice = createSlice({
     stopRecording: (state) => {
       state.recording.inProgress = false;
     },
+    setDownloadUrlPending: (state) => {
+      state.recording.isGenerating = true;
+    },
     setDownloadUrl: (state, action) => {
       state.recording.download_url = action.payload;
+      state.recording.isGenerating = false;
+    },
+    setDownloadUrlFailure: (state) => {
+      state.recording.isGenerating = false;
     },
     setTestName: (state, action) => {
       state.recording.test_name = action.payload;
@@ -109,6 +117,8 @@ export const {
   getUserFailure,
   saveFixture,
   setDownloadUrl,
+  setDownloadUrlPending,
+  setDownloadUrlFailure,
   setTestName,
   resetPageState,
   saveEvent,
