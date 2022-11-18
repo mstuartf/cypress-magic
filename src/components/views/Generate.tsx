@@ -32,6 +32,7 @@ const Generate = () => {
   const dispatch = useDispatch();
 
   const [localTestName, setLocalTestName] = useState<string>("");
+  const [genError, setGenError] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const fixtures = useSelector(selectFixtures);
@@ -53,14 +54,21 @@ const Generate = () => {
         const finalFixtures = Object.entries(fixtures).filter(
           ([path, pickle]) => finalFixtureNames.includes(path)
         );
-        unPickleFixtures(finalFixtures).then((values) => {
-          values.forEach(({ name: path, blob }) => {
-            zip.file(`${kebabName}_fixtures/${path}`, blob);
+        unPickleFixtures(finalFixtures)
+          .then((values) => {
+            values.forEach(({ name: path, blob }) => {
+              zip.file(`${kebabName}_fixtures/${path}`, blob);
+            });
+            zip.generateAsync({ type: "base64" }).then((content) => {
+              dispatch(
+                setDownloadUrl(`data:application/zip;base64,${content}`)
+              );
+            });
+          })
+          .catch((e) => {
+            setGenError(e);
+            setIsGenerating(false);
           });
-          zip.generateAsync({ type: "base64" }).then((content) => {
-            dispatch(setDownloadUrl(`data:application/zip;base64,${content}`));
-          });
-        });
       })
       .catch(() => setIsGenerating(false));
   };
@@ -77,7 +85,7 @@ const Generate = () => {
     <div className="h-full flex flex-col">
       <Header />
       <div className="h-20 w-full flex items-center justify-center text-gray-700">
-        {!downloadUrl && !isGenerating && (
+        {!downloadUrl && !isGenerating && !genError && (
           <div className="w-full">
             <label className="block text-gray-700 font-semibold mb-2">
               Generate test files
@@ -90,11 +98,14 @@ const Generate = () => {
             />
           </div>
         )}
-        {!downloadUrl && isGenerating && (
+        {isGenerating && (
           <div className="flex items-center">
             <Spinner />
             <div className="ml-4">Generating...</div>
           </div>
+        )}
+        {!isGenerating && !!genError && (
+          <div className="flex items-center text-red-700">{genError}</div>
         )}
         {!!downloadUrl && (
           <Link href={downloadUrl} download>

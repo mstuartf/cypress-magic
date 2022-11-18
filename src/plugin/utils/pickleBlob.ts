@@ -17,12 +17,12 @@ export const unPickleBlob = (
   name: string,
   pickle: string
 ): Promise<{ name: string; blob: Blob }> =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     const parsed = JSON.parse(pickle);
     fetch(parsed.blob)
       .then((res) => res.blob().then((blob) => resolve({ name, blob })))
       .catch(() => {
-        console.error(`error unpickling ${name}`);
+        reject(`error generating ${name}`);
       });
   });
 
