@@ -49,11 +49,16 @@ export function initXMLHttpRequestObserver({
           const contentType =
             this.getResponseHeader("Content-Type") || "application/json";
           const blobType = contentType.split(";")[0]; // handle e.g. application/json; charset=utf-8
-          const blob = new Blob([this.response], { type: blobType });
+          // if the user has set this.responseType = 'json', then the response is auto-parsed and it needs to be stringified
+          const res =
+            this.responseType === "json"
+              ? JSON.stringify(this.response)
+              : this.response;
+          const blob = new Blob([res], { type: blobType });
           const extension = getBlobFileExtension(blob);
+          const fixture = `api${alias}.${extension}`;
           pickleBlob(blob)
             .then((pickle) => {
-              const fixture = `api${alias}.${extension}`;
               saveFixture(fixture, pickle);
               saveEvent({ ...event, fixture });
             })
