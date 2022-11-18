@@ -1,6 +1,6 @@
 import { InitArgs, ResponseEvent } from "../types";
 import mimeDb from "mime-db";
-import { pickleBlob } from "../utils/pickleBlob";
+import { getBlobFileExtension, pickleBlob } from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 
 export function initXMLHttpRequestObserver({
@@ -50,10 +50,10 @@ export function initXMLHttpRequestObserver({
             this.getResponseHeader("Content-Type") || "application/json";
           const blobType = contentType.split(";")[0]; // handle e.g. application/json; charset=utf-8
           const blob = new Blob([this.response], { type: blobType });
-          const { extensions } = mimeDb[blob.type];
+          const extension = getBlobFileExtension(blob);
           pickleBlob(blob)
             .then((pickle) => {
-              const fixture = `api${alias}.${extensions![0]}`;
+              const fixture = `api${alias}.${extension}`;
               saveFixture(fixture, pickle);
               saveEvent({ ...event, fixture });
             })

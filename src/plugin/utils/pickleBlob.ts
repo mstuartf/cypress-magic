@@ -1,3 +1,5 @@
+import mimeDb from "mime-db";
+
 export const pickleBlob = (blob: Blob): Promise<string> =>
   new Promise((resolve) => {
     const reader = new FileReader();
@@ -17,9 +19,11 @@ export const unPickleBlob = (
 ): Promise<{ name: string; blob: Blob }> =>
   new Promise((resolve) => {
     const parsed = JSON.parse(pickle);
-    fetch(parsed.blob).then((res) =>
-      res.blob().then((blob) => resolve({ name, blob }))
-    );
+    fetch(parsed.blob)
+      .then((res) => res.blob().then((blob) => resolve({ name, blob })))
+      .catch(() => {
+        console.error(`error unpickling ${name}`);
+      });
   });
 
 export const unPickleFixtures = (
@@ -27,4 +31,11 @@ export const unPickleFixtures = (
 ): Promise<{ name: string; blob: Blob }[]> => {
   const promises = fixtures.map(([k, v]) => unPickleBlob(k, v));
   return Promise.all(promises);
+};
+
+export const getBlobFileExtension = (blob: Blob): string => {
+  const mimeInfo = mimeDb[blob.type];
+  return mimeInfo && mimeInfo.extensions && mimeInfo.extensions.length
+    ? mimeInfo.extensions[0]
+    : "json";
 };
