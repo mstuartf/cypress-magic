@@ -5,7 +5,13 @@ export const pickleBlob = (blob: Blob): Promise<string> =>
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = function () {
-      resolve(JSON.stringify({ blob: reader.result }));
+      resolve(
+        JSON.stringify({
+          dataUri: reader.result,
+          size: blob.size,
+          type: blob.type,
+        })
+      );
     };
   });
 
@@ -18,8 +24,13 @@ export const unPickleBlob = (
   pickle: string
 ): Promise<{ name: string; blob: Blob }> =>
   new Promise((resolve, reject) => {
-    const parsed = JSON.parse(pickle);
-    fetch(parsed.blob)
+    const { dataUri, size, type } = JSON.parse(pickle);
+    if (size === 0) {
+      // in this case the data URI will be invalid
+      resolve({ name, blob: new Blob([], { type }) });
+      return;
+    }
+    fetch(dataUri)
       .then((res) => res.blob().then((blob) => resolve({ name, blob })))
       .catch(() => {
         reject(`error generating ${name}`);
