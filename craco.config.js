@@ -1,6 +1,7 @@
 module.exports = {
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
+      // console.log(webpackConfig)
       return {
         ...webpackConfig,
         entry: {
@@ -20,6 +21,7 @@ module.exports = {
         optimization: {
           ...webpackConfig.optimization,
           runtimeChunk: false,
+          // minimize: false,
         },
       };
     },
