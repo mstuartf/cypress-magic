@@ -6,6 +6,7 @@ import {
   saveSessionId,
   startRecording,
   stopRecording,
+  updateAliases,
 } from "../redux/slice";
 import { readCache, setBadgeText, updateCache } from "./utils";
 import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
@@ -66,6 +67,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === saveEvent.type) {
     store.dispatch(saveEvent(request.payload));
     ws.saveEvent(request.payload);
+  }
+  if (request.type === updateAliases.type) {
+    store.dispatch(
+      updateAliases({ aliases: JSON.parse(request.payload.aliases) })
+    );
   }
 });
 

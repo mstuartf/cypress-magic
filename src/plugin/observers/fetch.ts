@@ -47,7 +47,7 @@ const parseResponse = (
 ): Promise<ResponseEvent> => {
   return new Promise((resolve, reject) => {
     const { url, status } = response;
-    const alias = buildAlias(url, method, status);
+    const alias = buildAlias({ url, method, status });
     const event: Omit<ResponseEvent, "fixture"> = {
       type: "response",
       timestamp: Date.now(),

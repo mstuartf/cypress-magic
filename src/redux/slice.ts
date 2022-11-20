@@ -17,6 +17,7 @@ const initialRecordingState = () => ({
   resetPageState: false,
   fixtures: {} as { [path: string]: any },
   events: [] as ParsedEvent[],
+  aliases: {},
 });
 
 export const getInitialUserState = () => ({
@@ -80,6 +81,9 @@ export const userSlice = createSlice({
     saveEvent: (state, action) => {
       state.recording.events.push(action.payload);
     },
+    updateAliases: (state, action) => {
+      state.recording.aliases = action.payload.aliases;
+    },
     saveFixture: (state, action) => {
       state.recording.fixtures[action.payload.name] = action.payload.value;
     },
@@ -124,4 +128,5 @@ export const {
   saveEvent,
   saveSessionId,
   cancelRecording,
+  updateAliases,
 } = userSlice.actions;

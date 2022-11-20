@@ -32,7 +32,7 @@ export function initXMLHttpRequestObserver({
         const url = (this as any).__url;
         const method = (this as any).__method;
         const status = this.status;
-        const alias = buildAlias(url, method, status);
+        const alias = buildAlias({ url, method, status });
         const event: Omit<ResponseEvent, "body" | "fixture"> = {
           type: "response",
           timestamp: Date.now(),

@@ -6,9 +6,10 @@ import {
   startRecording,
   stopRecording,
   saveEvent,
+  updateAliases,
 } from "../redux/slice";
 import { Fixture, OnCloseCallback, ParsedEvent } from "../plugin/types";
-import { aliasTracker } from "../plugin/utils/aliases";
+import { AliasTracker, buildAliasTracker } from "../plugin/utils/aliases";
 
 const saveEventFn = (event: ParsedEvent) => {
   window.postMessage({ type: saveEvent.type, payload: event });
@@ -18,12 +19,17 @@ const saveFixtureFn = (name: string, value: Fixture) => {
   window.postMessage({ type: saveFixture.type, payload: { name, value } });
 };
 
+const saveAliasFn = (aliases: AliasTracker) => {
+  window.postMessage({
+    type: updateAliases.type,
+    payload: { aliases: JSON.stringify(aliases) },
+  });
+};
+
 const onCloseCallbacks: OnCloseCallback[] = [];
 const registerOnCloseCallback = (fn: OnCloseCallback) => {
   onCloseCallbacks.push(fn);
 };
-
-const buildAlias = aliasTracker();
 
 const init = () => {
   window.addEventListener("message", (event) => {
@@ -31,11 +37,12 @@ const init = () => {
       return;
     }
     if (event.data.type === startRecording.type) {
+      const { aliases } = event.data.payload;
       initialize({
         saveEvent: saveEventFn,
         saveFixture: saveFixtureFn,
         registerOnCloseCallback,
-        buildAlias,
+        buildAlias: buildAliasTracker(aliases, saveAliasFn),
       });
     }
     if (event.data.type === stopRecording.type) {

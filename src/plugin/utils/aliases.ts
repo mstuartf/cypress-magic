@@ -1,21 +1,57 @@
+import { StorageType } from "../types";
+
+export interface RequestAliasArgs {
+  url: string;
+  method: string;
+  status: number;
+}
+
+export interface StorageAliasArgs {
+  type: StorageType;
+}
+
 export type AliasBuilder = (
-  url: string,
-  method: string,
-  status: number
+  args: StorageAliasArgs | RequestAliasArgs
 ) => string;
 
-export const buildRawAlias: AliasBuilder = (url, method, status) =>
+export interface AliasTracker {
+  [rawAlias: string]: number;
+}
+
+export type AliasBuilderConstructor = (
+  starter: AliasTracker,
+  onUpdate: (aliases: AliasTracker) => void
+) => AliasBuilder;
+
+const buildRequestAlias = ({ url, method, status }: RequestAliasArgs): string =>
   `${new URL(url).pathname.replace(/\/?$/, "/")}${method}_${status}`;
 
-export const aliasTracker = (): AliasBuilder => {
-  const aliasTracker: { [rawAlias: string]: number } = {};
-  return (url, method, status) => {
-    const rawAlias = buildRawAlias(url, method, status);
+const buildStorageAlias = ({ type }: StorageAliasArgs): string => type;
+
+function isRequest(
+  args: RequestAliasArgs | StorageAliasArgs
+): args is RequestAliasArgs {
+  return (args as RequestAliasArgs).url !== undefined;
+}
+
+export const buildAliasTracker: AliasBuilderConstructor = (
+  starter,
+  onUpdate
+) => {
+  const aliasTracker: AliasTracker = { ...starter };
+  return (args) => {
+    let rawAlias: string;
+    if (isRequest(args)) {
+      rawAlias = buildRequestAlias(args);
+    } else {
+      rawAlias = buildStorageAlias(args);
+    }
     if (!aliasTracker.hasOwnProperty(rawAlias)) {
       aliasTracker[rawAlias] = 0;
     } else {
       aliasTracker[rawAlias] = aliasTracker[rawAlias] + 1;
     }
+    onUpdate(aliasTracker);
     if (aliasTracker[rawAlias] > 0) {
       return `${rawAlias}_${aliasTracker[rawAlias]}`;
     }

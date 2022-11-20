@@ -97,9 +97,11 @@ export type UserEvent =
   | DragDropEvent
   | UploadEvent;
 
+export type StorageType = "local" | "session" | "cookie";
+
 export interface StorageEvent extends BaseEvent {
   fixture: string;
-  storageType: "local" | "session" | "cookie";
+  storageType: StorageType;
 }
 
 export type ParsedEvent =

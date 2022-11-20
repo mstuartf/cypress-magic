@@ -3,6 +3,7 @@ import {
   saveFixture,
   startRecording,
   stopRecording,
+  updateAliases,
 } from "../redux/slice";
 import { readCache } from "./utils";
 
@@ -38,17 +39,24 @@ window.addEventListener("message", (event) => {
       payload: event.data.payload,
     });
   }
+  if (event.data.type === updateAliases.type) {
+    chrome.runtime.sendMessage({
+      type: updateAliases.type,
+      payload: event.data.payload,
+    });
+  }
 });
 
 readCache(
   ({
     user: {
-      recording: { inProgress },
+      recording: { inProgress, aliases },
     },
   }) => {
     if (inProgress) {
       window.postMessage({
         type: startRecording.type,
+        payload: { aliases },
       });
     }
   }
