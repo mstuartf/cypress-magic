@@ -6,8 +6,10 @@ import { blobify, pickleBlob } from "../utils/pickleBlob";
 export const initLocalStorageObserver = ({
   saveEvent,
   saveFixture,
+  buildAlias,
 }: InitArgs) => {
-  const fixture = "storage/local.json";
+  const alias = buildAlias({ type: "local" });
+  const fixture = `storage/${alias}.json`;
   const value = parseStorageObject(localStorage);
   const event: StorageEvent = {
     type: "storage",

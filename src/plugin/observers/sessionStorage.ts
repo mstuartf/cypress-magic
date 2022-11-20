@@ -6,8 +6,10 @@ import { blobify, pickleBlob } from "../utils/pickleBlob";
 export const initSessionStorageObserver = ({
   saveEvent,
   saveFixture,
+  buildAlias,
 }: InitArgs) => {
-  const fixture = "storage/session.json";
+  const alias = buildAlias({ type: "session" });
+  const fixture = `storage/${alias}.json`;
   const value = parseStorageObject(sessionStorage);
   const event: StorageEvent = {
     type: "storage",
