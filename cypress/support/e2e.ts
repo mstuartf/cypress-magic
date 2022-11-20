@@ -18,3 +18,13 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  Cypress.log({
+    displayName: "SEASMOKE WARNING",
+    message: `uncaught:exception in application code`,
+  });
+  return false;
+});
