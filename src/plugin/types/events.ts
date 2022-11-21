@@ -43,7 +43,7 @@ export interface Target {
   selectors: string[][]; // todo: remove
   tag: string; // todo: remove
   isHidden: boolean;
-  type: string;
+  type: string | null;
   domPath: DomPathNode[];
 }
 

@@ -30,7 +30,10 @@ const getTargetProps = (target: HTMLElement): TargetEvent => ({
     selectors: [[finder(target)]],
     tag: target.tagName,
     isHidden: isHidden(target),
-    type: (target as HTMLInputElement).type,
+    type:
+      target.tagName.toUpperCase() === "INPUT"
+        ? (target as HTMLInputElement).type
+        : null,
     domPath: getDomPath(target),
   },
 });
