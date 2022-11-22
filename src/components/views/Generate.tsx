@@ -56,15 +56,15 @@ const Generate = () => {
       .then(({ mocked, live, fixtures: finalFixtureNames }) => {
         dispatch(setTestName(kebabName));
         const zip = new JSZip();
-        zip.file(`${kebabName}-mocked.cy.js`, mocked);
-        zip.file(`${kebabName}-live.cy.js`, live);
+        zip.file("mocked.cy.js", mocked);
+        zip.file("live.cy.js", live);
         const finalFixtures = Object.entries(fixtures).filter(
           ([path, pickle]) => finalFixtureNames.includes(path)
         );
         unPickleFixtures(finalFixtures)
           .then((values) => {
             values.forEach(({ name: path, blob }) => {
-              zip.file(`${kebabName}_fixtures/${path}`, blob);
+              zip.file(`fixtures/${path}`, blob);
             });
             zip.generateAsync({ type: "base64" }).then((content) => {
               dispatch(
@@ -115,7 +115,7 @@ const Generate = () => {
           <div className="flex items-center text-red-700">{genError}</div>
         )}
         {!!downloadUrl && (
-          <Link href={downloadUrl} download>
+          <Link href={downloadUrl} download={testName}>
             Download '{testName}' test assets
           </Link>
         )}
