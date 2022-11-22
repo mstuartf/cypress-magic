@@ -1,7 +1,7 @@
 import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
 import { AliasBuilder } from "../utils/aliases";
 import { getBlobFileExtension, pickleBlob } from "../utils/pickleBlob";
-import mimeDb from "mime-db";
+import { v4 as uuidv4 } from "uuid";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 
 const isRequestObj = (input: RequestInfo | URL): input is Request => {
@@ -15,7 +15,7 @@ const isURL = (input: string | URL): input is URL => {
 const parseRequest = (
   input: RequestInfo | URL,
   init?: RequestInit
-): RequestEvent => {
+): Omit<RequestEvent, "id"> => {
   let url: string;
   let method: string;
 
@@ -44,11 +44,11 @@ const parseResponse = (
   method: string,
   buildAlias: AliasBuilder,
   saveFixture: SaveFixture
-): Promise<ResponseEvent> => {
+): Promise<Omit<ResponseEvent, "requestId">> => {
   return new Promise((resolve, reject) => {
     const { url, status } = response;
     const alias = buildAlias({ url, method, status });
-    const event: Omit<ResponseEvent, "fixture"> = {
+    const event: Omit<ResponseEvent, "fixture" | "requestId"> = {
       type: "response",
       timestamp: Date.now(),
       method,
@@ -97,8 +97,9 @@ export function initFetchObserver({
   const { fetch: originalFetch } = window;
 
   window.fetch = async (...args) => {
+    const id = uuidv4();
     const requestEvent = parseRequest(...args);
-    saveEvent(requestEvent);
+    saveEvent({ ...requestEvent, id });
 
     const response = await originalFetch(...args);
 
@@ -108,7 +109,7 @@ export function initFetchObserver({
       buildAlias,
       saveFixture
     );
-    saveEvent(responseEvent);
+    saveEvent({ ...responseEvent, requestId: id });
 
     return response;
   };

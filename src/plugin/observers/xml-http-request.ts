@@ -1,5 +1,5 @@
 import { InitArgs, ResponseEvent } from "../types";
-import mimeDb from "mime-db";
+import { v4 as uuidv4 } from "uuid";
 import { getBlobFileExtension, pickleBlob } from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 
@@ -14,9 +14,11 @@ export function initXMLHttpRequestObserver({
     // cache these so they are available in onreadystatechange
     (this as any).__method = arguments[0].toUpperCase();
     (this as any).__url = getAbsoluteUrl(arguments[1]);
+    (this as any).__id = uuidv4();
     saveEvent({
       type: "request",
       timestamp: Date.now(),
+      id: (this as any).__id,
       url: (this as any).__url,
       method: (this as any).__method,
       initiator: "xml",
@@ -29,6 +31,7 @@ export function initXMLHttpRequestObserver({
     const _onreadystatechange = this.onreadystatechange;
     this.onreadystatechange = function () {
       if (this.readyState === 4) {
+        const requestId = (this as any).__id;
         const url = (this as any).__url;
         const method = (this as any).__method;
         const status = this.status;
@@ -37,6 +40,7 @@ export function initXMLHttpRequestObserver({
           type: "response",
           timestamp: Date.now(),
           method,
+          requestId,
           url,
           status,
           alias,

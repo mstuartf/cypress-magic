@@ -17,12 +17,14 @@ export interface PerformanceResourceEvent extends BaseEvent {
 }
 
 export interface RequestEvent extends BaseEvent {
+  id: string;
   url: string;
   method: string;
   initiator: "xml" | "fetch";
 }
 
 export interface ResponseEvent extends BaseEvent {
+  requestId: string;
   url: string;
   method: string;
   status: number;
