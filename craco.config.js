@@ -1,18 +1,12 @@
 module.exports = {
   webpack: {
-    configure: (webpackConfig, { env, paths }) => {
-      // console.log(webpackConfig)
+    configure: (webpackConfig) => {
       return {
         ...webpackConfig,
         entry: {
-          main: [
-            env === "development" &&
-              require.resolve("react-dev-utils/webpackHotDevClient"),
-            paths.appIndexJs,
-          ].filter(Boolean),
-          content: "./src/chrome/content.ts",
+          main: "./src/index.tsx",
           background: "./src/chrome/background.ts",
-          inject: "./src/chrome/inject.ts",
+          content: "./src/widget.tsx",
         },
         output: {
           ...webpackConfig.output,
@@ -21,7 +15,7 @@ module.exports = {
         optimization: {
           ...webpackConfig.optimization,
           runtimeChunk: false,
-          // minimize: false,
+          minimize: false,
         },
       };
     },

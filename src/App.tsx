@@ -1,12 +1,9 @@
 import React from "react";
-import "./App.css";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import Login from "./components/views/Login";
-import Record from "./components/views/Record";
 import { useSelector } from "react-redux";
 import { selectCacheLoaded } from "./redux/selectors";
-import Generate from "./components/views/Generate";
+import Main from "./components/views/Main";
 
 const history = createMemoryHistory();
 
@@ -21,17 +18,11 @@ function App() {
       <div className="h-full w-full">
         <Router history={history}>
           <Switch>
-            <Route exact path="/login">
-              <Login />
-            </Route>
             <Route path="/record">
-              <Record />
-            </Route>
-            <Route path="/generate">
-              <Generate />
+              <Main />
             </Route>
             <Route path="*">
-              <Redirect to="/login" />
+              <Redirect to="/record" />
             </Route>
           </Switch>
         </Router>
