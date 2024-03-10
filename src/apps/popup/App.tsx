@@ -2,8 +2,8 @@ import React from "react";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { useSelector } from "react-redux";
-import { selectCacheLoaded } from "./redux/selectors";
-import Main from "./components/views/Main";
+import { selectCacheLoaded } from "../../redux/selectors";
+import Main from "./components/Main";
 
 const history = createMemoryHistory();
 
