@@ -17,6 +17,7 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["./static/js/content.js"],
+      "css": ["./css/content.css"],
       "run_at": "document_start"
     }
   ],

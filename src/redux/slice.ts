@@ -3,23 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 export const rootSlice = createSlice({
   name: "root",
   initialState: {
-    recording: {
-      inProgress: false,
-    },
+    isActive: false,
     cacheLoaded: false,
   },
   reducers: {
     restoreCache: (state, action) => {
       if (action.payload) {
-        state.recording = { ...action.payload.recording };
+        state.isActive = { ...action.payload.isActive };
       }
       state.cacheLoaded = true;
     },
     startRecording: (state) => {
-      state.recording.inProgress = true;
+      state.isActive = true;
     },
     stopRecording: (state) => {
-      state.recording.inProgress = false;
+      state.isActive = false;
     },
   },
 });
