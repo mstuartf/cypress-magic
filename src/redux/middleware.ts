@@ -7,9 +7,10 @@ export const msgMiddleware: redux.Middleware =
     if (action.type === startRecording.type) {
       next(action);
       setBadgeText("ON").then(() => {
-        chrome.tabs.reload();
+        sendMsgToContent({ type: action.type });
       });
     } else if (action.type === stopRecording.type) {
+      next(action);
       setBadgeText("OFF").then(() => {
         sendMsgToContent({ type: action.type });
       });
