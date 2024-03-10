@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsRecording } from "../../../redux/selectors";
+import { selectIsActive } from "../../../redux/selectors";
 import { startRecording, stopRecording } from "../../../redux/slice";
 
 const Main = () => {
-  const isRecording = useSelector(selectIsRecording);
+  const isRecording = useSelector(selectIsActive);
   const dispatch = useDispatch();
   const onClick = () => {
     if (isRecording) {

@@ -11,7 +11,7 @@ const createRootElement = () => {
   const el = window.document.createElement("div");
   el.id = id;
   el.style.position = "fixed";
-  el.style.top = "0";
+  el.style.bottom = "0";
   el.style.right = "0";
   el.style.zIndex = "1000";
   window.document.body.appendChild(el);
