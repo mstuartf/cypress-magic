@@ -19,8 +19,3 @@ export const updateCache = async (state: object) =>
   chrome.storage.local.set({
     seasmoke: { ...state },
   });
-
-export const setBadgeText = async (text: "ON" | "OFF") =>
-  chrome.action.setBadgeText({
-    text,
-  });

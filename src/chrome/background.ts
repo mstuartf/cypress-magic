@@ -1,10 +1,8 @@
 import { store } from "../redux/store";
 import { restoreCache } from "../redux/slice";
-import { readCache, setBadgeText, updateCache } from "./utils";
+import { readCache, updateCache } from "./utils";
 
-chrome.runtime.onInstalled.addListener(() => {
-  setBadgeText("OFF");
-});
+chrome.runtime.onInstalled.addListener(() => {});
 
 store.subscribe(async () => {
   await updateCache({ ...store.getState() });
