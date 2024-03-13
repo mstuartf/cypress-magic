@@ -32,8 +32,9 @@ function App() {
       for (let i = 0; i < events.length - nbEvents; i++) {
         toast(
           <>
-            <div>{events[nbEvents + i].type}</div>
-            <div>+ {Math.max(nbEvents + i - 1, 0)} more</div>
+            <div>
+              {nbEvents + i}. {events[nbEvents + i].type}
+            </div>
           </>,
           {
             toastId: `event-${nbEvents + i}`,
@@ -45,6 +46,7 @@ function App() {
       }
       setNbEvents(events.length);
     }
+    console.log(events);
   }, [events]);
 
   if (!isActive) {
