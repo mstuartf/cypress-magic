@@ -1,18 +1,64 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectIsActive } from "../../redux/selectors";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectEvents, selectIsActive } from "../../redux/selectors";
+import { ParsedEvent } from "../../plugin/types";
+import { saveEvent } from "../../redux/slice";
+import initialize from "../../plugin/initialize";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const dispatch = useDispatch();
+
   const isActive = useSelector(selectIsActive);
+  const events = useSelector(selectEvents);
+  const [nbEvents, setNbEvents] = useState<number>(0);
+
+  const saveEventCallback = (event: ParsedEvent) => {
+    dispatch(saveEvent(event));
+  };
+
+  useEffect(() => {
+    initialize({
+      saveEvent: saveEventCallback,
+      saveFixture: () => {},
+      buildAlias: () => "abc123",
+      registerOnCloseCallback: () => {},
+    });
+  }, []);
+
+  useEffect(() => {
+    if (events.length) {
+      for (let i = 0; i < events.length - nbEvents; i++) {
+        toast(
+          <>
+            <div>{events[nbEvents + i].type}</div>
+            <div>+ {Math.max(nbEvents + i - 1, 0)} more</div>
+          </>,
+          {
+            toastId: `event-${nbEvents + i}`,
+          }
+        );
+        if (nbEvents + i >= 3) {
+          toast.dismiss(`event-${nbEvents + i - 3}`);
+        }
+      }
+      setNbEvents(events.length);
+    }
+  }, [events]);
+
   if (!isActive) {
     return null;
   }
   return (
-    <button className="relative inline-flex items-center justify-center p-0.5 mb-16 mr-16 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-      <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-        🐞 Report bug
-      </span>
-    </button>
+    <div className="">
+      <ToastContainer
+        stacked={true}
+        position="bottom-right"
+        autoClose={false}
+        closeButton={false}
+      />
+    </div>
   );
 }
 
