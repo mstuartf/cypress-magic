@@ -30,18 +30,20 @@ function App() {
   useEffect(() => {
     if (events.length) {
       for (let i = 0; i < events.length - nbEvents; i++) {
+        console.log(`showing event ${events[nbEvents + i].timestamp}`);
         toast(
           <>
             <div>
-              {nbEvents + i}. {events[nbEvents + i].type}
+              {nbEvents + i + 1}. {events[nbEvents + i].type}
             </div>
           </>,
           {
-            toastId: `event-${nbEvents + i}`,
+            toastId: events[nbEvents + i].timestamp,
           }
         );
         if (nbEvents + i >= 3) {
-          toast.dismiss(`event-${nbEvents + i - 3}`);
+          console.log(`removing event ${events[nbEvents + i - 3].timestamp}`);
+          toast.dismiss(events[nbEvents + i - 3].timestamp);
         }
       }
       setNbEvents(events.length);
@@ -58,7 +60,7 @@ function App() {
         stacked={true}
         position="bottom-right"
         autoClose={false}
-        closeButton={false}
+        closeButton={true}
       />
     </div>
   );

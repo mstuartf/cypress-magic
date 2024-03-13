@@ -31,8 +31,14 @@ export const rootSlice = createSlice({
       state.isActive = false;
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
-      console.log(action.payload);
       state.events.push(action.payload);
+    },
+    removeEvent: (state, action: PayloadAction<ParsedEvent>) => {
+      state.events = [
+        ...state.events.filter(
+          ({ timestamp }) => timestamp != action.payload.timestamp
+        ),
+      ];
     },
   },
 });
