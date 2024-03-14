@@ -43,5 +43,10 @@ export const rootSlice = createSlice({
   },
 });
 
-export const { restoreCache, stopRecording, startRecording, saveEvent } =
-  rootSlice.actions;
+export const {
+  restoreCache,
+  stopRecording,
+  startRecording,
+  saveEvent,
+  removeEvent,
+} = rootSlice.actions;
