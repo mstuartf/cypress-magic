@@ -5,9 +5,9 @@
 /* height must be some multiple of toastHeight + toastMarginBottom */
 .Toastify__toast-container {
   height: 640px;
+  position: revert;
   overflow: hidden;
   scroll-behavior: smooth;
-  border: 1px solid red;
   box-sizing: content-box;
 }
 
