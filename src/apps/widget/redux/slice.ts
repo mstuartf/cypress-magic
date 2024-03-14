@@ -4,11 +4,13 @@ import { ParsedEvent } from "../../../plugin/types";
 interface State {
   events: ParsedEvent[];
   recordingInProgress?: boolean;
+  hasRefreshed: boolean;
 }
 
 const initialState: State = {
   events: [],
   recordingInProgress: undefined,
+  hasRefreshed: false,
 };
 
 export const rootSlice = createSlice({
@@ -17,6 +19,10 @@ export const rootSlice = createSlice({
   reducers: {
     setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
       state.recordingInProgress = action.payload;
+      state.hasRefreshed = false;
+    },
+    setHasRefreshed: (state, action: PayloadAction<boolean>) => {
+      state.hasRefreshed = action.payload;
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       state.events.push(action.payload);
@@ -31,5 +37,9 @@ export const rootSlice = createSlice({
   },
 });
 
-export const { saveEvent, removeEvent, setRecordingInProgress } =
-  rootSlice.actions;
+export const {
+  saveEvent,
+  removeEvent,
+  setRecordingInProgress,
+  setHasRefreshed,
+} = rootSlice.actions;
