@@ -7,8 +7,47 @@ import initialize from "../../plugin/initialize";
 import { toast, ToastContainer, ToastTransition } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CloseButtonProps } from "react-toastify/dist/components";
+import { widgetId } from "../../widget";
 
 const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
+
+const sideBarWith = 384;
+const squashAppUnderTest = () => {
+  const body = document.getElementsByTagName("body")[0];
+  body.style.width = `${window.innerWidth - sideBarWith}px`;
+  const widget = document.getElementById(widgetId)!;
+
+  const fixedElements = Array.prototype.slice
+    .call(document.body.getElementsByTagName("*"))
+    .filter(
+      (elem) =>
+        window.getComputedStyle(elem, null).getPropertyValue("position") ==
+        "fixed"
+    )
+    .filter((elem) => !widget.contains(elem));
+
+  // Reduce width of fixed elements with no width explicitly set or whose width is the full viewport
+  fixedElements
+    .filter((elem) => {
+      const elementWidth = window
+        .getComputedStyle(elem, null)
+        .getPropertyValue("width");
+      return !elementWidth || elementWidth === `${window.innerWidth}px`;
+    })
+    .forEach(
+      (elem) => (elem.style.width = `${window.innerWidth - sideBarWith}px`)
+    );
+
+  // Find all fixed elements pinned to the right of the screen and adjust their offset
+  fixedElements
+    .filter((elem) => {
+      const elementRight = window
+        .getComputedStyle(elem, null)
+        .getPropertyValue("right");
+      return elementRight === "0px";
+    })
+    .forEach((elem) => (elem.style.right = `${sideBarWith}px`));
+};
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +69,7 @@ function App() {
   };
 
   useEffect(() => {
+    squashAppUnderTest();
     initialize({
       saveEvent: saveEventCallback,
       saveFixture: () => {},
@@ -91,11 +131,16 @@ function App() {
   }, [events]);
 
   return (
-    <ToastContainer
-      position="top-right"
-      autoClose={false}
-      closeOnClick={false}
-    />
+    <div
+      className="fixed top-0 right-0 bottom-0 border-2 border-red-500"
+      style={{ width: `${sideBarWith}px` }}
+    >
+      <ToastContainer
+        position="top-right"
+        autoClose={false}
+        closeOnClick={false}
+      />
+    </div>
   );
 }
 
