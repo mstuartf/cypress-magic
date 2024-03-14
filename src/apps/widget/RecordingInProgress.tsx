@@ -4,6 +4,7 @@ import ToggleNetworkRequests from "./ToggleNetworkRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "./redux/slice";
 import { selectHasRefreshed } from "./redux/selectors";
+import Header from "./Header";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const RecordingInProgress = () => {
   };
   return (
     <>
-      <div className="flex justify-center mb-4">
+      <Header>
         <div role="status">
           <svg
             aria-hidden="true"
@@ -33,10 +34,8 @@ const RecordingInProgress = () => {
           </svg>
           <span className="sr-only">Loading...</span>
         </div>
-        <div className="font-semibold ml-4 text-xl">
-          Recording in progress...
-        </div>
-      </div>
+        <div className="ml-4">Recording in progress...</div>
+      </Header>
       {hasRefreshed && (
         <>
           <div className="grid grid-cols-2 gap-4">
