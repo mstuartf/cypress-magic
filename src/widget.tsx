@@ -15,6 +15,8 @@ const createRootElement = () => {
   return el;
 };
 
+// todo: may need to setup listeners before onload (below)
+
 // content script runs in the main process and in the extension popup, so need this check here
 // because we only want to render the app in the main process
 const { protocol } = new URL(window.location.href);
