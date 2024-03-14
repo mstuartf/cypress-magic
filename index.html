@@ -1,0 +1,21 @@
+<script>
+  function onload() {
+    document.getElementById("abc").addEventListener("click", function () {
+      fetch("https://google.com").then(console.log);
+    });
+
+    // const { fetch: originalFetch } = window;
+    //
+    // window.fetch = async (...args) => {
+    //   console.log("fetching...")
+    //   const response = await originalFetch(...args);
+    //   console.log({response})
+    //
+    //   return response;
+    // };
+  }
+
+  document.addEventListener("DOMContentLoaded", onload);
+</script>
+
+<button id="abc">click</button>
