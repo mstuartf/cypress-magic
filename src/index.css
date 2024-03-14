@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* height must be some multiple of toastHeight + toastMarginBottom */
+/* height must be some multiple of toastHeight + (toastMarginBottom - 1) */
 .Toastify__toast-container {
-  height: 640px;
+  height: 632px;
   position: revert;
   overflow: hidden;
   scroll-behavior: smooth;

@@ -34,8 +34,8 @@ function App() {
   return (
     <Resizer>
       <div className="flex justify-center">
-        <div className="">
-          <div>Test steps</div>
+        <div className="pt-6">
+          <div>Recording in progress...</div>
           <EventList />
           <div>Something else</div>
         </div>
