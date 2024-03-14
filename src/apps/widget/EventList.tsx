@@ -5,6 +5,7 @@ import { ParsedEvent } from "../../plugin/types";
 import { removeEvent } from "./redux/slice";
 import { toast, ToastContainer } from "react-toastify";
 import { useNewToast } from "./hooks/useNewToast";
+import { toastHeight, toastMarginBottom } from "./constants";
 
 const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
 
@@ -58,7 +59,10 @@ const ScrollBtn = ({ direction }: { direction: "up" | "down" }) => (
     onClick={() => {
       const toastContainer = document.getElementById("my-toaster")!;
       if (toastContainer.children.length) {
-        toastContainer.children[0].scrollBy(0, direction === "down" ? 80 : -80);
+        toastContainer.children[0].scrollBy(
+          0,
+          (toastHeight + toastMarginBottom) * (direction === "down" ? 1 : -1)
+        );
       }
     }}
   >

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "./hooks/useWindowSize";
-import { widgetId } from "../../widget";
-import { sideBarWith } from "./constants";
+import { sideBarWith, widgetId } from "./constants";
 
 const Resizer = ({ children }: { children: React.ReactNode }) => {
   const [fixedWidthElements, setFixedWidthElements] = useState<

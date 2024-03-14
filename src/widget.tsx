@@ -5,8 +5,7 @@ import "./index.css";
 import App from "./apps/widget/App";
 import { store } from "./apps/widget/redux/store";
 import { Provider } from "react-redux";
-
-export const widgetId = "__widget__";
+import { widgetId } from "./apps/widget/constants";
 
 const createRootElement = () => {
   const el = window.document.createElement("div");

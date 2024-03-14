@@ -5,6 +5,7 @@ import { saveEvent } from "./redux/slice";
 import initialize from "../../plugin/initialize";
 import Resizer from "./Resizer";
 import EventList from "./EventList";
+import { widgetId } from "./constants";
 
 function App() {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ function App() {
   const saveEventCallback = (event: ParsedEvent) => {
     if ((event as UserEvent).target?.domPath) {
       const inWidget = (event as UserEvent).target?.domPath.find(
-        ({ id }) => id === "__widget__"
+        ({ id }) => id === widgetId
       );
       if (inWidget) {
         return;

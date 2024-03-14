@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* height must be some multiple of 64 + 16 */
+/* height must be some multiple of toastHeight + toastMarginBottom */
 .Toastify__toast-container {
   height: 400px;
   overflow: hidden;
@@ -16,7 +16,7 @@
   top: 16px;
 }
 
-/* must be 16 */
+/* must be toastMarginBottom */
 .Toastify__toast {
   margin-bottom: 16px;
 }
