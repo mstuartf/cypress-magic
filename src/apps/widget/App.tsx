@@ -17,6 +17,7 @@ function App() {
 
   const startRecording = () => {
     dispatch(setRecordingInProgress(true));
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -24,9 +25,6 @@ function App() {
   }, []);
 
   const saveEventCallback = (event: ParsedEvent) => {
-    if (!recordingInProgress) {
-      return;
-    }
     if ((event as UserEvent).target?.domPath) {
       const inWidget = (event as UserEvent).target?.domPath.find(
         ({ id }) => id === widgetId
