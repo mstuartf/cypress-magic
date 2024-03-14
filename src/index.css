@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.Toastify__toast-container {
+  height: 400px;
+  border: 1px solid red;
+  overflow: scroll;
+}

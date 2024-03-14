@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEvents } from "./redux/selectors";
 import { ParsedEvent, UserEvent } from "../../plugin/types";
@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { CloseButtonProps } from "react-toastify/dist/components";
 import { widgetId } from "../../widget";
 import { useWindowSize } from "./hooks/useWindowSize";
+import { useMutateObserver } from "@rc-component/mutate-observer";
+import { useNewToast } from "./hooks/useNewToast";
 
 const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
 
@@ -108,6 +110,7 @@ function App() {
     body.style.width = `${innerWidth - sideBarWith}px`;
 
     // fixed right elements only need to be moved once
+    // todo: what about when new fixed right elements are added
     if (!lastInnerWidth) {
       getFixedRightElements().forEach(([elem, oldRight]) => {
         elem.style.right = `${sideBarWith}px`;
@@ -117,6 +120,8 @@ function App() {
     setFixedWidthElements(updatedWidthElements);
     setLastInnerWidth(innerWidth);
   }, [innerWidth]);
+
+  useNewToast();
 
   const showToast = (
     event: ParsedEvent,
@@ -176,6 +181,7 @@ function App() {
       style={{ width: `${sideBarWith}px` }}
     >
       <ToastContainer
+        containerId="my-toaster"
         position="top-right"
         autoClose={false}
         closeOnClick={false}
