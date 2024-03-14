@@ -1,6 +1,6 @@
 import * as redux from "redux";
 import { startRecording, stopRecording } from "./slice";
-import { sendMsgToContent } from "../chrome/utils";
+import { sendMsgToContent } from "../../../chrome/utils";
 
 export const msgMiddleware: redux.Middleware =
   (store) => (next) => (action) => {
