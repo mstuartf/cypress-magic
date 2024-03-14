@@ -1,15 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ParsedEvent, UserEvent } from "../../plugin/types";
-import { saveEvent } from "./redux/slice";
+import { saveEvent, setRecordingInProgress } from "./redux/slice";
 import initialize from "../../plugin/initialize";
 import Resizer from "./Resizer";
 import { widgetId } from "./constants";
-import RecordingInProgress from "./RecordingInProgress";
+import InnerApp from "./InnerApp";
+import { selectRecordingInProgress } from "./redux/selectors";
+
+const readCache = (): boolean =>
+  localStorage.getItem("__seasmoke__") === "true";
 
 function App() {
   const dispatch = useDispatch();
-  const [recordingInProgress, setRecordingInProgress] = useState(false);
+  const recordingInProgress = useSelector(selectRecordingInProgress);
+
+  const startRecording = () => {
+    dispatch(setRecordingInProgress(true));
+  };
+
+  useEffect(() => {
+    dispatch(setRecordingInProgress(readCache()));
+  }, []);
 
   const saveEventCallback = (event: ParsedEvent) => {
     if (!recordingInProgress) {
@@ -35,22 +47,18 @@ function App() {
     });
   }, []);
 
+  if (recordingInProgress === undefined) {
+    return null;
+  }
+
   return (
     <Resizer>
       <div className="flex justify-center">
         <div className="pt-6" style={{ width: "328px" }}>
-          {recordingInProgress ? (
-            <RecordingInProgress />
-          ) : (
-            <div className="grid">
-              <button
-                onClick={() => setRecordingInProgress(true)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Start recording
-              </button>
-            </div>
-          )}
+          <InnerApp
+            recordingInProgress={recordingInProgress}
+            startRecording={startRecording}
+          />
         </div>
       </div>
     </Resizer>
