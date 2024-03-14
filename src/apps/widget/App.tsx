@@ -5,16 +5,14 @@ import { ParsedEvent, UserEvent } from "../../plugin/types";
 import { removeEvent, saveEvent } from "./redux/slice";
 import initialize from "../../plugin/initialize";
 import { toast, ToastContainer, ToastTransition } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { CloseButtonProps } from "react-toastify/dist/components";
 import { widgetId } from "../../widget";
 import { useWindowSize } from "./hooks/useWindowSize";
-import { useMutateObserver } from "@rc-component/mutate-observer";
 import { useNewToast } from "./hooks/useNewToast";
 
 const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
 
-const sideBarWith = 384;
+const sideBarWith = 362;
 
 const getFixedElements = (): HTMLElement[] =>
   Array.prototype.slice
@@ -100,7 +98,6 @@ function App() {
     const updatedWidthElements = widthElementsToUpdate.map(
       ([elem, oldWidth]) => {
         const newWidth = oldWidth + widthChange;
-        console.log("width", elem, oldWidth, newWidth);
         elem.style.width = `${newWidth}px`;
         // todo: what if elem no longer exists?
         return [elem, newWidth] as [HTMLElement, number];

@@ -6,8 +6,6 @@ export const useNewToast = () => {
   useMutateObserver(
     document.getElementById("__widget__")!,
     (mutations, observer) => {
-      console.log(mutations);
-      console.log(observer);
       const added = mutations.find(
         ({ addedNodes }) =>
           addedNodes.length &&
