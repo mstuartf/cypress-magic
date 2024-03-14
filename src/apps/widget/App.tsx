@@ -158,7 +158,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("events", events);
     if (events.length > localEvents.length) {
       for (let i = 0; i < events.length - localEvents.length; i++) {
         showToast(events[localEvents.length + i]);
