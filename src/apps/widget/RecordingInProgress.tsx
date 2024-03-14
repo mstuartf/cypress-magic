@@ -1,11 +1,13 @@
 import React from "react";
 import EventList from "./EventList";
 import ToggleNetworkRequests from "./ToggleNetworkRequests";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "./redux/slice";
+import { selectHasRefreshed } from "./redux/selectors";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
+  const hasRefreshed = useSelector(selectHasRefreshed);
   const onCancel = () => {
     dispatch(setRecordingInProgress(false));
   };
@@ -35,19 +37,23 @@ const RecordingInProgress = () => {
           Recording in progress...
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <button
-          onClick={onCancel}
-          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-        >
-          Cancel
-        </button>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Save
-        </button>
-      </div>
-      <EventList />
-      <ToggleNetworkRequests />
+      {hasRefreshed && (
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={onCancel}
+              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            >
+              Cancel
+            </button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Save
+            </button>
+          </div>
+          <EventList />
+          <ToggleNetworkRequests />
+        </>
+      )}
     </>
   );
 };

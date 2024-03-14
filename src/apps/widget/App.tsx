@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ParsedEvent, UserEvent } from "../../plugin/types";
-import { saveEvent, setRecordingInProgress } from "./redux/slice";
+import {
+  saveEvent,
+  setHasRefreshed,
+  setRecordingInProgress,
+} from "./redux/slice";
 import initialize from "../../plugin/initialize";
 import Resizer from "./Resizer";
 import { widgetId } from "./constants";
 import InnerApp from "./InnerApp";
 import { selectRecordingInProgress } from "./redux/selectors";
-
-const readCache = (): boolean =>
-  localStorage.getItem("__seasmoke__") === "true";
+import { readCache } from "./cache";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +23,11 @@ function App() {
   };
 
   useEffect(() => {
-    dispatch(setRecordingInProgress(readCache()));
+    const { recordingInProgress } = readCache();
+    dispatch(setRecordingInProgress(recordingInProgress));
+    if (recordingInProgress) {
+      dispatch(setHasRefreshed(true));
+    }
   }, []);
 
   const saveEventCallback = (event: ParsedEvent) => {
