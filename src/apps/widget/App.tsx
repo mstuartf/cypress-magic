@@ -8,52 +8,60 @@ import { toast, ToastContainer, ToastTransition } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CloseButtonProps } from "react-toastify/dist/components";
 import { widgetId } from "../../widget";
+import { useWindowSize } from "./hooks/useWindowSize";
 
 const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
 
 const sideBarWith = 384;
-const squashAppUnderTest = () => {
-  const body = document.getElementsByTagName("body")[0];
-  body.style.width = `${window.innerWidth - sideBarWith}px`;
-  const widget = document.getElementById(widgetId)!;
 
-  const fixedElements = Array.prototype.slice
+const getFixedElements = (): HTMLElement[] =>
+  Array.prototype.slice
     .call(document.body.getElementsByTagName("*"))
     .filter(
       (elem) =>
         window.getComputedStyle(elem, null).getPropertyValue("position") ==
         "fixed"
     )
-    .filter((elem) => !widget.contains(elem));
+    .filter((elem) => !document.getElementById(widgetId)!.contains(elem));
 
-  // Reduce width of fixed elements with no width explicitly set or whose width is the full viewport
-  fixedElements
+const getFixedWidthElements = (innerWidth: number): [HTMLElement, number][] =>
+  getFixedElements()
     .filter((elem) => {
       const elementWidth = window
         .getComputedStyle(elem, null)
         .getPropertyValue("width");
-      return !elementWidth || elementWidth === `${window.innerWidth}px`;
+      return !elementWidth || elementWidth === `${innerWidth}px`;
     })
-    .forEach(
-      (elem) => (elem.style.width = `${window.innerWidth - sideBarWith}px`)
-    );
+    .map((elem) => {
+      const elementWidth = window
+        .getComputedStyle(elem, null)
+        .getPropertyValue("width");
+      return [
+        elem,
+        elementWidth ? parseInt(elementWidth.replace("px", "")) : innerWidth,
+      ];
+    });
 
-  // Find all fixed elements pinned to the right of the screen and adjust their offset
-  fixedElements
+const getFixedRightElements = (): [HTMLElement, number][] =>
+  getFixedElements()
     .filter((elem) => {
       const elementRight = window
         .getComputedStyle(elem, null)
         .getPropertyValue("right");
       return elementRight === "0px";
     })
-    .forEach((elem) => (elem.style.right = `${sideBarWith}px`));
-};
+    .map((elem) => [elem, 0]);
 
 function App() {
   const dispatch = useDispatch();
 
   const events = useSelector(selectEvents);
   const [localEvents, setLocalEvents] = useState<ParsedEvent[]>([]);
+
+  const [fixedWidthElements, setFixedWidthElements] = useState<
+    [HTMLElement, number][] | null
+  >(null);
+  const [lastInnerWidth, setLastInnerWidth] = useState<number | null>(null);
 
   const saveEventCallback = (event: ParsedEvent) => {
     if ((event as UserEvent).target?.domPath) {
@@ -64,12 +72,10 @@ function App() {
         return;
       }
     }
-    console.log("dispatching", event);
     dispatch(saveEvent(event));
   };
 
   useEffect(() => {
-    squashAppUnderTest();
     initialize({
       saveEvent: saveEventCallback,
       saveFixture: () => {},
@@ -77,6 +83,40 @@ function App() {
       registerOnCloseCallback: () => {},
     });
   }, []);
+
+  const [innerWidth] = useWindowSize();
+  useEffect(() => {
+    if (!innerWidth) return;
+    const widthElementsToUpdate =
+      fixedWidthElements !== null
+        ? fixedWidthElements
+        : getFixedWidthElements(innerWidth);
+    const widthChange =
+      lastInnerWidth !== null ? innerWidth - lastInnerWidth : sideBarWith * -1;
+
+    // body and fixed width elements need to be resized everytime viewport changes
+    const updatedWidthElements = widthElementsToUpdate.map(
+      ([elem, oldWidth]) => {
+        const newWidth = oldWidth + widthChange;
+        console.log("width", elem, oldWidth, newWidth);
+        elem.style.width = `${newWidth}px`;
+        // todo: what if elem no longer exists?
+        return [elem, newWidth] as [HTMLElement, number];
+      }
+    );
+    const body = document.getElementsByTagName("body")[0];
+    body.style.width = `${innerWidth - sideBarWith}px`;
+
+    // fixed right elements only need to be moved once
+    if (!lastInnerWidth) {
+      getFixedRightElements().forEach(([elem, oldRight]) => {
+        elem.style.right = `${sideBarWith}px`;
+      });
+    }
+
+    setFixedWidthElements(updatedWidthElements);
+    setLastInnerWidth(innerWidth);
+  }, [innerWidth]);
 
   const showToast = (
     event: ParsedEvent,
@@ -132,7 +172,7 @@ function App() {
 
   return (
     <div
-      className="fixed top-0 right-0 bottom-0 border-2 border-red-500"
+      className="fixed top-0 right-0 bottom-0 border-2 border-red-500 bg-white"
       style={{ width: `${sideBarWith}px` }}
     >
       <ToastContainer
