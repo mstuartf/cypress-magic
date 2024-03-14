@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* height must be some multiple of 64 + 16 */
 .Toastify__toast-container {
   height: 400px;
-  border: 1px solid red;
-  overflow: scroll;
+  overflow: hidden;
   scroll-behavior: smooth;
+  border: 1px solid red;
+  box-sizing: content-box;
+}
+
+.Toastify__toast-container--top-right {
+  right: 16px;
+  top: 16px;
+}
+
+/* must be 16 */
+.Toastify__toast {
+  margin-bottom: 16px;
 }
