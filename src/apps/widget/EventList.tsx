@@ -37,15 +37,17 @@ function EventList() {
   }, [events]);
 
   return (
-    <div className="mt-6">
+    <div className="my-6">
+      <div className="flex justify-center">
+        <ScrollBtn direction="up" />
+      </div>
       <ToastContainer
         containerId="my-toaster"
         position="top-right"
         autoClose={false}
         closeOnClick={false}
       />
-      <div className="flex justify-between">
-        <ScrollBtn direction="up" />
+      <div className="flex justify-center">
         <ScrollBtn direction="down" />
       </div>
     </div>
@@ -59,12 +61,16 @@ const ScrollBtn = ({ direction }: { direction: "up" | "down" }) => (
       if (toastContainer.children.length) {
         toastContainer.children[0].scrollBy(
           0,
-          (toastHeight + toastMarginBottom) * (direction === "down" ? 1 : -1)
+          (toastHeight + toastMarginBottom - 1) *
+            (direction === "down" ? 1 : -1)
         );
       }
     }}
+    className={`hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 flex justify-center w-full ${
+      direction === "up" ? "rounded-t-lg" : "rounded-b-lg"
+    }`}
   >
-    {direction}
+    <span>+ X more</span>
   </button>
 );
 
