@@ -37,20 +37,18 @@ function EventList() {
   }, [events]);
 
   return (
-    <>
-      <div className="h-96 border">
-        <ToastContainer
-          containerId="my-toaster"
-          position="top-right"
-          autoClose={false}
-          closeOnClick={false}
-        />
-      </div>
-      <div className="pt-24">
+    <div className="mt-6">
+      <ToastContainer
+        containerId="my-toaster"
+        position="top-right"
+        autoClose={false}
+        closeOnClick={false}
+      />
+      <div className="flex justify-between">
         <ScrollBtn direction="up" />
         <ScrollBtn direction="down" />
       </div>
-    </>
+    </div>
   );
 }
 

@@ -33,7 +33,13 @@ function App() {
 
   return (
     <Resizer>
-      <EventList />
+      <div className="flex justify-center">
+        <div className="">
+          <div>Test steps</div>
+          <EventList />
+          <div>Something else</div>
+        </div>
+      </div>
     </Resizer>
   );
 }
