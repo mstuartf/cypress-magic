@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { useMutateObserver } from "@rc-component/mutate-observer";
-import { add } from "husky";
 
 export const useNewToast = () => {
   useMutateObserver(
