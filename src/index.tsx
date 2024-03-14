@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./apps/popup/App";
 import { Provider } from "react-redux";
-import store from "./redux/proxy";
+import store from "./apps/popup/redux/proxy";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

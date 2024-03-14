@@ -1,4 +1,4 @@
-import { RootState } from "../redux/store";
+import { RootState } from "../apps/popup/redux/store";
 
 export const getActiveTabId = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });

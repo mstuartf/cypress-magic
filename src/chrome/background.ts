@@ -1,5 +1,5 @@
-import { store } from "../redux/store";
-import { restoreCache } from "../redux/slice";
+import { store } from "../apps/popup/redux/store";
+import { restoreCache } from "../apps/popup/redux/slice";
 import { readCache, updateCache } from "./utils";
 
 chrome.runtime.onInstalled.addListener(() => {});

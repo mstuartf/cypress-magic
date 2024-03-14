@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEvents, selectIsActive } from "../../redux/selectors";
+import { selectEvents } from "./redux/selectors";
 import { ParsedEvent, UserEvent } from "../../plugin/types";
-import { removeEvent, saveEvent } from "../../redux/slice";
+import { removeEvent, saveEvent } from "./redux/slice";
 import initialize from "../../plugin/initialize";
-import {
-  ToastContainer,
-  toast,
-  collapseToast,
-  ToastTransition,
-  ToastItem,
-} from "react-toastify";
+import { toast, ToastContainer, ToastTransition } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CloseButtonProps } from "react-toastify/dist/components";
 
@@ -19,7 +13,6 @@ const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
 function App() {
   const dispatch = useDispatch();
 
-  const isActive = useSelector(selectIsActive);
   const events = useSelector(selectEvents);
   const [localEvents, setLocalEvents] = useState<ParsedEvent[]>([]);
 
@@ -32,6 +25,7 @@ function App() {
         return;
       }
     }
+    console.log("dispatching", event);
     dispatch(saveEvent(event));
   };
 
@@ -82,6 +76,7 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("events", events);
     if (events.length > localEvents.length) {
       for (let i = 0; i < events.length - localEvents.length; i++) {
         showToast(events[localEvents.length + i]);
@@ -95,9 +90,6 @@ function App() {
     setLocalEvents(events);
   }, [events]);
 
-  if (!isActive) {
-    return null;
-  }
   return (
     <ToastContainer
       position="top-right"
