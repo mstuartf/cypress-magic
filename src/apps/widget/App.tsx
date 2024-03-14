@@ -9,18 +9,14 @@ import {
 import initialize from "../../plugin/initialize";
 import Resizer from "./Resizer";
 import { widgetId } from "./constants";
-import InnerApp from "./InnerApp";
 import { selectRecordingInProgress } from "./redux/selectors";
 import { readCache } from "./cache";
+import RecordingInProgress from "./RecordingInProgress";
+import Setup from "./Setup";
 
 function App() {
   const dispatch = useDispatch();
   const recordingInProgress = useSelector(selectRecordingInProgress);
-
-  const startRecording = () => {
-    dispatch(setRecordingInProgress(true));
-    window.location.reload();
-  };
 
   useEffect(() => {
     const { recordingInProgress } = readCache();
@@ -59,10 +55,7 @@ function App() {
     <Resizer>
       <div className="flex justify-center">
         <div className="pt-6" style={{ width: "328px" }}>
-          <InnerApp
-            recordingInProgress={recordingInProgress}
-            startRecording={startRecording}
-          />
+          {recordingInProgress ? <RecordingInProgress /> : <Setup />}
         </div>
       </div>
     </Resizer>
