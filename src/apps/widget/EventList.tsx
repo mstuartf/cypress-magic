@@ -5,7 +5,7 @@ import { ParsedEvent } from "../../plugin/types";
 import { removeEvent } from "./redux/slice";
 import { toast, ToastContainer } from "react-toastify";
 import { useNewToast } from "./hooks/useNewToast";
-import { toastHeight, toastMarginBottom } from "./constants";
+import { hideRequestsClass, toastHeight, toastMarginBottom } from "./constants";
 
 const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
 
@@ -43,6 +43,7 @@ function EventList() {
       </div>
       <ToastContainer
         containerId="my-toaster"
+        className={hideRequestsClass}
         position="top-right"
         autoClose={false}
         closeOnClick={false}
