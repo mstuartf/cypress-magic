@@ -177,14 +177,33 @@ function App() {
       className="fixed top-0 right-0 bottom-0 border-2 border-red-500 bg-white"
       style={{ width: `${sideBarWith}px` }}
     >
-      <ToastContainer
-        containerId="my-toaster"
-        position="top-right"
-        autoClose={false}
-        closeOnClick={false}
-      />
+      <div className="h-96 border">
+        <ToastContainer
+          containerId="my-toaster"
+          position="top-right"
+          autoClose={false}
+          closeOnClick={false}
+        />
+      </div>
+      <div className="pt-24">
+        <ScrollBtn direction="up" />
+        <ScrollBtn direction="down" />
+      </div>
     </div>
   );
 }
+
+const ScrollBtn = ({ direction }: { direction: "up" | "down" }) => (
+  <button
+    onClick={() => {
+      const toastContainer = document.getElementById("my-toaster")!;
+      if (toastContainer.children.length) {
+        toastContainer.children[0].scrollBy(0, direction === "down" ? 80 : -80);
+      }
+    }}
+  >
+    {direction}
+  </button>
+);
 
 export default App;
