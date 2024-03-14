@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ParsedEvent, UserEvent } from "../../plugin/types";
+import { ParsedEvent } from "../../plugin/types";
 import {
   saveEvent,
+  setBaseUrl,
   setHasRefreshed,
   setRecordingInProgress,
 } from "./redux/slice";
 import initialize from "../../plugin/initialize";
 import Resizer from "./Resizer";
-import { widgetId } from "./constants";
 import { selectRecordingInProgress } from "./redux/selectors";
 import { readCache } from "./cache";
 import RecordingInProgress from "./RecordingInProgress";
@@ -19,28 +19,17 @@ function App() {
   const recordingInProgress = useSelector(selectRecordingInProgress);
 
   useEffect(() => {
-    const { recordingInProgress } = readCache();
+    const { recordingInProgress, baseUrl } = readCache();
     dispatch(setRecordingInProgress(recordingInProgress));
+    dispatch(setBaseUrl(baseUrl));
     if (recordingInProgress) {
       dispatch(setHasRefreshed(true));
     }
   }, []);
 
-  const saveEventCallback = (event: ParsedEvent) => {
-    if ((event as UserEvent).target?.domPath) {
-      const inWidget = (event as UserEvent).target?.domPath.find(
-        ({ id }) => id === widgetId
-      );
-      if (inWidget) {
-        return;
-      }
-    }
-    dispatch(saveEvent(event));
-  };
-
   useEffect(() => {
     initialize({
-      saveEvent: saveEventCallback,
+      saveEvent: (event: ParsedEvent) => dispatch(saveEvent(event)),
       saveFixture: () => {},
       buildAlias: () => "abc123",
       registerOnCloseCallback: () => {},

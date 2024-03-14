@@ -3,6 +3,7 @@ const cacheKey = "widgetCache";
 export interface Cache {
   recordingInProgress: boolean;
   hasRefreshed: boolean;
+  baseUrl: string | undefined;
 }
 
 export const readCache = (): Cache => {
@@ -12,6 +13,7 @@ export const readCache = (): Cache => {
     : {
         recordingInProgress: false,
         hasRefreshed: false,
+        baseUrl: undefined,
       };
 };
 
