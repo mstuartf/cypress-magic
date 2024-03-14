@@ -6,6 +6,7 @@ import initialize from "../../plugin/initialize";
 import Resizer from "./Resizer";
 import EventList from "./EventList";
 import { widgetId } from "./constants";
+import ToggleNetworkRequests from "./ToggleNetworkRequests";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ function App() {
             </button>
           </div>
           <EventList />
+          <ToggleNetworkRequests />
         </div>
       </div>
     </Resizer>
