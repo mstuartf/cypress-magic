@@ -16,7 +16,7 @@ const AddAssertion = () => {
         <div
           id={assertionOverlayId}
           className="fixed top-0 left-0 bottom-0 bg-red-500 opacity-15"
-          style={{ right: `${sideBarWith}px` }}
+          style={{ right: `${sideBarWith}px`, zIndex: 1000 }}
         ></div>
       )}
       <div className="mb-6">

@@ -10,8 +10,8 @@ export function isUserEvent(event: ParsedEvent): event is UserEvent {
   return (event as UserEvent).target !== undefined;
 }
 
-export function isClickEvent(event: UserEvent): event is ClickEvent {
-  return (event as ClickEvent).offsetX !== undefined;
+export function isClickEvent(event: ParsedEvent): event is ClickEvent {
+  return (event as ClickEvent).clientX !== undefined;
 }
 
 export function isRequestOrResponseEvent(
