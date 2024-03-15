@@ -6,6 +6,7 @@ import { setRecordingInProgress } from "./redux/slice";
 import { selectHasRefreshed } from "./redux/selectors";
 import Header from "./Header";
 import AddAssertion from "./AddAssertion";
+import Typewriter from "./Typewriter";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const RecordingInProgress = () => {
               Save
             </button>
           </div>
-          <EventList />
+          <Typewriter />
           <AddAssertion />
           <ToggleNetworkRequests />
         </>

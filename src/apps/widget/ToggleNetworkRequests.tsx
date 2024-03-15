@@ -5,16 +5,16 @@ const ToggleNetworkRequests = () => {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    const toastContainer = document.getElementById("my-toaster")!.children[0];
-    if (!toastContainer) {
-      return;
-    }
-    if (!shown && !toastContainer.classList.contains(hideRequestsClass)) {
-      toastContainer.classList.add(hideRequestsClass);
-    }
-    if (shown && toastContainer.classList.contains(hideRequestsClass)) {
-      toastContainer.classList.remove(hideRequestsClass);
-    }
+    // const toastContainer = document.getElementById("my-toaster")!.children[0];
+    // if (!toastContainer) {
+    //   return;
+    // }
+    // if (!shown && !toastContainer.classList.contains(hideRequestsClass)) {
+    //   toastContainer.classList.add(hideRequestsClass);
+    // }
+    // if (shown && toastContainer.classList.contains(hideRequestsClass)) {
+    //   toastContainer.classList.remove(hideRequestsClass);
+    // }
   }, [shown]);
 
   return (

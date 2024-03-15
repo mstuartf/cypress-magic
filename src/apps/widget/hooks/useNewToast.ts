@@ -19,9 +19,9 @@ export const useNewToast = () => {
 };
 
 const scrollToastContainer = () => {
-  const toastContainer = document.getElementById("my-toaster")!;
-  if (toastContainer.children.length) {
-    toastContainer.children[0].scrollTop =
-      toastContainer.children[0].scrollHeight;
-  }
+  // const toastContainer = document.getElementById("my-toaster")!;
+  // if (toastContainer.children.length) {
+  //   toastContainer.children[0].scrollTop =
+  //     toastContainer.children[0].scrollHeight;
+  // }
 };
