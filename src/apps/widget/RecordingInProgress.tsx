@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "./redux/slice";
 import { selectHasRefreshed } from "./redux/selectors";
 import Header from "./Header";
+import AddAssertion from "./AddAssertion";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ const RecordingInProgress = () => {
             </button>
           </div>
           <EventList />
+          <AddAssertion />
           <ToggleNetworkRequests />
         </>
       )}

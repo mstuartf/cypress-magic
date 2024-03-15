@@ -12,6 +12,7 @@ interface State {
   recordingInProgress?: boolean;
   hasRefreshed: boolean;
   baseUrl?: string;
+  isAddingAssertion: boolean;
 }
 
 const initialState: State = {
@@ -19,6 +20,7 @@ const initialState: State = {
   recordingInProgress: undefined,
   hasRefreshed: false,
   baseUrl: undefined,
+  isAddingAssertion: false,
 };
 
 export const rootSlice = createSlice({
@@ -29,6 +31,9 @@ export const rootSlice = createSlice({
       state.recordingInProgress = action.payload;
       state.hasRefreshed = false;
     },
+    setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
+      state.isAddingAssertion = action.payload;
+    },
     setHasRefreshed: (state, action: PayloadAction<boolean>) => {
       state.hasRefreshed = action.payload;
     },
@@ -36,30 +41,31 @@ export const rootSlice = createSlice({
       state.baseUrl = action.payload;
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
-      if ((action.payload as UserEvent).target?.domPath) {
-        const inWidget = (action.payload as UserEvent).target?.domPath.find(
+      let event = action.payload;
+      if ((event as UserEvent).target?.domPath) {
+        const inWidget = (event as UserEvent).target?.domPath.find(
           ({ id }) => id === widgetId
         );
         if (inWidget) {
           return;
         }
+        if (event.type === "click" && state.isAddingAssertion) {
+          event = {
+            ...event,
+            type: "assertion",
+          };
+          state.isAddingAssertion = false;
+        }
       }
-      if ((action.payload as RequestEvent | ResponseEvent).url) {
+      if ((event as RequestEvent | ResponseEvent).url) {
         if (
           state.baseUrl &&
-          !(action.payload as RequestEvent | ResponseEvent).url.startsWith(
-            state.baseUrl
-          )
+          !(event as RequestEvent | ResponseEvent).url.startsWith(state.baseUrl)
         ) {
-          console.log(
-            `skipping event ${
-              (action.payload as RequestEvent | ResponseEvent).url
-            }`
-          );
           return;
         }
       }
-      state.events.push(action.payload);
+      state.events.push(event);
     },
     removeEvent: (state, action: PayloadAction<ParsedEvent>) => {
       state.events = [
@@ -77,4 +83,5 @@ export const {
   setRecordingInProgress,
   setHasRefreshed,
   setBaseUrl,
+  setIsAddingAssertion,
 } = rootSlice.actions;

@@ -4,7 +4,7 @@
 
 /* height must be some multiple of toastHeight + (toastMarginBottom - 1) */
 .Toastify__toast-container {
-  height: 632px;
+  height: 472px;
   position: revert;
   overflow: hidden;
   scroll-behavior: smooth;
