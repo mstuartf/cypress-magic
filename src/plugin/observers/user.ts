@@ -24,7 +24,7 @@ const getBaseProps = (event: Event): BaseEvent => ({
   timestamp: Date.now(),
 });
 
-const getTargetProps = (target: HTMLElement): TargetEvent => ({
+export const getTargetProps = (target: HTMLElement): TargetEvent => ({
   pathname: window.location.pathname,
   target: {
     selectors: [[finder(target)]],
@@ -35,14 +35,17 @@ const getTargetProps = (target: HTMLElement): TargetEvent => ({
         ? (target as HTMLInputElement).type
         : null,
     domPath: getDomPath(target),
+    innerText: target.innerText || undefined,
+    value: (target as HTMLInputElement).value || undefined,
+    placeholder: (target as HTMLInputElement).placeholder || undefined,
   },
 });
 
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
   ...getTargetProps(event.target as HTMLElement),
-  offsetX: event.pageX,
-  offsetY: event.pageY,
+  clientX: event.x,
+  clientY: event.y,
   href: (event.target as HTMLAnchorElement).href,
 });
 

@@ -47,6 +47,9 @@ export interface Target {
   isHidden: boolean;
   type: string | null;
   domPath: DomPathNode[];
+  innerText?: string;
+  value?: string;
+  placeholder?: string;
 }
 
 export interface TargetEvent {
@@ -71,10 +74,12 @@ export interface UploadEvent extends BaseEvent, TargetEvent {
 }
 
 export interface ClickEvent extends BaseEvent, TargetEvent {
-  offsetX: number;
-  offsetY: number;
+  clientX: number;
+  clientY: number;
   href?: string;
 }
+
+export interface AssertionEvent extends ClickEvent {}
 
 export interface ErrorEvent extends BaseEvent {
   handler: string;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEvents } from "./redux/selectors";
-import { ParsedEvent } from "../../plugin/types";
+import { ClickEvent, ParsedEvent } from "../../plugin/types";
 import { removeEvent } from "./redux/slice";
 import { toast, ToastContainer } from "react-toastify";
 import { useNewToast } from "./hooks/useNewToast";
@@ -78,7 +78,18 @@ const ScrollBtn = ({ direction }: { direction: "up" | "down" }) => (
 const ToastContents = ({ event }: { event: ParsedEvent }) => (
   <>
     <div>
-      {event.type} {event.timestamp}
+      {event.type === "click" || event.type === "assertion" ? (
+        <>
+          {event.type}:{" "}
+          {(event as ClickEvent).target.innerText ||
+            (event as ClickEvent).target.value ||
+            (event as ClickEvent).target.placeholder}
+        </>
+      ) : (
+        <>
+          {event.type} {event.timestamp}
+        </>
+      )}
     </div>
   </>
 );

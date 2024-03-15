@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  AssertionEvent,
   ParsedEvent,
   RequestEvent,
   ResponseEvent,
@@ -44,33 +45,23 @@ export const rootSlice = createSlice({
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       let event = action.payload;
-      if (isUserEvent(event)) {
-        const inWidget = event.target.domPath.find(({ id }) => id === widgetId);
-        if (inWidget) {
-          if (
-            isClickEvent(event) &&
-            event.target.domPath.length &&
-            event.target.domPath[event.target.domPath.length - 1].id ===
-              assertionOverlayId
-          ) {
-            const elementUnderneath = document.elementsFromPoint(
-              event.offsetX,
-              event.offsetY
-            )[1];
-            // todo: build click event on this element
-            console.log(elementUnderneath);
-            state.isAddingAssertion = false;
-          } else {
-            return;
-          }
-        }
+      if (
+        isUserEvent(event) &&
+        event.target.domPath.find(({ id }) => id === widgetId)
+      ) {
+        return;
       }
-      if (isRequestOrResponseEvent(event)) {
-        if (state.baseUrl && !event.url.startsWith(state.baseUrl)) {
-          return;
-        }
+      if (
+        isRequestOrResponseEvent(event) &&
+        state.baseUrl &&
+        !event.url.startsWith(state.baseUrl)
+      ) {
+        return;
       }
       state.events.push(event);
+      if (event.type === "assertion") {
+        state.isAddingAssertion = false;
+      }
     },
     removeEvent: (state, action: PayloadAction<ParsedEvent>) => {
       state.events = [
