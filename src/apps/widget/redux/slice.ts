@@ -6,6 +6,8 @@ import {
   UserEvent,
 } from "../../../plugin/types";
 import { widgetId } from "../constants";
+import { isClickEvent, isRequestOrResponseEvent, isUserEvent } from "../utils";
+import { assertionOverlayId } from "../AddAssertion";
 
 interface State {
   events: ParsedEvent[];
@@ -42,26 +44,29 @@ export const rootSlice = createSlice({
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       let event = action.payload;
-      if ((event as UserEvent).target?.domPath) {
-        const inWidget = (event as UserEvent).target?.domPath.find(
-          ({ id }) => id === widgetId
-        );
+      if (isUserEvent(event)) {
+        const inWidget = event.target.domPath.find(({ id }) => id === widgetId);
         if (inWidget) {
-          return;
-        }
-        if (event.type === "click" && state.isAddingAssertion) {
-          event = {
-            ...event,
-            type: "assertion",
-          };
-          state.isAddingAssertion = false;
+          if (
+            isClickEvent(event) &&
+            event.target.domPath.length &&
+            event.target.domPath[event.target.domPath.length - 1].id ===
+              assertionOverlayId
+          ) {
+            const elementUnderneath = document.elementsFromPoint(
+              event.offsetX,
+              event.offsetY
+            )[1];
+            // todo: build click event on this element
+            console.log(elementUnderneath);
+            state.isAddingAssertion = false;
+          } else {
+            return;
+          }
         }
       }
-      if ((event as RequestEvent | ResponseEvent).url) {
-        if (
-          state.baseUrl &&
-          !(event as RequestEvent | ResponseEvent).url.startsWith(state.baseUrl)
-        ) {
+      if (isRequestOrResponseEvent(event)) {
+        if (state.baseUrl && !event.url.startsWith(state.baseUrl)) {
           return;
         }
       }
