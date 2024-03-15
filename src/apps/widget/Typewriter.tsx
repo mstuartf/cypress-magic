@@ -1,0 +1,50 @@
+import { useSelector } from "react-redux";
+import { selectEvents } from "./redux/selectors";
+import { useEffect, useState } from "react";
+import { ParsedEvent } from "../../plugin/types";
+import { getEventId } from "./EventList";
+
+const Typewriter = () => {
+  const events = useSelector(selectEvents);
+  const [draftText, setDraftText] = useState("");
+  const [displayText, setDisplayText] = useState("");
+  const [draftedEvents, setDraftedEvents] = useState<ParsedEvent[]>([]);
+
+  useEffect(() => {
+    const newEvents = events
+      .filter((event) => ["request", "response"].indexOf(event.type) < 0)
+      .filter(
+        (event) =>
+          !draftedEvents.find(
+            (drafted) => getEventId(event) === getEventId(drafted)
+          )
+      );
+    if (!newEvents.length) return;
+    const appendToDraft = newEvents
+      .map((event) => `${event.type} at ${event.timestamp}`)
+      .join("\n");
+    setDraftText(`${draftText}${draftText.length ? "\n" : ""}${appendToDraft}`);
+    setDraftedEvents(events);
+  }, [events]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (draftText.length > displayText.length) {
+        setDisplayText(draftText.slice(0, displayText.length + 1));
+      }
+    }, 10);
+    return () => clearInterval(interval);
+  }, [draftText, displayText]);
+
+  // todo: prevent user edits while machine is typing
+
+  return (
+    <textarea
+      value={displayText}
+      style={{ height: "600px" }}
+      onChange={({ target: { value } }) => setDraftText(value)}
+    />
+  );
+};
+
+export default Typewriter;

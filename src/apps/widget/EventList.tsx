@@ -7,7 +7,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNewToast } from "./hooks/useNewToast";
 import { hideRequestsClass, toastHeight, toastMarginBottom } from "./constants";
 
-const getEventId = (event: ParsedEvent) => `${event.type}-${event.timestamp}`;
+export const getEventId = (event: ParsedEvent) =>
+  `${event.type}-${event.timestamp}`;
 
 function EventList() {
   const events = useSelector(selectEvents);
