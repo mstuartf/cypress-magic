@@ -3,6 +3,7 @@ import { rootReducer } from "./reducers";
 import {
   assertionMiddleware,
   cacheMiddleware,
+  filterClicksMiddleware,
   navMiddleware,
   throttlerMiddleware,
   urlMatcherMiddleware,
@@ -20,5 +21,6 @@ export const store = configureStore({
     navMiddleware,
     widgetClickMiddleware,
     urlMatcherMiddleware,
+    filterClicksMiddleware,
   ],
 });
