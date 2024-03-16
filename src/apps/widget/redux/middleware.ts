@@ -102,3 +102,36 @@ export const navMiddleware: redux.Middleware =
     }
     next(action);
   };
+
+export const widgetClickMiddleware: redux.Middleware =
+  (store) => (next) => (action) => {
+    if (action.type !== saveEvent.type) {
+      next(action);
+      return;
+    }
+    let event = action.payload;
+    if (
+      isUserEvent(event) &&
+      event.target.domPath.find(({ id }) => id === widgetId)
+    ) {
+      return;
+    }
+    next(action);
+  };
+
+export const urlMatcherMiddleware: redux.Middleware =
+  (store) => (next) => (action) => {
+    if (action.type !== saveEvent.type) {
+      next(action);
+      return;
+    }
+    let event = action.payload;
+    if (
+      isRequestOrResponseEvent(event) &&
+      store.getState().root.baseUrl &&
+      !event.url.startsWith(store.getState().root.baseUrl)
+    ) {
+      return;
+    }
+    next(action);
+  };

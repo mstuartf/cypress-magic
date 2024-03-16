@@ -5,6 +5,8 @@ import {
   cacheMiddleware,
   navMiddleware,
   throttlerMiddleware,
+  urlMatcherMiddleware,
+  widgetClickMiddleware,
 } from "./middleware";
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -16,5 +18,7 @@ export const store = configureStore({
     assertionMiddleware,
     throttlerMiddleware,
     navMiddleware,
+    widgetClickMiddleware,
+    urlMatcherMiddleware,
   ],
 });
