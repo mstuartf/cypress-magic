@@ -58,7 +58,9 @@ export const rootSlice = createSlice({
       ) {
         return;
       }
-      state.events.push(event);
+      state.events = [...state.events, event].sort(
+        (a, b) => a.timestamp - b.timestamp
+      );
       if (event.type === "assertion") {
         state.isAddingAssertion = false;
       }

@@ -1,10 +1,21 @@
 import * as redux from "redux";
 import { saveEvent, setBaseUrl, setRecordingInProgress } from "./slice";
 import { setCache } from "../cache";
-import { isClickEvent, isRequestOrResponseEvent, isUserEvent } from "../utils";
+import {
+  isClickEvent,
+  isRequestEvent,
+  isRequestOrResponseEvent,
+  isUserEvent,
+} from "../utils";
 import { widgetId } from "../constants";
 import { assertionOverlayId } from "../AddAssertion";
-import { AssertionEvent, ClickEvent } from "../../../plugin/types";
+import {
+  AssertionEvent,
+  ClickEvent,
+  EventType,
+  ParsedEvent,
+  RequestEvent,
+} from "../../../plugin/types";
 import { getTargetProps } from "../../../plugin/observers/user";
 
 export const cacheMiddleware: redux.Middleware =
@@ -43,6 +54,25 @@ export const assertionMiddleware: redux.Middleware =
         clientX: event.clientX,
         clientY: event.clientY,
         href: (elementUnderneath as HTMLAnchorElement).href,
+      };
+      action.payload = newEvent;
+    }
+    next(action);
+  };
+
+export const throttlerMiddleware: redux.Middleware =
+  (store) => (next) => (action) => {
+    if (action.type !== saveEvent.type) {
+      next(action);
+      return;
+    }
+    let event = action.payload;
+    if (isRequestEvent(event)) {
+      const events = [...(store.getState().root.events as ParsedEvent[])];
+      const lastUserEvent = events.reverse().find((e) => isUserEvent(e))!;
+      const newEvent: RequestEvent = {
+        ...event,
+        timestamp: lastUserEvent.timestamp - 1,
       };
       action.payload = newEvent;
     }
