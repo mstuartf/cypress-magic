@@ -95,6 +95,7 @@ export const navMiddleware: redux.Middleware =
         const newEvent: NavigationEvent = {
           ...event,
           type: "urlChange",
+          timestamp: event.timestamp + 1, // move after trigger
         };
         action.payload = newEvent;
       }
