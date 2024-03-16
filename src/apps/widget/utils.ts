@@ -26,7 +26,7 @@ export function isRequestEvent(event: ParsedEvent): event is RequestEvent {
   return (event as RequestEvent).type === "request";
 }
 
-export function isNavigationEvent(
+export function isNavigationOrUrlChangeEvent(
   event: ParsedEvent
 ): event is NavigationEvent {
   return (event as NavigationEvent).hostname !== undefined;
