@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ParsedEvent } from "../../plugin/types";
 import { getEventId } from "./EventList";
 
-const Typewriter = () => {
+const Typewriter = ({ className }: { className?: string }) => {
   const events = useSelector(selectEvents);
   const [draftText, setDraftText] = useState("");
   const [displayText, setDisplayText] = useState("");
@@ -37,11 +37,12 @@ const Typewriter = () => {
   }, [draftText, displayText]);
 
   // todo: prevent user edits while machine is typing
+  // todo: support deletions...
 
   return (
     <textarea
+      className={className}
       value={displayText}
-      style={{ height: "600px" }}
       onChange={({ target: { value } }) => setDraftText(value)}
     />
   );

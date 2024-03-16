@@ -19,7 +19,7 @@ const AddAssertion = () => {
           style={{ right: `${sideBarWith}px`, zIndex: 1000 }}
         ></div>
       )}
-      <div className="mb-6">
+      <div>
         {isAddingAssertion ? (
           <div className="grid">
             <div className="h-10 flex items-center justify-center text-sm font-medium text-gray-900">

@@ -42,11 +42,7 @@ function App() {
 
   return (
     <Resizer>
-      <div className="flex justify-center">
-        <div className="pt-6" style={{ width: "328px" }}>
-          {recordingInProgress ? <RecordingInProgress /> : <Setup />}
-        </div>
-      </div>
+      {recordingInProgress ? <RecordingInProgress /> : <Setup />}
     </Resizer>
   );
 }
