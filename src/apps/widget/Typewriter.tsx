@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { selectEvents } from "./redux/selectors";
 import { useEffect, useState } from "react";
 import { ParsedEvent } from "../../plugin/types";
-import { getEventId } from "./EventList";
+import { getEventId } from "./constants";
 
 const Typewriter = ({ className }: { className?: string }) => {
   const events = useSelector(selectEvents);

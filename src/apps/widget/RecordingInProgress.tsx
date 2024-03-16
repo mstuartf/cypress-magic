@@ -1,6 +1,4 @@
 import React from "react";
-import EventList from "./EventList";
-import ToggleNetworkRequests from "./ToggleNetworkRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "./redux/slice";
 import { selectHasRefreshed } from "./redux/selectors";

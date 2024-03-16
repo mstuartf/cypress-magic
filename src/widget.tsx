@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import App from "./apps/widget/App";
 import { store } from "./apps/widget/redux/store";
