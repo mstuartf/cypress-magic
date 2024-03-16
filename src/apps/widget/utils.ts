@@ -26,6 +26,10 @@ export function isRequestEvent(event: ParsedEvent): event is RequestEvent {
   return (event as RequestEvent).type === "request";
 }
 
+export function isResponseEvent(event: ParsedEvent): event is ResponseEvent {
+  return (event as ResponseEvent).type === "response";
+}
+
 export function isNavigationOrUrlChangeEvent(
   event: ParsedEvent
 ): event is NavigationEvent {
