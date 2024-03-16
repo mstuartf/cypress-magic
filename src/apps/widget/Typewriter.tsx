@@ -3,6 +3,7 @@ import { selectEvents } from "./redux/selectors";
 import { useEffect, useState } from "react";
 import { ParsedEvent } from "../../plugin/types";
 import { getEventId } from "./constants";
+import { parse } from "./parser";
 
 const Typewriter = ({ className }: { className?: string }) => {
   const events = useSelector(selectEvents);
@@ -18,9 +19,7 @@ const Typewriter = ({ className }: { className?: string }) => {
         )
     );
     if (!newEvents.length) return;
-    const appendToDraft = newEvents
-      .map((event) => `${event.type} at ${event.timestamp}`)
-      .join("\n");
+    const appendToDraft = newEvents.map((event) => parse(event)).join("\n");
     setDraftText(`${draftText}${draftText.length ? "\n" : ""}${appendToDraft}`);
     setDraftedEvents(events);
   }, [events]);
