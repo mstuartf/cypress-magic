@@ -11,14 +11,12 @@ const Typewriter = ({ className }: { className?: string }) => {
   const [draftedEvents, setDraftedEvents] = useState<ParsedEvent[]>([]);
 
   useEffect(() => {
-    const newEvents = events
-      .filter((event) => ["request", "response"].indexOf(event.type) < 0)
-      .filter(
-        (event) =>
-          !draftedEvents.find(
-            (drafted) => getEventId(event) === getEventId(drafted)
-          )
-      );
+    const newEvents = events.filter(
+      (event) =>
+        !draftedEvents.find(
+          (drafted) => getEventId(event) === getEventId(drafted)
+        )
+    );
     if (!newEvents.length) return;
     const appendToDraft = newEvents
       .map((event) => `${event.type} at ${event.timestamp}`)
