@@ -49,7 +49,7 @@ const RecordingInProgress = () => {
               Save
             </button>
           </div>
-          <Typewriter className="flex-grow my-4 resize-none border rounded p-2 text-xs" />
+          <Typewriter className="flex-grow my-4 resize-none border border-gray-400 rounded p-2 text-xs" />
           <AddAssertion />
         </>
       )}
