@@ -15,7 +15,7 @@ const RecordingInProgress = () => {
     dispatch(setRecordingInProgress(false));
   };
   return (
-    <>
+    <div className="h-full flex flex-col">
       <Header>
         <div role="status">
           <svg
@@ -51,12 +51,11 @@ const RecordingInProgress = () => {
               Save
             </button>
           </div>
-          <Typewriter />
+          <Typewriter className="flex-grow my-4 resize-none border rounded p-2 text-xs" />
           <AddAssertion />
-          <ToggleNetworkRequests />
         </>
       )}
-    </>
+    </div>
   );
 };
 
