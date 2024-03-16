@@ -1,8 +1,7 @@
+import { ParsedEvent } from "../../plugin/types";
+
 export const sideBarWith = 362;
 export const widgetId = "__widget__";
 
-// these must line up with index.css
-export const toastHeight = 64;
-export const toastMarginBottom = 16;
-
-export const hideRequestsClass = "hide-requests";
+export const getEventId = (event: ParsedEvent) =>
+  `${event.type}-${event.timestamp}`;
