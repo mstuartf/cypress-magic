@@ -135,3 +135,29 @@ export const urlMatcherMiddleware: redux.Middleware =
     }
     next(action);
   };
+
+export const filterClicksMiddleware: redux.Middleware =
+  (store) => (next) => (action) => {
+    if (action.type !== saveEvent.type) {
+      next(action);
+      return;
+    }
+    let event = action.payload;
+    if (isClickEvent(event)) {
+      if (event.target.tag === "SELECT") {
+        // this should be handled by the change handler
+        return;
+      }
+
+      if (event.target.isHidden) {
+        // this click was triggered programmatically
+        return;
+      }
+
+      if (event.target.tag === "INPUT" && event.target.type === "radio") {
+        // this should be handled by the change handler
+        return;
+      }
+    }
+    next(action);
+  };
