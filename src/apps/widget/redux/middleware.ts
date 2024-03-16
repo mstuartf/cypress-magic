@@ -3,6 +3,7 @@ import { saveEvent, setBaseUrl, setRecordingInProgress } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
+  isNavigationEvent,
   isRequestEvent,
   isRequestOrResponseEvent,
   isUserEvent,
@@ -13,6 +14,7 @@ import {
   AssertionEvent,
   ClickEvent,
   EventType,
+  NavigationEvent,
   ParsedEvent,
   RequestEvent,
 } from "../../../plugin/types";
@@ -75,6 +77,27 @@ export const throttlerMiddleware: redux.Middleware =
         timestamp: lastUserEvent.timestamp - 1,
       };
       action.payload = newEvent;
+    }
+    next(action);
+  };
+
+export const navMiddleware: redux.Middleware =
+  (store) => (next) => (action) => {
+    if (action.type !== saveEvent.type) {
+      next(action);
+      return;
+    }
+    let event = action.payload;
+    if (isNavigationEvent(event)) {
+      const events = [...(store.getState().root.events as ParsedEvent[])];
+      const isFirstNavigationEvent = !events.find((e) => isNavigationEvent(e));
+      if (!isFirstNavigationEvent) {
+        const newEvent: NavigationEvent = {
+          ...event,
+          type: "urlChange",
+        };
+        action.payload = newEvent;
+      }
     }
     next(action);
   };
