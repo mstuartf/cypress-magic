@@ -3,7 +3,7 @@ import { saveEvent, setBaseUrl, setRecordingInProgress } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
-  isNavigationEvent,
+  isNavigationOrUrlChangeEvent,
   isRequestEvent,
   isRequestOrResponseEvent,
   isUserEvent,
@@ -88,9 +88,11 @@ export const navMiddleware: redux.Middleware =
       return;
     }
     let event = action.payload;
-    if (isNavigationEvent(event)) {
+    if (isNavigationOrUrlChangeEvent(event)) {
       const events = [...(store.getState().root.events as ParsedEvent[])];
-      const isFirstNavigationEvent = !events.find((e) => isNavigationEvent(e));
+      const isFirstNavigationEvent = !events.find((e) =>
+        isNavigationOrUrlChangeEvent(e)
+      );
       if (!isFirstNavigationEvent) {
         const newEvent: NavigationEvent = {
           ...event,
