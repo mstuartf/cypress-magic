@@ -1,6 +1,7 @@
 import {
   ClickEvent,
   EventType,
+  NavigationEvent,
   ParsedEvent,
   RequestEvent,
   ResponseEvent,
@@ -23,4 +24,10 @@ export function isRequestOrResponseEvent(
 
 export function isRequestEvent(event: ParsedEvent): event is RequestEvent {
   return (event as RequestEvent).type === "request";
+}
+
+export function isNavigationEvent(
+  event: ParsedEvent
+): event is NavigationEvent {
+  return (event as NavigationEvent).hostname !== undefined;
 }
