@@ -45,19 +45,6 @@ export const rootSlice = createSlice({
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       let event = action.payload;
-      if (
-        isUserEvent(event) &&
-        event.target.domPath.find(({ id }) => id === widgetId)
-      ) {
-        return;
-      }
-      if (
-        isRequestOrResponseEvent(event) &&
-        state.baseUrl &&
-        !event.url.startsWith(state.baseUrl)
-      ) {
-        return;
-      }
       state.events = [...state.events, event].sort(
         (a, b) => a.timestamp - b.timestamp
       );
@@ -65,19 +52,11 @@ export const rootSlice = createSlice({
         state.isAddingAssertion = false;
       }
     },
-    removeEvent: (state, action: PayloadAction<ParsedEvent>) => {
-      state.events = [
-        ...state.events.filter(
-          ({ timestamp }) => timestamp != action.payload.timestamp
-        ),
-      ];
-    },
   },
 });
 
 export const {
   saveEvent,
-  removeEvent,
   setRecordingInProgress,
   setHasRefreshed,
   setBaseUrl,
