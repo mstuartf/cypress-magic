@@ -90,7 +90,6 @@ const parseResponse = (
 
 export function initFetchObserver({
   saveEvent,
-  registerOnCloseCallback,
   saveFixture,
   buildAlias,
 }: InitArgs) {
@@ -113,10 +112,4 @@ export function initFetchObserver({
 
     return response;
   };
-
-  const removePatch = () => {
-    window.fetch = originalFetch;
-  };
-
-  registerOnCloseCallback(removePatch);
 }

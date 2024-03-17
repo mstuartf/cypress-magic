@@ -7,7 +7,6 @@ export function initXMLHttpRequestObserver({
   saveEvent,
   saveFixture,
   buildAlias,
-  registerOnCloseCallback,
 }: InitArgs) {
   const _open = window.XMLHttpRequest.prototype.open;
   window.XMLHttpRequest.prototype.open = function () {
@@ -85,11 +84,4 @@ export function initXMLHttpRequestObserver({
     };
     return _send.apply(this, arguments as any);
   };
-
-  const removePatch = () => {
-    window.XMLHttpRequest.prototype.open = _open;
-    window.XMLHttpRequest.prototype.send = _send;
-  };
-
-  registerOnCloseCallback(removePatch);
 }

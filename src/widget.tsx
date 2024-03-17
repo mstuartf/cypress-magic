@@ -13,8 +13,6 @@ import { saveEvent } from "./apps/widget/redux/slice";
 initialize({
   saveEvent: (event: ParsedEvent) => store.dispatch(saveEvent(event)),
   saveFixture: () => {},
-  buildAlias: () => "abc123",
-  registerOnCloseCallback: () => {},
 });
 
 const createRootElement = () => {

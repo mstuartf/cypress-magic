@@ -1,13 +1,15 @@
 // Initializes the lib to start listening for events
 
 import { initializers, Observer } from "./observers";
-import { InitArgs } from "./types";
+import { MainInitArgs } from "./types";
+import { buildAliasTracker } from "./utils/aliases";
 
 const observers: Observer[] = ["viewport", "history", "fetch", "user", "xml"];
 
-const initialize = (args: InitArgs) => {
+const initialize = (args: MainInitArgs) => {
+  const buildAlias = buildAliasTracker();
   observers.forEach((observer) => {
-    initializers[observer](args);
+    initializers[observer]({ ...args, buildAlias });
   });
 };
 

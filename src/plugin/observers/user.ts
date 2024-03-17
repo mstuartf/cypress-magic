@@ -7,7 +7,6 @@ import {
   DragDropEvent,
   EventType,
   InitArgs,
-  OnCloseCallback,
   SaveFixture,
   SubmitEvent,
   TargetEvent,
@@ -134,7 +133,7 @@ function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   }
 }
 
-function addDOMListeners(args: InitArgs): OnCloseCallback {
+function addDOMListeners(args: InitArgs) {
   const listener: EventListener = (event) => handleEvent(event, args);
   Object.values(EventType).forEach((event) => {
     document.addEventListener(event, listener, {
@@ -149,13 +148,6 @@ function addDOMListeners(args: InitArgs): OnCloseCallback {
   };
 }
 
-export function initUserObserver({
-  registerOnCloseCallback,
-  ...rest
-}: InitArgs): void {
-  const removeDOMListeners = addDOMListeners({
-    registerOnCloseCallback,
-    ...rest,
-  });
-  registerOnCloseCallback(removeDOMListeners);
+export function initUserObserver(args: InitArgs): void {
+  addDOMListeners(args);
 }
