@@ -5,11 +5,6 @@ export const getActiveTabId = async () => {
   return tab.id!;
 };
 
-export const sendMsgToContent = async (msg: any) => {
-  const tabId = await getActiveTabId();
-  await chrome.tabs.sendMessage(tabId, msg);
-};
-
 export const readCache = async (
   callback: (value: RootState) => void
 ): Promise<void> =>

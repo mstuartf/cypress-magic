@@ -1,12 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface State {
-  isActive: boolean;
+  tabId?: number;
+  hasBeenInjected: boolean;
   cacheLoaded: boolean;
 }
 
 const initialState: State = {
-  isActive: false,
+  tabId: undefined,
+  hasBeenInjected: false,
   cacheLoaded: false,
 };
 
@@ -15,19 +17,25 @@ export const rootSlice = createSlice({
   initialState,
   reducers: {
     restoreCache: (state, action) => {
-      if (action.payload) {
-        state.isActive = { ...action.payload.isActive };
-      }
       state.cacheLoaded = true;
     },
-    startRecording: (state) => {
-      state.isActive = true;
+    activateForTab: (state, action: PayloadAction<number>) => {
+      state.tabId = action.payload;
+      state.hasBeenInjected = false;
     },
-    stopRecording: (state) => {
-      state.isActive = false;
+    deactivateForTab: (state) => {
+      state.tabId = undefined;
+      state.hasBeenInjected = false;
+    },
+    setHasBeenInjected: (state) => {
+      state.hasBeenInjected = true;
     },
   },
 });
 
-export const { restoreCache, stopRecording, startRecording } =
-  rootSlice.actions;
+export const {
+  restoreCache,
+  activateForTab,
+  deactivateForTab,
+  setHasBeenInjected,
+} = rootSlice.actions;

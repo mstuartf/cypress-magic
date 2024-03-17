@@ -1,23 +1,24 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsActive } from "../redux/selectors";
-import { startRecording, stopRecording } from "../redux/slice";
+import { selectTabId } from "../redux/selectors";
+import { activateForTab, deactivateForTab } from "../redux/slice";
+import { getActiveTabId } from "../../../chrome/utils";
 
 const Main = () => {
-  const isRecording = useSelector(selectIsActive);
+  const tabId = useSelector(selectTabId);
   const dispatch = useDispatch();
   const onClick = () => {
-    if (isRecording) {
-      dispatch(stopRecording());
+    if (!!tabId) {
+      dispatch(deactivateForTab());
     } else {
-      dispatch(startRecording());
+      getActiveTabId().then((value) => dispatch(activateForTab(value)));
     }
   };
   return (
     <div>
-      main view
+      main view {tabId}
       <div>
-        <button onClick={onClick}>{isRecording ? "stop" : "start"}</button>
+        <button onClick={onClick}>{!!tabId ? "deactivate" : "activate"}</button>
       </div>
     </div>
   );
