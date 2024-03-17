@@ -26,6 +26,7 @@ const createRootElement = () => {
 // because we only want to render the app in the main process
 const { protocol } = new URL(window.location.href);
 if (!protocol.includes("chrome-extension")) {
+  console.log("INJECTED");
   const root = ReactDOM.createRoot(
     window.document.getElementById(widgetId) || createRootElement()
   );
