@@ -12,4 +12,11 @@ readCache((state) => {
   store.dispatch(restoreCache(state.root));
 });
 
+chrome.webNavigation.onBeforeNavigate.addListener((details) => {
+  chrome.tabs.executeScript({
+    file: "./static/js/content.js",
+    runAt: "document_start",
+  });
+});
+
 export default {};
