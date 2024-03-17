@@ -1,6 +1,5 @@
 import {
   ClickEvent,
-  EventType,
   NavigationEvent,
   ParsedEvent,
   RequestEvent,
@@ -13,7 +12,7 @@ export function isUserEvent(event: ParsedEvent): event is UserEvent {
 }
 
 export function isClickEvent(event: ParsedEvent): event is ClickEvent {
-  return (event as ClickEvent).clientX !== undefined;
+  return (event as ClickEvent).type === "click";
 }
 
 export function isRequestOrResponseEvent(
