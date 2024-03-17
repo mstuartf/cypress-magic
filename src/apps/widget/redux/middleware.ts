@@ -3,7 +3,7 @@ import { saveEvent, setBaseUrl, setRecordingInProgress } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
-  isNavigationOrUrlChangeEvent,
+  isNavigationEvent,
   isRequestEvent,
   isRequestOrResponseEvent,
   isUserEvent,
@@ -71,10 +71,13 @@ export const throttlerMiddleware: redux.Middleware =
     let event = action.payload;
     if (isRequestEvent(event)) {
       const events = [...(store.getState().root.events as ParsedEvent[])];
-      const lastUserEvent = events.reverse().find((e) => isUserEvent(e))!;
+      const trigger = events
+        .reverse()
+        .find((e) => isUserEvent(e) || isNavigationEvent(e))!;
+      console.log(trigger);
       const newEvent: RequestEvent = {
         ...event,
-        timestamp: lastUserEvent.timestamp - 1,
+        timestamp: trigger.timestamp - 1,
       };
       action.payload = newEvent;
     }
@@ -88,11 +91,9 @@ export const navMiddleware: redux.Middleware =
       return;
     }
     let event = action.payload;
-    if (isNavigationOrUrlChangeEvent(event)) {
+    if (isNavigationEvent(event)) {
       const events = [...(store.getState().root.events as ParsedEvent[])];
-      const isFirstNavigationEvent = !events.find((e) =>
-        isNavigationOrUrlChangeEvent(e)
-      );
+      const isFirstNavigationEvent = !events.find((e) => isNavigationEvent(e));
       if (!isFirstNavigationEvent) {
         const newEvent: NavigationEvent = {
           ...event,

@@ -2,7 +2,7 @@ import { ParsedEvent } from "../../../plugin/types";
 import { getElementCy } from "./getElementCy";
 import {
   isClickEvent,
-  isNavigationOrUrlChangeEvent,
+  isNavigationEvent,
   isRequestEvent,
   isResponseEvent,
 } from "../utils";
@@ -12,7 +12,7 @@ export const parse = (event: ParsedEvent): string => {
     // todo: detect if right click
     return `${getElementCy(event.target.domPath)}.click();`;
   }
-  if (isNavigationOrUrlChangeEvent(event) && event.type === "navigation") {
+  if (isNavigationEvent(event)) {
     const { protocol, hostname, pathname } = event;
     return `cy.visit('${protocol}${hostname}${pathname}');`;
   }

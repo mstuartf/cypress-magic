@@ -30,8 +30,8 @@ export function isResponseEvent(event: ParsedEvent): event is ResponseEvent {
   return (event as ResponseEvent).type === "response";
 }
 
-export function isNavigationOrUrlChangeEvent(
+export function isNavigationEvent(
   event: ParsedEvent
 ): event is NavigationEvent {
-  return (event as NavigationEvent).hostname !== undefined;
+  return (event as NavigationEvent).type === "navigation";
 }
