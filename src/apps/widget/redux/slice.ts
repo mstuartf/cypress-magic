@@ -7,7 +7,12 @@ import {
   UserEvent,
 } from "../../../plugin/types";
 import { widgetId } from "../constants";
-import { isClickEvent, isRequestOrResponseEvent, isUserEvent } from "../utils";
+import {
+  isClickEvent,
+  isRequestEvent,
+  isRequestOrResponseEvent,
+  isUserEvent,
+} from "../utils";
 import { assertionOverlayId } from "../AddAssertion";
 
 interface State {

@@ -5,6 +5,17 @@ import App from "./apps/widget/App";
 import { store } from "./apps/widget/redux/store";
 import { Provider } from "react-redux";
 import { widgetId } from "./apps/widget/constants";
+import initialize from "./plugin/initialize";
+import { ParsedEvent } from "./plugin/types";
+import { saveEvent } from "./apps/widget/redux/slice";
+
+// this needs to be done immediately (i.e. not in the app) to catch all events from the host page
+initialize({
+  saveEvent: (event: ParsedEvent) => store.dispatch(saveEvent(event)),
+  saveFixture: () => {},
+  buildAlias: () => "abc123",
+  registerOnCloseCallback: () => {},
+});
 
 const createRootElement = () => {
   const el = window.document.createElement("div");
