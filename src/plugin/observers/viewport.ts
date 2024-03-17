@@ -5,7 +5,7 @@ import { InitArgs } from "../types";
 export const initViewportObserver = ({ saveEvent }: InitArgs) => {
   saveEvent({
     type: "setViewport",
-    timestamp: Date.now(),
+    timestamp: Date.now() - 1,
     width: window.innerWidth,
     height: window.innerHeight,
     // todo: un hard code

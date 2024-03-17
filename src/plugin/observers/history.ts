@@ -1,6 +1,6 @@
 // Listens for navigation events
 
-import { BaseEvent, InitArgs, OnCloseCallback, SaveEvent } from "../types";
+import { BaseEvent, InitArgs, SaveEvent } from "../types";
 import { createErrorEvent } from "../utils/createErrorEvent";
 
 const getBaseEvent = (): BaseEvent => ({
@@ -25,10 +25,7 @@ const getPathAndHost = (
   };
 };
 
-function monkeyPatchHistory(
-  history: History,
-  saveEvent: SaveEvent
-): OnCloseCallback {
+function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   const pushState = history.pushState;
   history.pushState = function (state, unused, url) {
     if (url) {
@@ -73,11 +70,8 @@ function monkeyPatchHistory(
   };
 }
 
-export const initHistoryObserver = ({
-  saveEvent,
-  registerOnCloseCallback,
-}: InitArgs) => {
-  const removePatch = monkeyPatchHistory(window.history, saveEvent);
+export const initHistoryObserver = ({ saveEvent }: InitArgs) => {
+  monkeyPatchHistory(window.history, saveEvent);
   const { pathname, hostname, protocol } = new URL(window.location.href);
   saveEvent({
     ...getBaseEvent(),
@@ -85,5 +79,4 @@ export const initHistoryObserver = ({
     hostname,
     protocol,
   });
-  registerOnCloseCallback(removePatch);
 };
