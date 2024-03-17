@@ -13,6 +13,7 @@ const isURL = (input: string | URL): input is URL => {
 };
 
 const parseRequest = (
+  buildAlias: AliasBuilder,
   input: RequestInfo | URL,
   init?: RequestInit
 ): Omit<RequestEvent, "id"> => {
@@ -21,20 +22,22 @@ const parseRequest = (
 
   if (isRequestObj(input)) {
     url = input.url;
-    method = input.method;
   } else if (isURL(input)) {
     url = input.toString();
-    method = init ? init.method! : "GET";
   } else {
     url = input;
-    method = init ? init.method! : "GET";
   }
+  url = getAbsoluteUrl(url);
+  method = init?.method || "GET";
+
+  const alias = buildAlias({ url, method });
 
   return {
     type: "request",
     timestamp: Date.now(),
-    url: getAbsoluteUrl(url),
+    url,
     method,
+    alias,
     initiator: "fetch",
   };
 };
@@ -42,12 +45,11 @@ const parseRequest = (
 const parseResponse = (
   response: Response,
   method: string,
-  buildAlias: AliasBuilder,
+  alias: string,
   saveFixture: SaveFixture
 ): Promise<Omit<ResponseEvent, "requestId">> => {
   return new Promise((resolve, reject) => {
     const { url, status } = response;
-    const alias = buildAlias({ url, method, status });
     const event: Omit<ResponseEvent, "fixture" | "requestId"> = {
       type: "response",
       timestamp: Date.now(),
@@ -97,7 +99,7 @@ export function initFetchObserver({
 
   window.fetch = async (...args) => {
     const id = uuidv4();
-    const requestEvent = parseRequest(...args);
+    const requestEvent = parseRequest(buildAlias, ...args);
     saveEvent({ ...requestEvent, id });
 
     const response = await originalFetch(...args);
@@ -105,7 +107,7 @@ export function initFetchObserver({
     const responseEvent = await parseResponse(
       response,
       requestEvent.method,
-      buildAlias,
+      requestEvent.alias,
       saveFixture
     );
     saveEvent({ ...responseEvent, requestId: id });

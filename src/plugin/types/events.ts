@@ -21,6 +21,7 @@ export interface RequestEvent extends BaseEvent {
   url: string;
   method: string;
   initiator: "xml" | "fetch";
+  alias: string;
 }
 
 export interface ResponseEvent extends BaseEvent {

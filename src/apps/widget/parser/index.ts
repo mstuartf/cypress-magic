@@ -17,13 +17,11 @@ export const parse = (event: ParsedEvent): string => {
     return `cy.visit('${protocol}${hostname}${pathname}');`;
   }
   if (isRequestEvent(event)) {
-    const alias = "__alias__"; // todo
-    const { method, url } = event;
+    const { method, url, alias } = event;
     return `cy.intercept('${method}', '${url}').as('${alias}')`;
   }
   if (isResponseEvent(event)) {
-    const alias = "__alias__"; // todo
-    return `cy.wait('@${alias}')`;
+    return `cy.wait('@${event.alias}')`;
   }
   return `${event.type} at ${event.timestamp}`;
 };

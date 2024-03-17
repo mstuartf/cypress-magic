@@ -14,12 +14,17 @@ export function initXMLHttpRequestObserver({
     (this as any).__method = arguments[0].toUpperCase();
     (this as any).__url = getAbsoluteUrl(arguments[1]);
     (this as any).__id = uuidv4();
+    (this as any).__alias = buildAlias({
+      url: (this as any).__url,
+      method: (this as any).__method,
+    });
     saveEvent({
       type: "request",
       timestamp: Date.now(),
       id: (this as any).__id,
       url: (this as any).__url,
       method: (this as any).__method,
+      alias: (this as any).__alias,
       initiator: "xml",
     });
     return _open.apply(this, arguments as any);
@@ -33,8 +38,8 @@ export function initXMLHttpRequestObserver({
         const requestId = (this as any).__id;
         const url = (this as any).__url;
         const method = (this as any).__method;
+        const alias = (this as any).__alias;
         const status = this.status;
-        const alias = buildAlias({ url, method, status });
         const event: Omit<ResponseEvent, "body" | "fixture"> = {
           type: "response",
           timestamp: Date.now(),

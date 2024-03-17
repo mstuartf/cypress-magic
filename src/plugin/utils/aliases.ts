@@ -1,7 +1,6 @@
 export interface RequestAliasArgs {
   url: string;
   method: string;
-  status: number;
 }
 
 export type AliasBuilder = (args: RequestAliasArgs) => string;
@@ -10,12 +9,8 @@ export interface AliasTracker {
   [rawAlias: string]: number;
 }
 
-export const buildRequestAlias = ({
-  url,
-  method,
-  status,
-}: RequestAliasArgs): string =>
-  `${new URL(url).pathname.replace(/\/?$/, "/")}${method}_${status}`;
+export const buildRequestAlias = ({ url, method }: RequestAliasArgs): string =>
+  `${method}__${new URL(url).pathname.replace(/\/?$/, "/")}`;
 
 export const buildAliasTracker = (): AliasBuilder => {
   const aliasTracker: AliasTracker = {};
