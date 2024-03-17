@@ -74,7 +74,6 @@ export const throttlerMiddleware: redux.Middleware =
       const trigger = events
         .reverse()
         .find((e) => isUserEvent(e) || isNavigationEvent(e))!;
-      console.log(trigger);
       const newEvent: RequestEvent = {
         ...event,
         timestamp: trigger.timestamp - 1,
