@@ -3,7 +3,7 @@
 import { initializers, Observer } from "./observers";
 import { InitArgs } from "./types";
 
-const observers: Observer[] = ["history", "fetch", "user", "viewport", "xml"];
+const observers: Observer[] = ["viewport", "history", "fetch", "user", "xml"];
 
 const initialize = (args: InitArgs) => {
   observers.forEach((observer) => {
