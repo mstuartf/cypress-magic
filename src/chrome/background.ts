@@ -31,7 +31,7 @@ const injectWidgetIfActivatedForTab = (
       files: ["static/js/content.js"],
       world: "MAIN",
     })
-    .then((value) => console.log("script injected", value));
+    .then(callback);
 };
 
 chrome.tabs.onUpdated.addListener(
