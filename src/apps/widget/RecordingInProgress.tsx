@@ -4,7 +4,7 @@ import { setRecordingInProgress } from "./redux/slice";
 import { selectHasRefreshed } from "./redux/selectors";
 import Header from "./Header";
 import AddAssertion from "./AddAssertion";
-import Typewriter from "./Typewriter";
+import EventList from "./EventList";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const RecordingInProgress = () => {
               Save
             </button>
           </div>
-          <Typewriter className="flex-grow my-4 resize-none border border-gray-400 rounded p-2 text-xs" />
+          <EventList />
           <AddAssertion />
         </>
       )}

@@ -1,48 +1,21 @@
-import { useSelector } from "react-redux";
-import { selectEvents } from "./redux/selectors";
 import { useEffect, useState } from "react";
 import { ParsedEvent } from "../../plugin/types";
-import { getEventId } from "./constants";
 import { parse } from "./parser";
 
-const Typewriter = ({ className }: { className?: string }) => {
-  const events = useSelector(selectEvents);
-  const [draftText, setDraftText] = useState("");
-  const [displayText, setDisplayText] = useState("");
-  const [draftedEvents, setDraftedEvents] = useState<ParsedEvent[]>([]);
+const Typewriter = ({ event }: { event: ParsedEvent }) => {
+  const [partialText, setPartialText] = useState("");
 
   useEffect(() => {
-    const newEvents = events.filter(
-      (event) =>
-        !draftedEvents.find(
-          (drafted) => getEventId(event) === getEventId(drafted)
-        )
-    );
-    if (!newEvents.length) return;
-    const appendToDraft = newEvents.map((event) => parse(event)).join("\n");
-    setDraftText(`${draftText}${draftText.length ? "\n" : ""}${appendToDraft}`);
-    setDraftedEvents(events);
-  }, [events]);
-
-  useEffect(() => {
+    const finalText = parse(event);
     const interval = setInterval(() => {
-      if (draftText.length > displayText.length) {
-        setDisplayText(draftText.slice(0, displayText.length + 1));
+      if (finalText.length > partialText.length) {
+        setPartialText(finalText.slice(0, partialText.length + 1));
       }
     }, 10);
     return () => clearInterval(interval);
-  }, [draftText, displayText]);
+  }, [event, partialText]);
 
-  // todo: prevent user edits while machine is typing
-  // todo: support deletions...
-
-  return (
-    <textarea
-      className={className}
-      value={displayText}
-      onChange={({ target: { value } }) => setDraftText(value)}
-    />
-  );
+  return <>{partialText}</>;
 };
 
 export default Typewriter;
