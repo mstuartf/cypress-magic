@@ -14,8 +14,8 @@ function App() {
   }
 
   return (
-    <div className="w-full h-full px-8 py-6">
-      <div className="h-full w-full">
+    <div className="cyw-w-full cyw-h-full cyw-px-8 cyw-py-6">
+      <div className="cyw-h-full cyw-w-full">
         <Router history={history}>
           <Switch>
             <Route path="/record">

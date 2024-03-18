@@ -13,12 +13,12 @@ const RecordingInProgress = () => {
     dispatch(setRecordingInProgress(false));
   };
   return (
-    <div className="h-full flex flex-col">
+    <div className="cyw-h-full cyw-flex cyw-flex-col">
       <Header>
         <div role="status">
           <svg
             aria-hidden="true"
-            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="cyw-w-8 cyw-h-8 cyw-text-gray-200 cyw-animate-spin dark:cyw-text-gray-600 cyw-fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -32,20 +32,20 @@ const RecordingInProgress = () => {
               fill="currentFill"
             />
           </svg>
-          <span className="sr-only">Loading...</span>
+          <span className="cyw-sr-only">Loading...</span>
         </div>
-        <div className="ml-4">Recording in progress...</div>
+        <div className="cyw-ml-4">Recording in progress...</div>
       </Header>
       {hasRefreshed && (
         <>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
             <button
               onClick={onCancel}
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              className="cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-4 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
             >
               Cancel
             </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button className="cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded">
               Save
             </button>
           </div>
