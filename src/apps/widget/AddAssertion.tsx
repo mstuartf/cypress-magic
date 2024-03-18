@@ -17,20 +17,20 @@ const AddAssertion = () => {
     <>
       <div>
         {isAddingAssertion ? (
-          <div className="grid">
-            <div className="h-10 flex items-center justify-center text-sm font-medium text-gray-900">
+          <div className="cyw-grid">
+            <div className="cyw-h-10 cyw-flex cyw-items-center cyw-justify-center cyw-text-sm cyw-font-medium cyw-text-gray-900">
               Click on the element to assert...
             </div>
           </div>
         ) : (
-          <div className="grid">
+          <div className="cyw-grid">
             <button
               onClick={() => {
                 if (!isAddingAssertion) {
                   dispatch(setIsAddingAssertion(true));
                 }
               }}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
             >
               + Add assertion
             </button>
@@ -49,7 +49,8 @@ const showOrHideOverlay = (show: boolean) => {
   if (show) {
     const el = window.document.createElement("div");
     el.id = assertionOverlayId;
-    el.className = "fixed top-0 left-0 bottom-0 bg-red-500 opacity-15";
+    el.className =
+      "cyw-fixed cyw-top-0 cyw-left-0 cyw-bottom-0 cyw-bg-red-500 cyw-opacity-15";
     el.style.right = `${sideBarWith}px`;
     el.style.zIndex = "1000";
     window.document.body.appendChild(el);

@@ -1,5 +1,5 @@
 import { useMutateObserver } from "@rc-component/mutate-observer";
-import { sideBarWith } from "../constants";
+import { sideBarWith, widgetId } from "../constants";
 
 export const useNewFixedElementAdded = () => {
   useMutateObserver(document.body, (mutations, observer) => {
@@ -19,6 +19,7 @@ const getFixedRightHTMLElements = (nodes: Node[]): HTMLElement[] => {
     .filter((node): node is Element => isElement(node))
     .filter((element): element is HTMLElement => isHTMLElement(element))
     .filter((element) => isHTMLElement(element))
+    .filter((elem) => !document.getElementById(widgetId)!.contains(elem))
     .filter((element) => isFixedRight(element)) as HTMLElement[];
 };
 

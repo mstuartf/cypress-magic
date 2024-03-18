@@ -14,11 +14,11 @@ const Setup = () => {
   };
 
   return (
-    <div className="grid">
+    <div className="cyw-grid">
       <Header>Welcome</Header>
-      <div className="w-full mb-6">
+      <div className="cyw-w-full cyw-mb-6">
         <label
-          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          className="cyw-block cyw-uppercase cyw-tracking-wide cyw-text-gray-700 cyw-text-xs cyw-font-bold cyw-mb-2"
           htmlFor="grid-first-name"
         >
           Match API calls to:
@@ -26,19 +26,19 @@ const Setup = () => {
         <input
           value={url}
           onChange={({ target: { value } }) => setUrl(value)}
-          className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          className="cyw-appearance-none block cyw-w-full cyw-bg-gray-200 cyw-text-gray-700 cyw-border cyw-rounded cyw-py-3 cyw-px-4 cyw-mb-3 cyw-leading-tight focus:cyw-outline-none focus:cyw-bg-white"
           id="grid-first-name"
           type="text"
           placeholder="e.g. https://api.placeholder.com"
         />
-        <p className="text-gray-600 text-xs italic">
+        <p className="cyw-text-gray-600 cyw-text-xs cyw-italic">
           Only API calls made to URLS starting with this value will be matched
           and intercepted.
         </p>
       </div>
       <button
         onClick={startRecording}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
       >
         Start recording
       </button>

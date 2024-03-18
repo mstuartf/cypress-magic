@@ -8,7 +8,7 @@ const Header = ({
   className?: string;
 }) => (
   <div
-    className={`flex justify-center font-semibold mb-4 text-xl ${className}`}
+    className={`cyw-flex cyw-justify-center cyw-font-semibold cyw-mb-4 cyw-text-xl ${className}`}
   >
     {children}
   </div>
