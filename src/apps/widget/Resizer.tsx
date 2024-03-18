@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "./hooks/useWindowSize";
 import { sideBarWith, widgetId } from "./constants";
+import { useNewFixedElementAdded } from "./hooks/useNewFixedElementAdded";
 
 const Resizer = ({ children }: { children: React.ReactNode }) => {
   const [fixedWidthElements, setFixedWidthElements] = useState<
@@ -40,6 +41,9 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
     setFixedWidthElements(updatedWidthElements);
     setLastInnerWidth(innerWidth);
   }, [innerWidth]);
+
+  useNewFixedElementAdded();
+
   return (
     <div
       className="fixed top-0 right-0 bottom-0 border-l-2 border-gray-500 bg-slate-50 px-4 py-6"
@@ -78,7 +82,7 @@ const getFixedWidthElements = (innerWidth: number): [HTMLElement, number][] =>
       ];
     });
 
-const getFixedRightElements = (): [HTMLElement, number][] =>
+export const getFixedRightElements = (): [HTMLElement, number][] =>
   getFixedElements()
     .filter((elem) => {
       const elementRight = window
