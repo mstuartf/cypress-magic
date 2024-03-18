@@ -1,20 +1,27 @@
 import { Target } from "../../../plugin/types";
 
 export function parseSelector(domPath: Target["domPath"]): string {
-  const selectors = domPath.map(
-    ({ nodeName, id, siblingCount, siblingIndex, dataTestId, dataCy }) => {
-      let selector: string = `${nodeName.toLowerCase()}`;
-      if (dataCy) {
-        selector += `[data-cy="${dataCy}"]`;
-      } else if (dataTestId) {
-        selector += `[data-testid="${dataTestId}"]`;
-      } else if (id) {
-        selector += `#${id}`;
-      } else if (siblingCount > 1) {
-        selector += `:nth-of-type(${siblingIndex + 1})`;
-      }
-      return selector;
+  const bottomUp = [...domPath].reverse();
+  const selectors = [];
+  for (let i = 0; i < domPath.length; i++) {
+    const { nodeName, id, siblingCount, siblingIndex, dataTestId, dataCy } =
+      bottomUp[i];
+    if (dataCy) {
+      selectors.push(`[data-cy="${dataCy}"]`);
+      break;
+    } else if (dataTestId) {
+      selectors.push(`[data-testid="${dataTestId}"]`);
+      break;
+    } else if (id) {
+      selectors.push(`#${id}`);
+      break;
+    } else if (siblingCount > 1) {
+      selectors.push(
+        `${nodeName.toLowerCase()}:nth-of-type(${siblingIndex + 1})`
+      );
+    } else {
+      selectors.push(`${nodeName.toLowerCase()}`);
     }
-  );
-  return selectors.join(" > ");
+  }
+  return [...selectors].reverse().join(" > ");
 }
