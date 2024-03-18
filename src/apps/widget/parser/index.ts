@@ -1,6 +1,7 @@
 import { ParsedEvent } from "../../../plugin/types";
 import { getElementCy } from "./getElementCy";
 import {
+  isAssertionEvent,
   isClickEvent,
   isNavigationEvent,
   isRequestEvent,
@@ -22,6 +23,15 @@ export const parse = (event: ParsedEvent): string => {
   }
   if (isResponseEvent(event)) {
     return `cy.wait('@${event.alias}')`;
+  }
+  if (isAssertionEvent(event)) {
+    const {
+      target: { innerText, domPath },
+    } = event;
+    const assertion = innerText
+      ? `contains('${innerText}')`
+      : `should('exist')`;
+    return `${getElementCy(domPath)}.${assertion};`;
   }
   return `${event.type} at ${event.timestamp}`;
 };
