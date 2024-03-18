@@ -50,11 +50,19 @@ const showOrHideOverlay = (show: boolean) => {
     const el = window.document.createElement("div");
     el.id = assertionOverlayId;
     el.className =
-      "cyw-fixed cyw-top-0 cyw-left-0 cyw-bottom-0 cyw-bg-red-500 cyw-opacity-15";
+      "cyw-fixed cyw-top-0 cyw-left-0 cyw-bottom-0 cyw-bg-red-500 cyw-opacity-15 cyw-cursor-pointer";
     el.style.right = `${sideBarWith}px`;
-    el.style.zIndex = "1000";
+    el.style.zIndex = `${maxZIndex() + 1}`;
     window.document.body.appendChild(el);
   } else {
     document.getElementById(assertionOverlayId)?.remove();
   }
 };
+
+const maxZIndex = (): number =>
+  Array.from(document.querySelectorAll("body *"))
+    .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
+    .filter((a) => !isNaN(a))
+    .concat(1000)
+    .sort((a, b) => a - b)
+    .pop()!;
