@@ -14,14 +14,16 @@ function isURL(url: string | URL): url is URL {
 
 const getPathAndHost = (
   url: string | URL
-): { pathname: string; hostname: string; protocol: string } => {
+): { pathname: string; hostname: string; protocol: string; search: string } => {
   if (isURL(url)) {
-    return url;
+    const { pathname, hostname, protocol, search } = url;
+    return { pathname, hostname, protocol, search };
   }
   return {
     hostname: window.location.hostname,
     protocol: window.location.protocol,
     pathname: url,
+    search: window.location.search,
   };
 };
 
@@ -30,8 +32,8 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   history.pushState = function (state, unused, url) {
     if (url) {
       try {
-        const { pathname, hostname, protocol } = getPathAndHost(url);
-        saveEvent({ ...getBaseEvent(), pathname, hostname, protocol });
+        const components = getPathAndHost(url);
+        saveEvent({ ...getBaseEvent(), ...components });
       } catch (e) {
         saveEvent(createErrorEvent("navigation", e as any));
       }
@@ -43,8 +45,8 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   history.replaceState = function (state, unused, url) {
     if (url) {
       try {
-        const { pathname, hostname, protocol } = getPathAndHost(url);
-        saveEvent({ ...getBaseEvent(), pathname, hostname, protocol });
+        const components = getPathAndHost(url);
+        saveEvent({ ...getBaseEvent(), ...components });
       } catch (e) {
         saveEvent(createErrorEvent("navigation", e as any));
       }
@@ -55,8 +57,8 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   // listen to popstate for back, forward and go (async)
   const listener: EventListener = (event) => {
     try {
-      const { hostname, pathname, protocol } = window.location;
-      saveEvent({ ...getBaseEvent(), pathname, hostname, protocol });
+      const components = getPathAndHost(new URL(window.location.href));
+      saveEvent({ ...getBaseEvent(), ...components });
     } catch (e) {
       saveEvent(createErrorEvent("navigation", e as any));
     }
@@ -72,11 +74,9 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
 
 export const initHistoryObserver = ({ saveEvent }: InitArgs) => {
   monkeyPatchHistory(window.history, saveEvent);
-  const { pathname, hostname, protocol } = new URL(window.location.href);
+  const components = getPathAndHost(new URL(window.location.href));
   saveEvent({
     ...getBaseEvent(),
-    pathname,
-    hostname,
-    protocol,
+    ...components,
   });
 };
