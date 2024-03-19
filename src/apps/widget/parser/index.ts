@@ -4,8 +4,10 @@ import {
   isAssertionEvent,
   isClickEvent,
   isNavigationEvent,
+  checkIfNoUrlChange,
   isRequestEvent,
   isResponseEvent,
+  isPageRefreshEvent,
 } from "../utils";
 
 export const parse = (event: ParsedEvent): string => {
@@ -16,6 +18,9 @@ export const parse = (event: ParsedEvent): string => {
   if (isNavigationEvent(event)) {
     const { protocol, hostname, pathname } = event;
     return `cy.visit('${protocol}${hostname}${pathname}');`;
+  }
+  if (isPageRefreshEvent(event)) {
+    return `cy.reload();`;
   }
   if (isRequestEvent(event)) {
     const { method, url, alias } = event;

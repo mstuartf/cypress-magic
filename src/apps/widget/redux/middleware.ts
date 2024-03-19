@@ -3,7 +3,7 @@ import { setCache } from "../cache";
 import {
   isClickEvent,
   isNavigationEvent,
-  isRefreshPageEvent,
+  checkIfNoUrlChange,
   isRequestEvent,
   isRequestOrResponseEvent,
   isRequestTriggerEvent,
@@ -96,7 +96,7 @@ export const navMiddleware: WidgetMiddleware =
         const lastEvent = previousNavigationEvents.reverse()[0];
         action.payload = {
           ...event,
-          type: isRefreshPageEvent(event, lastEvent) ? "refresh" : "urlChange",
+          type: checkIfNoUrlChange(event, lastEvent) ? "refresh" : "urlChange",
           timestamp: event.timestamp + 1, // move after trigger
         } as UrlChangeEvent | PageRefreshEvent;
       }

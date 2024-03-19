@@ -2,6 +2,7 @@ import {
   AssertionEvent,
   ClickEvent,
   NavigationEvent,
+  PageRefreshEvent,
   ParsedEvent,
   RequestEvent,
   ResponseEvent,
@@ -45,7 +46,13 @@ export function isUrlChangeEvent(event: ParsedEvent): event is UrlChangeEvent {
   return (event as UrlChangeEvent).type === "urlChange";
 }
 
-export const isRefreshPageEvent = (
+export function isPageRefreshEvent(
+  event: ParsedEvent
+): event is PageRefreshEvent {
+  return (event as PageRefreshEvent).type === "refresh";
+}
+
+export const checkIfNoUrlChange = (
   event: NavigationEvent,
   lastEvent: NavigationEvent
 ): event is NavigationEvent => {
