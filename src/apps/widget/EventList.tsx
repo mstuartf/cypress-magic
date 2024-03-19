@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 import { selectEvents } from "./redux/selectors";
 import Typewriter from "./Typewriter";
 import { useEffect, useRef, useState } from "react";
+import { ReactComponent as Refresh } from "../../zondicons/refresh.svg";
+import { ReactComponent as Trash } from "../../zondicons/trash.svg";
 
 const EventList = () => {
   const events = useSelector(selectEvents);
@@ -14,11 +16,21 @@ const EventList = () => {
       {events.map((event) => (
         <div
           key={event.timestamp}
-          className="cyw-mb-1 cyw-text-wrap cyw-break-words"
+          className="cyw-mb-1 cyw-text-wrap cyw-break-words cyw-flex cyw-group"
         >
-          <p className="cyw-text-xs">
+          <p className="cyw-text-xs cyw-flex-grow">
             <Typewriter event={event} />
           </p>
+          <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all">
+            <button className="h-4 w-4">
+              <Refresh />
+            </button>
+          </div>
+          <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
+            <button className="h-4 w-4">
+              <Trash />
+            </button>
+          </div>
         </div>
       ))}
     </div>
