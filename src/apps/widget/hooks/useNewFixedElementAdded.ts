@@ -8,26 +8,30 @@ export const useNewFixedElementAdded = () => {
         ({ addedNodes }) => Array.prototype.slice.call(addedNodes) as Node[]
       ),
       ...mutations.map(({ target }) => target),
-    ]).forEach((elem) => {
-      elem.style.setProperty("right", `${sideBarWith}px`, "important");
+    ]).forEach(([elem, right]) => {
+      elem.style.setProperty("right", `${sideBarWith + right}px`, "important");
     });
   });
 };
 
-const getFixedRightHTMLElements = (nodes: Node[]): HTMLElement[] => {
+const getFixedRightHTMLElements = (nodes: Node[]): [HTMLElement, number][] => {
   return nodes
     .filter((node): node is Element => isElement(node))
     .filter((element): element is HTMLElement => isHTMLElement(element))
     .filter((element) => isHTMLElement(element))
     .filter((elem) => !document.getElementById(widgetId)!.contains(elem))
-    .filter((element) => isFixedRight(element)) as HTMLElement[];
+    .map((element) => isFixedRight(element))
+    .filter(([element, right]) => right < sideBarWith);
 };
 
-const isFixedRight = (element: HTMLElement): boolean => {
-  const elementRight = window
-    .getComputedStyle(element, null)
-    .getPropertyValue("right");
-  return elementRight === "0px";
+export const isFixedRight = (element: HTMLElement): [HTMLElement, number] => {
+  const elementRight = parseInt(
+    window
+      .getComputedStyle(element, null)
+      .getPropertyValue("right")
+      .replace("px", "")
+  );
+  return [element, elementRight];
 };
 
 const isElement = (node: Node): node is Element => {

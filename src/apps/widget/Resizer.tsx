@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "./hooks/useWindowSize";
 import { sideBarWith, widgetId } from "./constants";
-import { useNewFixedElementAdded } from "./hooks/useNewFixedElementAdded";
+import {
+  isFixedRight,
+  useNewFixedElementAdded,
+} from "./hooks/useNewFixedElementAdded";
 import { useZIndexMonitor } from "./hooks/useZIndexMonitor";
 
 const Resizer = ({ children }: { children: React.ReactNode }) => {
@@ -34,8 +37,8 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
     // fixed right elements only need to be moved once
     // todo: what about when new fixed right elements are added
     if (!lastInnerWidth) {
-      getFixedRightElements().forEach(([elem, oldRight]) => {
-        elem.style.right = `${sideBarWith}px`;
+      getFixedRightElements().forEach(([elem, right]) => {
+        elem.style.right = `${sideBarWith + right}px`;
       });
     }
 
@@ -86,12 +89,7 @@ const getFixedWidthElements = (innerWidth: number): [HTMLElement, number][] =>
 
 export const getFixedRightElements = (): [HTMLElement, number][] =>
   getFixedElements()
-    .filter((elem) => {
-      const elementRight = window
-        .getComputedStyle(elem, null)
-        .getPropertyValue("right");
-      return elementRight === "0px";
-    })
-    .map((elem) => [elem, 0]);
+    .map((elem) => isFixedRight(elem))
+    .filter((elem, right) => right < sideBarWith);
 
 export default Resizer;
