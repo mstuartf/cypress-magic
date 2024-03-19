@@ -1,10 +1,11 @@
-import { RootState } from "./store";
+import { WidgetRootState } from "./store";
 
-export const selectEvents = (state: RootState) => state.root.events;
-export const selectRecordingInProgress = (state: RootState) =>
-  state.root.recordingInProgress;
-export const selectHasRefreshed = (state: RootState) => state.root.hasRefreshed;
-export const selectIsAddingAssertion = (state: RootState) =>
-  state.root.isAddingAssertion;
-export const selectDisplayEvents = (state: RootState) =>
+export const selectEvents = (state: WidgetRootState) => state.recording.events;
+export const selectRecordingInProgress = (state: WidgetRootState) =>
+  state.recording.recordingInProgress;
+export const selectHasRefreshed = (state: WidgetRootState) =>
+  state.recording.hasRefreshed;
+export const selectIsAddingAssertion = (state: WidgetRootState) =>
+  state.recording.isAddingAssertion;
+export const selectDisplayEvents = (state: WidgetRootState) =>
   selectEvents(state).slice(-3);

@@ -1,4 +1,3 @@
-import * as redux from "redux";
 import { saveEvent, setBaseUrl, setRecordingInProgress } from "./slice";
 import { setCache } from "../cache";
 import {
@@ -12,15 +11,14 @@ import { widgetId } from "../constants";
 import { assertionOverlayId } from "../AddAssertion";
 import {
   AssertionEvent,
-  ClickEvent,
-  EventType,
   NavigationEvent,
   ParsedEvent,
   RequestEvent,
 } from "../../../plugin/types";
 import { getTargetProps } from "../../../plugin/observers/user";
+import { WidgetMiddleware } from "./store";
 
-export const cacheMiddleware: redux.Middleware =
+export const cacheMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type == setRecordingInProgress.type) {
       setCache("recordingInProgress", action.payload);
@@ -31,7 +29,7 @@ export const cacheMiddleware: redux.Middleware =
     next(action);
   };
 
-export const assertionMiddleware: redux.Middleware =
+export const assertionMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type !== saveEvent.type) {
       next(action);
@@ -62,7 +60,7 @@ export const assertionMiddleware: redux.Middleware =
     next(action);
   };
 
-export const throttlerMiddleware: redux.Middleware =
+export const throttlerMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type !== saveEvent.type) {
       next(action);
@@ -70,7 +68,7 @@ export const throttlerMiddleware: redux.Middleware =
     }
     let event = action.payload;
     if (isRequestEvent(event)) {
-      const events = [...(store.getState().root.events as ParsedEvent[])];
+      const events = [...(store.getState().recording.events as ParsedEvent[])];
       const trigger = events
         .reverse()
         .find((e) => isUserEvent(e) || isNavigationEvent(e))!;
@@ -83,7 +81,7 @@ export const throttlerMiddleware: redux.Middleware =
     next(action);
   };
 
-export const navMiddleware: redux.Middleware =
+export const navMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type !== saveEvent.type) {
       next(action);
@@ -91,7 +89,7 @@ export const navMiddleware: redux.Middleware =
     }
     let event = action.payload;
     if (isNavigationEvent(event)) {
-      const events = [...(store.getState().root.events as ParsedEvent[])];
+      const events = [...(store.getState().recording.events as ParsedEvent[])];
       const isFirstNavigationEvent = !events.find((e) => isNavigationEvent(e));
       if (!isFirstNavigationEvent) {
         const newEvent: NavigationEvent = {
@@ -105,7 +103,7 @@ export const navMiddleware: redux.Middleware =
     next(action);
   };
 
-export const widgetClickMiddleware: redux.Middleware =
+export const widgetClickMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type !== saveEvent.type) {
       next(action);
@@ -121,24 +119,23 @@ export const widgetClickMiddleware: redux.Middleware =
     next(action);
   };
 
-export const urlMatcherMiddleware: redux.Middleware =
+export const urlMatcherMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type !== saveEvent.type) {
       next(action);
       return;
     }
     let event = action.payload;
-    if (
-      isRequestOrResponseEvent(event) &&
-      store.getState().root.baseUrl &&
-      !event.url.startsWith(store.getState().root.baseUrl)
-    ) {
-      return;
+    if (isRequestOrResponseEvent(event)) {
+      const baseUrl = store.getState().recording.baseUrl;
+      if (baseUrl && !event.url.startsWith(baseUrl)) {
+        return;
+      }
     }
     next(action);
   };
 
-export const filterClicksMiddleware: redux.Middleware =
+export const filterClicksMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     if (action.type !== saveEvent.type) {
       next(action);
