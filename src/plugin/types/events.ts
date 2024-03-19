@@ -8,6 +8,7 @@ export interface NavigationEvent extends BaseEvent {
   protocol: string;
   pathname: string;
   search: string;
+  port: string;
 }
 
 export interface UrlChangeEvent extends NavigationEvent {

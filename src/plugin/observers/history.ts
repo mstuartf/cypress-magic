@@ -14,17 +14,18 @@ function isURL(url: string | URL): url is URL {
 
 const getPathAndHost = (
   url: string | URL
-): { pathname: string; hostname: string; protocol: string; search: string } => {
+): {
+  pathname: string;
+  hostname: string;
+  protocol: string;
+  search: string;
+  port: string;
+} => {
   if (isURL(url)) {
-    const { pathname, hostname, protocol, search } = url;
-    return { pathname, hostname, protocol, search };
+    const { pathname, hostname, protocol, search, port } = url;
+    return { pathname, hostname, protocol, search, port };
   }
-  return {
-    hostname: window.location.hostname,
-    protocol: window.location.protocol,
-    pathname: url,
-    search: window.location.search,
-  };
+  return getPathAndHost(new URL(url));
 };
 
 function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {

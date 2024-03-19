@@ -24,6 +24,22 @@
               window.history.pushState({ path: newUrl }, "", newUrl);
             }
           });
+        document
+          .getElementById("remove-param-button")
+          .addEventListener("click", function () {
+            if (history.pushState) {
+              let searchParams = new URLSearchParams(window.location.search);
+              searchParams.delete("newParam");
+              let newUrl =
+                window.location.protocol +
+                "//" +
+                window.location.host +
+                window.location.pathname +
+                "?" +
+                searchParams.toString();
+              window.history.pushState({ path: newUrl }, "", newUrl);
+            }
+          });
       }
       document.addEventListener("DOMContentLoaded", onload);
     </script>
@@ -53,11 +69,20 @@
     </div>
 
     <div class="flex">
+      <button
+        id="remove-param-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Remove param button
+      </button>
+    </div>
+
+    <div class="flex">
       <a
-        href="https://www.bbc.co.uk/news"
+        href="./page_1.html"
         class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600 cursor-pointer"
       >
-        Add param button
+        Go to other site
       </a>
     </div>
 

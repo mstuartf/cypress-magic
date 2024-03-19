@@ -28,8 +28,10 @@ export const parse = (event: ParsedEvent): string => {
     }
   }
   if (isNavigationEvent(event)) {
-    const { protocol, hostname, pathname } = event;
-    return `cy.visit('${protocol}${hostname}${pathname}');`;
+    const { protocol, hostname, pathname, port } = event;
+    return `cy.visit('${protocol}//${hostname}${
+      port.length ? `:${port}` : ""
+    }${pathname}');`;
   }
   if (isPageRefreshEvent(event)) {
     return `cy.reload();`;
