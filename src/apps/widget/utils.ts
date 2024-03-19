@@ -57,8 +57,24 @@ export const checkIfNoUrlChange = (
   lastEvent: NavigationEvent
 ): event is NavigationEvent => {
   return !(
-    ["hostname", "protocol", "pathname", "search"] as (keyof NavigationEvent)[]
+    ["protocol", "hostname", "pathname", "search"] as (keyof NavigationEvent)[]
   ).filter((prop) => event[prop] != lastEvent[prop]).length;
+};
+
+export const getUrlDiff = (
+  event: NavigationEvent,
+  lastEvent: NavigationEvent
+): string | undefined => {
+  if (
+    event.protocol !== lastEvent.protocol ||
+    event.hostname !== lastEvent.hostname
+  ) {
+    return `${event.protocol}//${event.hostname}${event.pathname}${event.search}`;
+  }
+  if (event.pathname != lastEvent.pathname) {
+    return `${event.pathname}${event.search}`;
+  }
+  return event.search;
 };
 
 export const isRequestTriggerEvent = (event: ParsedEvent) =>
