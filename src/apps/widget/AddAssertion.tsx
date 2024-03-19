@@ -59,7 +59,7 @@ const showOrHideOverlay = (show: boolean) => {
   }
 };
 
-const maxZIndex = (): number =>
+export const maxZIndex = (): number =>
   Array.from(document.querySelectorAll("body *"))
     .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
     .filter((a) => !isNaN(a))
