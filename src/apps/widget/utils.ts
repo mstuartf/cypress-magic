@@ -1,5 +1,6 @@
 import {
   AssertionEvent,
+  ChangeEvent,
   ClickEvent,
   NavigationEvent,
   PageRefreshEvent,
@@ -16,6 +17,10 @@ export function isUserEvent(event: ParsedEvent): event is UserEvent {
 
 export function isClickEvent(event: ParsedEvent): event is ClickEvent {
   return (event as ClickEvent).type === "click";
+}
+
+export function isChangeEvent(event: ParsedEvent): event is ChangeEvent {
+  return (event as ChangeEvent).type === "change";
 }
 
 export function isAssertionEvent(event: ParsedEvent): event is AssertionEvent {
