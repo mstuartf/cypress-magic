@@ -16,12 +16,12 @@ const EventList = () => {
       {events.map((event) => (
         <div
           key={event.timestamp}
-          className="cyw-mb-1 cyw-text-wrap cyw-break-words cyw-flex cyw-group"
+          className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
         >
           <p className="cyw-text-xs cyw-flex-grow">
             <Typewriter event={event} />
           </p>
-          <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all">
+          <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
             <button className="h-4 w-4">
               <Refresh />
             </button>
