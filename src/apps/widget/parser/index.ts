@@ -4,17 +4,28 @@ import {
   isAssertionEvent,
   isClickEvent,
   isNavigationEvent,
-  checkIfNoUrlChange,
   isRequestEvent,
   isResponseEvent,
   isPageRefreshEvent,
   isUrlChangeEvent,
+  isChangeEvent,
 } from "../utils";
 
 export const parse = (event: ParsedEvent): string => {
   if (isClickEvent(event)) {
     // todo: detect if right click
     return `${getElementCy(event.target.domPath)}.click();`;
+  }
+  if (isChangeEvent(event)) {
+    if (event.target.tag === "SELECT") {
+      return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
+    } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
+      return `${getElementCy(event.target.domPath)}.check();`;
+    } else {
+      return `${getElementCy(event.target.domPath)}.clear().type('${
+        event.value
+      }');`;
+    }
   }
   if (isNavigationEvent(event)) {
     const { protocol, hostname, pathname } = event;
