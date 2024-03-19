@@ -10,7 +10,9 @@ export interface NavigationEvent extends BaseEvent {
   search: string;
 }
 
-export interface UrlChangeEvent extends NavigationEvent {}
+export interface UrlChangeEvent extends NavigationEvent {
+  urlDiff: string;
+}
 
 export interface PageRefreshEvent extends NavigationEvent {}
 

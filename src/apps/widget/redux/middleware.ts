@@ -9,6 +9,7 @@ import {
   isRequestTriggerEvent,
   isUrlChangeEvent,
   isUserEvent,
+  getUrlDiff,
 } from "../utils";
 import { widgetId } from "../constants";
 import { assertionOverlayId } from "../AddAssertion";
@@ -94,9 +95,11 @@ export const navMiddleware: WidgetMiddleware =
       );
       if (previousNavigationEvents.length) {
         const lastEvent = previousNavigationEvents.reverse()[0];
+        const noUrlChange = checkIfNoUrlChange(event, lastEvent);
         action.payload = {
           ...event,
-          type: checkIfNoUrlChange(event, lastEvent) ? "refresh" : "urlChange",
+          type: noUrlChange ? "refresh" : "urlChange",
+          urlDiff: !noUrlChange && getUrlDiff(event, lastEvent),
           timestamp: event.timestamp + 1, // move after trigger
         } as UrlChangeEvent | PageRefreshEvent;
       }

@@ -8,6 +8,7 @@ import {
   isRequestEvent,
   isResponseEvent,
   isPageRefreshEvent,
+  isUrlChangeEvent,
 } from "../utils";
 
 export const parse = (event: ParsedEvent): string => {
@@ -21,6 +22,9 @@ export const parse = (event: ParsedEvent): string => {
   }
   if (isPageRefreshEvent(event)) {
     return `cy.reload();`;
+  }
+  if (isUrlChangeEvent(event)) {
+    return `cy.url().should('include', '${event.urlDiff}')`;
   }
   if (isRequestEvent(event)) {
     const { method, url, alias } = event;
