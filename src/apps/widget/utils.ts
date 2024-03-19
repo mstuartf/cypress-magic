@@ -5,6 +5,7 @@ import {
   NavigationEvent,
   PageRefreshEvent,
   ParsedEvent,
+  QueryParamChangeEvent,
   RequestEvent,
   ResponseEvent,
   UrlChangeEvent,
@@ -51,20 +52,17 @@ export function isUrlChangeEvent(event: ParsedEvent): event is UrlChangeEvent {
   return (event as UrlChangeEvent).type === "urlChange";
 }
 
+export function isQueryParamChangeEvent(
+  event: ParsedEvent
+): event is QueryParamChangeEvent {
+  return (event as QueryParamChangeEvent).type === "queryParamChange";
+}
+
 export function isPageRefreshEvent(
   event: ParsedEvent
 ): event is PageRefreshEvent {
   return (event as PageRefreshEvent).type === "refresh";
 }
-
-export const checkIfNoUrlChange = (
-  event: NavigationEvent,
-  lastEvent: NavigationEvent
-): event is NavigationEvent => {
-  return !(
-    ["protocol", "hostname", "pathname", "search"] as (keyof NavigationEvent)[]
-  ).filter((prop) => event[prop] != lastEvent[prop]).length;
-};
 
 export const getUrlDiff = (
   event: NavigationEvent,
@@ -79,7 +77,45 @@ export const getUrlDiff = (
   if (event.pathname != lastEvent.pathname) {
     return `${event.pathname}${event.search}`;
   }
-  return event.search;
+  return undefined;
+};
+
+function getRemovedParamsSearchString(
+  updatedSearchParams: URLSearchParams,
+  originalSearchParams: URLSearchParams
+) {
+  const diffs: Pick<
+    QueryParamChangeEvent,
+    "param" | "added" | "removed" | "changed"
+  >[] = [];
+
+  originalSearchParams.forEach((value, param) => {
+    if (!updatedSearchParams.has(param)) {
+      diffs.push({ param, removed: value });
+    } else if (
+      updatedSearchParams.get(param) != originalSearchParams.get(param)
+    ) {
+      diffs.push({ param, changed: value });
+    }
+  });
+
+  updatedSearchParams.forEach((value, param) => {
+    if (!originalSearchParams.has(param)) {
+      diffs.push({ param, added: value });
+    }
+  });
+
+  return diffs;
+}
+
+export const getSearchDiff = (
+  event: NavigationEvent,
+  lastEvent: NavigationEvent
+): Pick<QueryParamChangeEvent, "param" | "added" | "removed" | "changed">[] => {
+  return getRemovedParamsSearchString(
+    new URLSearchParams(event.search),
+    new URLSearchParams(lastEvent.search)
+  );
 };
 
 export const isRequestTriggerEvent = (event: ParsedEvent) =>
