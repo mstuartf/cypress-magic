@@ -1,11 +1,83 @@
-<script>
-  function onload() {
-    document.getElementById("abc").addEventListener("click", function () {
-      fetch("https://swapi.dev/api/people/1").then(console.log);
-    });
-    fetch("https://swapi.dev/api/people/2").then(console.log);
-  }
-  document.addEventListener("DOMContentLoaded", onload);
-</script>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      function onload() {
+        document
+          .getElementById("request-button")
+          .addEventListener("click", function () {
+            fetch("https://swapi.dev/api/people/1").then(console.log);
+          });
+        document
+          .getElementById("add-param-button")
+          .addEventListener("click", function () {
+            if (history.pushState) {
+              let searchParams = new URLSearchParams(window.location.search);
+              searchParams.set("newParam", "value");
+              let newUrl =
+                window.location.protocol +
+                "//" +
+                window.location.host +
+                window.location.pathname +
+                "?" +
+                searchParams.toString();
+              window.history.pushState({ path: newUrl }, "", newUrl);
+            }
+          });
+      }
+      document.addEventListener("DOMContentLoaded", onload);
+    </script>
+  </head>
+</html>
 
-<button id="abc">click</button>
+<body>
+  <div class="grid gap-4 p-4">
+    <div>only match calls to https://swapi</div>
+
+    <div class="flex">
+      <button
+        id="request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Request button
+      </button>
+    </div>
+
+    <div class="flex">
+      <button
+        id="add-param-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Add param button
+      </button>
+    </div>
+
+    <div class="flex">
+      <a
+        href="https://www.bbc.co.uk/news"
+        class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600 cursor-pointer"
+      >
+        Add param button
+      </a>
+    </div>
+
+    <div class="mb-4 flex">
+      <div>
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="username"
+        >
+          Username
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="username"
+          type="text"
+          placeholder="Username"
+        />
+      </div>
+    </div>
+
+    <div data-cy="display-text">This is some text.</div>
+  </div>
+</body>
