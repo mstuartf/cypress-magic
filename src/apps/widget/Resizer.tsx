@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useWindowSize } from "./hooks/useWindowSize";
 import { sideBarWith, widgetId } from "./constants";
 import { useNewFixedElementAdded } from "./hooks/useNewFixedElementAdded";
+import { useZIndexMonitor } from "./hooks/useZIndexMonitor";
 
 const Resizer = ({ children }: { children: React.ReactNode }) => {
   const [fixedWidthElements, setFixedWidthElements] = useState<
@@ -43,11 +44,12 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
   }, [innerWidth]);
 
   useNewFixedElementAdded();
+  const zIndex = useZIndexMonitor();
 
   return (
     <div
       className="cyw-fixed cyw-top-0 cyw-right-0 cyw-bottom-0 cyw-border-l-2 cyw-border-gray-500 cyw-bg-slate-50 cyw-px-4 cyw-py-6"
-      style={{ width: `${sideBarWith}px`, zIndex: 1000 }}
+      style={{ width: `${sideBarWith}px`, zIndex }}
     >
       {children}
     </div>
