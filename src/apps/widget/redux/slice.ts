@@ -31,8 +31,8 @@ const initialState: State = {
   isAddingAssertion: false,
 };
 
-export const rootSlice = createSlice({
-  name: "root",
+export const recordingSlice = createSlice({
+  name: "recording",
   initialState,
   reducers: {
     setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
@@ -66,4 +66,4 @@ export const {
   setHasRefreshed,
   setBaseUrl,
   setIsAddingAssertion,
-} = rootSlice.actions;
+} = recordingSlice.actions;

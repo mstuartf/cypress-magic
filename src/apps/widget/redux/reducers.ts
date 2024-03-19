@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { rootSlice } from "./slice";
+import { recordingSlice } from "./slice";
 
-export const rootReducer = combineReducers({
-  root: rootSlice.reducer,
+export const widgetRootReducer = combineReducers({
+  [recordingSlice.name]: recordingSlice.reducer,
 });

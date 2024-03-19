@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { rootReducer } from "./reducers";
+import { widgetRootReducer } from "./reducers";
 import {
   assertionMiddleware,
   cacheMiddleware,
@@ -9,11 +9,12 @@ import {
   urlMatcherMiddleware,
   widgetClickMiddleware,
 } from "./middleware";
+import * as redux from "redux";
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type WidgetRootState = ReturnType<typeof widgetRootReducer>;
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: widgetRootReducer,
   middleware: [
     cacheMiddleware,
     assertionMiddleware,
@@ -24,3 +25,5 @@ export const store = configureStore({
     filterClicksMiddleware,
   ],
 });
+
+export type WidgetMiddleware = redux.Middleware<{}, WidgetRootState>;
