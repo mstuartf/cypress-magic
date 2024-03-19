@@ -1,15 +1,16 @@
 import { saveEvent } from "./slice";
 import { setCache } from "../cache";
 import {
+  getSearchDiff,
+  getUrlDiff,
   isClickEvent,
   isNavigationEvent,
-  checkIfNoUrlChange,
+  isQueryParamChangeEvent,
   isRequestEvent,
   isRequestOrResponseEvent,
   isRequestTriggerEvent,
   isUrlChangeEvent,
   isUserEvent,
-  getUrlDiff,
 } from "../utils";
 import { widgetId } from "../constants";
 import { assertionOverlayId } from "../AddAssertion";
@@ -18,6 +19,7 @@ import {
   NavigationEvent,
   PageRefreshEvent,
   ParsedEvent,
+  QueryParamChangeEvent,
   RequestEvent,
   UrlChangeEvent,
 } from "../../../plugin/types";
@@ -91,17 +93,49 @@ export const navMiddleware: WidgetMiddleware =
       const events = [...(store.getState().recording.events as ParsedEvent[])];
       const previousNavigationEvents = events.filter(
         (e): e is NavigationEvent | UrlChangeEvent =>
-          isNavigationEvent(e) || isUrlChangeEvent(e)
+          isNavigationEvent(e) ||
+          isUrlChangeEvent(e) ||
+          isQueryParamChangeEvent(e)
       );
       if (previousNavigationEvents.length) {
         const lastEvent = previousNavigationEvents.reverse()[0];
-        const noUrlChange = checkIfNoUrlChange(event, lastEvent);
-        action.payload = {
-          ...event,
-          type: noUrlChange ? "refresh" : "urlChange",
-          urlDiff: !noUrlChange && getUrlDiff(event, lastEvent),
-          timestamp: event.timestamp + 1, // move after trigger
-        } as UrlChangeEvent | PageRefreshEvent;
+        const urlDiff = getUrlDiff(event, lastEvent);
+        const searchDiff = getSearchDiff(event, lastEvent);
+        if (!!urlDiff) {
+          action.payload = {
+            ...event,
+            type: "urlChange",
+            urlDiff,
+            timestamp: event.timestamp + 1, // move after trigger
+          } as UrlChangeEvent;
+          next(action);
+          return;
+        } else if (searchDiff.length) {
+          searchDiff.forEach(({ param, added, removed, changed }) => {
+            const newAction = {
+              ...action,
+              payload: {
+                ...action.payload,
+                type: "queryParamChange",
+                timestamp: event.timestamp + 1, // move after trigger
+                param,
+                added,
+                removed,
+                changed,
+              },
+            } as QueryParamChangeEvent;
+            next(newAction);
+          });
+          return;
+        } else {
+          action.payload = {
+            ...event,
+            type: "refresh",
+            timestamp: event.timestamp + 1, // move after trigger
+          } as PageRefreshEvent;
+          next(action);
+          return;
+        }
       }
     }
     next(action);

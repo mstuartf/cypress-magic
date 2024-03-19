@@ -15,6 +15,13 @@ export interface UrlChangeEvent extends NavigationEvent {
   urlDiff: string;
 }
 
+export interface QueryParamChangeEvent extends NavigationEvent {
+  param: string;
+  added?: string;
+  removed?: string;
+  changed?: string;
+}
+
 export interface PageRefreshEvent extends NavigationEvent {}
 
 export interface PerformanceResourceEvent extends BaseEvent {

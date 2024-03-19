@@ -9,6 +9,7 @@ import {
   isPageRefreshEvent,
   isUrlChangeEvent,
   isChangeEvent,
+  isQueryParamChangeEvent,
 } from "../utils";
 
 export const parse = (event: ParsedEvent): string => {
@@ -32,6 +33,16 @@ export const parse = (event: ParsedEvent): string => {
     return `cy.visit('${protocol}//${hostname}${
       port.length ? `:${port}` : ""
     }${pathname}');`;
+  }
+  if (isQueryParamChangeEvent(event)) {
+    const { param, added, removed, changed } = event;
+    if (added) {
+      return `cy.url().should('include', '${param}=${added}')`;
+    }
+    if (changed) {
+      return `cy.url().should('include', '${param}=${changed}')`;
+    }
+    return `cy.url().should('not.include', '${param}=${removed}')`;
   }
   if (isPageRefreshEvent(event)) {
     return `cy.reload();`;
