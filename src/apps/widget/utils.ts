@@ -5,6 +5,7 @@ import {
   ParsedEvent,
   RequestEvent,
   ResponseEvent,
+  UrlChangeEvent,
   UserEvent,
 } from "../../plugin/types";
 
@@ -39,3 +40,19 @@ export function isNavigationEvent(
 ): event is NavigationEvent {
   return (event as NavigationEvent).type === "navigation";
 }
+
+export function isUrlChangeEvent(event: ParsedEvent): event is UrlChangeEvent {
+  return (event as UrlChangeEvent).type === "urlChange";
+}
+
+export const isRefreshPageEvent = (
+  event: NavigationEvent,
+  lastEvent: NavigationEvent
+): event is NavigationEvent => {
+  return !(
+    ["hostname", "protocol", "pathname", "search"] as (keyof NavigationEvent)[]
+  ).filter((prop) => event[prop] != lastEvent[prop]).length;
+};
+
+export const isRequestTriggerEvent = (event: ParsedEvent) =>
+  isUserEvent(event) || isNavigationEvent(event);

@@ -7,7 +7,12 @@ export interface NavigationEvent extends BaseEvent {
   hostname: string;
   protocol: string;
   pathname: string;
+  search: string;
 }
+
+export interface UrlChangeEvent extends NavigationEvent {}
+
+export interface PageRefreshEvent extends NavigationEvent {}
 
 export interface PerformanceResourceEvent extends BaseEvent {
   resources: {

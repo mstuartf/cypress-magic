@@ -3,8 +3,11 @@ import { setCache } from "../cache";
 import {
   isClickEvent,
   isNavigationEvent,
+  isRefreshPageEvent,
   isRequestEvent,
   isRequestOrResponseEvent,
+  isRequestTriggerEvent,
+  isUrlChangeEvent,
   isUserEvent,
 } from "../utils";
 import { widgetId } from "../constants";
@@ -12,8 +15,10 @@ import { assertionOverlayId } from "../AddAssertion";
 import {
   AssertionEvent,
   NavigationEvent,
+  PageRefreshEvent,
   ParsedEvent,
   RequestEvent,
+  UrlChangeEvent,
 } from "../../../plugin/types";
 import { getTargetProps } from "../../../plugin/observers/user";
 import { WidgetMiddleware } from "./store";
@@ -64,9 +69,7 @@ export const throttlerMiddleware: WidgetMiddleware =
     let event = action.payload;
     if (isRequestEvent(event)) {
       const events = [...(store.getState().recording.events as ParsedEvent[])];
-      const trigger = events
-        .reverse()
-        .find((e) => isUserEvent(e) || isNavigationEvent(e))!;
+      const trigger = events.reverse().find((e) => isRequestTriggerEvent(e))!;
       const newEvent: RequestEvent = {
         ...event,
         timestamp: trigger.timestamp - 1,
@@ -85,14 +88,17 @@ export const navMiddleware: WidgetMiddleware =
     let event = action.payload;
     if (isNavigationEvent(event)) {
       const events = [...(store.getState().recording.events as ParsedEvent[])];
-      const isFirstNavigationEvent = !events.find((e) => isNavigationEvent(e));
-      if (!isFirstNavigationEvent) {
-        const newEvent: NavigationEvent = {
+      const previousNavigationEvents = events.filter(
+        (e): e is NavigationEvent | UrlChangeEvent =>
+          isNavigationEvent(e) || isUrlChangeEvent(e)
+      );
+      if (previousNavigationEvents.length) {
+        const lastEvent = previousNavigationEvents.reverse()[0];
+        action.payload = {
           ...event,
-          type: "urlChange",
+          type: isRefreshPageEvent(event, lastEvent) ? "refresh" : "urlChange",
           timestamp: event.timestamp + 1, // move after trigger
-        };
-        action.payload = newEvent;
+        } as UrlChangeEvent | PageRefreshEvent;
       }
     }
     next(action);
