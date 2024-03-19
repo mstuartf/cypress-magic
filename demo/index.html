@@ -4,6 +4,19 @@
     <script>
       function onload() {
         document
+          .getElementById("change-selector-button")
+          .addEventListener("click", function () {
+            let el = document.getElementById("select-this-element");
+            if (!!el) {
+              el.dataset.cy = "select-this-element";
+              el.removeAttribute("id");
+            } else {
+              el = document.querySelector('[data-cy="select-this-element"]');
+              el.id = "select-this-element";
+              delete el.dataset.cy;
+            }
+          });
+        document
           .getElementById("request-button")
           .addEventListener("click", function () {
             fetch("https://swapi.dev/api/people/1").then(console.log);
@@ -101,6 +114,16 @@
           placeholder="Username"
         />
       </div>
+    </div>
+
+    <div>
+      <div id="select-this-element">Select this element</div>
+      <button
+        id="change-selector-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Change selector button
+      </button>
     </div>
 
     <div data-cy="display-text">This is some text.</div>
