@@ -1,23 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  AssertionEvent,
-  ParsedEvent,
-  RequestEvent,
-  ResponseEvent,
-  UserEvent,
-} from "../../../plugin/types";
-import { widgetId } from "../constants";
-import {
-  isClickEvent,
-  isRequestEvent,
-  isRequestOrResponseEvent,
-  isUserEvent,
-} from "../utils";
-import { assertionOverlayId } from "../AddAssertion";
+import { ParsedEvent } from "../../../plugin/types";
+import { readCache } from "../cache";
 
 interface State {
   events: ParsedEvent[];
-  recordingInProgress?: boolean;
+  recordingInProgress: boolean;
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
@@ -25,7 +12,7 @@ interface State {
 
 const initialState: State = {
   events: [],
-  recordingInProgress: undefined,
+  recordingInProgress: false,
   hasRefreshed: false,
   baseUrl: undefined,
   isAddingAssertion: false,
@@ -33,11 +20,13 @@ const initialState: State = {
 
 export const recordingSlice = createSlice({
   name: "recording",
-  initialState,
+  initialState: readCache<State>("recording") || initialState,
   reducers: {
     setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
       state.recordingInProgress = action.payload;
-      state.hasRefreshed = false;
+      if (action.payload) {
+        state.events = [];
+      }
     },
     setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
       state.isAddingAssertion = action.payload;

@@ -1,4 +1,4 @@
-import { saveEvent, setBaseUrl, setRecordingInProgress } from "./slice";
+import { saveEvent } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
@@ -20,13 +20,8 @@ import { WidgetMiddleware } from "./store";
 
 export const cacheMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
-    if (action.type == setRecordingInProgress.type) {
-      setCache("recordingInProgress", action.payload);
-    }
-    if (action.type == setBaseUrl.type) {
-      setCache("baseUrl", action.payload);
-    }
     next(action);
+    setCache(store.getState());
   };
 
 export const assertionMiddleware: WidgetMiddleware =

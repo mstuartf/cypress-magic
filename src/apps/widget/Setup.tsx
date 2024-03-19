@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Header from "./Header";
-import { setBaseUrl, setRecordingInProgress } from "./redux/slice";
+import {
+  setBaseUrl,
+  setHasRefreshed,
+  setRecordingInProgress,
+} from "./redux/slice";
 import { useDispatch } from "react-redux";
 
 const Setup = () => {
@@ -9,6 +13,7 @@ const Setup = () => {
 
   const startRecording = () => {
     dispatch(setBaseUrl(url));
+    dispatch(setHasRefreshed(false));
     dispatch(setRecordingInProgress(true));
     window.location.reload();
   };
