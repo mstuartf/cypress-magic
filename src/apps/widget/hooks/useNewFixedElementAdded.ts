@@ -38,6 +38,6 @@ const isElement = (node: Node): node is Element => {
   return (node as Element).tagName !== undefined;
 };
 
-const isHTMLElement = (element: Element): element is HTMLElement => {
+export const isHTMLElement = (element: Element): element is HTMLElement => {
   return (element as HTMLElement).accessKey !== undefined;
 };

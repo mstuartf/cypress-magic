@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { ParsedEvent } from "../../plugin/types";
-import { parse } from "./parser";
 
-const Typewriter = ({ event }: { event: ParsedEvent }) => {
+const Typewriter = ({ text }: { text: string }) => {
   const [partialText, setPartialText] = useState("");
 
   useEffect(() => {
-    const finalText = parse(event);
+    setPartialText("");
+  }, [text]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (finalText.length > partialText.length) {
-        setPartialText(finalText.slice(0, partialText.length + 1));
+      if (text.length > partialText.length) {
+        setPartialText(text.slice(0, partialText.length + 1));
       }
     }, 10);
     return () => clearInterval(interval);
-  }, [event, partialText]);
+  }, [partialText]);
 
   return <>{partialText}</>;
 };
