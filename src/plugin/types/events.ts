@@ -142,6 +142,4 @@ export enum EventType {
   CLICK = "click",
   CHANGE = "change",
   DBLCLICK = "dblclick",
-  SUBMIT = "submit",
-  DRAGEND = "dragend",
 }
