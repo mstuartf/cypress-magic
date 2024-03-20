@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { widgetId } from "./apps/widget/constants";
 import initialize from "./plugin/initialize";
 import { ParsedEvent } from "./plugin/types";
-import { saveEvent } from "./apps/widget/redux/slice";
+import { saveEvent, saveFixture } from "./apps/widget/redux/slice";
 
 interface W extends Window {
   seasmokeHasLoaded?: boolean;
@@ -25,7 +25,7 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   // this needs to be done immediately (i.e. not in the app) to catch all events from the host page
   initialize({
     saveEvent: (event: ParsedEvent) => store.dispatch(saveEvent(event)),
-    saveFixture: () => {},
+    saveFixture: (name, value) => store.dispatch(saveFixture({ name, value })),
   });
 
   const createRootElement = () => {

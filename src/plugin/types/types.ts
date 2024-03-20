@@ -9,8 +9,7 @@ export interface NestedObj {
   [key: string]: NestedOption | Array<NestedOption>;
 }
 
-export type Fixture = any;
-export type SaveFixture = (name: string, value: Fixture) => void;
+export type SaveFixture = (name: string, value: Blob) => void;
 
 export type InitArgs = {
   saveFixture: SaveFixture;

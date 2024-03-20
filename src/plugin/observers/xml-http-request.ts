@@ -66,17 +66,8 @@ export function initXMLHttpRequestObserver({
           const blob = new Blob([res], { type: blobType });
           const extension = getBlobFileExtension(blob);
           const fixture = `${alias}.${extension}`;
-          pickleBlob(blob)
-            .then((pickle) => {
-              saveFixture(fixture, pickle);
-              saveEvent({ ...event, fixture });
-            })
-            .catch((e) => {
-              console.log(url);
-              console.log(this.getResponseHeader("Content-Type"));
-              console.log(e);
-              saveEvent({ ...event, fixture: "error.json" });
-            });
+          saveFixture(fixture, blob);
+          saveEvent({ ...event, fixture });
         } catch (e) {
           console.log(url);
           console.log(this.getResponseHeader("Content-Type"));
