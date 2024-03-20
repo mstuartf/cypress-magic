@@ -2,13 +2,14 @@ import Typewriter from "./Typewriter";
 import { ReactComponent as Refresh } from "../../zondicons/refresh.svg";
 import { ReactComponent as Trash } from "../../zondicons/trash.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEvent } from "./redux/selectors";
+import { selectEvent, selectMockNetworkRequests } from "./redux/selectors";
 import { deleteEvent, updateEvent } from "./redux/slice";
 import { isUserEvent } from "./utils";
 import { parseSelectorPositionOnly } from "./parser/parseSelector";
 import { getTargetProps } from "../../plugin/observers/user";
 import { isHTMLElement } from "./hooks/useNewFixedElementAdded";
 import { parse } from "./parser";
+import { useEffect, useState } from "react";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -28,13 +29,21 @@ const Event = ({ id }: { id: string }) => {
       }
     }
   };
+  const mockNetworkRequests = useSelector(selectMockNetworkRequests);
+  const [text, setText] = useState("");
+  useEffect(() => {
+    const updated = parse(event, { mockNetworkRequests });
+    if (text !== updated) {
+      setText(updated);
+    }
+  }, [mockNetworkRequests, event]);
   return (
     <div
       key={event.timestamp}
       className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
     >
       <p className="cyw-text-xs cyw-flex-grow">
-        <Typewriter text={parse(event)} />
+        <Typewriter text={text} />
       </p>
       {isUserEvent(event) && (
         <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
