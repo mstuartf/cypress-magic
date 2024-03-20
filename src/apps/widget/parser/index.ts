@@ -10,12 +10,16 @@ import {
   isUrlChangeEvent,
   isChangeEvent,
   isQueryParamChangeEvent,
+  isDblClickEvent,
 } from "../utils";
 
 export const parse = (event: ParsedEvent): string => {
   if (isClickEvent(event)) {
     // todo: detect if right click
     return `${getElementCy(event.target.domPath)}.click();`;
+  }
+  if (isDblClickEvent(event)) {
+    return `${getElementCy(event.target.domPath)}.dblclick();`;
   }
   if (isChangeEvent(event)) {
     if (event.target.tag === "SELECT") {

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ParsedEvent } from "../../../plugin/types";
 import { readCache } from "../cache";
+import { isDblClickEvent } from "../utils";
 
 interface State {
   eventIds: string[];
@@ -42,6 +43,14 @@ export const recordingSlice = createSlice({
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       let event = action.payload;
+      if (isDblClickEvent(event)) {
+        // remove the two last events (the click events)
+        const toRemove = state.eventIds.slice(-2);
+        state.eventIds = [...state.eventIds].filter(
+          (id) => !toRemove.includes(id)
+        );
+        toRemove.forEach((id) => delete state.events[id]);
+      }
       state.eventIds = [...state.eventIds, event.id];
       state.events[event.id] = { ...event };
       if (event.type === "assertion") {
