@@ -62,9 +62,9 @@ export const parse = (
     return `cy.url().should('include', '${event.urlDiff}')`;
   }
   if (isRequestEvent(event)) {
-    const { method, url, alias } = event;
+    const { method, url, alias, fixture } = event;
     if (mockNetworkRequests) {
-      return `cy.intercept('${method}', '${url}', {statusCode: ${200}, fixture: '${alias}.json'}).as('${alias}')`;
+      return `cy.intercept('${method}', '${url}', {statusCode: ${200}, fixture: '${fixture}'}).as('${alias}')`;
     } else {
       return `${
         mockNetworkRequests ? "!!!" : ""

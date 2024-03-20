@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ParsedEvent } from "../../../plugin/types";
+import { ParsedEvent, RequestEvent } from "../../../plugin/types";
 import { readCache } from "../cache";
-import { isDblClickEvent } from "../utils";
+import { isDblClickEvent, isResponseEvent } from "../utils";
 
 interface State {
   eventIds: string[];
@@ -52,6 +52,12 @@ export const recordingSlice = createSlice({
           (id) => !toRemove.includes(id)
         );
         toRemove.forEach((id) => delete state.events[id]);
+      }
+      if (isResponseEvent(event)) {
+        state.events[event.requestId] = {
+          ...(state.events[event.requestId] as RequestEvent),
+          fixture: event.fixture || undefined,
+        };
       }
       state.eventIds = [...state.eventIds, event.id];
       state.events[event.id] = { ...event };

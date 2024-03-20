@@ -33,6 +33,7 @@ export interface RequestEvent extends BaseEvent {
   method: string;
   initiator: "xml" | "fetch";
   alias: string;
+  fixture?: string;
 }
 
 export interface ResponseEvent extends BaseEvent {
