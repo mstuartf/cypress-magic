@@ -1,6 +1,10 @@
 import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
 import { AliasBuilder } from "../utils/aliases";
-import { getBlobFileExtension, pickleBlob } from "../utils/pickleBlob";
+import {
+  aliasToFileName,
+  getBlobFileExtension,
+  pickleBlob,
+} from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 import { generateEventId } from "../utils/generateEventId";
 
@@ -71,7 +75,7 @@ const parseResponse = (
       .blob()
       .then((blob) => {
         const extension = getBlobFileExtension(blob);
-        const fixture = `${alias}.${extension}`;
+        const fixture = `${aliasToFileName(alias)}.${extension}`;
         saveFixture(fixture, blob);
         resolve({ ...event, fixture });
       })

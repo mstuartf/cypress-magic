@@ -34,6 +34,7 @@ export const recordingSlice = createSlice({
       if (action.payload) {
         state.eventIds = [];
         state.events = {};
+        state.fixtures = {};
       }
     },
     setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
