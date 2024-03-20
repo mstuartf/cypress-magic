@@ -34,6 +34,7 @@ export interface RequestEvent extends BaseEvent {
   initiator: "xml" | "fetch";
   alias: string;
   fixture?: string;
+  status?: number;
 }
 
 export interface ResponseEvent extends BaseEvent {
