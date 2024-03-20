@@ -5,6 +5,8 @@ import { selectHasRefreshed } from "./redux/selectors";
 import Header from "./Header";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
+import Toggle from "./Toggle";
+import ToggleMocks from "./ToggleMocks";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -49,7 +51,11 @@ const RecordingInProgress = () => {
               Save
             </button>
           </div>
+          <div className="h-4" />
+          <ToggleMocks />
+          <div className="h-4" />
           <EventList />
+          <div className="h-4" />
           <AddAssertion />
         </>
       )}

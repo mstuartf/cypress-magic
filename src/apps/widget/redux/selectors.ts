@@ -16,3 +16,5 @@ export const selectHasRefreshed = (state: WidgetRootState) =>
   state.recording.hasRefreshed;
 export const selectIsAddingAssertion = (state: WidgetRootState) =>
   state.recording.isAddingAssertion;
+export const selectMockNetworkRequests = (state: WidgetRootState) =>
+  state.recording.mockNetworkRequests;
