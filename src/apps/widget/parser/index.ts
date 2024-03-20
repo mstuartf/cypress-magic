@@ -13,7 +13,14 @@ import {
   isDblClickEvent,
 } from "../utils";
 
-export const parse = (event: ParsedEvent): string => {
+interface ParseOptions {
+  mockNetworkRequests: boolean;
+}
+
+export const parse = (
+  event: ParsedEvent,
+  { mockNetworkRequests }: ParseOptions
+): string => {
   if (isClickEvent(event)) {
     // todo: detect if right click
     return `${getElementCy(event.target.domPath)}.click();`;
@@ -56,7 +63,15 @@ export const parse = (event: ParsedEvent): string => {
   }
   if (isRequestEvent(event)) {
     const { method, url, alias } = event;
-    return `cy.intercept('${method}', '${url}').as('${alias}')`;
+    if (mockNetworkRequests) {
+      return `cy.intercept('${method}', '${url}', {statusCode: ${200}, body: ${JSON.stringify(
+        {}
+      )}}).as('${alias}')`;
+    } else {
+      return `${
+        mockNetworkRequests ? "!!!" : ""
+      }cy.intercept('${method}', '${url}').as('${alias}')`;
+    }
   }
   if (isResponseEvent(event)) {
     return `cy.wait('@${event.alias}')`;

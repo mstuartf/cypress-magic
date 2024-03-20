@@ -14,7 +14,7 @@ const Typewriter = ({ text }: { text: string }) => {
       }
     }, 10);
     return () => clearInterval(interval);
-  }, [partialText]);
+  }, [partialText, text]);
 
   return <>{partialText}</>;
 };
