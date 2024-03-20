@@ -1,7 +1,7 @@
 import { InitArgs, ResponseEvent } from "../types";
-import { v4 as uuidv4 } from "uuid";
 import { getBlobFileExtension, pickleBlob } from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
+import { generateEventId } from "../utils/generateEventId";
 
 export function initXMLHttpRequestObserver({
   saveEvent,
@@ -13,7 +13,7 @@ export function initXMLHttpRequestObserver({
     // cache these so they are available in onreadystatechange
     (this as any).__method = arguments[0].toUpperCase();
     (this as any).__url = getAbsoluteUrl(arguments[1]);
-    (this as any).__id = uuidv4();
+    (this as any).__id = generateEventId();
     (this as any).__alias = buildAlias({
       url: (this as any).__url,
       method: (this as any).__method,
@@ -41,6 +41,7 @@ export function initXMLHttpRequestObserver({
         const alias = (this as any).__alias;
         const status = this.status;
         const event: Omit<ResponseEvent, "body" | "fixture"> = {
+          id: generateEventId(),
           type: "response",
           timestamp: Date.now(),
           method,

@@ -3,7 +3,8 @@ import { ParsedEvent } from "../../../plugin/types";
 import { readCache } from "../cache";
 
 interface State {
-  events: ParsedEvent[];
+  eventIds: string[];
+  events: { [id: string]: ParsedEvent };
   recordingInProgress: boolean;
   hasRefreshed: boolean;
   baseUrl?: string;
@@ -11,7 +12,8 @@ interface State {
 }
 
 const initialState: State = {
-  events: [],
+  eventIds: [],
+  events: {},
   recordingInProgress: false,
   hasRefreshed: false,
   baseUrl: undefined,
@@ -25,7 +27,8 @@ export const recordingSlice = createSlice({
     setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
       state.recordingInProgress = action.payload;
       if (action.payload) {
-        state.events = [];
+        state.eventIds = [];
+        state.events = {};
       }
     },
     setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
@@ -39,9 +42,8 @@ export const recordingSlice = createSlice({
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       let event = action.payload;
-      state.events = [...state.events, event].sort(
-        (a, b) => a.timestamp - b.timestamp
-      );
+      state.eventIds = [...state.eventIds, event.id];
+      state.events[event.id] = { ...event };
       if (event.type === "assertion") {
         state.isAddingAssertion = false;
       }

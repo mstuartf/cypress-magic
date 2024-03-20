@@ -17,8 +17,10 @@ import { finder } from "@medv/finder";
 import { isHidden } from "../utils/isHidden";
 import { getDomPath } from "../utils/getDomPath";
 import { createErrorEvent } from "../utils/createErrorEvent";
+import { generateEventId } from "../utils/generateEventId";
 
 const getBaseProps = (event: Event): BaseEvent => ({
+  id: generateEventId(),
   type: event.type,
   timestamp: Date.now(),
 });
@@ -65,6 +67,7 @@ const parseUploadEvent = (
   // todo: blobify
   saveFixture(file.name, file);
   return {
+    id: generateEventId(),
     type: "fileUpload",
     timestamp: Date.now(),
     ...getTargetProps(event.target as HTMLElement),
