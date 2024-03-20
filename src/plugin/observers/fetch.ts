@@ -73,7 +73,7 @@ const parseResponse = (
         const extension = getBlobFileExtension(blob);
         pickleBlob(blob)
           .then((pickle) => {
-            const fixture = `api${alias}.${extension}`;
+            const fixture = `${alias}.${extension}`;
             saveFixture(fixture, pickle);
             resolve({ ...event, fixture });
           })
