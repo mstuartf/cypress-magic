@@ -71,17 +71,9 @@ const parseResponse = (
       .blob()
       .then((blob) => {
         const extension = getBlobFileExtension(blob);
-        pickleBlob(blob)
-          .then((pickle) => {
-            const fixture = `${alias}.${extension}`;
-            saveFixture(fixture, pickle);
-            resolve({ ...event, fixture });
-          })
-          .catch((e) => {
-            console.log(e);
-            console.log(response);
-            resolve({ ...event, fixture: "error.json" });
-          });
+        const fixture = `${alias}.${extension}`;
+        saveFixture(fixture, blob);
+        resolve({ ...event, fixture });
       })
       .catch((e) => {
         console.log(e);
