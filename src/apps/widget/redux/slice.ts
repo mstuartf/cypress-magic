@@ -10,6 +10,7 @@ interface State {
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
+  mockNetworkRequests: boolean;
 }
 
 const initialState: State = {
@@ -19,6 +20,7 @@ const initialState: State = {
   hasRefreshed: false,
   baseUrl: undefined,
   isAddingAssertion: false,
+  mockNetworkRequests: false,
 };
 
 export const recordingSlice = createSlice({
@@ -67,6 +69,9 @@ export const recordingSlice = createSlice({
         ...action.payload,
       };
     },
+    setMockNetworkRequests: (state, action: PayloadAction<boolean>) => {
+      state.mockNetworkRequests = action.payload;
+    },
   },
 });
 
@@ -78,4 +83,5 @@ export const {
   setIsAddingAssertion,
   deleteEvent,
   updateEvent,
+  setMockNetworkRequests,
 } = recordingSlice.actions;
