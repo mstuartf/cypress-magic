@@ -48,6 +48,10 @@ export const recordingSlice = createSlice({
         state.isAddingAssertion = false;
       }
     },
+    deleteEvent: (state, action: PayloadAction<string>) => {
+      state.eventIds = [...state.eventIds].filter((id) => id != action.payload);
+      delete state.events[action.payload];
+    },
   },
 });
 
@@ -57,4 +61,5 @@ export const {
   setHasRefreshed,
   setBaseUrl,
   setIsAddingAssertion,
+  deleteEvent,
 } = recordingSlice.actions;
