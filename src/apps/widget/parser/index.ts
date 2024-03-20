@@ -64,9 +64,7 @@ export const parse = (
   if (isRequestEvent(event)) {
     const { method, url, alias } = event;
     if (mockNetworkRequests) {
-      return `cy.intercept('${method}', '${url}', {statusCode: ${200}, body: ${JSON.stringify(
-        {}
-      )}}).as('${alias}')`;
+      return `cy.intercept('${method}', '${url}', {statusCode: ${200}, fixture: '${alias}.json'}).as('${alias}')`;
     } else {
       return `${
         mockNetworkRequests ? "!!!" : ""
