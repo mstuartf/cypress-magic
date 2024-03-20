@@ -64,11 +64,11 @@ export const parse = (
   if (isRequestEvent(event)) {
     const { method, url, alias, fixture, status } = event;
     if (mockNetworkRequests) {
-      return `cy.intercept('${method}', '${url}', {statusCode: ${status}, fixture: '${fixture}'}).as('${alias}')`;
+      return `cy.intercept('${method}', '${url}', {statusCode: ${
+        status || "..."
+      }, fixture: '${fixture || "..."}'}).as('${alias}')`;
     } else {
-      return `${
-        mockNetworkRequests ? "!!!" : ""
-      }cy.intercept('${method}', '${url}').as('${alias}')`;
+      return `cy.intercept('${method}', '${url}').as('${alias}')`;
     }
   }
   if (isResponseEvent(event)) {
