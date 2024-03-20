@@ -3,24 +3,46 @@ import { ReactComponent as Refresh } from "../../zondicons/refresh.svg";
 import { ReactComponent as Trash } from "../../zondicons/trash.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEvent } from "./redux/selectors";
-import { deleteEvent } from "./redux/slice";
+import { deleteEvent, updateEvent } from "./redux/slice";
+import { isUserEvent } from "./utils";
+import { parseSelectorPositionOnly } from "./parser/parseSelector";
+import { getTargetProps } from "../../plugin/observers/user";
+import { isHTMLElement } from "./hooks/useNewFixedElementAdded";
+import { parse } from "./parser";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
   const event = useSelector(selectEvent(id));
+  const updateEventTarget = () => {
+    if (isUserEvent(event)) {
+      const targetEl = document.querySelector(
+        parseSelectorPositionOnly(event.target.domPath)
+      );
+      if (targetEl && isHTMLElement(targetEl)) {
+        dispatch(
+          updateEvent({
+            ...event,
+            ...getTargetProps(targetEl),
+          })
+        );
+      }
+    }
+  };
   return (
     <div
       key={event.timestamp}
       className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
     >
       <p className="cyw-text-xs cyw-flex-grow">
-        <Typewriter event={event} />
+        <Typewriter text={parse(event)} />
       </p>
-      <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
-        <button className="h-4 w-4">
-          <Refresh />
-        </button>
-      </div>
+      {isUserEvent(event) && (
+        <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
+          <button onClick={updateEventTarget} className="h-4 w-4">
+            <Refresh />
+          </button>
+        </div>
+      )}
       <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
         <button className="h-4 w-4" onClick={() => dispatch(deleteEvent(id))}>
           <Trash />

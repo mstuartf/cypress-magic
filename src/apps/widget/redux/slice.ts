@@ -52,6 +52,12 @@ export const recordingSlice = createSlice({
       state.eventIds = [...state.eventIds].filter((id) => id != action.payload);
       delete state.events[action.payload];
     },
+    updateEvent: (state, action: PayloadAction<ParsedEvent>) => {
+      state.events[action.payload.id] = {
+        ...state.events[action.payload.id],
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -62,4 +68,5 @@ export const {
   setBaseUrl,
   setIsAddingAssertion,
   deleteEvent,
+  updateEvent,
 } = recordingSlice.actions;
