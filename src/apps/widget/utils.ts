@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   ClickEvent,
   DblClickEvent,
+  HistoryEvent,
   NavigationEvent,
   PageRefreshEvent,
   ParsedEvent,
@@ -47,6 +48,10 @@ export function isResponseEvent(event: ParsedEvent): event is ResponseEvent {
   return (event as ResponseEvent).type === "response";
 }
 
+export function isHistoryEvent(event: ParsedEvent): event is HistoryEvent {
+  return (event as HistoryEvent).type === "history";
+}
+
 export function isNavigationEvent(
   event: ParsedEvent
 ): event is NavigationEvent {
@@ -69,59 +74,5 @@ export function isPageRefreshEvent(
   return (event as PageRefreshEvent).type === "refresh";
 }
 
-export const getUrlDiff = (
-  event: NavigationEvent,
-  lastEvent: NavigationEvent
-): string | undefined => {
-  if (
-    event.protocol !== lastEvent.protocol ||
-    event.hostname !== lastEvent.hostname
-  ) {
-    return `${event.protocol}//${event.hostname}${event.pathname}${event.search}`;
-  }
-  if (event.pathname != lastEvent.pathname) {
-    return `${event.pathname}${event.search}`;
-  }
-  return undefined;
-};
-
-function getRemovedParamsSearchString(
-  updatedSearchParams: URLSearchParams,
-  originalSearchParams: URLSearchParams
-) {
-  const diffs: Pick<
-    QueryParamChangeEvent,
-    "param" | "added" | "removed" | "changed"
-  >[] = [];
-
-  originalSearchParams.forEach((value, param) => {
-    if (!updatedSearchParams.has(param)) {
-      diffs.push({ param, removed: value });
-    } else if (
-      updatedSearchParams.get(param) != originalSearchParams.get(param)
-    ) {
-      diffs.push({ param, changed: value });
-    }
-  });
-
-  updatedSearchParams.forEach((value, param) => {
-    if (!originalSearchParams.has(param)) {
-      diffs.push({ param, added: value });
-    }
-  });
-
-  return diffs;
-}
-
-export const getSearchDiff = (
-  event: NavigationEvent,
-  lastEvent: NavigationEvent
-): Pick<QueryParamChangeEvent, "param" | "added" | "removed" | "changed">[] => {
-  return getRemovedParamsSearchString(
-    new URLSearchParams(event.search),
-    new URLSearchParams(lastEvent.search)
-  );
-};
-
 export const isRequestTriggerEvent = (event: ParsedEvent) =>
-  isUserEvent(event) || isNavigationEvent(event);
+  isUserEvent(event) || isHistoryEvent(event);
