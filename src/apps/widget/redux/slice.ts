@@ -57,6 +57,7 @@ export const recordingSlice = createSlice({
         state.events[event.requestId] = {
           ...(state.events[event.requestId] as RequestEvent),
           fixture: event.fixture || undefined,
+          status: event.status,
         };
       }
       state.eventIds = [...state.eventIds, event.id];
