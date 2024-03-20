@@ -1,15 +1,11 @@
 import { saveEvent } from "./slice";
 import { setCache } from "../cache";
 import {
-  getSearchDiff,
-  getUrlDiff,
   isClickEvent,
   isNavigationEvent,
-  isQueryParamChangeEvent,
   isRequestEvent,
   isRequestOrResponseEvent,
   isRequestTriggerEvent,
-  isUrlChangeEvent,
   isUserEvent,
 } from "../utils";
 import { widgetId } from "../constants";
@@ -17,16 +13,11 @@ import { assertionOverlayId } from "../AddAssertion";
 import {
   AssertionEvent,
   NavigationEvent,
-  PageRefreshEvent,
-  ParsedEvent,
-  QueryParamChangeEvent,
   RequestEvent,
-  UrlChangeEvent,
 } from "../../../plugin/types";
 import { getTargetProps } from "../../../plugin/observers/user";
 import { WidgetMiddleware } from "./store";
-import { generateEventId } from "../../../plugin/utils/generateEventId";
-import { selectEventIdsSorted, selectEventsSorted } from "./selectors";
+import { selectEventsSorted } from "./selectors";
 
 export const cacheMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
@@ -95,50 +86,10 @@ export const navMiddleware: WidgetMiddleware =
     if (isNavigationEvent(event)) {
       const events = [...selectEventsSorted(store.getState())];
       const previousNavigationEvents = events.filter(
-        (e): e is NavigationEvent | UrlChangeEvent =>
-          isNavigationEvent(e) ||
-          isUrlChangeEvent(e) ||
-          isQueryParamChangeEvent(e)
+        (e): e is NavigationEvent => isNavigationEvent(e)
       );
       if (previousNavigationEvents.length) {
-        const lastEvent = previousNavigationEvents.reverse()[0];
-        const urlDiff = getUrlDiff(event, lastEvent);
-        const searchDiff = getSearchDiff(event, lastEvent);
-        if (!!urlDiff) {
-          action.payload = {
-            ...event,
-            type: "urlChange",
-            urlDiff,
-            timestamp: event.timestamp + 1, // move after trigger
-          } as UrlChangeEvent;
-          next(action);
-          return;
-        } else if (searchDiff.length) {
-          searchDiff.forEach(({ param, added, removed, changed }) => {
-            const newAction = {
-              ...action,
-              payload: {
-                ...action.payload,
-                type: "queryParamChange",
-                timestamp: event.timestamp + 1, // move after trigger
-                param,
-                added,
-                removed,
-                changed,
-              },
-            } as QueryParamChangeEvent;
-            next(newAction);
-          });
-          return;
-        } else {
-          action.payload = {
-            ...event,
-            type: "refresh",
-            timestamp: event.timestamp + 1, // move after trigger
-          } as PageRefreshEvent;
-          next(action);
-          return;
-        }
+        action.payload.type = "refresh";
       }
     }
     next(action);

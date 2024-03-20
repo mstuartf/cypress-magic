@@ -4,7 +4,7 @@ import { initializers, Observer } from "./observers";
 import { MainInitArgs } from "./types";
 import { buildAliasTracker } from "./utils/aliases";
 
-const observers: Observer[] = ["history", "fetch", "user", "xml"];
+const observers: Observer[] = ["navigation", "history", "fetch", "user", "xml"];
 
 const initialize = (args: MainInitArgs) => {
   const buildAlias = buildAliasTracker();

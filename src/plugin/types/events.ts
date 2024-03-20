@@ -4,7 +4,9 @@ export interface BaseEvent {
   id: string;
 }
 
-export interface NavigationEvent extends BaseEvent {
+export interface NavigationEvent extends HistoryEvent {}
+
+export interface HistoryEvent extends BaseEvent {
   hostname: string;
   protocol: string;
   pathname: string;
@@ -12,11 +14,11 @@ export interface NavigationEvent extends BaseEvent {
   port: string;
 }
 
-export interface UrlChangeEvent extends NavigationEvent {
+export interface UrlChangeEvent extends HistoryEvent {
   urlDiff: string;
 }
 
-export interface QueryParamChangeEvent extends NavigationEvent {
+export interface QueryParamChangeEvent extends HistoryEvent {
   param: string;
   added?: string;
   removed?: string;
@@ -99,7 +101,7 @@ export type UserEvent = ChangeEvent | ClickEvent | DblClickEvent;
 
 export type ParsedEvent =
   | UserEvent
-  | NavigationEvent
+  | HistoryEvent
   | RequestEvent
   | ResponseEvent
   | ViewEvent
