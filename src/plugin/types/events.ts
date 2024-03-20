@@ -25,13 +25,6 @@ export interface QueryParamChangeEvent extends NavigationEvent {
 
 export interface PageRefreshEvent extends NavigationEvent {}
 
-export interface PerformanceResourceEvent extends BaseEvent {
-  resources: {
-    name: PerformanceResourceTiming["name"];
-    initiatorType: PerformanceResourceTiming["initiatorType"];
-  }[];
-}
-
 export interface RequestEvent extends BaseEvent {
   id: string;
   url: string;
@@ -74,20 +67,8 @@ export interface TargetEvent {
   pathname: string;
 }
 
-export interface DragDropEvent extends BaseEvent, TargetEvent {
-  destination: {
-    clientX: number;
-    clientY: number;
-  };
-}
-
 export interface ChangeEvent extends BaseEvent, TargetEvent {
   value: any;
-}
-
-export interface UploadEvent extends BaseEvent, TargetEvent {
-  mimeType: string;
-  fileName: string;
 }
 
 export interface ClickEvent extends BaseEvent, TargetEvent {
@@ -96,14 +77,14 @@ export interface ClickEvent extends BaseEvent, TargetEvent {
   href?: string;
 }
 
+export interface DblClickEvent extends ClickEvent {}
+
 export interface AssertionEvent extends ClickEvent {}
 
 export interface ErrorEvent extends BaseEvent {
   handler: string;
   message: string;
 }
-
-export interface SubmitEvent extends BaseEvent, TargetEvent {}
 
 export interface ViewEvent extends BaseEvent {
   width: number;
@@ -114,19 +95,7 @@ export interface ViewEvent extends BaseEvent {
   isLandscape: boolean;
 }
 
-export type UserEvent =
-  | ChangeEvent
-  | ClickEvent
-  | SubmitEvent
-  | DragDropEvent
-  | UploadEvent;
-
-export type StorageType = "local" | "session" | "cookie";
-
-export interface StorageEvent extends BaseEvent {
-  fixture: string;
-  storageType: StorageType;
-}
+export type UserEvent = ChangeEvent | ClickEvent | DblClickEvent;
 
 export type ParsedEvent =
   | UserEvent
@@ -134,8 +103,6 @@ export type ParsedEvent =
   | RequestEvent
   | ResponseEvent
   | ViewEvent
-  | StorageEvent
-  | PerformanceResourceEvent
   | ErrorEvent;
 
 export enum EventType {
