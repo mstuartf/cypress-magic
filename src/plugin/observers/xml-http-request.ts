@@ -1,5 +1,9 @@
 import { InitArgs, ResponseEvent } from "../types";
-import { getBlobFileExtension, pickleBlob } from "../utils/pickleBlob";
+import {
+  aliasToFileName,
+  getBlobFileExtension,
+  pickleBlob,
+} from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 import { generateEventId } from "../utils/generateEventId";
 
@@ -65,7 +69,7 @@ export function initXMLHttpRequestObserver({
               : this.response;
           const blob = new Blob([res], { type: blobType });
           const extension = getBlobFileExtension(blob);
-          const fixture = `${alias}.${extension}`;
+          const fixture = `${aliasToFileName(alias)}.${extension}`;
           saveFixture(fixture, blob);
           saveEvent({ ...event, fixture });
         } catch (e) {

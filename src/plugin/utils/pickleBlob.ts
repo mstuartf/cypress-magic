@@ -50,3 +50,5 @@ export const getBlobFileExtension = (blob: Blob): string => {
     ? mimeInfo.extensions[0]
     : "json";
 };
+
+export const aliasToFileName = (alias: string) => alias.replaceAll("/", "_");

@@ -7,6 +7,7 @@ import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
 import Toggle from "./Toggle";
 import ToggleMocks from "./ToggleMocks";
+import DownloadButton from "./DownloadButton";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -54,9 +55,7 @@ const RecordingInProgress = () => {
           <div className="h-4" />
           <EventList />
           <div className="h-4" />
-          <button className="text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded">
-            Download test and fixtures!
-          </button>
+          <DownloadButton />
         </>
       )}
     </div>

@@ -18,3 +18,5 @@ export const selectIsAddingAssertion = (state: WidgetRootState) =>
   state.recording.isAddingAssertion;
 export const selectMockNetworkRequests = (state: WidgetRootState) =>
   state.recording.mockNetworkRequests;
+export const selectFixtures = (state: WidgetRootState) =>
+  Object.entries(state.recording.fixtures);
