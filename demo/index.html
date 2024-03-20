@@ -17,6 +17,18 @@
             }
           });
         document
+          .getElementById("add-selector-button")
+          .addEventListener("click", function (event) {
+            const el = event.target.parentNode.firstElementChild;
+            if (!!el) {
+              if ("cy" in el.dataset) {
+                delete el.dataset.cy;
+              } else {
+                el.dataset.cy = "now-has-selector";
+              }
+            }
+          });
+        document
           .getElementById("request-button")
           .addEventListener("click", function () {
             fetch("https://swapi.dev/api/people/1").then(console.log);
@@ -123,6 +135,16 @@
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         Change selector button
+      </button>
+    </div>
+
+    <div>
+      <div>Select this element</div>
+      <button
+        id="add-selector-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Add selector button
       </button>
     </div>
 
