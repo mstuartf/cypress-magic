@@ -65,7 +65,7 @@ export function initXMLHttpRequestObserver({
               : this.response;
           const blob = new Blob([res], { type: blobType });
           const extension = getBlobFileExtension(blob);
-          const fixture = `api${alias}.${extension}`;
+          const fixture = `${alias}.${extension}`;
           pickleBlob(blob)
             .then((pickle) => {
               saveFixture(fixture, pickle);
