@@ -1,37 +1,18 @@
 import { useSelector } from "react-redux";
-import { selectEvents } from "./redux/selectors";
-import Typewriter from "./Typewriter";
+import { selectEventIdsSorted } from "./redux/selectors";
 import { useEffect, useRef, useState } from "react";
-import { ReactComponent as Refresh } from "../../zondicons/refresh.svg";
-import { ReactComponent as Trash } from "../../zondicons/trash.svg";
+import Event from "./Event";
 
 const EventList = () => {
-  const events = useSelector(selectEvents);
+  const eventIds = useSelector(selectEventIdsSorted);
   const ref = useScrollDownOnSizeIncrease();
   return (
     <div
       ref={ref}
       className="cyw-flex-grow cyw-my-4 cyw-border cyw-border-gray-400 cyw-rounded cyw-p-2 cyw-overflow-scroll"
     >
-      {events.map((event) => (
-        <div
-          key={event.timestamp}
-          className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
-        >
-          <p className="cyw-text-xs cyw-flex-grow">
-            <Typewriter event={event} />
-          </p>
-          <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
-            <button className="h-4 w-4">
-              <Refresh />
-            </button>
-          </div>
-          <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
-            <button className="h-4 w-4">
-              <Trash />
-            </button>
-          </div>
-        </div>
+      {eventIds.map((id) => (
+        <Event id={id} key={id} />
       ))}
     </div>
   );

@@ -1,6 +1,7 @@
 export interface BaseEvent {
   type: string;
   timestamp: number;
+  id: string;
 }
 
 export interface NavigationEvent extends BaseEvent {

@@ -25,6 +25,8 @@ import {
 } from "../../../plugin/types";
 import { getTargetProps } from "../../../plugin/observers/user";
 import { WidgetMiddleware } from "./store";
+import { generateEventId } from "../../../plugin/utils/generateEventId";
+import { selectEventIdsSorted, selectEventsSorted } from "./selectors";
 
 export const cacheMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
@@ -51,6 +53,7 @@ export const assertionMiddleware: WidgetMiddleware =
       )[1] as HTMLElement;
 
       const newEvent: AssertionEvent = {
+        id: event.id,
         type: "assertion",
         timestamp: Date.now(),
         ...getTargetProps(elementUnderneath),
@@ -71,7 +74,7 @@ export const throttlerMiddleware: WidgetMiddleware =
     }
     let event = action.payload;
     if (isRequestEvent(event)) {
-      const events = [...(store.getState().recording.events as ParsedEvent[])];
+      const events = [...selectEventsSorted(store.getState())];
       const trigger = events.reverse().find((e) => isRequestTriggerEvent(e))!;
       const newEvent: RequestEvent = {
         ...event,
@@ -90,7 +93,7 @@ export const navMiddleware: WidgetMiddleware =
     }
     let event = action.payload;
     if (isNavigationEvent(event)) {
-      const events = [...(store.getState().recording.events as ParsedEvent[])];
+      const events = [...selectEventsSorted(store.getState())];
       const previousNavigationEvents = events.filter(
         (e): e is NavigationEvent | UrlChangeEvent =>
           isNavigationEvent(e) ||

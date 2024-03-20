@@ -2,8 +2,10 @@
 
 import { BaseEvent, InitArgs, SaveEvent } from "../types";
 import { createErrorEvent } from "../utils/createErrorEvent";
+import { generateEventId } from "../utils/generateEventId";
 
 const getBaseEvent = (): BaseEvent => ({
+  id: generateEventId(),
   type: "navigation",
   timestamp: Date.now(),
 });
