@@ -14,30 +14,12 @@ const AddAssertion = () => {
   }, [isAddingAssertion]);
 
   return (
-    <>
-      <div>
-        {isAddingAssertion ? (
-          <div className="cyw-grid">
-            <div className="cyw-h-10 cyw-flex cyw-items-center cyw-justify-center cyw-text-sm cyw-font-medium cyw-text-gray-900">
-              Click on the element to assert...
-            </div>
-          </div>
-        ) : (
-          <div className="cyw-grid">
-            <button
-              onClick={() => {
-                if (!isAddingAssertion) {
-                  dispatch(setIsAddingAssertion(true));
-                }
-              }}
-              className="cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
-            >
-              + Add assertion
-            </button>
-          </div>
-        )}
-      </div>
-    </>
+    <button
+      onClick={() => dispatch(setIsAddingAssertion(!isAddingAssertion))}
+      className="text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
+    >
+      {isAddingAssertion ? "Cancel assertion" : "+ Add assertion"}
+    </button>
   );
 };
 

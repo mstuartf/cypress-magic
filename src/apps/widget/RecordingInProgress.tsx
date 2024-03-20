@@ -43,20 +43,20 @@ const RecordingInProgress = () => {
           <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
             <button
               onClick={onCancel}
-              className="cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-4 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
+              className="text-xs cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-4 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
             >
-              Cancel
+              Discard test
             </button>
-            <button className="cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded">
-              Save
-            </button>
+            <AddAssertion />
           </div>
           <div className="h-4" />
           <ToggleMocks />
           <div className="h-4" />
           <EventList />
           <div className="h-4" />
-          <AddAssertion />
+          <button className="text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded">
+            Download test and fixtures!
+          </button>
         </>
       )}
     </div>
