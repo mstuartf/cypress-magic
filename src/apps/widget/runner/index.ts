@@ -83,5 +83,4 @@ export const run = (
   //     : `should('exist')`;
   //   return `${getElementCy(domPath)}.${assertion};`;
   // }
-  console.log(event);
 };

@@ -42,6 +42,7 @@ export interface ResponseEvent extends BaseEvent {
   url: string;
   method: string;
   status: number;
+  statusText: string;
   alias: string;
   fixture: string | null;
 }

@@ -53,6 +53,7 @@ export function initXMLHttpRequestObserver({
           url,
           status,
           alias,
+          statusText: this.statusText,
         };
         try {
           if (status === 204) {
@@ -75,9 +76,6 @@ export function initXMLHttpRequestObserver({
             saveEvent({ ...event, fixture });
           });
         } catch (e) {
-          console.log(url);
-          console.log(this.getResponseHeader("Content-Type"));
-          console.log(e);
           saveEvent({ ...event, fixture: "error.json" });
         }
       }

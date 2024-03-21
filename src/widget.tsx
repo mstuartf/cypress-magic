@@ -13,6 +13,10 @@ import {
   updateAliasTracker,
 } from "./apps/widget/redux/slice";
 import { buildAliasTracker } from "./plugin/utils/aliases";
+import {
+  selectMockedResponse,
+  selectMockNetworkInTests,
+} from "./apps/widget/redux/selectors";
 
 interface W extends Window {
   seasmokeHasLoaded?: boolean;
@@ -37,6 +41,8 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
       store.getState().recording.aliasTracker,
       (updated) => store.dispatch(updateAliasTracker(updated))
     ),
+    mockApiCalls: () => selectMockNetworkInTests(store.getState()),
+    getMockedResponse: (alias) => selectMockedResponse(alias)(store.getState()),
   });
 
   const createRootElement = () => {

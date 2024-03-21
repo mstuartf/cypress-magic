@@ -36,7 +36,11 @@
         document
           .getElementById("request-button")
           .addEventListener("click", function () {
-            fetch("https://swapi.dev/api/people/1").then(console.log);
+            fetch("https://swapi.dev/api/people/1").then((res) => {
+              res.json().then(({ name }) => {
+                document.getElementById("request-results").innerText = name;
+              });
+            });
           });
         document
           .getElementById("add-param-button")
@@ -88,6 +92,7 @@
       >
         Request button
       </button>
+      <div class="ml-4 flex items-center" id="request-results"></div>
     </div>
 
     <div class="flex">

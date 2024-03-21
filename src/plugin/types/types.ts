@@ -16,4 +16,10 @@ export type InitArgs = {
   saveFixture: SaveFixture;
   buildAlias: AliasBuilder;
   saveEvent: SaveEvent;
+  mockApiCalls: () => boolean;
+  getMockedResponse: (alias: string) => {
+    status: number;
+    statusText: string;
+    content: PickledBlob;
+  };
 };
