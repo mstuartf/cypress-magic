@@ -16,7 +16,7 @@ const AddAssertion = () => {
   return (
     <button
       onClick={() => dispatch(setIsAddingAssertion(!isAddingAssertion))}
-      className="text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
+      className="cyw-text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
     >
       {isAddingAssertion ? "Cancel assertion" : "+ Add assertion"}
     </button>

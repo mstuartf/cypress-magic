@@ -10,16 +10,16 @@ const Toggle = ({
   onChange: () => void;
 }) => (
   <div>
-    <label className="inline-flex items-center cursor-pointer">
+    <label className="cyw-inline-flex cyw-items-center cyw-cursor-pointer">
       <input
         type="checkbox"
         value=""
-        className="sr-only peer"
+        className="cyw-sr-only cyw-peer"
         checked={checked}
         onChange={onChange}
       />
-      <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-      <span className="ms-3 text-xs text-gray-900 dark:text-gray-300">
+      <div className="cyw-relative cyw-w-9 cyw-h-5 cyw-bg-gray-200 peer-focus:cyw-outline-none peer-focus:cyw-ring-4 peer-focus:cyw-ring-blue-300 dark:peer-focus:cyw-ring-blue-800 cyw-rounded-full cyw-peer dark:cyw-bg-gray-700 peer-checked:after:cyw-translate-x-full rtl:peer-checked:after:-cyw-translate-x-full peer-checked:after:cyw-border-white after:cyw-content-[''] after:cyw-absolute after:cyw-top-[2px] after:cyw-start-[2px] after:cyw-bg-white after:cyw-border-gray-300 after:cyw-border after:cyw-rounded-full after:cyw-h-4 after:cyw-w-4 after:cyw-transition-all dark:cyw-border-gray-600 peer-checked:cyw-bg-blue-600"></div>
+      <span className="cyw-ms-3 cyw-text-xs cyw-text-gray-900 dark:cyw-text-gray-300">
         {label}
       </span>
     </label>
