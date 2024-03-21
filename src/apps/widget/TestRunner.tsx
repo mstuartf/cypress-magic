@@ -5,6 +5,7 @@ import {
   selectIsRunningResponses,
   selectIsRunningStep,
   selectIsRunningStepIncrementOnLoad,
+  selectMockNetworkRequests,
   selectRunOptions,
 } from "./redux/selectors";
 import { useEffect, useState } from "react";
@@ -28,6 +29,7 @@ const TestRunner = () => {
   const event = useSelector(selectEvent(eventIds[step]));
   const runOptions = useSelector(selectRunOptions);
   const responses = useSelector(selectIsRunningResponses);
+  const isMocked = useSelector(selectMockNetworkRequests);
 
   useEffect(() => {
     if (incrementOnLoad) {
@@ -40,11 +42,12 @@ const TestRunner = () => {
       return;
     }
     if (
+      !isMocked &&
       !!event &&
       isResponseEvent(event) &&
       !responses.find(({ alias }) => alias === event.alias)
     ) {
-      console.log("do noting because response has not been received");
+      console.log(`Waiting for the network response for ${event.alias}...`);
       return;
     }
     if (step < eventIds.length) {

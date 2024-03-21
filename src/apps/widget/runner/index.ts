@@ -72,10 +72,6 @@ export const run = (
   //     return `cy.intercept('${method}', '${url}').as('${alias}')`;
   //   }
   // }
-  if (isResponseEvent(event)) {
-    console.log("need a way to wait for the response...");
-    //   return `cy.wait('@${event.alias}')`;
-  }
   // if (isAssertionEvent(event)) {
   //   const {
   //     target: { innerText, domPath },

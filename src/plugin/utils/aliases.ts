@@ -13,11 +13,11 @@ export const buildRequestAlias = ({ url, method }: RequestAliasArgs): string =>
   `${method}__${new URL(url).pathname.replace(/\/?$/, "/")}`;
 
 export const buildAliasTracker = (
-  loaded: AliasTracker,
+  getAliasTracker: () => AliasTracker,
   onUpdate: (updated: AliasTracker) => void
 ): AliasBuilder => {
-  const aliasTracker = { ...loaded };
   return (args) => {
+    const aliasTracker = { ...getAliasTracker() };
     let rawAlias = buildRequestAlias(args);
     if (!aliasTracker.hasOwnProperty(rawAlias)) {
       aliasTracker[rawAlias] = 0;
