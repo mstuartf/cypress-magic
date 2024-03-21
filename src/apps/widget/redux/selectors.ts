@@ -1,4 +1,5 @@
 import { WidgetRootState } from "./store";
+import { toCamelCase } from "../utils";
 
 export const selectEventsSorted = (state: WidgetRootState) =>
   state.recording.eventIds
@@ -24,3 +25,9 @@ export const selectTestDescribe = (state: WidgetRootState) =>
   state.recording.testDescribe;
 export const selectTestShould = (state: WidgetRootState) =>
   state.recording.testShould;
+export const selectParseOptions = ({
+  recording: { mockNetworkRequests, testDescribe },
+}: WidgetRootState) => ({
+  mockNetworkRequests,
+  nestedFixtureFolder: toCamelCase(testDescribe as string),
+});
