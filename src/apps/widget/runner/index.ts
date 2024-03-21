@@ -1,5 +1,10 @@
 import { ParsedEvent } from "../../../plugin/types";
-import { isClickEvent, isNavigationEvent, isPageRefreshEvent } from "../utils";
+import {
+  isChangeEvent,
+  isClickEvent,
+  isNavigationEvent,
+  isPageRefreshEvent,
+} from "../utils";
 import { parseSelector } from "../parser/parseSelector";
 
 interface RunOptions {
@@ -20,17 +25,17 @@ export const run = (
   // if (isDblClickEvent(event)) {
   //   return `${getElementCy(event.target.domPath)}.dblclick();`;
   // }
-  // if (isChangeEvent(event)) {
-  //   if (event.target.tag === "SELECT") {
-  //     return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
-  //   } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
-  //     return `${getElementCy(event.target.domPath)}.check();`;
-  //   } else {
-  //     return `${getElementCy(event.target.domPath)}.clear().type('${
-  //       event.value
-  //     }');`;
-  //   }
-  // }
+  if (isChangeEvent(event)) {
+    if (event.target.tag === "SELECT") {
+      //     return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
+    } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
+      //     return `${getElementCy(event.target.domPath)}.check();`;
+    } else {
+      (document.querySelector(
+        parseSelector(event.target.domPath)
+      ) as HTMLInputElement)!.value = event.value;
+    }
+  }
   if (isNavigationEvent(event)) {
     const { protocol, hostname, pathname, port, search } = event;
     window.location.href = `${protocol}//${hostname}${
