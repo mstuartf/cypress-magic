@@ -1,15 +1,21 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectFixtures, selectMockNetworkRequests } from "./redux/selectors";
+import {
+  selectFixtures,
+  selectMockNetworkRequests,
+  selectTestDescribe,
+} from "./redux/selectors";
 import JSZip from "jszip";
+import { toCamelCase } from "./utils";
 
 const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);
   const mockNetworkRequests = useSelector(selectMockNetworkRequests);
+  const testDescribe = useSelector(selectTestDescribe)!;
   const disabled = !mockNetworkRequests || !fixtures.length;
   const download = () => {
     const zip = new JSZip();
-    const folder = zip.folder("fixtures");
+    const folder = zip.folder(toCamelCase(testDescribe));
     fixtures.forEach(([name, blob]) => {
       folder!.file(name, blob);
     });
@@ -17,7 +23,7 @@ const DownloadFixtures = () => {
       const url = URL.createObjectURL(zipBlob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "fixtures.zip";
+      link.download = `${toCamelCase(testDescribe)}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
