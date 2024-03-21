@@ -67,6 +67,7 @@ export const throttlerMiddleware: WidgetMiddleware =
     let event = action.payload;
     if (isRequestEvent(event)) {
       const events = [...selectEventsSorted(store.getState())];
+      console.log(events);
       const trigger = events.reverse().find((e) => isRequestTriggerEvent(e))!;
       const newEvent: RequestEvent = {
         ...event,
@@ -165,6 +166,18 @@ export const testIsRunningMiddleware: WidgetMiddleware =
       if (isResponseEvent(event)) {
         next(saveIsRunningResponse(event));
       }
+      return;
+    }
+    next(action);
+  };
+
+export const recordingInProgressMiddleware: WidgetMiddleware =
+  (store) => (next) => (action) => {
+    // don't start saving events until the user has setup and started
+    if (
+      action.type === saveEvent.type &&
+      !store.getState().recording.recordingInProgress
+    ) {
       return;
     }
     next(action);

@@ -75,7 +75,10 @@ export function isPageRefreshEvent(
 }
 
 export const isRequestTriggerEvent = (event: ParsedEvent) =>
-  isUserEvent(event) || isHistoryEvent(event);
+  isUserEvent(event) ||
+  isHistoryEvent(event) ||
+  isNavigationEvent(event) ||
+  isPageRefreshEvent(event);
 
 export function toCamelCase(str: string) {
   return str
