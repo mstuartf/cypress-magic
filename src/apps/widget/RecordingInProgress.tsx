@@ -9,6 +9,7 @@ import Toggle from "./Toggle";
 import ToggleMocks from "./ToggleMocks";
 import DownloadFixtures from "./DownloadFixtures";
 import DownloadTest from "./DownloadTest";
+import RunTest from "./RunTest";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -55,6 +56,8 @@ const RecordingInProgress = () => {
           <ToggleMocks />
           <div className="cyw-h-4" />
           <EventList />
+          <div className="cyw-h-4" />
+          <RunTest />
           <div className="cyw-h-4" />
           <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
             <DownloadFixtures />

@@ -4,7 +4,9 @@ import { ReactComponent as Trash } from "../../zondicons/trash.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
-  selectMockNetworkRequests,
+  selectEventIdsSorted,
+  selectIsRunning,
+  selectIsRunningStep,
   selectParseOptions,
 } from "./redux/selectors";
 import { deleteEvent, updateEvent } from "./redux/slice";
@@ -41,12 +43,18 @@ const Event = ({ id }: { id: string }) => {
       setText(updated);
     }
   }, [parseOptions, event]);
+  const step = useSelector(selectIsRunningStep);
+  const eventIds = useSelector(selectEventIdsSorted);
+  const isRunning = useSelector(selectIsRunning);
+  const highlight = isRunning && id === eventIds[step];
   return (
     <div
       key={event.timestamp}
       className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
     >
-      <p className="cyw-text-xs cyw-flex-grow">
+      <p
+        className={`cyw-text-xs cyw-flex-grow ${highlight && "cyw-font-bold"}`}
+      >
         <span className="cyw-w-2 cyw-inline-block" />
         <span className="cyw-w-2 cyw-inline-block" />
         <Typewriter text={text} />
