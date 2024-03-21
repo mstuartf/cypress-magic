@@ -21,21 +21,9 @@ const parseRequest = (
   input: RequestInfo | URL,
   init?: RequestInit
 ): Omit<RequestEvent, "id"> => {
-  let url: string;
-  let method: string;
-
-  if (isRequestObj(input)) {
-    url = input.url;
-  } else if (isURL(input)) {
-    url = input.toString();
-  } else {
-    url = input;
-  }
-  url = getAbsoluteUrl(url);
-  method = init?.method || "GET";
-
+  const url = getAbsoluteUrl(parseUrl(input));
+  const method = init?.method || "GET";
   const alias = buildAlias({ url, method });
-
   return {
     type: "request",
     timestamp: Date.now(),
@@ -96,21 +84,42 @@ export function initFetchObserver({
 }: InitArgs) {
   const { fetch: originalFetch } = window;
 
-  window.fetch = async (...args) => {
+  window.fetch = async (input, init) => {
+    const include = !isDataUrl(input);
     const id = generateEventId();
-    const requestEvent = parseRequest(buildAlias, ...args);
-    saveEvent({ ...requestEvent, id });
+    const requestEvent = parseRequest(buildAlias, input, init);
 
-    const response = await originalFetch(...args);
+    if (include) {
+      saveEvent({ ...requestEvent, id });
+    }
 
-    const responseEvent = await parseResponse(
-      response,
-      requestEvent.method,
-      requestEvent.alias,
-      saveFixture
-    );
-    saveEvent({ ...responseEvent, requestId: id });
+    const response = await originalFetch(input, init);
+
+    if (include) {
+      const responseEvent = await parseResponse(
+        response,
+        requestEvent.method,
+        requestEvent.alias,
+        saveFixture
+      );
+      saveEvent({ ...responseEvent, requestId: id });
+    }
 
     return response;
   };
 }
+
+const parseUrl = (input: RequestInfo | URL) => {
+  if (isRequestObj(input)) {
+    return input.url;
+  } else if (isURL(input)) {
+    return input.toString();
+  } else {
+    return input;
+  }
+};
+
+const isDataUrl = (input: RequestInfo | URL): boolean => {
+  const url = parseUrl(input);
+  return url.startsWith("data:");
+};
