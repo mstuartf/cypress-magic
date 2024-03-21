@@ -31,7 +31,7 @@ const Setup = () => {
         <input
           value={url}
           onChange={({ target: { value } }) => setUrl(value)}
-          className="cyw-appearance-none block cyw-w-full cyw-bg-gray-200 cyw-text-gray-700 cyw-border cyw-rounded cyw-py-3 cyw-px-4 cyw-mb-3 cyw-leading-tight focus:cyw-outline-none focus:cyw-bg-white"
+          className="cyw-text-xs cyw-appearance-none block cyw-w-full cyw-bg-gray-200 cyw-text-gray-700 cyw-border cyw-rounded cyw-py-3 cyw-px-4 cyw-mb-3 cyw-leading-tight focus:cyw-outline-none focus:cyw-bg-white"
           id="grid-first-name"
           type="text"
           placeholder="e.g. https://api.placeholder.com"
@@ -43,7 +43,7 @@ const Setup = () => {
       </div>
       <button
         onClick={startRecording}
-        className="cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
+        className="cyw-text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
       >
         Start recording
       </button>
