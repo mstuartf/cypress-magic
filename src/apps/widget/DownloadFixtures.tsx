@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { selectFixtures } from "./redux/selectors";
 import JSZip from "jszip";
 
-const DownloadButton = () => {
+const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);
   const download = () => {
     const zip = new JSZip();
@@ -15,7 +15,7 @@ const DownloadButton = () => {
       const url = URL.createObjectURL(zipBlob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "files.zip";
+      link.download = "fixtures.zip";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -25,11 +25,11 @@ const DownloadButton = () => {
   return (
     <button
       onClick={download}
-      className="text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
+      className="text-xs cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-4 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
     >
-      Download test and fixtures!
+      Download fixtures ({fixtures.length})
     </button>
   );
 };
 
-export default DownloadButton;
+export default DownloadFixtures;

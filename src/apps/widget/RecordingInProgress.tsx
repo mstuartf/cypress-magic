@@ -7,7 +7,8 @@ import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
 import Toggle from "./Toggle";
 import ToggleMocks from "./ToggleMocks";
-import DownloadButton from "./DownloadButton";
+import DownloadFixtures from "./DownloadFixtures";
+import DownloadTest from "./DownloadTest";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -55,7 +56,10 @@ const RecordingInProgress = () => {
           <div className="h-4" />
           <EventList />
           <div className="h-4" />
-          <DownloadButton />
+          <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
+            <DownloadFixtures />
+            <DownloadTest />
+          </div>
         </>
       )}
     </div>
