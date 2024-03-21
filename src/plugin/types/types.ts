@@ -16,5 +16,3 @@ export type InitArgs = {
   buildAlias: AliasBuilder;
   saveEvent: SaveEvent;
 };
-
-export type MainInitArgs = Omit<InitArgs, "buildAlias">;

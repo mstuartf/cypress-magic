@@ -7,7 +7,12 @@ import { Provider } from "react-redux";
 import { widgetId } from "./apps/widget/constants";
 import initialize from "./plugin/initialize";
 import { ParsedEvent } from "./plugin/types";
-import { saveEvent, saveFixture } from "./apps/widget/redux/slice";
+import {
+  saveEvent,
+  saveFixture,
+  updateAliasTracker,
+} from "./apps/widget/redux/slice";
+import { buildAliasTracker } from "./plugin/utils/aliases";
 
 interface W extends Window {
   seasmokeHasLoaded?: boolean;
@@ -26,6 +31,11 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   initialize({
     saveEvent: (event: ParsedEvent) => store.dispatch(saveEvent(event)),
     saveFixture: (name, value) => store.dispatch(saveFixture({ name, value })),
+    // aliases need to be stored in state so that counts do not reset if there is a reload() as part of a test
+    buildAlias: buildAliasTracker(
+      store.getState().recording.aliasTracker,
+      (updated) => store.dispatch(updateAliasTracker(updated))
+    ),
   });
 
   const createRootElement = () => {

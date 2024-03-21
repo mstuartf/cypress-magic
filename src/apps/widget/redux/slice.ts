@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ParsedEvent, RequestEvent } from "../../../plugin/types";
 import { readCache } from "../cache";
 import { isDblClickEvent, isResponseEvent } from "../utils";
+import { AliasTracker } from "../../../plugin/utils/aliases";
 
 interface State {
   eventIds: string[];
@@ -19,6 +20,7 @@ interface State {
   fixtures: { [name: string]: Blob };
   testDescribe?: string;
   testShould?: string;
+  aliasTracker: AliasTracker;
 }
 
 const initialState: State = {
@@ -33,6 +35,7 @@ const initialState: State = {
   isAddingAssertion: false,
   mockNetworkRequests: false,
   fixtures: {},
+  aliasTracker: {},
 };
 
 export const recordingSlice = createSlice({
@@ -120,6 +123,9 @@ export const recordingSlice = createSlice({
     scheduleUpdateRunStep: (state) => {
       state.isRunningStepIncrementOnLoad = true;
     },
+    updateAliasTracker: (state, action: PayloadAction<AliasTracker>) => {
+      state.aliasTracker = { ...action.payload };
+    },
   },
 });
 
@@ -136,4 +142,5 @@ export const {
   setIsRunning,
   updateRunStep,
   scheduleUpdateRunStep,
+  updateAliasTracker,
 } = recordingSlice.actions;
