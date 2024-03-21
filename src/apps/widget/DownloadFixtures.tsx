@@ -25,7 +25,7 @@ const DownloadFixtures = () => {
   return (
     <button
       onClick={download}
-      className="text-xs cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-4 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
+      className="text-xs cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-2 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
     >
       Download fixtures ({fixtures.length})
     </button>
