@@ -7,6 +7,8 @@ interface State {
   eventIds: string[];
   events: { [id: string]: ParsedEvent };
   recordingInProgress: boolean;
+  isRunning: boolean;
+  isRunningStep: number;
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
@@ -20,6 +22,8 @@ const initialState: State = {
   eventIds: [],
   events: {},
   recordingInProgress: false,
+  isRunning: false,
+  isRunningStep: 0,
   hasRefreshed: false,
   baseUrl: undefined,
   isAddingAssertion: false,
@@ -37,7 +41,13 @@ export const recordingSlice = createSlice({
         state.eventIds = [];
         state.events = {};
         state.fixtures = {};
+        state.isRunning = false;
+        state.isRunningStep = 0;
       }
+    },
+    setIsRunning: (state, action: PayloadAction<boolean>) => {
+      state.isRunning = action.payload;
+      state.isRunningStep = 0;
     },
     setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
       state.isAddingAssertion = action.payload;
@@ -99,6 +109,9 @@ export const recordingSlice = createSlice({
       state.testDescribe = action.payload.testDescribe;
       state.testShould = action.payload.testShould;
     },
+    updateRunStep: (state) => {
+      state.isRunningStep = state.isRunningStep + 1;
+    },
   },
 });
 
@@ -112,4 +125,6 @@ export const {
   setMockNetworkRequests,
   saveFixture,
   setupTest,
+  setIsRunning,
+  updateRunStep,
 } = recordingSlice.actions;

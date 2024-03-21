@@ -41,10 +41,10 @@ export const parse = (
     }
   }
   if (isNavigationEvent(event)) {
-    const { protocol, hostname, pathname, port } = event;
+    const { protocol, hostname, pathname, port, search } = event;
     return `cy.visit('${protocol}//${hostname}${
       port.length ? `:${port}` : ""
-    }${pathname}');`;
+    }${pathname}${search}');`;
   }
   if (isQueryParamChangeEvent(event)) {
     const { param, added, removed, changed } = event;

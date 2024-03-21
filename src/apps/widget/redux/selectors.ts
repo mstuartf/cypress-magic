@@ -13,6 +13,10 @@ export const selectEvent = (id: string) => (state: WidgetRootState) =>
   state.recording.events[id];
 export const selectRecordingInProgress = (state: WidgetRootState) =>
   state.recording.recordingInProgress;
+export const selectIsRunning = (state: WidgetRootState) =>
+  state.recording.isRunning;
+export const selectIsRunningStep = (state: WidgetRootState) =>
+  state.recording.isRunningStep;
 export const selectHasRefreshed = (state: WidgetRootState) =>
   state.recording.hasRefreshed;
 export const selectIsAddingAssertion = (state: WidgetRootState) =>
@@ -30,4 +34,9 @@ export const selectParseOptions = ({
 }: WidgetRootState) => ({
   mockNetworkRequests,
   nestedFixtureFolder: toCamelCase(testDescribe as string),
+});
+export const selectRunOptions = ({
+  recording: { mockNetworkRequests },
+}: WidgetRootState) => ({
+  mockNetworkRequests,
 });
