@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
+  selectIsRunningResponses,
   selectIsRunningStep,
   selectIsRunningStepIncrementOnLoad,
   selectRunOptions,
@@ -13,7 +14,11 @@ import {
   updateRunStep,
 } from "./redux/slice";
 import { run } from "./runner";
-import { isNavigationEvent, isPageRefreshEvent } from "./utils";
+import {
+  isNavigationEvent,
+  isPageRefreshEvent,
+  isResponseEvent,
+} from "./utils";
 
 const TestRunner = () => {
   const dispatch = useDispatch();
@@ -22,6 +27,7 @@ const TestRunner = () => {
   const eventIds = useSelector(selectEventIdsSorted);
   const event = useSelector(selectEvent(eventIds[step]));
   const runOptions = useSelector(selectRunOptions);
+  const responses = useSelector(selectIsRunningResponses);
 
   useEffect(() => {
     if (incrementOnLoad) {
@@ -31,6 +37,14 @@ const TestRunner = () => {
 
   useEffect(() => {
     if (incrementOnLoad) {
+      return;
+    }
+    if (
+      !!event &&
+      isResponseEvent(event) &&
+      !responses.find(({ alias }) => alias === event.alias)
+    ) {
+      console.log("do noting because response has not been received");
       return;
     }
     if (step < eventIds.length) {
@@ -46,7 +60,7 @@ const TestRunner = () => {
     } else {
       dispatch(setIsRunning(false));
     }
-  }, [event, incrementOnLoad]);
+  }, [event, incrementOnLoad, responses]);
 
   return null;
 };

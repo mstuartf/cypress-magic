@@ -1,4 +1,4 @@
-import { saveEvent } from "./slice";
+import { saveEvent, saveIsRunningResponse } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
@@ -6,6 +6,7 @@ import {
   isRequestEvent,
   isRequestOrResponseEvent,
   isRequestTriggerEvent,
+  isResponseEvent,
   isUserEvent,
 } from "../utils";
 import { widgetId } from "../constants";
@@ -160,6 +161,10 @@ export const testIsRunningMiddleware: WidgetMiddleware =
       action.type === saveEvent.type &&
       store.getState().recording.isRunning
     ) {
+      const event = action.payload;
+      if (isResponseEvent(event)) {
+        next(saveIsRunningResponse(event));
+      }
       return;
     }
     next(action);
