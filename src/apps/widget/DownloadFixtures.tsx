@@ -7,27 +7,33 @@ import {
 } from "./redux/selectors";
 import JSZip from "jszip";
 import { toCamelCase } from "./utils";
+import { unPickleBlob } from "../../plugin/utils/pickleBlob";
 
 const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);
+  console.log(fixtures);
   const mockNetworkRequests = useSelector(selectMockNetworkRequests);
   const testDescribe = useSelector(selectTestDescribe)!;
   const disabled = !mockNetworkRequests || !fixtures.length;
   const download = () => {
     const zip = new JSZip();
     const folder = zip.folder(toCamelCase(testDescribe));
-    fixtures.forEach(([name, blob]) => {
-      folder!.file(name, blob);
-    });
-    zip.generateAsync({ type: "blob" }).then((zipBlob) => {
-      const url = URL.createObjectURL(zipBlob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${toCamelCase(testDescribe)}.zip`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+    Promise.all(
+      fixtures.map(([name, pickle]) => unPickleBlob(name, pickle))
+    ).then((results) => {
+      results.forEach(({ name, blob }) => {
+        folder!.file(name, blob);
+      });
+      zip.generateAsync({ type: "blob" }).then((zipBlob) => {
+        const url = URL.createObjectURL(zipBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${toCamelCase(testDescribe)}.zip`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
     });
   };
   return (

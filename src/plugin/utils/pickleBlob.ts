@@ -1,6 +1,9 @@
 import mimeDb from "mime-db";
 
-export const pickleBlob = (blob: Blob): Promise<string> =>
+export type PickledBlob = string;
+
+// Need to pickle blobs so they can be cached in local storage.
+export const pickleBlob = (blob: Blob): Promise<PickledBlob> =>
   new Promise((resolve) => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
@@ -15,13 +18,9 @@ export const pickleBlob = (blob: Blob): Promise<string> =>
     };
   });
 
-export const blobify = (value: object): Blob => {
-  return new Blob([JSON.stringify(value)], { type: "application/json" });
-};
-
 export const unPickleBlob = (
   name: string,
-  pickle: string
+  pickle: PickledBlob
 ): Promise<{ name: string; blob: Blob }> =>
   new Promise((resolve, reject) => {
     const { dataUri, size, type } = JSON.parse(pickle);
@@ -36,13 +35,6 @@ export const unPickleBlob = (
         reject(`error generating ${name}`);
       });
   });
-
-export const unPickleFixtures = (
-  fixtures: [string, string][]
-): Promise<{ name: string; blob: Blob }[]> => {
-  const promises = fixtures.map(([k, v]) => unPickleBlob(k, v));
-  return Promise.all(promises);
-};
 
 export const getBlobFileExtension = (blob: Blob): string => {
   const mimeInfo = mimeDb[blob.type];
