@@ -162,6 +162,5 @@ export const testIsRunningMiddleware: WidgetMiddleware =
     ) {
       return;
     }
-    console.log(action, store.getState().recording.isRunning);
     next(action);
   };

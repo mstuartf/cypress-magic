@@ -3,6 +3,7 @@ import { ParsedEvent, RequestEvent } from "../../../plugin/types";
 import { readCache } from "../cache";
 import { isDblClickEvent, isResponseEvent } from "../utils";
 import { AliasTracker } from "../../../plugin/utils/aliases";
+import { PickledBlob } from "../../../plugin/utils/pickleBlob";
 
 interface State {
   eventIds: string[];
@@ -17,7 +18,7 @@ interface State {
   baseUrl?: string;
   isAddingAssertion: boolean;
   mockNetworkRequests: boolean;
-  fixtures: { [name: string]: Blob };
+  fixtures: { [name: string]: PickledBlob };
   testDescribe?: string;
   testShould?: string;
   aliasTracker: AliasTracker;
@@ -48,6 +49,7 @@ export const recordingSlice = createSlice({
         state.eventIds = [];
         state.events = {};
         state.fixtures = {};
+        state.aliasTracker = {};
         state.isRunning = false;
         state.isRunningStep = 0;
       }
@@ -100,9 +102,11 @@ export const recordingSlice = createSlice({
     },
     saveFixture: (
       state,
-      action: PayloadAction<{ name: string; value: Blob }>
+      {
+        payload: { name, pickle },
+      }: PayloadAction<{ name: string; pickle: PickledBlob }>
     ) => {
-      state.fixtures[action.payload.name] = action.payload.value;
+      state.fixtures[name] = pickle;
     },
     setupTest: (
       state,

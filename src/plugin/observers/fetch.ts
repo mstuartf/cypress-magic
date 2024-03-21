@@ -76,8 +76,10 @@ const parseResponse = (
       .then((blob) => {
         const extension = getBlobFileExtension(blob);
         const fixture = `${aliasToFileName(alias)}.${extension}`;
-        saveFixture(fixture, blob);
-        resolve({ ...event, fixture });
+        pickleBlob(blob).then((pickle) => {
+          saveFixture(fixture, pickle);
+          resolve({ ...event, fixture });
+        });
       })
       .catch((e) => {
         console.log(e);

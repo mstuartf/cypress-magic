@@ -30,7 +30,8 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   // this needs to be done immediately (i.e. not in the app) to catch all events from the host page
   initialize({
     saveEvent: (event: ParsedEvent) => store.dispatch(saveEvent(event)),
-    saveFixture: (name, value) => store.dispatch(saveFixture({ name, value })),
+    saveFixture: (name, pickle) =>
+      store.dispatch(saveFixture({ name, pickle })),
     // aliases need to be stored in state so that counts do not reset if there is a reload() as part of a test
     buildAlias: buildAliasTracker(
       store.getState().recording.aliasTracker,
