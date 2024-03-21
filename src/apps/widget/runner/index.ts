@@ -1,5 +1,5 @@
 import { ParsedEvent } from "../../../plugin/types";
-import { isClickEvent } from "../utils";
+import { isClickEvent, isNavigationEvent, isPageRefreshEvent } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
 
 interface RunOptions {
@@ -31,11 +31,13 @@ export const run = (
   //     }');`;
   //   }
   // }
-  // if (isNavigationEvent(event)) {
-  //   const { protocol, hostname, pathname, port, search } = event;
-  //   window.location.href = `${protocol}//${hostname}${port.length ? `:${port}` : ""}${pathname}${search}`;
-  //   return
-  // }
+  if (isNavigationEvent(event)) {
+    const { protocol, hostname, pathname, port, search } = event;
+    window.location.href = `${protocol}//${hostname}${
+      port.length ? `:${port}` : ""
+    }${pathname}${search}`;
+    return;
+  }
   // if (isQueryParamChangeEvent(event)) {
   //   const { param, added, removed, changed } = event;
   //   if (added) {
@@ -46,9 +48,9 @@ export const run = (
   //   }
   //   return `cy.url().should('not.include', '${param}=${removed}')`;
   // }
-  // if (isPageRefreshEvent(event)) {
-  //   return `cy.reload();`;
-  // }
+  if (isPageRefreshEvent(event)) {
+    return window.location.reload();
+  }
   // if (isUrlChangeEvent(event)) {
   //   return `cy.url().should('include', '${event.urlDiff}')`;
   // }
