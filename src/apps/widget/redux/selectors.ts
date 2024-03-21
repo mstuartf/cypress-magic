@@ -20,3 +20,7 @@ export const selectMockNetworkRequests = (state: WidgetRootState) =>
   state.recording.mockNetworkRequests;
 export const selectFixtures = (state: WidgetRootState) =>
   Object.entries(state.recording.fixtures);
+export const selectTestDescribe = (state: WidgetRootState) =>
+  state.recording.testDescribe;
+export const selectTestShould = (state: WidgetRootState) =>
+  state.recording.testShould;
