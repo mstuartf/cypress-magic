@@ -128,10 +128,19 @@ const handleStateChange = (
 };
 
 function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
+  const states: URL[] = [new URL(window.location.href)];
+
+  const onStateChange = (url: string | URL) => {
+    const prevUrl = states[states.length - 1];
+    const newUrl = isURL(url) ? url : new URL(url);
+    handleStateChange(prevUrl, newUrl, saveEvent);
+    states.push(newUrl);
+  };
+
   const pushState = history.pushState;
   history.pushState = function (state, unused, url) {
     if (url) {
-      handleStateChange(history.state.path, url, saveEvent);
+      onStateChange(url);
     }
     return pushState.apply(history, arguments as any);
   };
@@ -139,7 +148,7 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   const replaceState = history.replaceState;
   history.replaceState = function (state, unused, url) {
     if (url) {
-      handleStateChange(history.state.path, url, saveEvent);
+      onStateChange(url);
     }
     return replaceState.apply(history, arguments as any);
   };
