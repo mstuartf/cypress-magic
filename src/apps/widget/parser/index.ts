@@ -15,11 +15,12 @@ import {
 
 interface ParseOptions {
   mockNetworkRequests: boolean;
+  nestedFixtureFolder: string;
 }
 
 export const parse = (
   event: ParsedEvent,
-  { mockNetworkRequests }: ParseOptions
+  { mockNetworkRequests, nestedFixtureFolder }: ParseOptions
 ): string => {
   if (isClickEvent(event)) {
     // todo: detect if right click
@@ -66,7 +67,9 @@ export const parse = (
     if (mockNetworkRequests) {
       return `cy.intercept('${method}', '${url}', {statusCode: ${
         status || "..."
-      }, fixture: '${fixture || "..."}'}).as('${alias}')`;
+      }, fixture: '${nestedFixtureFolder}/${
+        fixture || "..."
+      }'}).as('${alias}')`;
     } else {
       return `cy.intercept('${method}', '${url}').as('${alias}')`;
     }

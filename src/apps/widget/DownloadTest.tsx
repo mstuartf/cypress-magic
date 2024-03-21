@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {
   selectEventsSorted,
   selectMockNetworkRequests,
+  selectParseOptions,
   selectTestDescribe,
   selectTestShould,
 } from "./redux/selectors";
@@ -20,13 +21,13 @@ const template = (
 });`;
 
 const DownloadTest = () => {
-  const mockNetworkRequests = useSelector(selectMockNetworkRequests);
+  const parseOptions = useSelector(selectParseOptions);
   const events = useSelector(selectEventsSorted);
   const testDescribe = useSelector(selectTestDescribe)!;
   const testShould = useSelector(selectTestShould)!;
 
   const download = () => {
-    const steps = events.map((event) => parse(event, { mockNetworkRequests }));
+    const steps = events.map((event) => parse(event, parseOptions));
     const content = template(testDescribe, testShould, steps);
     const blob = new Blob([content], { type: "text/javascript" });
     const url = URL.createObjectURL(blob);

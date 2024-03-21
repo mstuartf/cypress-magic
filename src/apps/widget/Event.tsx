@@ -2,7 +2,11 @@ import Typewriter from "./Typewriter";
 import { ReactComponent as Refresh } from "../../zondicons/refresh.svg";
 import { ReactComponent as Trash } from "../../zondicons/trash.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEvent, selectMockNetworkRequests } from "./redux/selectors";
+import {
+  selectEvent,
+  selectMockNetworkRequests,
+  selectParseOptions,
+} from "./redux/selectors";
 import { deleteEvent, updateEvent } from "./redux/slice";
 import { isUserEvent } from "./utils";
 import { parseSelectorPositionOnly } from "./parser/parseSelector";
@@ -29,14 +33,14 @@ const Event = ({ id }: { id: string }) => {
       }
     }
   };
-  const mockNetworkRequests = useSelector(selectMockNetworkRequests);
+  const parseOptions = useSelector(selectParseOptions);
   const [text, setText] = useState("");
   useEffect(() => {
-    const updated = parse(event, { mockNetworkRequests });
+    const updated = parse(event, parseOptions);
     if (text !== updated) {
       setText(updated);
     }
-  }, [mockNetworkRequests, event]);
+  }, [parseOptions, event]);
   return (
     <div
       key={event.timestamp}
