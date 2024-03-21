@@ -5,6 +5,7 @@ import {
   cacheMiddleware,
   filterClicksMiddleware,
   navMiddleware,
+  testIsRunningMiddleware,
   throttlerMiddleware,
   urlMatcherMiddleware,
   widgetClickMiddleware,
@@ -23,6 +24,7 @@ export const store = configureStore({
     widgetClickMiddleware,
     urlMatcherMiddleware,
     filterClicksMiddleware,
+    testIsRunningMiddleware,
   ],
 });
 

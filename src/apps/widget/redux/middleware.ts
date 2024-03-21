@@ -152,3 +152,16 @@ export const filterClicksMiddleware: WidgetMiddleware =
     }
     next(action);
   };
+
+export const testIsRunningMiddleware: WidgetMiddleware =
+  (store) => (next) => (action) => {
+    // otherwise e.g. reload events run by the test will register again and cause an infinite loop
+    if (
+      action.type === saveEvent.type &&
+      store.getState().recording.isRunning
+    ) {
+      console.log(action);
+      return;
+    }
+    next(action);
+  };
