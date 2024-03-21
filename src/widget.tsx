@@ -38,9 +38,10 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
       store.dispatch(saveFixture({ name, pickle })),
     // aliases need to be stored in state so that counts do not reset if there is a reload() as part of a test
     buildAlias: buildAliasTracker(
-      store.getState().recording.isRunning
-        ? store.getState().recording.isRunningAliasTracker
-        : store.getState().recording.aliasTracker,
+      () =>
+        store.getState().recording.isRunning
+          ? store.getState().recording.isRunningAliasTracker
+          : store.getState().recording.aliasTracker,
       (updated) => store.dispatch(updateAliasTracker(updated))
     ),
     mockApiCalls: () => selectMockNetworkInTests(store.getState()),
