@@ -7,6 +7,7 @@ import {
   selectTestShould,
 } from "./redux/selectors";
 import { parse } from "./parser";
+import { toCamelCase } from "./utils";
 
 const template = (
   describe: string,
@@ -31,7 +32,7 @@ const DownloadTest = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "test.cy.js";
+    link.download = `${toCamelCase(testDescribe)}.cy.js`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
