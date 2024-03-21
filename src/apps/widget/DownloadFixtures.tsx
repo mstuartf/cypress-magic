@@ -31,7 +31,7 @@ const DownloadFixtures = () => {
       className={`disabled:cyw-cursor-not-allowed cyw-text-xs cyw-font-semibold cyw-py-2 cyw-px-2 cyw-border cyw-rounded ${
         !disabled
           ? "cyw-bg-transparent cyw-text-blue-700 cyw-border-blue-500 hover:cyw-text-white hover:cyw-bg-blue-500 hover:cyw-border-transparent"
-          : "cyw-bg-gray-100 cyw-text-gray-500 cyw-border-gray-500"
+          : "cyw-bg-gray-100 cyw-text-gray-500 cyw-border-gray-500 cyw-cursor-not-allowed"
       }`}
     >
       Download fixtures{!disabled && <> ({fixtures.length})</>}
