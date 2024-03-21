@@ -12,6 +12,8 @@ interface State {
   isAddingAssertion: boolean;
   mockNetworkRequests: boolean;
   fixtures: { [name: string]: Blob };
+  testDescribe?: string;
+  testShould?: string;
 }
 
 const initialState: State = {
@@ -42,9 +44,6 @@ export const recordingSlice = createSlice({
     },
     setHasRefreshed: (state, action: PayloadAction<boolean>) => {
       state.hasRefreshed = action.payload;
-    },
-    setBaseUrl: (state, action: PayloadAction<string | undefined>) => {
-      state.baseUrl = action.payload;
     },
     saveEvent: (state, action: PayloadAction<ParsedEvent>) => {
       let event = action.payload;
@@ -87,7 +86,18 @@ export const recordingSlice = createSlice({
       action: PayloadAction<{ name: string; value: Blob }>
     ) => {
       state.fixtures[action.payload.name] = action.payload.value;
-      console.log(action.payload);
+    },
+    setupTest: (
+      state,
+      action: PayloadAction<{
+        baseUrl?: string;
+        testDescribe: string;
+        testShould: string;
+      }>
+    ) => {
+      state.baseUrl = action.payload.baseUrl;
+      state.testDescribe = action.payload.testDescribe;
+      state.testShould = action.payload.testShould;
     },
   },
 });
@@ -96,10 +106,10 @@ export const {
   saveEvent,
   setRecordingInProgress,
   setHasRefreshed,
-  setBaseUrl,
   setIsAddingAssertion,
   deleteEvent,
   updateEvent,
   setMockNetworkRequests,
   saveFixture,
+  setupTest,
 } = recordingSlice.actions;
