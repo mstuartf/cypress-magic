@@ -9,6 +9,9 @@ interface State {
   recordingInProgress: boolean;
   isRunning: boolean;
   isRunningStep: number;
+  // When running navigation events in test mode, we can't increment the step once
+  // the event has run. Schedule it to increment on load using this prop.
+  isRunningStepIncrementOnLoad: boolean;
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
@@ -24,6 +27,7 @@ const initialState: State = {
   recordingInProgress: false,
   isRunning: false,
   isRunningStep: 0,
+  isRunningStepIncrementOnLoad: false,
   hasRefreshed: false,
   baseUrl: undefined,
   isAddingAssertion: false,
@@ -111,6 +115,10 @@ export const recordingSlice = createSlice({
     },
     updateRunStep: (state) => {
       state.isRunningStep = state.isRunningStep + 1;
+      state.isRunningStepIncrementOnLoad = false;
+    },
+    scheduleUpdateRunStep: (state) => {
+      state.isRunningStepIncrementOnLoad = true;
     },
   },
 });
@@ -127,4 +135,5 @@ export const {
   setupTest,
   setIsRunning,
   updateRunStep,
+  scheduleUpdateRunStep,
 } = recordingSlice.actions;

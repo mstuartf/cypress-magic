@@ -3,36 +3,50 @@ import {
   selectEvent,
   selectEventIdsSorted,
   selectIsRunningStep,
+  selectIsRunningStepIncrementOnLoad,
   selectRunOptions,
 } from "./redux/selectors";
 import { useEffect, useState } from "react";
-import { setIsRunning, updateRunStep } from "./redux/slice";
+import {
+  scheduleUpdateRunStep,
+  setIsRunning,
+  updateRunStep,
+} from "./redux/slice";
 import { run } from "./runner";
+import { isNavigationEvent, isPageRefreshEvent } from "./utils";
 
 const TestRunner = () => {
   const dispatch = useDispatch();
   const step = useSelector(selectIsRunningStep);
+  const incrementOnLoad = useSelector(selectIsRunningStepIncrementOnLoad);
   const eventIds = useSelector(selectEventIdsSorted);
   const event = useSelector(selectEvent(eventIds[step]));
   const runOptions = useSelector(selectRunOptions);
 
-  // this is local state so it will be reset to false on navigation / reload
-  const [executing, setExecuting] = useState(false);
+  useEffect(() => {
+    if (incrementOnLoad) {
+      dispatch(updateRunStep());
+    }
+  }, []);
 
   useEffect(() => {
-    if (!executing) {
-      setExecuting(true);
-      setTimeout(() => {
-        if (step < eventIds.length - 1) {
-          dispatch(updateRunStep());
-        } else {
-          dispatch(setIsRunning(false));
-        }
-        run(event, runOptions);
-        setExecuting(false);
-      }, 500);
+    if (incrementOnLoad) {
+      return;
     }
-  }, [event, executing]);
+    if (step < eventIds.length) {
+      setTimeout(() => {
+        if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
+          dispatch(scheduleUpdateRunStep());
+          run(event, runOptions);
+        } else {
+          run(event, runOptions);
+          dispatch(updateRunStep());
+        }
+      }, 500);
+    } else {
+      dispatch(setIsRunning(false));
+    }
+  }, [event, incrementOnLoad]);
 
   return null;
 };

@@ -17,6 +17,8 @@ export const selectIsRunning = (state: WidgetRootState) =>
   state.recording.isRunning;
 export const selectIsRunningStep = (state: WidgetRootState) =>
   state.recording.isRunningStep;
+export const selectIsRunningStepIncrementOnLoad = (state: WidgetRootState) =>
+  state.recording.isRunningStepIncrementOnLoad;
 export const selectHasRefreshed = (state: WidgetRootState) =>
   state.recording.hasRefreshed;
 export const selectIsAddingAssertion = (state: WidgetRootState) =>
