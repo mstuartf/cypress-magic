@@ -1,5 +1,7 @@
 import { WidgetRootState } from "./store";
-import { toCamelCase } from "../utils";
+import { isResponseEvent, toCamelCase } from "../utils";
+import { ResponseEvent } from "../../../plugin/types";
+import { aliasToFileName } from "../../../plugin/utils/pickleBlob";
 
 export const selectEventsSorted = (state: WidgetRootState) =>
   state.recording.eventIds
@@ -42,3 +44,19 @@ export const selectRunOptions = ({
 }: WidgetRootState) => ({
   mockNetworkRequests,
 });
+export const selectMockNetworkInTests = ({
+  recording: { mockNetworkRequests, isRunning },
+}: WidgetRootState) => mockNetworkRequests && isRunning;
+export const selectMockedResponse =
+  (alias: string) =>
+  ({ recording: { events, fixtures } }: WidgetRootState) => {
+    const { status, statusText, fixture } = Object.values(events)
+      .filter((event): event is ResponseEvent => isResponseEvent(event))
+      .find(({ alias: _alias }) => alias === _alias)!;
+    const content = fixtures[fixture!];
+    return {
+      status,
+      statusText,
+      content,
+    };
+  };

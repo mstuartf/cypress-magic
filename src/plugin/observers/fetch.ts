@@ -1,9 +1,11 @@
 import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
-import { AliasBuilder } from "../utils/aliases";
+import { AliasBuilder, buildRequestAlias } from "../utils/aliases";
 import {
   aliasToFileName,
   getBlobFileExtension,
   pickleBlob,
+  PickledBlob,
+  unPickleBlob,
 } from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 import { generateEventId } from "../utils/generateEventId";
@@ -41,7 +43,7 @@ const parseResponse = (
   saveFixture: SaveFixture
 ): Promise<Omit<ResponseEvent, "requestId">> => {
   return new Promise((resolve, reject) => {
-    const { url, status } = response;
+    const { url, status, statusText } = response;
     const event: Omit<ResponseEvent, "fixture" | "requestId"> = {
       id: generateEventId(),
       type: "response",
@@ -49,6 +51,7 @@ const parseResponse = (
       method,
       url,
       status,
+      statusText,
       alias,
     };
     if (status === 204) {
@@ -70,8 +73,6 @@ const parseResponse = (
         });
       })
       .catch((e) => {
-        console.log(e);
-        console.log(response);
         resolve({ ...event, fixture: "error.json" });
       });
   });
@@ -81,11 +82,23 @@ export function initFetchObserver({
   saveEvent,
   saveFixture,
   buildAlias,
+  mockApiCalls,
+  getMockedResponse,
 }: InitArgs) {
   const { fetch: originalFetch } = window;
 
   window.fetch = async (input, init) => {
     const include = !isDataUrl(input);
+
+    if (include && mockApiCalls()) {
+      const alias = buildRequestAlias({
+        url: parseUrl(input),
+        method: init?.method || "GET",
+      });
+      const { status, statusText, content } = getMockedResponse(alias);
+      return buildMockedResponse(status, statusText, content);
+    }
+
     const id = generateEventId();
     const requestEvent = parseRequest(buildAlias, input, init);
 
@@ -123,3 +136,22 @@ const isDataUrl = (input: RequestInfo | URL): boolean => {
   const url = parseUrl(input);
   return url.startsWith("data:");
 };
+
+async function buildMockedResponse(
+  status: number,
+  statusText: string,
+  content: PickledBlob
+): Promise<Response> {
+  return unPickleBlob(content).then((blob) => {
+    const responseInit: ResponseInit = {
+      status,
+      statusText,
+      headers: new Headers({
+        "Content-Type": blob.type,
+        "Content-Length": String(blob.size),
+      }),
+    };
+
+    return new Response(blob, responseInit);
+  });
+}

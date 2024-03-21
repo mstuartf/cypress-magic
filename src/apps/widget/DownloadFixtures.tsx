@@ -11,7 +11,6 @@ import { unPickleBlob } from "../../plugin/utils/pickleBlob";
 
 const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);
-  console.log(fixtures);
   const mockNetworkRequests = useSelector(selectMockNetworkRequests);
   const testDescribe = useSelector(selectTestDescribe)!;
   const disabled = !mockNetworkRequests || !fixtures.length;
@@ -19,7 +18,9 @@ const DownloadFixtures = () => {
     const zip = new JSZip();
     const folder = zip.folder(toCamelCase(testDescribe));
     Promise.all(
-      fixtures.map(([name, pickle]) => unPickleBlob(name, pickle))
+      fixtures.map(([name, pickle]) =>
+        unPickleBlob(pickle).then((blob) => ({ name, blob }))
+      )
     ).then((results) => {
       results.forEach(({ name, blob }) => {
         folder!.file(name, blob);

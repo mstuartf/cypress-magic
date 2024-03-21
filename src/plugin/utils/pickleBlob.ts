@@ -18,21 +18,18 @@ export const pickleBlob = (blob: Blob): Promise<PickledBlob> =>
     };
   });
 
-export const unPickleBlob = (
-  name: string,
-  pickle: PickledBlob
-): Promise<{ name: string; blob: Blob }> =>
+export const unPickleBlob = (pickle: PickledBlob): Promise<Blob> =>
   new Promise((resolve, reject) => {
     const { dataUri, size, type } = JSON.parse(pickle);
     if (size === 0) {
       // in this case the data URI will be invalid
-      resolve({ name, blob: new Blob([], { type }) });
+      resolve(new Blob([], { type }));
       return;
     }
     fetch(dataUri)
-      .then((res) => res.blob().then((blob) => resolve({ name, blob })))
-      .catch(() => {
-        reject(`error generating ${name}`);
+      .then((res) => res.blob().then((blob) => resolve(blob)))
+      .catch((e) => {
+        reject(`error generating blob`);
       });
   });
 
