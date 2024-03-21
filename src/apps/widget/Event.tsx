@@ -9,7 +9,7 @@ import { parseSelectorPositionOnly } from "./parser/parseSelector";
 import { getTargetProps } from "../../plugin/observers/user";
 import { isHTMLElement } from "./hooks/useNewFixedElementAdded";
 import { parse } from "./parser";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -43,6 +43,8 @@ const Event = ({ id }: { id: string }) => {
       className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
     >
       <p className="cyw-text-xs cyw-flex-grow">
+        <span className="cyw-w-2 cyw-inline-block" />
+        <span className="cyw-w-2 cyw-inline-block" />
         <Typewriter text={text} />
       </p>
       {isUserEvent(event) && (

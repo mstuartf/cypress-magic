@@ -3,17 +3,16 @@ import { useSelector } from "react-redux";
 import {
   selectEventsSorted,
   selectMockNetworkRequests,
+  selectTestDescribe,
+  selectTestShould,
 } from "./redux/selectors";
 import { parse } from "./parser";
 
 const template = (
   describe: string,
-  beforeEach: string,
   should: string,
   steps: string[]
 ) => `describe('${describe}', () => {
-  beforeEach(() => {\n    ${beforeEach}\n  })
-
   it('${should}', () => {\n${steps
   .map((text) => `    ${text}`)
   .join("\n")}\n  });
@@ -22,10 +21,12 @@ const template = (
 const DownloadTest = () => {
   const mockNetworkRequests = useSelector(selectMockNetworkRequests);
   const events = useSelector(selectEventsSorted);
+  const testDescribe = useSelector(selectTestDescribe)!;
+  const testShould = useSelector(selectTestShould)!;
 
   const download = () => {
     const steps = events.map((event) => parse(event, { mockNetworkRequests }));
-    const content = template("my test...", "cy.reload()", "should pass", steps);
+    const content = template(testDescribe, testShould, steps);
     const blob = new Blob([content], { type: "text/javascript" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
