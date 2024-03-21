@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 
-const Typewriter = ({ text }: { text: string }) => {
+const Typewriter = ({
+  text,
+  disabled,
+}: {
+  text: string;
+  disabled: boolean;
+}) => {
   const [partialText, setPartialText] = useState("");
 
   useEffect(() => {
-    setPartialText("");
-  }, [text]);
+    if (!disabled && partialText !== text) {
+      setPartialText("");
+    } else {
+      setPartialText(text);
+    }
+  }, [text, disabled]);
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -57,7 +57,7 @@ const Event = ({ id }: { id: string }) => {
       >
         <span className="cyw-w-2 cyw-inline-block" />
         <span className="cyw-w-2 cyw-inline-block" />
-        {isRunning ? <>{text}</> : <Typewriter text={text} />}
+        <Typewriter text={text} disabled={isRunning} />
       </p>
       {isUserEvent(event) && (
         <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">

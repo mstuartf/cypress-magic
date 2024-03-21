@@ -160,8 +160,8 @@ export const testIsRunningMiddleware: WidgetMiddleware =
       action.type === saveEvent.type &&
       store.getState().recording.isRunning
     ) {
-      console.log(action);
       return;
     }
+    console.log(action, store.getState().recording.isRunning);
     next(action);
   };
