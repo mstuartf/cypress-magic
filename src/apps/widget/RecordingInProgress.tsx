@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "./redux/slice";
-import { selectHasRefreshed } from "./redux/selectors";
+import { selectHasRefreshed, selectIsRunning } from "./redux/selectors";
 import Header from "./Header";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
@@ -14,6 +14,7 @@ import RunTest from "./RunTest";
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
   const hasRefreshed = useSelector(selectHasRefreshed);
+  const isRunning = useSelector(selectIsRunning);
   const onCancel = () => {
     dispatch(setRecordingInProgress(false));
   };
@@ -39,7 +40,9 @@ const RecordingInProgress = () => {
           </svg>
           <span className="cyw-sr-only">Loading...</span>
         </div>
-        <div className="cyw-ml-4">Recording in progress...</div>
+        <div className="cyw-ml-4">
+          {isRunning ? "Running test..." : "Recording in progress..."}
+        </div>
       </Header>
       {hasRefreshed && (
         <>
