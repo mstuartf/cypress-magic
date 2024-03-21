@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectFixtures } from "./redux/selectors";
+import { selectFixtures, selectMockNetworkRequests } from "./redux/selectors";
 import JSZip from "jszip";
 
 const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);
+  const mockNetworkRequests = useSelector(selectMockNetworkRequests);
+  const disabled = !mockNetworkRequests || !fixtures.length;
   const download = () => {
     const zip = new JSZip();
     const folder = zip.folder("fixtures");
@@ -25,9 +27,14 @@ const DownloadFixtures = () => {
   return (
     <button
       onClick={download}
-      className="text-xs cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-2 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
+      disabled={disabled}
+      className={`disabled:cyw-cursor-not-allowed text-xs cyw-font-semibold cyw-py-2 cyw-px-2 cyw-border cyw-rounded ${
+        !disabled
+          ? "cyw-bg-transparent cyw-text-blue-700 cyw-border-blue-500 hover:cyw-text-white hover:cyw-bg-blue-500 hover:cyw-border-transparent"
+          : "cyw-bg-gray-100 cyw-text-gray-500 cyw-border-gray-500"
+      }`}
     >
-      Download fixtures ({fixtures.length})
+      Download fixtures{!disabled && <> ({fixtures.length})</>}
     </button>
   );
 };
