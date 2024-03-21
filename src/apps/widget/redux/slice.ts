@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ParsedEvent, RequestEvent } from "../../../plugin/types";
+import {
+  ParsedEvent,
+  RequestEvent,
+  ResponseEvent,
+} from "../../../plugin/types";
 import { readCache } from "../cache";
 import { isDblClickEvent, isResponseEvent } from "../utils";
 import { AliasTracker } from "../../../plugin/utils/aliases";
@@ -14,6 +18,10 @@ interface State {
   // When running navigation events in test mode, we can't increment the step once
   // the event has run. Schedule it to increment on load using this prop.
   isRunningStepIncrementOnLoad: boolean;
+  // Count aliases from scratch when running in test mode.
+  isRunningAliasTracker: AliasTracker;
+  // When running (un-mocked) in test mode, record responses here (so we know when to cy.wait).
+  isRunningReturnedResponses: ResponseEvent[];
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
@@ -37,6 +45,8 @@ const initialState: State = {
   mockNetworkRequests: false,
   fixtures: {},
   aliasTracker: {},
+  isRunningAliasTracker: {},
+  isRunningReturnedResponses: [],
 };
 
 export const recordingSlice = createSlice({
@@ -57,6 +67,17 @@ export const recordingSlice = createSlice({
     setIsRunning: (state, action: PayloadAction<boolean>) => {
       state.isRunning = action.payload;
       state.isRunningStep = 0;
+      state.isRunningAliasTracker = {};
+      state.isRunningReturnedResponses = [];
+    },
+    saveIsRunningResponse: (
+      state,
+      { payload }: PayloadAction<ResponseEvent>
+    ) => {
+      state.isRunningReturnedResponses = [
+        ...state.isRunningReturnedResponses,
+        payload,
+      ];
     },
     setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
       state.isAddingAssertion = action.payload;
@@ -90,6 +111,7 @@ export const recordingSlice = createSlice({
     deleteEvent: (state, action: PayloadAction<string>) => {
       state.eventIds = [...state.eventIds].filter((id) => id != action.payload);
       delete state.events[action.payload];
+      // todo: delete from aliasTracker?
     },
     updateEvent: (state, action: PayloadAction<ParsedEvent>) => {
       state.events[action.payload.id] = {
@@ -147,4 +169,5 @@ export const {
   updateRunStep,
   scheduleUpdateRunStep,
   updateAliasTracker,
+  saveIsRunningResponse,
 } = recordingSlice.actions;

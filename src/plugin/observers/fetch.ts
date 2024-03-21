@@ -89,8 +89,11 @@ export function initFetchObserver({
 
   window.fetch = async (input, init) => {
     const include = !isDataUrl(input);
+    if (!include) {
+      return originalFetch(input, init);
+    }
 
-    if (include && mockApiCalls()) {
+    if (mockApiCalls()) {
       const alias = buildRequestAlias({
         url: parseUrl(input),
         method: init?.method || "GET",
@@ -101,22 +104,15 @@ export function initFetchObserver({
 
     const id = generateEventId();
     const requestEvent = parseRequest(buildAlias, input, init);
-
-    if (include) {
-      saveEvent({ ...requestEvent, id });
-    }
-
+    saveEvent({ ...requestEvent, id });
     const response = await originalFetch(input, init);
-
-    if (include) {
-      const responseEvent = await parseResponse(
-        response,
-        requestEvent.method,
-        requestEvent.alias,
-        saveFixture
-      );
-      saveEvent({ ...responseEvent, requestId: id });
-    }
+    const responseEvent = await parseResponse(
+      response,
+      requestEvent.method,
+      requestEvent.alias,
+      saveFixture
+    );
+    saveEvent({ ...responseEvent, requestId: id });
 
     return response;
   };
