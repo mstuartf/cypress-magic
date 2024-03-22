@@ -44,6 +44,8 @@ export const selectRunOptions = ({
 }: WidgetRootState) => ({
   mockNetworkRequests,
 });
+export const selectBaseUrl = ({ recording: { baseUrl } }: WidgetRootState) =>
+  baseUrl;
 export const selectIsRunningResponses = ({
   recording: { isRunningReturnedResponses },
 }: WidgetRootState) => isRunningReturnedResponses;

@@ -17,6 +17,7 @@ export type InitArgs = {
   buildAlias: AliasBuilder;
   saveEvent: SaveEvent;
   mockApiCalls: () => boolean;
+  matchUrl: (url: string) => boolean;
   getMockedResponse: (alias: string) => {
     status: number;
     statusText: string;
