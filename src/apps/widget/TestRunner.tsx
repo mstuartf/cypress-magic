@@ -18,6 +18,7 @@ import { run } from "./runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
+  isRequestEvent,
   isResponseEvent,
 } from "./utils";
 
@@ -51,6 +52,7 @@ const TestRunner = () => {
       return;
     }
     if (step < eventIds.length) {
+      const timeout = isRequestEvent(event) || isResponseEvent(event) ? 0 : 500;
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
           dispatch(scheduleUpdateRunStep());
@@ -59,7 +61,7 @@ const TestRunner = () => {
           run(event, runOptions);
           dispatch(updateRunStep());
         }
-      }, 500);
+      }, timeout);
     } else {
       dispatch(setIsRunning(false));
     }

@@ -26,12 +26,27 @@ export const unPickleBlob = (pickle: PickledBlob): Promise<Blob> =>
       resolve(new Blob([], { type }));
       return;
     }
-    fetch(dataUri)
-      .then((res) => res.blob().then((blob) => resolve(blob)))
-      .catch((e) => {
-        reject(`error generating blob`);
-      });
+    try {
+      const blob = dataUriToBlob(dataUri, type);
+      resolve(blob);
+    } catch (e) {
+      console.log(e);
+      reject(`error generating blob`);
+    }
   });
+
+// don't use fetch to read data URIs because some apps will block this
+// also we should avoid using it and confusing the data tracking
+function dataUriToBlob(dataUri: string, type: string) {
+  const [_, data] = dataUri.split(",");
+  const binaryData = atob(data);
+  const byteNumbers = new Array(binaryData.length);
+  for (let i = 0; i < binaryData.length; i++) {
+    byteNumbers[i] = binaryData.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  return new Blob([byteArray], { type });
+}
 
 export const getBlobFileExtension = (blob: Blob): string => {
   const mimeInfo = mimeDb[blob.type];

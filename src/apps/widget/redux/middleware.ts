@@ -67,7 +67,6 @@ export const throttlerMiddleware: WidgetMiddleware =
     let event = action.payload;
     if (isRequestEvent(event)) {
       const events = [...selectEventsSorted(store.getState())];
-      console.log(events);
       const trigger = events.reverse().find((e) => isRequestTriggerEvent(e))!;
       const newEvent: RequestEvent = {
         ...event,

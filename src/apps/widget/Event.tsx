@@ -60,14 +60,17 @@ const Event = ({ id }: { id: string }) => {
         <Typewriter text={text} disabled={isRunning} />
       </p>
       {isUserEvent(event) && (
-        <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
-          <button onClick={updateEventTarget} className="h-4 w-4">
+        <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">
+          <button onClick={updateEventTarget} className="cyw-h-4 cyw-w-4">
             <Refresh />
           </button>
         </div>
       )}
-      <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all ml-1">
-        <button className="h-4 w-4" onClick={() => dispatch(deleteEvent(id))}>
+      <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">
+        <button
+          className="cyw-h-4 cyw-w-4"
+          onClick={() => dispatch(deleteEvent(id))}
+        >
           <Trash />
         </button>
       </div>
