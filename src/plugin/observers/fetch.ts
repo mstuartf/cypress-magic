@@ -101,8 +101,11 @@ export function initFetchObserver({
         url,
         method: init?.method || "GET",
       });
-      const { status, statusText, content } = getMockedResponse(alias);
-      return buildMockedResponse(status, statusText, content);
+      const mockedResponse = getMockedResponse(alias);
+      if (mockedResponse) {
+        const { status, statusText, content } = mockedResponse;
+        return buildMockedResponse(status, statusText, content);
+      }
     }
 
     const id = generateEventId();
