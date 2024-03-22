@@ -83,19 +83,22 @@ export function initFetchObserver({
   saveFixture,
   buildAlias,
   mockApiCalls,
+  matchUrl,
   getMockedResponse,
 }: InitArgs) {
   const { fetch: originalFetch } = window;
 
   window.fetch = async (input, init) => {
-    const include = !isDataUrl(input);
+    const url = parseUrl(input);
+    const include = !isDataUrl(input) && matchUrl(url);
+
     if (!include) {
       return originalFetch(input, init);
     }
 
     if (mockApiCalls()) {
       const alias = buildRequestAlias({
-        url: parseUrl(input),
+        url,
         method: init?.method || "GET",
       });
       const { status, statusText, content } = getMockedResponse(alias);

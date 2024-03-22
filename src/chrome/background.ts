@@ -36,9 +36,12 @@ const injectWidgetIfActivatedForTab = (
 
 chrome.tabs.onUpdated.addListener(
   (tabId: number, changeInfo: TabChangeInfo) => {
+    console.log(changeInfo);
     if (changeInfo.status === "loading") {
       const activatedForTab = store.getState().root.tabId;
+      console.log(activatedForTab);
       if (activatedForTab === tabId) {
+        console.log("injecting from background");
         injectWidgetIfActivatedForTab(activatedForTab);
       }
     }

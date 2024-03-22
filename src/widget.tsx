@@ -14,6 +14,7 @@ import {
 } from "./apps/widget/redux/slice";
 import { buildAliasTracker } from "./plugin/utils/aliases";
 import {
+  selectBaseUrl,
   selectMockedResponse,
   selectMockNetworkInTests,
 } from "./apps/widget/redux/selectors";
@@ -30,6 +31,7 @@ const setHasLoaded = (value: boolean) =>
 // content script runs in the main process and in the extension popup, so need this check here
 // because we only want to render the app in the main process
 const { protocol } = new URL(window.location.href);
+console.log("considering injecting...");
 if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   // this needs to be done immediately (i.e. not in the app) to catch all events from the host page
   initialize({
@@ -45,6 +47,10 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
       (updated) => store.dispatch(updateAliasTracker(updated))
     ),
     mockApiCalls: () => selectMockNetworkInTests(store.getState()),
+    matchUrl: (url) => {
+      const baseUrl = selectBaseUrl(store.getState());
+      return !baseUrl || url.startsWith(baseUrl);
+    },
     getMockedResponse: (alias) => selectMockedResponse(alias)(store.getState()),
   });
 
