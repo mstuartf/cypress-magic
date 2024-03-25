@@ -19,3 +19,5 @@ export const inject = (tabId: number) =>
     files: ["static/js/content.js"],
     world: "MAIN",
   });
+
+export const reloadTab = (tabId: number) => chrome.tabs.reload(tabId);
