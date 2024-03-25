@@ -10,7 +10,7 @@ import {
   isUserEvent,
 } from "../utils";
 import { widgetId } from "../constants";
-import { assertionOverlayId } from "../AddAssertion";
+import { assertionOverlayId } from "../components/AddAssertion";
 import {
   AssertionEvent,
   NavigationEvent,

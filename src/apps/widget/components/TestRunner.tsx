@@ -7,20 +7,20 @@ import {
   selectIsRunningStepIncrementOnLoad,
   selectMockNetworkRequests,
   selectRunOptions,
-} from "./redux/selectors";
+} from "../redux/selectors";
 import { useEffect, useState } from "react";
 import {
   scheduleUpdateRunStep,
   setIsRunning,
   updateRunStep,
-} from "./redux/slice";
-import { run } from "./runner";
+} from "../redux/slice";
+import { run } from "../runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
   isRequestEvent,
   isResponseEvent,
-} from "./utils";
+} from "../utils";
 
 const TestRunner = () => {
   const dispatch = useDispatch();

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsAddingAssertion } from "./redux/selectors";
-import { setIsAddingAssertion } from "./redux/slice";
-import { sideBarWith } from "./constants";
+import { selectIsAddingAssertion } from "../redux/selectors";
+import { setIsAddingAssertion } from "../redux/slice";
+import { sideBarWith } from "../constants";
 
 const AddAssertion = () => {
   const dispatch = useDispatch();

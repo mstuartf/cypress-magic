@@ -1,16 +1,17 @@
-import { RootState } from "../apps/popup/redux/store";
-import { initialState } from "../apps/popup/redux/slice";
+import { PopupState } from "../apps/popup/redux/store";
+import { initialBaseState } from "../apps/popup/redux/slice";
 
-export const readCache = async (
-  callback: (value: RootState) => void
-): Promise<void> =>
-  chrome.storage.local.get("__seasmoke", ({ seasmoke }) =>
-    callback(seasmoke || { root: { ...initialState } })
-  );
+const cacheKey = "__seasmoke__";
 
-export const updateCache = async (state: object) =>
+export const readCache = async (): Promise<PopupState | undefined> => {
+  return chrome.storage.local
+    .get(cacheKey)
+    .then((v) => v[cacheKey]) as unknown as PopupState | undefined;
+};
+
+export const updateCache = async (state: PopupState) =>
   chrome.storage.local.set({
-    __seasmoke: { ...state },
+    [cacheKey]: state,
   });
 
 export const inject = (tabId: number) =>
@@ -19,5 +20,3 @@ export const inject = (tabId: number) =>
     files: ["static/js/content.js"],
     world: "MAIN",
   });
-
-export const reloadTab = (tabId: number) => chrome.tabs.reload(tabId);

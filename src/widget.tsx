@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./apps/widget/App";
+import App from "./apps/widget/components/App";
 import { store } from "./apps/widget/redux/store";
 import { Provider } from "react-redux";
 import { widgetId } from "./apps/widget/constants";
@@ -31,7 +31,6 @@ const setHasLoaded = (value: boolean) =>
 // content script runs in the main process and in the extension popup, so need this check here
 // because we only want to render the app in the main process
 const { protocol } = new URL(window.location.href);
-console.log("considering injecting...");
 if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   // this needs to be done immediately (i.e. not in the app) to catch all events from the host page
   initialize({

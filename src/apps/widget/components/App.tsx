@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setHasRefreshed } from "./redux/slice";
+import { setHasRefreshed } from "../redux/slice";
 import Resizer from "./Resizer";
-import { selectRecordingInProgress } from "./redux/selectors";
+import { selectRecordingInProgress } from "../redux/selectors";
 import RecordingInProgress from "./RecordingInProgress";
 import Setup from "./Setup";
 

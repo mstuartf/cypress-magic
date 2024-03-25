@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsRunning } from "./redux/selectors";
-import { setIsRunning } from "./redux/slice";
+import { selectIsRunning } from "../redux/selectors";
+import { setIsRunning } from "../redux/slice";
 import TestRunner from "./TestRunner";
 
 const RunTest = () => {

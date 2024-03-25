@@ -4,7 +4,7 @@ import {
   setupTest,
   setHasRefreshed,
   setRecordingInProgress,
-} from "./redux/slice";
+} from "../redux/slice";
 import { useDispatch } from "react-redux";
 import InputRow from "./InputRow";
 
