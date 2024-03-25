@@ -3,7 +3,7 @@ import { WidgetRootState } from "./redux/store";
 const cacheKey = "__widgetCache__";
 
 export const readCache = <T>(slice: string): T | null => {
-  const raw = localStorage.getItem(cacheKey);
+  const raw = sessionStorage.getItem(cacheKey);
 
   if (!raw) {
     return null;
@@ -19,5 +19,5 @@ export const readCache = <T>(slice: string): T | null => {
 };
 
 export const setCache = (state: WidgetRootState) => {
-  localStorage.setItem(cacheKey, JSON.stringify(state));
+  sessionStorage.setItem(cacheKey, JSON.stringify(state));
 };
