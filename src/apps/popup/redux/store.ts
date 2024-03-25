@@ -14,7 +14,10 @@ export const middlewareAliases: { [key: string]: (action: any) => any } = {
     return action;
   },
   [deactivateForTab.type]: (action: ReturnType<typeof deactivateForTab>) => {
-    reload(action.payload);
+    setTimeout(() => {
+      // reload the page in a timeout so it comes after state is updated
+      reload(action.payload);
+    }, 100);
     return action;
   },
 };

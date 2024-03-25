@@ -1,6 +1,7 @@
 import { store } from "../apps/popup/redux/store";
 import {
   initialBaseState,
+  removeClosedTabId,
   restoreBaseCache,
   setActiveTabId,
 } from "../apps/popup/redux/slice";
@@ -8,7 +9,7 @@ import { inject, readCache, updateCache } from "./utils";
 import { selectInjectForTab } from "../apps/popup/redux/selectors";
 import TabChangeInfo = chrome.tabs.TabChangeInfo;
 
-console.log("background running", new Date().toString());
+// READING AND WRITING TO CACHE ------------------------------------------------
 
 readCache().then((value) => {
   console.log(`found ${JSON.stringify(value)} in storage`);
@@ -30,8 +31,14 @@ store.subscribe(async () => {
   await updateCache({ ...store.getState() });
 });
 
+// LISTENING FOR TAB EVENTS ----------------------------------------------------
+
 chrome.tabs.onActivated.addListener(({ tabId }) =>
   store.dispatch(setActiveTabId(tabId))
+);
+
+chrome.tabs.onRemoved.addListener((tabId) =>
+  store.dispatch(removeClosedTabId(tabId))
 );
 
 // handles re-injection when the extension has already been activated but the page is refreshed
