@@ -1,11 +1,16 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActiveTabId, selectInjectForTab } from "../redux/selectors";
+import {
+  selectActiveTabId,
+  selectInjectForTab,
+  selectNbOfInjectForTab,
+} from "../redux/selectors";
 import { activateForTab, deactivateForTab } from "../redux/slice";
 
 const Main = () => {
   const activeTabId = useSelector(selectActiveTabId)!;
   const injectForActiveTab = useSelector(selectInjectForTab(activeTabId));
+  const count = useSelector(selectNbOfInjectForTab);
   const dispatch = useDispatch();
   const onClick = () => {
     if (injectForActiveTab) {
@@ -16,7 +21,7 @@ const Main = () => {
   };
   return (
     <div>
-      main view
+      The widget is currently active on {count} tab{count > 1 ? "s" : ""}
       <div>
         <button onClick={onClick}>
           {injectForActiveTab ? "deactivate" : "activate"}

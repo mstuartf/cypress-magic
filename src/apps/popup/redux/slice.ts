@@ -32,6 +32,9 @@ export const baseSlice = createSlice({
     setActiveTabId: (state, { payload: tabId }: PayloadAction<number>) => {
       state.activeTabId = tabId;
     },
+    removeClosedTabId: (state, { payload: tabId }: PayloadAction<number>) => {
+      state.injectOnTabs = [...state.injectOnTabs].filter((id) => id !== tabId);
+    },
   },
 });
 
@@ -40,4 +43,5 @@ export const {
   activateForTab,
   deactivateForTab,
   setActiveTabId,
+  removeClosedTabId,
 } = baseSlice.actions;
