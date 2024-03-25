@@ -20,6 +20,7 @@
       "world": "MAIN"
     }
   ],
+  "host_permissions": ["*://*/"],
   "background": {
     "service_worker": "./static/js/background.js"
   }

@@ -1,9 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { alias, wrapStore } from "webext-redux";
 import { rootReducer } from "./reducers";
-import { inject } from "../../../chrome/utils";
-import { activateForTab, deactivateForTab } from "./slice";
-import reload = chrome.tabs.reload;
+import { inject, updateCache } from "../../../chrome/utils";
+import { activateForTab, updateCacheAfterUpdate } from "./slice";
 
 export type PopupState = ReturnType<typeof rootReducer>;
 
@@ -13,11 +12,15 @@ export const middlewareAliases: { [key: string]: (action: any) => any } = {
     inject(action.payload);
     return action;
   },
-  [deactivateForTab.type]: (action: ReturnType<typeof deactivateForTab>) => {
-    setTimeout(() => {
-      // reload the page in a timeout so it comes after state is updated
-      reload(action.payload);
-    }, 100);
+  [updateCacheAfterUpdate.type]: (
+    action: ReturnType<typeof updateCacheAfterUpdate>
+  ) => {
+    const { state, reload } = action.payload;
+    updateCache({ base: state }).then(() => {
+      if (reload) {
+        chrome.tabs.reload();
+      }
+    });
     return action;
   },
 };

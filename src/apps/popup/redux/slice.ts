@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface BaseState {
+export interface BaseState {
   activeTabId?: number;
   injectOnTabs: number[];
   cacheLoaded: boolean;
@@ -35,6 +35,11 @@ export const baseSlice = createSlice({
     removeClosedTabId: (state, { payload: tabId }: PayloadAction<number>) => {
       state.injectOnTabs = [...state.injectOnTabs].filter((id) => id !== tabId);
     },
+    // trigger background logic
+    updateCacheAfterUpdate: (
+      state,
+      { payload: tabId }: PayloadAction<{ state: BaseState; reload: boolean }>
+    ) => {},
   },
 });
 
@@ -44,4 +49,5 @@ export const {
   deactivateForTab,
   setActiveTabId,
   removeClosedTabId,
+  updateCacheAfterUpdate,
 } = baseSlice.actions;

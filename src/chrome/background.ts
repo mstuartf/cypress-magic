@@ -3,9 +3,8 @@ import {
   initialBaseState,
   removeClosedTabId,
   restoreBaseCache,
-  setActiveTabId,
 } from "../apps/popup/redux/slice";
-import { inject, readCache, updateCache } from "./utils";
+import { inject, readCache } from "./utils";
 import { selectInjectForTab } from "../apps/popup/redux/selectors";
 import TabChangeInfo = chrome.tabs.TabChangeInfo;
 
@@ -25,17 +24,7 @@ readCache().then((value) => {
   store.dispatch(restoreBaseCache(state.base));
 });
 
-// subscribe to all store updates and sync cache
-store.subscribe(async () => {
-  console.log(`updating to ${JSON.stringify(store.getState())}`);
-  await updateCache({ ...store.getState() });
-});
-
 // LISTENING FOR TAB EVENTS ----------------------------------------------------
-
-chrome.tabs.onActivated.addListener(({ tabId }) =>
-  store.dispatch(setActiveTabId(tabId))
-);
 
 chrome.tabs.onRemoved.addListener((tabId) =>
   store.dispatch(removeClosedTabId(tabId))
