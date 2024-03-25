@@ -2,14 +2,15 @@ import React from "react";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { useSelector } from "react-redux";
-import { selectCacheLoaded } from "./redux/selectors";
+import { selectActiveTabId, selectCacheLoaded } from "./redux/selectors";
 import Main from "./components/Main";
 
 const history = createMemoryHistory();
 
 function App() {
   const cacheLoaded = useSelector(selectCacheLoaded);
-  if (!cacheLoaded) {
+  const activeTabId = useSelector(selectActiveTabId);
+  if (!cacheLoaded || !activeTabId) {
     return <>Loading...</>;
   }
 

@@ -1,49 +1,36 @@
 import { store } from "../apps/popup/redux/store";
-import { restoreCache, setHasBeenInjected } from "../apps/popup/redux/slice";
-import { readCache, updateCache } from "./utils";
+import { restoreCache, setActiveTabId } from "../apps/popup/redux/slice";
+import { inject, readCache, updateCache } from "./utils";
 import TabChangeInfo = chrome.tabs.TabChangeInfo;
+import { useSelector } from "react-redux";
+import { selectInjectForTab } from "../apps/popup/redux/selectors";
 
 chrome.runtime.onInstalled.addListener(() => {});
-
-store.subscribe(async () => {
-  await updateCache({ ...store.getState() });
-  const { tabId, hasBeenInjected } = store.getState().root;
-  if (!!tabId && !hasBeenInjected) {
-    injectWidgetIfActivatedForTab(tabId, () => {
-      store.dispatch(setHasBeenInjected());
-    });
-  }
-});
 
 readCache((state) => {
   store.dispatch(restoreCache(state.root));
 });
 
-export default {};
+chrome.tabs.onActivated.addListener(({ tabId }) =>
+  store.dispatch(setActiveTabId(tabId))
+);
 
-const injectWidgetIfActivatedForTab = (
-  tabId: number,
-  callback?: () => void
-) => {
-  chrome.scripting
-    .executeScript({
-      target: { tabId },
-      files: ["static/js/content.js"],
-      world: "MAIN",
-    })
-    .then(callback);
-};
+// subscribe to all store updates and sync cache
+store.subscribe(async () => {
+  await updateCache({ ...store.getState() });
+});
 
+// handles re-injection when the extension has already been activated but the page is refreshed
 chrome.tabs.onUpdated.addListener(
   (tabId: number, changeInfo: TabChangeInfo) => {
-    console.log(changeInfo);
     if (changeInfo.status === "loading") {
-      const activatedForTab = store.getState().root.tabId;
-      console.log(activatedForTab);
-      if (activatedForTab === tabId) {
+      const shouldInject = selectInjectForTab(tabId)(store.getState());
+      if (shouldInject) {
         console.log("injecting from background");
-        injectWidgetIfActivatedForTab(activatedForTab);
+        inject(tabId);
       }
     }
   }
 );
+
+export default {};

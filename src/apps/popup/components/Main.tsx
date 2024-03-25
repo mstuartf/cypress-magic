@@ -1,25 +1,26 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectHasBeenInjected, selectTabId } from "../redux/selectors";
+import { selectActiveTabId, selectInjectForTab } from "../redux/selectors";
 import { activateForTab, deactivateForTab } from "../redux/slice";
-import { getActiveTabId } from "../../../chrome/utils";
 
 const Main = () => {
-  const tabId = useSelector(selectTabId);
-  const hasBeenInjected = useSelector(selectHasBeenInjected);
+  const activeTabId = useSelector(selectActiveTabId)!;
+  const injectForActiveTab = useSelector(selectInjectForTab(activeTabId));
   const dispatch = useDispatch();
   const onClick = () => {
-    if (!!tabId) {
-      dispatch(deactivateForTab());
+    if (injectForActiveTab) {
+      dispatch(deactivateForTab(activeTabId));
     } else {
-      getActiveTabId().then((value) => dispatch(activateForTab(value)));
+      dispatch(activateForTab(activeTabId));
     }
   };
   return (
     <div>
-      main view {tabId} {`${hasBeenInjected}`}
+      main view
       <div>
-        <button onClick={onClick}>{!!tabId ? "deactivate" : "activate"}</button>
+        <button onClick={onClick}>
+          {injectForActiveTab ? "deactivate" : "activate"}
+        </button>
       </div>
     </div>
   );
