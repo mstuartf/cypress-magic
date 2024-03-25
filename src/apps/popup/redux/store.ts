@@ -5,7 +5,7 @@ import { inject } from "../../../chrome/utils";
 import { activateForTab, deactivateForTab } from "./slice";
 import reload = chrome.tabs.reload;
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type PopupState = ReturnType<typeof rootReducer>;
 
 // This is executed by background script but for some reason needs to be defined here
 export const middlewareAliases: { [key: string]: (action: any) => any } = {

@@ -1,6 +1,6 @@
 import Typewriter from "./Typewriter";
-import { ReactComponent as Refresh } from "../../zondicons/refresh.svg";
-import { ReactComponent as Trash } from "../../zondicons/trash.svg";
+import { ReactComponent as Refresh } from "../../../zondicons/refresh.svg";
+import { ReactComponent as Trash } from "../../../zondicons/trash.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
@@ -8,13 +8,13 @@ import {
   selectIsRunning,
   selectIsRunningStep,
   selectParseOptions,
-} from "./redux/selectors";
-import { deleteEvent, updateEvent } from "./redux/slice";
-import { isUserEvent } from "./utils";
-import { parseSelectorPositionOnly } from "./parser/parseSelector";
-import { getTargetProps } from "../../plugin/observers/user";
-import { isHTMLElement } from "./hooks/useNewFixedElementAdded";
-import { parse } from "./parser";
+} from "../redux/selectors";
+import { deleteEvent, updateEvent } from "../redux/slice";
+import { isUserEvent } from "../utils";
+import { parseSelectorPositionOnly } from "../parser/parseSelector";
+import { getTargetProps } from "../../../plugin/observers/user";
+import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
+import { parse } from "../parser";
 import React, { useEffect, useState } from "react";
 
 const Event = ({ id }: { id: string }) => {

@@ -3,10 +3,10 @@ import {
   selectEventIdsSorted,
   selectTestDescribe,
   selectTestShould,
-} from "./redux/selectors";
+} from "../redux/selectors";
 import { useEffect, useRef, useState } from "react";
 import Event from "./Event";
-import Line from "../Line";
+import Line from "../../Line";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);

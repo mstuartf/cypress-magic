@@ -1,8 +1,8 @@
 import React from "react";
 import Toggle from "./Toggle";
 import { useDispatch, useSelector } from "react-redux";
-import { selectMockNetworkRequests } from "./redux/selectors";
-import { setMockNetworkRequests } from "./redux/slice";
+import { selectMockNetworkRequests } from "../redux/selectors";
+import { setMockNetworkRequests } from "../redux/slice";
 
 const ToggleMocks = () => {
   const dispatch = useDispatch();

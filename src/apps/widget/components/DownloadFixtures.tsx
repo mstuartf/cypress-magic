@@ -4,10 +4,10 @@ import {
   selectFixtures,
   selectMockNetworkRequests,
   selectTestDescribe,
-} from "./redux/selectors";
+} from "../redux/selectors";
 import JSZip from "jszip";
-import { toCamelCase } from "./utils";
-import { unPickleBlob } from "../../plugin/utils/pickleBlob";
+import { toCamelCase } from "../utils";
+import { unPickleBlob } from "../../../plugin/utils/pickleBlob";
 
 const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);

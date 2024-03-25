@@ -6,9 +6,9 @@ import {
   selectParseOptions,
   selectTestDescribe,
   selectTestShould,
-} from "./redux/selectors";
-import { parse } from "./parser";
-import { toCamelCase } from "./utils";
+} from "../redux/selectors";
+import { parse } from "../parser";
+import { toCamelCase } from "../utils";
 
 const template = (
   describe: string,

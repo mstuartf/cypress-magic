@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setRecordingInProgress } from "./redux/slice";
-import { selectHasRefreshed, selectIsRunning } from "./redux/selectors";
+import { setRecordingInProgress } from "../redux/slice";
+import { selectHasRefreshed, selectIsRunning } from "../redux/selectors";
 import Header from "./Header";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";

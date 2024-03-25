@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface State {
+interface BaseState {
   activeTabId?: number;
   injectOnTabs: number[];
   cacheLoaded: boolean;
 }
 
-export const initialState: State = {
+export const initialBaseState: BaseState = {
   activeTabId: undefined,
   injectOnTabs: [],
   cacheLoaded: false,
 };
 
-export const rootSlice = createSlice({
-  name: "root",
-  initialState,
+export const baseSlice = createSlice({
+  name: "base",
+  initialState: initialBaseState,
   reducers: {
-    restoreCache: (
+    restoreBaseCache: (
       state,
-      { payload: { injectOnTabs, activeTabId } }: PayloadAction<State>
+      { payload: { injectOnTabs } }: PayloadAction<BaseState>
     ) => {
       state.cacheLoaded = true;
       state.injectOnTabs = [...injectOnTabs];
@@ -36,8 +36,8 @@ export const rootSlice = createSlice({
 });
 
 export const {
-  restoreCache,
+  restoreBaseCache,
   activateForTab,
   deactivateForTab,
   setActiveTabId,
-} = rootSlice.actions;
+} = baseSlice.actions;
