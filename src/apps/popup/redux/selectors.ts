@@ -1,6 +1,6 @@
 import { RootState } from "./store";
 
 export const selectCacheLoaded = (state: RootState) => state.root.cacheLoaded;
-export const selectTabId = (state: RootState) => state.root.tabId;
-export const selectHasBeenInjected = (state: RootState) =>
-  state.root.hasBeenInjected;
+export const selectActiveTabId = (state: RootState) => state.root.activeTabId;
+export const selectInjectForTab = (tabId: number) => (state: RootState) =>
+  state.root.injectOnTabs.includes(tabId);

@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface State {
-  tabId?: number;
-  hasBeenInjected: boolean;
+  activeTabId?: number;
+  injectOnTabs: number[];
   cacheLoaded: boolean;
 }
 
-const initialState: State = {
-  tabId: undefined,
-  hasBeenInjected: false,
+export const initialState: State = {
+  activeTabId: undefined,
+  injectOnTabs: [],
   cacheLoaded: false,
 };
 
@@ -16,19 +16,21 @@ export const rootSlice = createSlice({
   name: "root",
   initialState,
   reducers: {
-    restoreCache: (state, action) => {
+    restoreCache: (
+      state,
+      { payload: { injectOnTabs, activeTabId } }: PayloadAction<State>
+    ) => {
       state.cacheLoaded = true;
+      state.injectOnTabs = [...injectOnTabs];
     },
-    activateForTab: (state, action: PayloadAction<number>) => {
-      state.tabId = action.payload;
-      state.hasBeenInjected = false;
+    activateForTab: (state, { payload: tabId }: PayloadAction<number>) => {
+      state.injectOnTabs = [...state.injectOnTabs, tabId];
     },
-    deactivateForTab: (state) => {
-      state.tabId = undefined;
-      state.hasBeenInjected = false;
+    deactivateForTab: (state, { payload: tabId }: PayloadAction<number>) => {
+      state.injectOnTabs = [...state.injectOnTabs].filter((id) => id !== tabId);
     },
-    setHasBeenInjected: (state) => {
-      state.hasBeenInjected = true;
+    setActiveTabId: (state, { payload: tabId }: PayloadAction<number>) => {
+      state.activeTabId = tabId;
     },
   },
 });
@@ -37,5 +39,5 @@ export const {
   restoreCache,
   activateForTab,
   deactivateForTab,
-  setHasBeenInjected,
+  setActiveTabId,
 } = rootSlice.actions;
