@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectActiveTabId, selectCacheLoaded } from "./redux/selectors";
 import Main from "./components/Main";
+import { setActiveTabId } from "./redux/slice";
 
 const history = createMemoryHistory();
 
 function App() {
+  const dispatch = useDispatch();
   const cacheLoaded = useSelector(selectCacheLoaded);
   const activeTabId = useSelector(selectActiveTabId);
+
+  useEffect(() => {
+    // Better to set the active tab ID when opening the popup rather than on focus changes in case
+    // the bg script is dormant and the user refocuses the window and opens the popup before interacting
+    // with the tab (in which case the tab activated event will not fire).
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      dispatch(setActiveTabId(tabs[0].id!));
+    });
+  }, []);
+
   if (!cacheLoaded || !activeTabId) {
     return <>Loading...</>;
   }
