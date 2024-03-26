@@ -1,27 +1,25 @@
 import { store } from "../apps/popup/redux/store";
-import {
-  initialBaseState,
-  removeClosedTabId,
-  restoreBaseCache,
-} from "../apps/popup/redux/slice";
-import { inject, readCache } from "./utils";
+import { removeClosedTabId, restoreBaseCache } from "../apps/popup/redux/slice";
+import { activeTabNeedsRefresh, inject, readCache, updateCache } from "./utils";
 import { selectInjectForTab } from "../apps/popup/redux/selectors";
 import TabChangeInfo = chrome.tabs.TabChangeInfo;
 
 // READING AND WRITING TO CACHE ------------------------------------------------
 
-readCache().then((value) => {
-  console.log(`found ${JSON.stringify(value)} in storage`);
-  const state =
-    value && Object.keys(value).length
-      ? value
-      : { base: { ...initialBaseState } };
-  console.log(
-    "restoring cache",
-    new Date().toString(),
-    JSON.stringify(state.base)
-  );
+readCache().then((state) => {
   store.dispatch(restoreBaseCache(state.base));
+});
+
+store.subscribe(() => {
+  const updated = { ...store.getState() };
+  readCache().then((current) => {
+    updateCache(updated).then(() => {
+      // This needs to be done here (not in middleware) because we need to be sure the cache is updated _before_ the refresh.
+      if (activeTabNeedsRefresh(current.base, updated.base)) {
+        chrome.tabs.reload();
+      }
+    });
+  });
 });
 
 // LISTENING FOR TAB EVENTS ----------------------------------------------------
@@ -30,18 +28,17 @@ chrome.tabs.onRemoved.addListener((tabId) =>
   store.dispatch(removeClosedTabId(tabId))
 );
 
-// handles re-injection when the extension has already been activated but the page is refreshed
+// Handles re-injection when the extension has already been activated but the page is refreshed
 chrome.tabs.onUpdated.addListener(
   (tabId: number, changeInfo: TabChangeInfo) => {
     if (changeInfo.status === "loading") {
-      console.log(
-        `injected on ${JSON.stringify(store.getState().base.injectOnTabs)}`
-      );
-      const shouldInject = selectInjectForTab(tabId)(store.getState());
-      if (shouldInject) {
-        console.log("injecting from background");
-        inject(tabId);
-      }
+      // Need to read from the cache not the store (store may have default values loaded sync).
+      readCache().then((state) => {
+        const shouldInject = selectInjectForTab(tabId)(state);
+        if (shouldInject) {
+          inject(tabId);
+        }
+      });
     }
   }
 );
