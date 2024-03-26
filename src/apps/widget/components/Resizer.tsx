@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../hooks/useWindowSize";
-import { sideBarWith, widgetId } from "../constants";
+import { sideBarWith } from "../constants";
 import {
-  isFixedRight,
+  getFixedSetRightElements,
+  getFixedFullWidthElements,
   useNewFixedElementAdded,
 } from "../hooks/useNewFixedElementAdded";
 import { useZIndexMonitor } from "../hooks/useZIndexMonitor";
@@ -18,7 +19,7 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
     const widthElementsToUpdate =
       fixedWidthElements !== null
         ? fixedWidthElements
-        : getFixedWidthElements(innerWidth);
+        : getFixedFullWidthElements(innerWidth);
     const widthChange =
       lastInnerWidth !== null ? innerWidth - lastInnerWidth : sideBarWith * -1;
 
@@ -34,10 +35,9 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
     const body = document.getElementsByTagName("body")[0];
     body.style.width = `${innerWidth - sideBarWith}px`;
 
-    // fixed right elements only need to be moved once
-    // todo: what about when new fixed right elements are added
+    // fixed right elements only need to be moved once (when they are added to the DOM)
     if (!lastInnerWidth) {
-      getFixedRightElements().forEach(([elem, right]) => {
+      getFixedSetRightElements().forEach(([elem, right]) => {
         elem.style.right = `${sideBarWith + right}px`;
       });
     }
@@ -58,38 +58,4 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-
-const getFixedElements = (): HTMLElement[] =>
-  Array.prototype.slice
-    .call(document.body.getElementsByTagName("*"))
-    .filter(
-      (elem) =>
-        window.getComputedStyle(elem, null).getPropertyValue("position") ==
-        "fixed"
-    )
-    .filter((elem) => !document.getElementById(widgetId)!.contains(elem));
-
-const getFixedWidthElements = (innerWidth: number): [HTMLElement, number][] =>
-  getFixedElements()
-    .filter((elem) => {
-      const elementWidth = window
-        .getComputedStyle(elem, null)
-        .getPropertyValue("width");
-      return !elementWidth || elementWidth === `${innerWidth}px`;
-    })
-    .map((elem) => {
-      const elementWidth = window
-        .getComputedStyle(elem, null)
-        .getPropertyValue("width");
-      return [
-        elem,
-        elementWidth ? parseInt(elementWidth.replace("px", "")) : innerWidth,
-      ];
-    });
-
-export const getFixedRightElements = (): [HTMLElement, number][] =>
-  getFixedElements()
-    .map((elem) => isFixedRight(elem))
-    .filter((elem, right) => right < sideBarWith);
-
 export default Resizer;
