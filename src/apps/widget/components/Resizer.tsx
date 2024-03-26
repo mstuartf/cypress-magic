@@ -51,7 +51,7 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className="cyw-fixed cyw-top-0 cyw-right-0 cyw-bottom-0 cyw-border-l-2 cyw-border-gray-500 cyw-bg-slate-50 cyw-px-4 cyw-py-6"
+      className="cyw-font-sans cyw-fixed cyw-top-0 cyw-right-0 cyw-bottom-0 cyw-border-solid cyw-border-l-2 cyw-border-gray-500 cyw-bg-slate-50 cyw-px-4 cyw-py-6"
       style={{ width: `${sideBarWith}px`, zIndex }}
     >
       {children}
