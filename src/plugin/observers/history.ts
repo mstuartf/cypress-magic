@@ -2,7 +2,6 @@
 
 import {
   BaseEvent,
-  HistoryEvent,
   InitArgs,
   QueryParamChangeEvent,
   SaveEvent,
@@ -19,6 +18,16 @@ const getBaseEvent = (): Omit<BaseEvent, "type"> => ({
 function isURL(url: string | URL): url is URL {
   return (url as URL).pathname !== undefined;
 }
+
+const isAbsoluteUrl = (url: string) => {
+  const r = new RegExp("^(?:[a-z+]+:)?//", "i");
+  return r.test(url);
+};
+
+const toURL = (url: string) => {
+  const input = isAbsoluteUrl(url) ? url : `${window.location.href}${url}`;
+  return new URL(input);
+};
 
 export const getUrlDiff = (
   event: Components,
@@ -82,19 +91,12 @@ interface Components {
   port: string;
 }
 
-export const getPathAndHost = (url: string | URL): Components => {
-  if (isURL(url)) {
-    const { pathname, hostname, protocol, search, port } = url;
-    return { pathname, hostname, protocol, search, port };
-  }
-  return getPathAndHost(new URL(url));
+export const getPathAndHost = (url: URL): Components => {
+  const { pathname, hostname, protocol, search, port } = url;
+  return { pathname, hostname, protocol, search, port };
 };
 
-const handleStateChange = (
-  oldUrl: string | URL,
-  newUrl: string | URL,
-  saveEvent: SaveEvent
-) => {
+const handleStateChange = (oldUrl: URL, newUrl: URL, saveEvent: SaveEvent) => {
   try {
     const oldState = getPathAndHost(oldUrl);
     const newState = getPathAndHost(newUrl);
@@ -128,11 +130,11 @@ const handleStateChange = (
 };
 
 function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
-  const states: URL[] = [new URL(window.location.href)];
+  const states: URL[] = [toURL(window.location.href)];
 
   const onStateChange = (url: string | URL) => {
     const prevUrl = states[states.length - 1];
-    const newUrl = isURL(url) ? url : new URL(url);
+    const newUrl = isURL(url) ? url : toURL(url);
     handleStateChange(prevUrl, newUrl, saveEvent);
     states.push(newUrl);
   };
@@ -156,7 +158,7 @@ function monkeyPatchHistory(history: History, saveEvent: SaveEvent) {
   // listen to popstate for back, forward and go (async)
   // const listener: EventListener = (event) => {
   //   try {
-  //     const components = getPathAndHost(new URL(window.location.href));
+  //     const components = getPathAndHost(toURL(window.location.href));
   //     saveEvent({ ...getBaseEvent(), ...components });
   //   } catch (e) {
   //     saveEvent(createErrorEvent("navigation", e as any));
