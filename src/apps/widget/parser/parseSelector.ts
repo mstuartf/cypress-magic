@@ -1,5 +1,7 @@
 import { Target } from "../../../plugin/types";
 
+const escapeChars = (value: string) => value.replaceAll(":", "\\:");
+
 export function parseSelector(domPath: Target["domPath"]): string {
   const bottomUp = [...domPath].reverse();
   const selectors = [];
@@ -13,7 +15,7 @@ export function parseSelector(domPath: Target["domPath"]): string {
       selectors.push(`[data-testid="${dataTestId}"]`);
       break;
     } else if (id) {
-      selectors.push(`#${id}`);
+      selectors.push(`#${escapeChars(id)}`);
       break;
     } else if (siblingCount > 1) {
       selectors.push(
