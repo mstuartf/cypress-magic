@@ -55,14 +55,12 @@ export const recordingSlice = createSlice({
   reducers: {
     setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
       state.recordingInProgress = action.payload;
-      if (action.payload) {
-        state.eventIds = [];
-        state.events = {};
-        state.fixtures = {};
-        state.aliasTracker = {};
-        state.isRunning = false;
-        state.isRunningStep = 0;
-      }
+      state.eventIds = [];
+      state.events = {};
+      state.fixtures = {};
+      state.aliasTracker = {};
+      state.isRunning = false;
+      state.isRunningStep = 0;
     },
     setIsRunning: (state, action: PayloadAction<boolean>) => {
       state.isRunning = action.payload;
