@@ -83,7 +83,7 @@ export const getFixedRight = (element: HTMLElement): [HTMLElement, number] => {
   return [element, elementRight];
 };
 
-const isElement = (node: Node): node is Element => {
+export const isElement = (node: Node): node is Element => {
   return (node as Element).tagName !== undefined;
 };
 

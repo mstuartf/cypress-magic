@@ -14,6 +14,10 @@ import { isHidden } from "../utils/isHidden";
 import { getDomPath } from "../utils/getDomPath";
 import { createErrorEvent } from "../utils/createErrorEvent";
 import { generateEventId } from "../utils/generateEventId";
+import {
+  isHTMLElement,
+  isElement,
+} from "../../apps/widget/hooks/useNewFixedElementAdded";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   id: generateEventId(),
@@ -38,9 +42,28 @@ export const getTargetProps = (target: HTMLElement): TargetEvent => ({
   },
 });
 
+const getFirstHTMLElement = (element: Element): HTMLElement => {
+  if (isHTMLElement(element)) {
+    return element;
+  } else if (element.parentElement) {
+    return getFirstHTMLElement(element.parentElement);
+  }
+  throw Error("no parent html element found");
+};
+
+// you can't programmatically click on non-html elements like SVGs, so find the
+// first html element parent here
+const getTargetHTMLElement = (target: EventTarget | null): HTMLElement => {
+  if (target instanceof Element) {
+    return getFirstHTMLElement(target);
+  } else {
+    throw Error("can't parse non-elements");
+  }
+};
+
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
-  ...getTargetProps(event.target as HTMLElement),
+  ...getTargetProps(getTargetHTMLElement(event.target)),
   clientX: event.x,
   clientY: event.y,
   href: (event.target as HTMLAnchorElement).href,
