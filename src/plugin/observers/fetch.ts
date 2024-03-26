@@ -144,16 +144,33 @@ async function buildMockedResponse(
   statusText: string,
   content: PickledBlob
 ): Promise<Response> {
-  return unPickleBlob(content).then((blob) => {
-    const responseInit: ResponseInit = {
-      status,
-      statusText,
-      headers: new Headers({
-        "Content-Type": blob.type,
-        "Content-Length": String(blob.size),
-      }),
-    };
-
-    return new Response(blob, responseInit);
+  return new Promise<Response>((resolve, reject) => {
+    if (status === 204) {
+      // For empty 204 responses, create a Response with no body
+      const response = new Response(null, {
+        status,
+        statusText,
+        headers: new Headers(),
+      });
+      resolve(response);
+    } else {
+      // For other status codes, proceed with regular response construction
+      unPickleBlob(content)
+        .then((blob) => {
+          const responseInit: ResponseInit = {
+            status,
+            statusText,
+            headers: new Headers({
+              "Content-Type": blob.type,
+              "Content-Length": String(blob.size),
+            }),
+          };
+          const response = new Response(blob, responseInit);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    }
   });
 }
