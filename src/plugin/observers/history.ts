@@ -19,7 +19,7 @@ function isURL(url: string | URL): url is URL {
   return (url as URL).pathname !== undefined;
 }
 
-const isAbsoluteUrl = (url: string) => {
+export const isAbsoluteUrl = (url: string) => {
   const r = new RegExp("^(?:[a-z+]+:)?//", "i");
   return r.test(url);
 };

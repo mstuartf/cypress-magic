@@ -89,7 +89,7 @@ export function initFetchObserver({
   const { fetch: originalFetch } = window;
 
   window.fetch = async (input, init) => {
-    const url = parseUrl(input);
+    const url = getAbsoluteUrl(parseUrl(input));
     const include = !isDataUrl(input) && matchUrl(url);
 
     if (!include) {

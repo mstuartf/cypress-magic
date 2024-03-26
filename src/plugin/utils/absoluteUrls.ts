@@ -1,2 +1,4 @@
+import { isAbsoluteUrl } from "../observers/history";
+
 export const getAbsoluteUrl = (url: string): string =>
-  url.startsWith("/") ? `${window.location.origin}${url}` : url;
+  !isAbsoluteUrl(url) ? `${window.location.origin}${url}` : url;
