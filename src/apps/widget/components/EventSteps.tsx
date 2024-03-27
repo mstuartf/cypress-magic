@@ -3,6 +3,7 @@ import Step from "./Step";
 import { ParsedEvent } from "../../../plugin/types";
 import {
   buildFullUrl,
+  isAssertionEvent,
   isClickEvent,
   isNavigationEvent,
   isQueryParamChangeEvent,
@@ -85,6 +86,34 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
     ];
   }
 
+  if (isAssertionEvent(event)) {
+    return [
+      {
+        children: (
+          <span>
+            <DefaultLabel text="get" />
+            <span>{parseSelector(event.target.domPath)}</span>
+          </span>
+        ),
+      },
+      {
+        // todo: show more element details like cypress
+        children: event.target.innerText ? (
+          <Assertion
+            value={parseSelector(event.target.domPath)}
+            operator="to contain"
+            comparator={event.target.innerText}
+          />
+        ) : (
+          <Assertion
+            value={parseSelector(event.target.domPath)}
+            operator="to"
+            comparator="exist"
+          />
+        ),
+      },
+    ];
+  }
   return [
     {
       children: event.id,
