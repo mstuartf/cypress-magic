@@ -64,8 +64,7 @@ const RecordingInProgress = () => {
           <ToggleMocks />
           <div className="cyw-h-4" />
           <EventList />
-          <div className="cyw-h-4" />
-          <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
+          <div className="cyw-grid cyw-grid-cols-2 cyw-mt-4 cyw-pt-4 cyw-border-t cyw-border-slate-400">
             <DownloadFixtures />
             <DownloadTest />
           </div>
