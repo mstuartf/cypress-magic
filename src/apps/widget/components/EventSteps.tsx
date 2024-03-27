@@ -171,11 +171,7 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
     }
   }
 
-  return [
-    {
-      children: event.type,
-    },
-  ];
+  return [];
 };
 
 const DefaultLabel = ({ text }: { text: string }) => (
