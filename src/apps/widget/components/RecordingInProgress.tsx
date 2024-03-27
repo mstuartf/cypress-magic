@@ -15,6 +15,7 @@ import DownloadFixtures from "./DownloadFixtures";
 import DownloadTest from "./DownloadTest";
 import RunTest from "./RunTest";
 import { toCamelCase } from "../utils";
+import FileIcon from "./FileIcon";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
@@ -27,8 +28,11 @@ const RecordingInProgress = () => {
     <div className="cyw-h-full cyw-flex cyw-flex-col">
       <div className="cyw-mb-4 cyw-border-b cyw-border-slate-400 cyw-pb-4">
         <div className="cyw-flex cyw-items-center cyw-justify-between cyw-mb-2">
-          <div className="cyw-text-sm">
-            <span className="cyw-text-slate-100 cyw-font-semibold">
+          <div className="cyw-text-sm cyw-flex cyw-items-center">
+            <span>
+              <FileIcon />
+            </span>
+            <span className="cyw-text-slate-100 cyw-font-semibold cyw-ml-1">
               {toCamelCase(testDescribe)}
             </span>
             <span>.cy.js</span>
