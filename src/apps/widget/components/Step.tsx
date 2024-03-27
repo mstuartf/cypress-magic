@@ -14,7 +14,7 @@ const Step = ({
 
   const [stepCount, setStepCount] = useState(0);
   useEffect(() => {
-    let count = 0;
+    let count = 1;
     const nodes = Array.prototype.slice.call(
       document.querySelectorAll(".event-step-count")
     ) as Node[];
