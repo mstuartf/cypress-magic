@@ -45,7 +45,7 @@ const Step = ({
           </div>
           <div>{children}</div>
         </div>
-        {sub && <div className="cyw-ml-2">{sub}</div>}
+        {sub && <div className="cyw-mt-2">{sub}</div>}
       </div>
     </div>
   );
