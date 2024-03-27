@@ -1,15 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "../redux/slice";
-import {
-  selectHasRefreshed,
-  selectIsRunning,
-  selectTestDescribe,
-} from "../redux/selectors";
-import Header from "./Header";
+import { selectHasRefreshed, selectTestDescribe } from "../redux/selectors";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
-import Toggle from "./Toggle";
 import ToggleMocks from "./ToggleMocks";
 import DownloadFixtures from "./DownloadFixtures";
 import DownloadTest from "./DownloadTest";
