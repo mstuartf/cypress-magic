@@ -29,8 +29,10 @@ const Step = ({ children }: { children: React.ReactNode }) => {
       className="cyw-flex cyw-items-start cyw-p-2 hover:cyw-bg-gray-700 event-step-count"
       ref={ref}
     >
-      <div className="cyw-break-keep cyw-mr-4">{stepCount}</div>
-      <div className="break-all">{children}</div>
+      <div className="cyw-break-keep cyw-mr-4 cyw-text-gray-500 cyw-text-xs">
+        {stepCount}
+      </div>
+      <div className="cyw-break-all cyw-font-semibold">{children}</div>
     </div>
   );
 };
