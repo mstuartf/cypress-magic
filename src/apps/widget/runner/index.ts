@@ -1,5 +1,6 @@
 import { ParsedEvent } from "../../../plugin/types";
 import {
+  buildFullUrl,
   isChangeEvent,
   isClickEvent,
   isNavigationEvent,
@@ -34,10 +35,7 @@ export const run = (
     }
   }
   if (isNavigationEvent(event)) {
-    const { protocol, hostname, pathname, port, search } = event;
-    window.location.href = `${protocol}//${hostname}${
-      port.length ? `:${port}` : ""
-    }${pathname}${search}`;
+    window.location.href = buildFullUrl(event);
     return;
   }
   if (isQueryParamChangeEvent(event)) {

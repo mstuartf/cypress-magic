@@ -85,3 +85,10 @@ export function toCamelCase(str: string) {
     .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase())
     .replace(/^./, (match) => match.toLowerCase());
 }
+
+export const buildFullUrl = (event: HistoryEvent) => {
+  const { protocol, hostname, pathname, port, search } = event;
+  return `${protocol}//${hostname}${
+    port.length ? `:${port}` : ""
+  }${pathname}${search}`;
+};

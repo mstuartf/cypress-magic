@@ -2,6 +2,7 @@ import React from "react";
 import Step from "./Step";
 import { ParsedEvent } from "../../../plugin/types";
 import {
+  buildFullUrl,
   isClickEvent,
   isNavigationEvent,
   isQueryParamChangeEvent,
@@ -30,13 +31,10 @@ interface IStep {
 
 const getEventSteps = (event: ParsedEvent): IStep[] => {
   if (isNavigationEvent(event)) {
-    const { protocol, hostname, pathname, port, search } = event;
     return [
       {
         label: "visit",
-        children: `${protocol}//${hostname}${
-          port.length ? `:${port}` : ""
-        }${pathname}${search}`,
+        children: buildFullUrl(event),
       },
     ];
   }
@@ -55,20 +53,8 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
   }
 
   if (isQueryParamChangeEvent(event)) {
-    const {
-      protocol,
-      hostname,
-      pathname,
-      port,
-      search,
-      param,
-      changed,
-      added,
-      removed,
-    } = event;
-    let sub = `${protocol}//${hostname}${
-      port.length ? `:${port}` : ""
-    }${pathname}${search}`;
+    const { param, changed, added, removed } = event;
+    let sub = buildFullUrl(event);
     if (changed) {
       sub += ` to include ${param}=${changed}`;
     } else if (added) {

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/seasmoke-plugin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/seasmoke-plugin.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/parser/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/parser/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/runner/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/runner/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/utils.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2eHECSDz11xjAjyWijmAscX8Li6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "bug-reporter",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Users/mikeflood/personal/seasmoke-plugin/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="" />
+      <created>1711552976761</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711552976761</updated>
+      <workItem from="1711552978159" duration="8000" />
+      <workItem from="1711553399829" duration="216000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

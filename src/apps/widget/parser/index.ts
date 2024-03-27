@@ -11,6 +11,7 @@ import {
   isChangeEvent,
   isQueryParamChangeEvent,
   isDblClickEvent,
+  buildFullUrl,
 } from "../utils";
 
 interface ParseOptions {
@@ -41,10 +42,7 @@ export const parse = (
     }
   }
   if (isNavigationEvent(event)) {
-    const { protocol, hostname, pathname, port, search } = event;
-    return `cy.visit('${protocol}//${hostname}${
-      port.length ? `:${port}` : ""
-    }${pathname}${search}');`;
+    return `cy.visit('${buildFullUrl(event)}');`;
   }
   if (isQueryParamChangeEvent(event)) {
     const { param, added, removed, changed } = event;
