@@ -16,9 +16,26 @@ const AddAssertion = () => {
   return (
     <button
       onClick={() => dispatch(setIsAddingAssertion(!isAddingAssertion))}
-      className="cyw-text-xs cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded"
+      className=""
     >
-      {isAddingAssertion ? "Cancel assertion" : "+ Add assertion"}
+      <svg
+        data-v-694f6e40=""
+        height="1em"
+        width="1em"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="cyw-fill-slate-300"
+        style={{ minWidth: "16px", minHeight: "16px" }}
+      >
+        <path
+          d="M8 4V12M12 8H4"
+          stroke="#D0D2E0"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></path>
+      </svg>
     </button>
   );
 };
