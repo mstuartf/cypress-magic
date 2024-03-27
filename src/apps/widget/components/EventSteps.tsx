@@ -58,16 +58,16 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
   if (isQueryParamChangeEvent(event)) {
     const { param, changed, added, removed } = event;
     let operator;
-    let value;
+    let comparator;
     if (changed) {
       operator = `to include`;
-      value = `${param}=${changed}`;
+      comparator = `${param}=${changed}`;
     } else if (added) {
       operator = `to include`;
-      value = `${param}=${added}`;
+      comparator = `${param}=${added}`;
     } else {
       operator = `not to include`;
-      value = `${param}=${removed}`;
+      comparator = `${param}=${removed}`;
     }
     return [
       {
@@ -75,24 +75,11 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
       },
       {
         children: (
-          <span>
-            <span className="cyw-break-keep cyw-mr-2">
-              <span className="cyw-text-emerald-500">-</span>
-              <span className="cyw-bg-emerald-500 cyw-text-gray-900 cyw-px-1 cyw-rounded">
-                assert
-              </span>
-            </span>
-            <span className="cyw-text-emerald-300 cyw-break-keep">
-              expected&nbsp;
-            </span>
-            <span className="cyw-text-emerald-200">
-              {buildFullUrl(event)}&nbsp;
-            </span>
-            <span className="cyw-text-emerald-300 cyw-break-keep">
-              {operator}&nbsp;
-            </span>
-            <span className="cyw-text-emerald-200">{value}</span>
-          </span>
+          <Assertion
+            value={buildFullUrl(event)}
+            operator={operator}
+            comparator={comparator}
+          />
         ),
       },
     ];
@@ -108,5 +95,30 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
 const DefaultLabel = ({ text }: { text: string }) => (
   <span className="cyw-break-keep cyw-text-slate-100 cyw-font-semibold cyw-mr-4">
     {text}
+  </span>
+);
+
+const Assertion = ({
+  value,
+  operator,
+  comparator,
+}: {
+  value: string;
+  operator: string;
+  comparator: string;
+}) => (
+  <span>
+    <span className="cyw-break-keep cyw-mr-2">
+      <span className="cyw-text-emerald-500">-</span>
+      <span className="cyw-bg-emerald-500 cyw-text-gray-900 cyw-px-1 cyw-rounded">
+        assert
+      </span>
+    </span>
+    <span className="cyw-text-emerald-300 cyw-break-keep">expected&nbsp;</span>
+    <span className="cyw-text-emerald-200">{value}&nbsp;</span>
+    <span className="cyw-text-emerald-300 cyw-break-keep">
+      {operator}&nbsp;
+    </span>
+    <span className="cyw-text-emerald-200">{comparator}</span>
   </span>
 );
