@@ -1,4 +1,3 @@
-import Typewriter from "./Typewriter";
 import { ReactComponent as Refresh } from "../../../zondicons/refresh.svg";
 import { ReactComponent as Trash } from "../../../zondicons/trash.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +6,6 @@ import {
   selectEventIdsSorted,
   selectIsRunning,
   selectIsRunningStep,
-  selectParseOptions,
   selectRunError,
 } from "../redux/selectors";
 import { deleteEvent, updateEvent } from "../redux/slice";
@@ -15,8 +13,9 @@ import { isUserEvent } from "../utils";
 import { parseSelectorPositionOnly } from "../parser/parseSelector";
 import { getTargetProps } from "../../../plugin/observers/user";
 import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
-import { parse } from "../parser";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import Step from "./Step";
+import EventSteps from "./EventSteps";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -37,14 +36,6 @@ const Event = ({ id }: { id: string }) => {
       }
     }
   };
-  const parseOptions = useSelector(selectParseOptions);
-  const [text, setText] = useState("");
-  useEffect(() => {
-    const updated = parse(event, parseOptions);
-    if (text !== updated) {
-      setText(updated);
-    }
-  }, [parseOptions, event]);
   const step = useSelector(selectIsRunningStep);
   const eventIds = useSelector(selectEventIdsSorted);
   const isRunning = useSelector(selectIsRunning);
@@ -52,18 +43,16 @@ const Event = ({ id }: { id: string }) => {
   return (
     <div
       key={event.timestamp}
-      className="cyw-mb-2 cyw-text-wrap cyw-break-all cyw-flex cyw-group"
+      className="cyw-text-wrap cyw-break-all cyw-flex cyw-group"
     >
-      <p
+      <div
         className={`cyw-text-xs cyw-flex-grow ${highlight && "cyw-font-bold"}`}
       >
-        <span className="cyw-w-2 cyw-inline-block" />
-        <span className="cyw-w-2 cyw-inline-block" />
-        <Typewriter text={text} disabled={isRunning} />
+        <EventSteps event={event} />
         {runError && runError.event.id === event.id && (
           <div>{runError.message}</div>
         )}
-      </p>
+      </div>
       {isUserEvent(event) && (
         <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">
           <button onClick={updateEventTarget} className="cyw-h-4 cyw-w-4">

@@ -1,30 +1,19 @@
 import { useSelector } from "react-redux";
-import {
-  selectEventIdsSorted,
-  selectTestDescribe,
-  selectTestShould,
-} from "../redux/selectors";
+import { selectEventIdsSorted } from "../redux/selectors";
 import { useEffect, useRef, useState } from "react";
 import Event from "./Event";
-import Line from "../../Line";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);
-  const testDescribe = useSelector(selectTestDescribe);
-  const testShould = useSelector(selectTestShould);
   const ref = useScrollDownOnSizeIncrease();
   return (
     <div
       ref={ref}
-      className="cyw-flex-grow cyw-rounded cyw-p-2 cyw-overflow-scroll"
+      className="cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900"
     >
-      <Line>{`describe('${testDescribe}', () => {`}</Line>
-      <Line indent={1}>{`it('${testShould}', () => {`}</Line>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
       ))}
-      <Line indent={1}>{`});`}</Line>
-      <Line>{`});`}</Line>
     </div>
   );
 };
