@@ -65,3 +65,6 @@ export const selectMockedResponse =
       content,
     };
   };
+export const selectRunError = ({
+  recording: { isRunningError },
+}: WidgetRootState) => isRunningError;

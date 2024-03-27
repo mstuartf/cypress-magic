@@ -4,11 +4,10 @@ import {
   isClickEvent,
   isNavigationEvent,
   isPageRefreshEvent,
-  isResponseEvent,
 } from "../utils";
-import { parseSelector } from "../parser/parseSelector";
+import { get } from "./get";
 
-interface RunOptions {
+export interface RunOptions {
   mockNetworkRequests: boolean;
 }
 
@@ -18,9 +17,7 @@ export const run = (
 ) => {
   if (isClickEvent(event)) {
     // todo: detect if right click
-    (document.querySelector(
-      parseSelector(event.target.domPath)
-    ) as HTMLElement)!.click();
+    get(event.target.domPath).click();
     return;
   }
   // if (isDblClickEvent(event)) {
@@ -32,9 +29,7 @@ export const run = (
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
       //     return `${getElementCy(event.target.domPath)}.check();`;
     } else {
-      (document.querySelector(
-        parseSelector(event.target.domPath)
-      ) as HTMLInputElement)!.value = event.value;
+      get<HTMLInputElement>(event.target.domPath).value = event.value;
     }
   }
   if (isNavigationEvent(event)) {
