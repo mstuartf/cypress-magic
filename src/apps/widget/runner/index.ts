@@ -4,6 +4,7 @@ import {
   isClickEvent,
   isNavigationEvent,
   isPageRefreshEvent,
+  isQueryParamChangeEvent,
 } from "../utils";
 import { get } from "./get";
 
@@ -39,16 +40,23 @@ export const run = (
     }${pathname}${search}`;
     return;
   }
-  // if (isQueryParamChangeEvent(event)) {
-  //   const { param, added, removed, changed } = event;
-  //   if (added) {
-  //     return `cy.url().should('include', '${param}=${added}')`;
-  //   }
-  //   if (changed) {
-  //     return `cy.url().should('include', '${param}=${changed}')`;
-  //   }
-  //   return `cy.url().should('not.include', '${param}=${removed}')`;
-  // }
+  if (isQueryParamChangeEvent(event)) {
+    const { param, added, removed, changed } = event;
+
+    if (added) {
+      if (!window.location.search.includes(`${param}=${added}`)) {
+        throw Error(`Param '${param}=${added}' not found.`);
+      }
+    }
+    if (changed) {
+      if (!window.location.search.includes(`${param}=${added}`)) {
+        throw Error(`Param '${param}=${changed}' not found.`);
+      }
+    }
+    if (window.location.search.includes(`${param}=${removed}`)) {
+      throw Error(`Param '${param}=${removed}' was not removed.`);
+    }
+  }
   if (isPageRefreshEvent(event)) {
     return window.location.reload();
   }
