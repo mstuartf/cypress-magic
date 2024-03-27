@@ -7,6 +7,7 @@ import {
   isClickEvent,
   isNavigationEvent,
   isQueryParamChangeEvent,
+  isResponseEvent,
 } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
 
@@ -110,6 +111,21 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
             operator="to"
             comparator="exist"
           />
+        ),
+      },
+    ];
+  }
+
+  if (isResponseEvent(event)) {
+    return [
+      {
+        children: (
+          <span>
+            <DefaultLabel text="wait" />
+            <span className="cyw-px-1 cyw-py-0.5 cyw-rounded cyw-bg-purple-700 cyw-text-white cyw-font-light">
+              @{event.alias}
+            </span>
+          </span>
         ),
       },
     ];
