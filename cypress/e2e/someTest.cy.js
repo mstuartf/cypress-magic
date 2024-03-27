@@ -1,6 +1,8 @@
 describe("User Login", () => {
   it("alskjd", () => {
-    cy.visit("./demo/index.html");
+    cy.visit(
+      "./demo/index.html?a=asjdhfgas&b=ldkjhladskjhlksajdhfkljashfljdhljasdlkfjahsglkjhaslgkjadlkgjdalkghldfkgh"
+    );
     cy.intercept("GET", "https://swapi.dev/api/people/1", {
       statusCode: 200,
       fixture: "someTest/GET___api_people_1_.json",

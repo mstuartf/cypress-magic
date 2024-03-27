@@ -2,15 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectEventIdsSorted } from "../redux/selectors";
 
-const Step = ({
-  label,
-  children,
-  sub,
-}: {
-  label: React.ReactNode;
-  children: React.ReactNode;
-  sub?: React.ReactNode;
-}) => {
+const Step = ({ children }: { children: React.ReactNode }) => {
   const ref = useRef<HTMLDivElement>(null);
   const eventIds = useSelector(selectEventIdsSorted);
 
@@ -38,15 +30,7 @@ const Step = ({
       ref={ref}
     >
       <div className="cyw-break-keep cyw-mr-4">{stepCount}</div>
-      <div>
-        <div className="cyw-flex cyw-items-start">
-          <div className="cyw-break-keep cyw-text-slate-100 cyw-font-semibold cyw-mr-4">
-            {label}
-          </div>
-          <div>{children}</div>
-        </div>
-        {sub && <div className="cyw-mt-2">{sub}</div>}
-      </div>
+      <div className="break-all">{children}</div>
     </div>
   );
 };
