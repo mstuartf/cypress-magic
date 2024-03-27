@@ -1,6 +1,7 @@
 describe("SomeTest", () => {
   it("should work", () => {
     cy.visit("./demo/index.html");
+    cy.wait(10000000);
     cy.intercept("GET", "https://swapi.dev/api/people/1", {
       statusCode: 200,
       fixture: "someTest/GET___api_people_1_.json",

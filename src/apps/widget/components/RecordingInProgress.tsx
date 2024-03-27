@@ -1,7 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "../redux/slice";
-import { selectHasRefreshed, selectIsRunning } from "../redux/selectors";
+import {
+  selectHasRefreshed,
+  selectIsRunning,
+  selectTestDescribe,
+} from "../redux/selectors";
 import Header from "./Header";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
@@ -10,57 +14,56 @@ import ToggleMocks from "./ToggleMocks";
 import DownloadFixtures from "./DownloadFixtures";
 import DownloadTest from "./DownloadTest";
 import RunTest from "./RunTest";
+import { toCamelCase } from "../utils";
 
 const RecordingInProgress = () => {
   const dispatch = useDispatch();
   const hasRefreshed = useSelector(selectHasRefreshed);
-  const isRunning = useSelector(selectIsRunning);
+  const testDescribe = useSelector(selectTestDescribe)!;
   const onCancel = () => {
     dispatch(setRecordingInProgress(false));
   };
   return (
     <div className="cyw-h-full cyw-flex cyw-flex-col">
-      <Header>
-        <div role="status">
-          <svg
-            aria-hidden="true"
-            className="cyw-w-8 cyw-h-8 cyw-text-gray-200 cyw-animate-spin dark:cyw-text-gray-600 cyw-fill-blue-600"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor"
-            />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentFill"
-            />
-          </svg>
-          <span className="cyw-sr-only">Loading...</span>
+      <div className="cyw-flex cyw-items-center cyw-justify-between cyw-mb-4 cyw-border-b cyw-border-slate-400 cyw-pb-4">
+        <div className="cyw-text-sm">
+          <span className="cyw-text-slate-100 cyw-font-semibold">
+            {toCamelCase(testDescribe)}
+          </span>
+          <span>.cy.js</span>
         </div>
-        <div className="cyw-ml-4">
-          {isRunning ? "Running test..." : "Recording in progress..."}
-        </div>
-      </Header>
-      {hasRefreshed && (
-        <>
-          <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
-            <button
-              onClick={onCancel}
-              className="cyw-text-xs cyw-bg-transparent hover:cyw-bg-blue-500 cyw-text-blue-700 cyw-font-semibold hover:cyw-text-white cyw-py-2 cyw-px-4 cyw-border cyw-border-blue-500 hover:cyw-border-transparent cyw-rounded"
-            >
-              Discard test
+        <div className="cyw-grid cyw-grid-cols-3 cyw-border cyw-border-slate-400 cyw-rounded">
+          <div className="cyw-p-0.5 cyw-border-r cyw-border-slate-400 cyw-flex cyw-items-center cyw-justify-center">
+            <button onClick={onCancel} className="">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3.70711 2.29289C3.31658 1.90237 2.68342 1.90237 2.29289 2.29289C1.90237 2.68342 1.90237 3.31658 2.29289 3.70711L3.70711 2.29289ZM8.29289 9.70711C8.68342 10.0976 9.31658 10.0976 9.70711 9.70711C10.0976 9.31658 10.0976 8.68342 9.70711 8.29289L8.29289 9.70711ZM9.70711 3.70711C10.0976 3.31658 10.0976 2.68342 9.70711 2.29289C9.31658 1.90237 8.68342 1.90237 8.29289 2.29289L9.70711 3.70711ZM2.29289 8.29289C1.90237 8.68342 1.90237 9.31658 2.29289 9.70711C2.68342 10.0976 3.31658 10.0976 3.70711 9.70711L2.29289 8.29289ZM2.29289 3.70711L8.29289 9.70711L9.70711 8.29289L3.70711 2.29289L2.29289 3.70711ZM8.29289 2.29289L2.29289 8.29289L3.70711 9.70711L9.70711 3.70711L8.29289 2.29289Z"
+                  fill="#E45770"
+                  className="icon-dark"
+                ></path>
+              </svg>
             </button>
+          </div>
+          <div className="cyw-p-0.5 cyw-border-r cyw-border-slate-400">
             <AddAssertion />
           </div>
-          <div className="cyw-h-4" />
+          <div className="cyw-p-0.5">
+            <RunTest />
+          </div>
+        </div>
+      </div>
+      {hasRefreshed && (
+        <>
           <ToggleMocks />
           <div className="cyw-h-4" />
           <EventList />
-          <div className="cyw-h-4" />
-          <RunTest />
           <div className="cyw-h-4" />
           <div className="cyw-grid cyw-grid-cols-2 cyw-gap-4">
             <DownloadFixtures />

@@ -16,7 +16,7 @@ const EventList = () => {
   return (
     <div
       ref={ref}
-      className="cyw-flex-grow cyw-border cyw-border-gray-400 cyw-rounded cyw-p-2 cyw-overflow-scroll"
+      className="cyw-flex-grow cyw-rounded cyw-p-2 cyw-overflow-scroll"
     >
       <Line>{`describe('${testDescribe}', () => {`}</Line>
       <Line indent={1}>{`it('${testShould}', () => {`}</Line>
