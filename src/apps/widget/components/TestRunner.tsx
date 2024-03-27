@@ -12,15 +12,17 @@ import { useEffect, useState } from "react";
 import {
   scheduleUpdateRunStep,
   setIsRunning,
+  setIsRunningError,
   updateRunStep,
 } from "../redux/slice";
-import { run } from "../runner";
+import { run, RunOptions } from "../runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
   isRequestEvent,
   isResponseEvent,
 } from "../utils";
+import { ParsedEvent } from "../../../plugin/types";
 
 const TestRunner = () => {
   const dispatch = useDispatch();
@@ -31,6 +33,14 @@ const TestRunner = () => {
   const runOptions = useSelector(selectRunOptions);
   const responses = useSelector(selectIsRunningResponses);
   const isMocked = useSelector(selectMockNetworkRequests);
+
+  const runStep = (event: ParsedEvent, runOptions: RunOptions) => {
+    try {
+      run(event, runOptions);
+    } catch (e: any) {
+      dispatch(setIsRunningError({ event, message: e.message }));
+    }
+  };
 
   useEffect(() => {
     if (incrementOnLoad) {
@@ -56,9 +66,9 @@ const TestRunner = () => {
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
           dispatch(scheduleUpdateRunStep());
-          run(event, runOptions);
+          runStep(event, runOptions);
         } else {
-          run(event, runOptions);
+          runStep(event, runOptions);
           dispatch(updateRunStep());
         }
       }, timeout);

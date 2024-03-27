@@ -22,6 +22,10 @@ interface State {
   isRunningAliasTracker: AliasTracker;
   // When running (un-mocked) in test mode, record responses here (so we know when to cy.wait).
   isRunningReturnedResponses: ResponseEvent[];
+  isRunningError?: {
+    event: ParsedEvent;
+    message: string;
+  };
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
@@ -47,6 +51,7 @@ const initialState: State = {
   aliasTracker: {},
   isRunningAliasTracker: {},
   isRunningReturnedResponses: [],
+  isRunningError: undefined,
 };
 
 export const recordingSlice = createSlice({
@@ -64,9 +69,19 @@ export const recordingSlice = createSlice({
     },
     setIsRunning: (state, action: PayloadAction<boolean>) => {
       state.isRunning = action.payload;
-      state.isRunningStep = 0;
-      state.isRunningAliasTracker = {};
-      state.isRunningReturnedResponses = [];
+      if (action.payload) {
+        state.isRunningStep = 0;
+        state.isRunningAliasTracker = {};
+        state.isRunningReturnedResponses = [];
+        state.isRunningError = undefined;
+      }
+    },
+    setIsRunningError: (
+      state,
+      action: PayloadAction<{ event: ParsedEvent; message: string }>
+    ) => {
+      state.isRunning = false;
+      state.isRunningError = { ...action.payload };
     },
     saveIsRunningResponse: (
       state,
@@ -168,4 +183,5 @@ export const {
   scheduleUpdateRunStep,
   updateAliasTracker,
   saveIsRunningResponse,
+  setIsRunningError,
 } = recordingSlice.actions;

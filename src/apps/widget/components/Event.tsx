@@ -8,6 +8,7 @@ import {
   selectIsRunning,
   selectIsRunningStep,
   selectParseOptions,
+  selectRunError,
 } from "../redux/selectors";
 import { deleteEvent, updateEvent } from "../redux/slice";
 import { isUserEvent } from "../utils";
@@ -20,6 +21,7 @@ import React, { useEffect, useState } from "react";
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
   const event = useSelector(selectEvent(id));
+  const runError = useSelector(selectRunError);
   const updateEventTarget = () => {
     if (isUserEvent(event)) {
       const targetEl = document.querySelector(
@@ -58,6 +60,9 @@ const Event = ({ id }: { id: string }) => {
         <span className="cyw-w-2 cyw-inline-block" />
         <span className="cyw-w-2 cyw-inline-block" />
         <Typewriter text={text} disabled={isRunning} />
+        {runError && runError.event.id === event.id && (
+          <div>{runError.message}</div>
+        )}
       </p>
       {isUserEvent(event) && (
         <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">
