@@ -15,5 +15,7 @@ describe("User Login", () => {
       "contain",
       "Change selector button"
     );
+    cy.reload();
+    cy.get("#username").clear().type("alskdjfh");
   });
 });

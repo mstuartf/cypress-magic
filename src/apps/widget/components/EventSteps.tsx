@@ -4,12 +4,15 @@ import { ParsedEvent } from "../../../plugin/types";
 import {
   buildFullUrl,
   isAssertionEvent,
+  isChangeEvent,
   isClickEvent,
   isNavigationEvent,
+  isPageRefreshEvent,
   isQueryParamChangeEvent,
   isResponseEvent,
 } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
+import { getElementCy } from "../parser/getElementCy";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   return (
@@ -130,9 +133,47 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
       },
     ];
   }
+  if (isPageRefreshEvent(event)) {
+    return [
+      {
+        children: <DefaultLabel text="reload" />,
+      },
+    ];
+  }
+
+  if (isChangeEvent(event)) {
+    if (event.target.tag === "SELECT") {
+      // return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
+    } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
+      // return `${getElementCy(event.target.domPath)}.check();`;
+    } else {
+      return [
+        {
+          children: (
+            <span>
+              <DefaultLabel text="get" />
+              <span>{parseSelector(event.target.domPath)}</span>
+            </span>
+          ),
+        },
+        {
+          children: <DefaultLabel text="-clear" />,
+        },
+        {
+          children: (
+            <span>
+              <DefaultLabel text="-type" />
+              <span>{event.value}</span>
+            </span>
+          ),
+        },
+      ];
+    }
+  }
+
   return [
     {
-      children: event.id,
+      children: event.type,
     },
   ];
 };
