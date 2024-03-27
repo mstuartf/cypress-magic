@@ -7,7 +7,7 @@ describe("User Login", () => {
       statusCode: 200,
       fixture: "someTest/GET___api_people_1_.json",
     }).as("GET__/api/people/1/");
-    cy.get("#request-button").click();
+    cy.get('[data-cy="select-this-element"]').click();
     cy.wait("@GET__/api/people/1/");
     cy.get("#add-param-button").click();
     cy.url().should("include", "newParam=value");

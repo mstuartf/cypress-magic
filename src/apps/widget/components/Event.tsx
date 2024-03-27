@@ -14,8 +14,8 @@ import { parseSelectorPositionOnly } from "../parser/parseSelector";
 import { getTargetProps } from "../../../plugin/observers/user";
 import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
 import React from "react";
-import Step from "./Step";
 import EventSteps from "./EventSteps";
+import AssertionError from "./AssertionError";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -50,24 +50,24 @@ const Event = ({ id }: { id: string }) => {
       >
         <EventSteps event={event} />
         {runError && runError.event.id === event.id && (
-          <div>{runError.message}</div>
+          <AssertionError message={runError.message} />
         )}
       </div>
-      {isUserEvent(event) && (
-        <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">
-          <button onClick={updateEventTarget} className="cyw-h-4 cyw-w-4">
-            <Refresh />
-          </button>
-        </div>
-      )}
-      <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">
-        <button
-          className="cyw-h-4 cyw-w-4"
-          onClick={() => dispatch(deleteEvent(id))}
-        >
-          <Trash />
-        </button>
-      </div>
+      {/*{isUserEvent(event) && (*/}
+      {/*  <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">*/}
+      {/*    <button onClick={updateEventTarget} className="cyw-h-4 cyw-w-4">*/}
+      {/*      <Refresh />*/}
+      {/*    </button>*/}
+      {/*  </div>*/}
+      {/*)}*/}
+      {/*<div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">*/}
+      {/*  <button*/}
+      {/*    className="cyw-h-4 cyw-w-4"*/}
+      {/*    onClick={() => dispatch(deleteEvent(id))}*/}
+      {/*  >*/}
+      {/*    <Trash />*/}
+      {/*  </button>*/}
+      {/*</div>*/}
     </div>
   );
 };
