@@ -12,10 +12,8 @@ import { parseSelector } from "../parser/parseSelector";
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   return (
     <>
-      {getEventSteps(event).map(({ label, children, sub }) => (
-        <Step label={label} sub={sub}>
-          {children}
-        </Step>
+      {getEventSteps(event).map(({ children }) => (
+        <Step>{children}</Step>
       ))}
     </>
   );
@@ -24,17 +22,19 @@ const EventSteps = ({ event }: { event: ParsedEvent }) => {
 export default EventSteps;
 
 interface IStep {
-  label: React.ReactNode;
   children: React.ReactNode;
-  sub?: React.ReactNode;
 }
 
 const getEventSteps = (event: ParsedEvent): IStep[] => {
   if (isNavigationEvent(event)) {
     return [
       {
-        label: "visit",
-        children: buildFullUrl(event),
+        children: (
+          <span>
+            <DefaultLabel text="visit" />
+            <span>{buildFullUrl(event)}</span>
+          </span>
+        ),
       },
     ];
   }
@@ -42,47 +42,57 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
   if (isClickEvent(event)) {
     return [
       {
-        label: "get",
-        children: parseSelector(event.target.domPath),
+        children: (
+          <span>
+            <DefaultLabel text="get" />
+            <span>{parseSelector(event.target.domPath)}</span>
+          </span>
+        ),
       },
       {
-        label: "-click",
-        children: null,
+        children: <DefaultLabel text="-click" />,
       },
     ];
   }
 
   if (isQueryParamChangeEvent(event)) {
     const { param, changed, added, removed } = event;
-    let sub = buildFullUrl(event);
+    let operator;
+    let value;
     if (changed) {
-      sub += ` to include ${param}=${changed}`;
+      operator = `to include`;
+      value = `${param}=${changed}`;
     } else if (added) {
-      sub += ` to include ${param}=${added}`;
+      operator = `to include`;
+      value = `${param}=${added}`;
     } else {
-      sub += ` not to include ${param}=${removed}`;
+      operator = `not to include`;
+      value = `${param}=${removed}`;
     }
     return [
       {
-        label: "url",
-        children: null,
+        children: <DefaultLabel text="url" />,
       },
       {
-        label: (
-          <div>
-            <span className="cyw-text-emerald-500">-</span>
-            <span className="cyw-bg-emerald-500 cyw-text-gray-900 cyw-px-1 cyw-rounded">
-              assert
-            </span>
-          </div>
-        ),
         children: (
-          <span className="cyw-text-emerald-300 cyw-font-semibold">
-            expected
+          <span>
+            <span className="cyw-break-keep cyw-mr-2">
+              <span className="cyw-text-emerald-500">-</span>
+              <span className="cyw-bg-emerald-500 cyw-text-gray-900 cyw-px-1 cyw-rounded">
+                assert
+              </span>
+            </span>
+            <span className="cyw-text-emerald-300 cyw-break-keep">
+              expected&nbsp;
+            </span>
+            <span className="cyw-text-emerald-200">
+              {buildFullUrl(event)}&nbsp;
+            </span>
+            <span className="cyw-text-emerald-300 cyw-break-keep">
+              {operator}&nbsp;
+            </span>
+            <span className="cyw-text-emerald-200">{value}</span>
           </span>
-        ),
-        sub: (
-          <span className="cyw-text-emerald-300 cyw-font-semibold">{sub}</span>
         ),
       },
     ];
@@ -90,8 +100,13 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
 
   return [
     {
-      label: event.type,
       children: event.id,
     },
   ];
 };
+
+const DefaultLabel = ({ text }: { text: string }) => (
+  <span className="cyw-break-keep cyw-text-slate-100 cyw-font-semibold cyw-mr-4">
+    {text}
+  </span>
+);

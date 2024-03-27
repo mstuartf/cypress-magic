@@ -9,7 +9,7 @@ const EventList = () => {
   return (
     <div
       ref={ref}
-      className="cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900"
+      className="cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900 cyw-font-semibold"
     >
       {eventIds.map((id) => (
         <Event id={id} key={id} />
