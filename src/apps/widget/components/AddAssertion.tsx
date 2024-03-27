@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsAddingAssertion } from "../redux/selectors";
 import { setIsAddingAssertion } from "../redux/slice";
-import { sideBarWith } from "../constants";
+import { sideBarWith, widgetId } from "../constants";
 
 const AddAssertion = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const showOrHideOverlay = (show: boolean) => {
       "cyw-fixed cyw-top-0 cyw-left-0 cyw-bottom-0 cyw-bg-red-500 cyw-opacity-15 cyw-cursor-pointer";
     el.style.right = `${sideBarWith}px`;
     el.style.zIndex = `${maxZIndex() + 1}`;
-    window.document.body.appendChild(el);
+    document.getElementById(widgetId)!.appendChild(el);
   } else {
     document.getElementById(assertionOverlayId)?.remove();
   }
