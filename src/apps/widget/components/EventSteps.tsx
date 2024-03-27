@@ -68,9 +68,22 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
         children: null,
       },
       {
-        label: <div>-assert</div>,
-        children: "expected",
-        sub: <div>{sub}</div>,
+        label: (
+          <div>
+            <span className="cyw-text-emerald-500">-</span>
+            <span className="cyw-bg-emerald-500 cyw-text-gray-900 cyw-px-1 cyw-rounded">
+              assert
+            </span>
+          </div>
+        ),
+        children: (
+          <span className="cyw-text-emerald-300 cyw-font-semibold">
+            expected
+          </span>
+        ),
+        sub: (
+          <span className="cyw-text-emerald-300 cyw-font-semibold">{sub}</span>
+        ),
       },
     ];
   }
