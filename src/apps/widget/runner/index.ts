@@ -63,18 +63,6 @@ export const run = (
   // if (isUrlChangeEvent(event)) {
   //   return `cy.url().should('include', '${event.urlDiff}')`;
   // }
-  // if (isRequestEvent(event)) {
-  //   const { method, url, alias, fixture, status } = event;
-  //   if (mockNetworkRequests) {
-  //     return `cy.intercept('${method}', '${url}', {statusCode: ${
-  //       status || "..."
-  //     }, fixture: '${nestedFixtureFolder}/${
-  //       fixture || "..."
-  //     }'}).as('${alias}')`;
-  //   } else {
-  //     return `cy.intercept('${method}', '${url}').as('${alias}')`;
-  //   }
-  // }
   if (isAssertionEvent(event)) {
     const {
       target: { innerText, domPath },
