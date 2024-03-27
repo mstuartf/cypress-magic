@@ -82,7 +82,7 @@ export const parse = (
       target: { innerText, domPath },
     } = event;
     const assertion = innerText
-      ? `contains('${innerText}')`
+      ? `should('contain', ${innerText}')`
       : `should('exist')`;
     return `${getElementCy(domPath)}.${assertion};`;
   }
