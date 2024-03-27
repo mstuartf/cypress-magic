@@ -1,6 +1,7 @@
 import { ParsedEvent } from "../../../plugin/types";
 import {
   buildFullUrl,
+  isAssertionEvent,
   isChangeEvent,
   isClickEvent,
   isNavigationEvent,
@@ -8,6 +9,7 @@ import {
   isQueryParamChangeEvent,
 } from "../utils";
 import { get } from "./get";
+import { parseSelector } from "../parser/parseSelector";
 
 export interface RunOptions {
   mockNetworkRequests: boolean;
@@ -73,13 +75,17 @@ export const run = (
   //     return `cy.intercept('${method}', '${url}').as('${alias}')`;
   //   }
   // }
-  // if (isAssertionEvent(event)) {
-  //   const {
-  //     target: { innerText, domPath },
-  //   } = event;
-  //   const assertion = innerText
-  //     ? `contains('${innerText}')`
-  //     : `should('exist')`;
-  //   return `${getElementCy(domPath)}.${assertion};`;
-  // }
+  if (isAssertionEvent(event)) {
+    const {
+      target: { innerText, domPath },
+    } = event;
+    const el = get(domPath);
+    if (!!innerText && !el.innerText.includes(innerText)) {
+      throw Error(
+        `Timed out retrying after 4000ms: expected '${parseSelector(
+          domPath
+        )}' to contain '${innerText}'`
+      );
+    }
+  }
 };
