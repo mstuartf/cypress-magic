@@ -45,16 +45,28 @@ export const run = (
 
     if (added) {
       if (!window.location.search.includes(`${param}=${added}`)) {
-        throw Error(`Param '${param}=${added}' not found.`);
+        throw Error(
+          `Timed out retrying after 4000ms: expected '${buildFullUrl(
+            event
+          )}' to include '${param}=${added}'`
+        );
       }
     }
     if (changed) {
       if (!window.location.search.includes(`${param}=${added}`)) {
-        throw Error(`Param '${param}=${changed}' not found.`);
+        throw Error(
+          `Timed out retrying after 4000ms: expected '${buildFullUrl(
+            event
+          )}' to include '${param}=${added}'`
+        );
       }
     }
     if (window.location.search.includes(`${param}=${removed}`)) {
-      throw Error(`Param '${param}=${removed}' was not removed.`);
+      throw Error(
+        `Timed out retrying after 4000ms: expected '${buildFullUrl(
+          event
+        )}' not to include '${param}=${added}'`
+      );
     }
   }
   if (isPageRefreshEvent(event)) {
