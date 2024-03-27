@@ -7,6 +7,7 @@ import {
 } from "../redux/slice";
 import { useDispatch } from "react-redux";
 import InputRow from "./InputRow";
+import FileIcon from "./FileIcon";
 
 const Setup = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,10 @@ const Setup = () => {
 
   return (
     <div className="cyw-grid">
-      <Header>Welcome</Header>
+      <div className="cyw-text-slate-100 cyw-font-semibold cyw-mb-4 cyw-flex cyw-justify-center cyw-items-center">
+        <FileIcon />
+        <span className="cyw-ml-2">Create a new test</span>
+      </div>
       <InputRow
         value={testDescribe}
         placeholder="e.g. User login"
@@ -48,7 +52,7 @@ const Setup = () => {
       <InputRow
         value={baseUrl}
         placeholder="e.g. https://api.placeholder.com"
-        info="Only API calls made to URLS starting with this value will be matched and intercepted (optional)."
+        info="Only API calls made to URLs starting with this value will be matched and intercepted (optional)."
         setValue={setBaseUrl}
         label="Match API calls to"
       />
@@ -56,7 +60,7 @@ const Setup = () => {
         onClick={startRecording}
         className={`cyw-text-xs cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded ${
           !disabled
-            ? "cyw-bg-blue-500 hover:cyw-bg-blue-700 cyw-text-white "
+            ? "cyw-bg-emerald-300 hover:cyw-bg-bg-emerald-400 cyw-text-gray-900"
             : "cyw-bg-gray-100 cyw-text-gray-500 cyw-border-gray-500 cyw-cursor-not-allowed"
         }`}
       >
