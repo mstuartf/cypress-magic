@@ -13,14 +13,27 @@ import {
 } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
 import { useSelector } from "react-redux";
-import { selectIsRunning, selectIsRunningEventId } from "../redux/selectors";
+import {
+  selectEventIdsSorted,
+  selectIsRunning,
+  selectIsRunningEventId,
+  selectIsRunningStep,
+} from "../redux/selectors";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   const isRunningEventId = useSelector(selectIsRunningEventId);
   const isRunning = useSelector(selectIsRunning);
+  const step = useSelector(selectIsRunningStep);
+  const completeEventIds = useSelector(selectEventIdsSorted).slice(0, step);
+  // only show the first step until completed (as this is the one that can fail)
+  const allSteps = getEventSteps(event);
+  const stepsToShow =
+    completeEventIds.includes(event.id) || !isRunning
+      ? allSteps
+      : [allSteps[0]];
   return (
     <>
-      {getEventSteps(event).map(({ children }, i) => (
+      {stepsToShow.map(({ children }, i) => (
         <Step isRunning={isRunningEventId === event.id && !i && isRunning}>
           {children}
         </Step>
