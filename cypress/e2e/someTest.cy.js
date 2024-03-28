@@ -3,6 +3,7 @@ describe("User Login", () => {
     cy.visit(
       "./demo/index.html?a=asjdhfgas&b=ldkjhladskjhlksajdhfkljashfljdhljasdlkfjahsglkjhaslgkjadlkgjdalkghldfkgh"
     );
+    cy.wait(1000000000);
     cy.url().should("include", "cbsadf");
     cy.get("#request-results").should("contain", "askldjfh");
     cy.intercept("GET", "https://swapi.dev/api/people/1", {

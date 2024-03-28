@@ -13,12 +13,18 @@ import {
 } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
 import { getElementCy } from "../parser/getElementCy";
+import { useSelector } from "react-redux";
+import { selectIsRunning, selectIsRunningEventId } from "../redux/selectors";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
+  const isRunningEventId = useSelector(selectIsRunningEventId);
+  const isRunning = useSelector(selectIsRunning);
   return (
     <>
-      {getEventSteps(event).map(({ children }) => (
-        <Step>{children}</Step>
+      {getEventSteps(event).map(({ children }, i) => (
+        <Step isRunning={isRunningEventId === event.id && !i && isRunning}>
+          {children}
+        </Step>
       ))}
     </>
   );

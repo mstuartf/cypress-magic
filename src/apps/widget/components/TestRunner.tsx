@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
+  selectIsRunningEventId,
   selectIsRunningResponses,
   selectIsRunningStep,
   selectIsRunningStepIncrementOnLoad,
@@ -29,21 +30,11 @@ const TestRunner = () => {
   const step = useSelector(selectIsRunningStep);
   const incrementOnLoad = useSelector(selectIsRunningStepIncrementOnLoad);
   const eventIds = useSelector(selectEventIdsSorted);
-  const event = useSelector(selectEvent(eventIds[step]));
+  const isRunningEventId = useSelector(selectIsRunningEventId);
+  const event = useSelector(selectEvent(isRunningEventId));
   const runOptions = useSelector(selectRunOptions);
   const responses = useSelector(selectIsRunningResponses);
   const isMocked = useSelector(selectMockNetworkRequests);
-
-  const runStep = async (
-    event: ParsedEvent,
-    runOptions: RunOptions
-  ): Promise<void> => {
-    try {
-      return await runAsync(event, runOptions);
-    } catch (e: any) {
-      dispatch(setIsRunningError({ event, message: e.message }));
-    }
-  };
 
   useEffect(() => {
     if (incrementOnLoad) {
@@ -69,13 +60,21 @@ const TestRunner = () => {
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
           dispatch(scheduleUpdateRunStep());
-          runStep(event, runOptions).then(() => {
-            console.log("navigating");
-          });
+          runAsync(event, runOptions)
+            .then(() => {
+              console.log("navigating");
+            })
+            .catch((e: any) =>
+              dispatch(setIsRunningError({ event, message: e.message }))
+            );
         } else {
-          runStep(event, runOptions).then(() => {
-            dispatch(updateRunStep());
-          });
+          runAsync(event, runOptions)
+            .then(() => {
+              dispatch(updateRunStep());
+            })
+            .catch((e: any) =>
+              dispatch(setIsRunningError({ event, message: e.message }))
+            );
         }
       }, timeout);
     } else {
