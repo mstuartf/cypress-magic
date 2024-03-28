@@ -72,9 +72,9 @@ const TestRunner = () => {
             .then(() => {
               dispatch(updateRunStep());
             })
-            .catch((e: any) =>
-              dispatch(setIsRunningError({ event, message: e.message }))
-            );
+            .catch((e: any) => {
+              dispatch(setIsRunningError({ event, message: e.message }));
+            });
         }
       }, timeout);
     } else {

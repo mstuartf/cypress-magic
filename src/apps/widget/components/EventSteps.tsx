@@ -9,6 +9,7 @@ import {
   isNavigationEvent,
   isPageRefreshEvent,
   isQueryParamChangeEvent,
+  isRequestEvent,
   isResponseEvent,
 } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
@@ -188,7 +189,15 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
     }
   }
 
-  return [];
+  if (isRequestEvent(event)) {
+    return [];
+  }
+
+  return [
+    {
+      children: event.type,
+    },
+  ];
 };
 
 const DefaultLabel = ({ text }: { text: string }) => (
