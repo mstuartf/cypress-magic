@@ -168,6 +168,12 @@ export const recordingSlice = createSlice({
     updateAliasTracker: (state, action: PayloadAction<AliasTracker>) => {
       state.aliasTracker = { ...action.payload };
     },
+    updateIsRunningAliasTracker: (
+      state,
+      action: PayloadAction<AliasTracker>
+    ) => {
+      state.isRunningAliasTracker = { ...action.payload };
+    },
   },
 });
 
@@ -185,6 +191,7 @@ export const {
   updateRunStep,
   scheduleUpdateRunStep,
   updateAliasTracker,
+  updateIsRunningAliasTracker,
   saveIsRunningResponse,
   setIsRunningError,
 } = recordingSlice.actions;

@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="" />
+    <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/widget.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widget.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

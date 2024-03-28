@@ -11,6 +11,7 @@ import {
   saveEvent,
   saveFixture,
   updateAliasTracker,
+  updateIsRunningAliasTracker,
 } from "./apps/widget/redux/slice";
 import { buildAliasTracker } from "./plugin/utils/aliases";
 import {
@@ -43,7 +44,13 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
         store.getState().recording.isRunning
           ? store.getState().recording.isRunningAliasTracker
           : store.getState().recording.aliasTracker,
-      (updated) => store.dispatch(updateAliasTracker(updated))
+      (updated) => {
+        if (store.getState().recording.isRunning) {
+          store.dispatch(updateIsRunningAliasTracker(updated));
+        } else {
+          store.dispatch(updateAliasTracker(updated));
+        }
+      }
     ),
     mockApiCalls: () => selectMockNetworkInTests(store.getState()),
     matchUrl: (url) => {
