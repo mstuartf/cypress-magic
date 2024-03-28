@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/AssertionError.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/AssertionError.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/Event.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/Event.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/widget/components/TestRunner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/TestRunner.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

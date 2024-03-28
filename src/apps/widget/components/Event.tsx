@@ -37,7 +37,8 @@ const Event = ({ id }: { id: string }) => {
       className="cyw-text-wrap cyw-break-all cyw-flex cyw-group cyw-relative"
     >
       <div className="cyw-text-xs cyw-flex-grow">
-        {(!isRunning || inProgressOrCompleteEventIds.includes(event.id)) && (
+        {((!isRunning && !runError) ||
+          inProgressOrCompleteEventIds.includes(event.id)) && (
           <>
             <EventSteps event={event} />
             {runError && runError.event.id === event.id && (
