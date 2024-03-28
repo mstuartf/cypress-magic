@@ -35,6 +35,7 @@ export interface RequestEvent extends BaseEvent {
   alias: string;
   fixture?: string;
   status?: number;
+  triggerId?: string;
 }
 
 export interface ResponseEvent extends BaseEvent {

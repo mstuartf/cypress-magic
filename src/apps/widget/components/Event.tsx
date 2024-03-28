@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
+  selectEventsSorted,
   selectIsRunning,
   selectIsRunningStep,
   selectRunError,
@@ -11,6 +12,10 @@ import { deleteEvent } from "../redux/slice";
 import React from "react";
 import EventSteps from "./EventSteps";
 import AssertionError from "./AssertionError";
+import { isRequestEvent } from "../utils";
+import { RequestEvent } from "../../../plugin/types";
+import Alias from "./Alias";
+import TriggeredRequest from "./TriggeredRequest";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -22,6 +27,10 @@ const Event = ({ id }: { id: string }) => {
     0,
     step + 1
   );
+  const events = useSelector(selectEventsSorted);
+  const triggeredRequests = events
+    .filter((e): e is RequestEvent => isRequestEvent(e))
+    .filter((e) => e.triggerId === event.id);
   return (
     <div
       key={event.timestamp}
@@ -33,6 +42,13 @@ const Event = ({ id }: { id: string }) => {
             <EventSteps event={event} />
             {runError && runError.event.id === event.id && (
               <AssertionError message={runError.message} />
+            )}
+            {!runError && !!triggeredRequests.length && (
+              <>
+                {triggeredRequests.map((e) => (
+                  <TriggeredRequest event={e} key={event.id} />
+                ))}
+              </>
             )}
           </>
         )}

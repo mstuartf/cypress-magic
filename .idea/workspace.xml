@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/e2e/someTest.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/someTest.cy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/Event.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/Event.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/plugin/types/events.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/plugin/types/events.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +58,7 @@
       <workItem from="1711553399829" duration="6553000" />
       <workItem from="1711573869573" duration="2818000" />
       <workItem from="1711607663689" duration="3431000" />
+      <workItem from="1711628216648" duration="1506000" />
     </task>
     <servers />
   </component>
