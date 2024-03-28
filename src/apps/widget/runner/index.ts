@@ -15,10 +15,31 @@ export interface RunOptions {
   mockNetworkRequests: boolean;
 }
 
-export const run = (
+const interval = 10;
+const timeout = 4000;
+
+export const runAsync = (
   event: ParsedEvent,
-  { mockNetworkRequests }: RunOptions
-) => {
+  options: RunOptions
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now();
+    const intervalId = setInterval(() => {
+      try {
+        run(event, options);
+        clearInterval(intervalId);
+        resolve();
+      } catch (e: any) {
+        if (Date.now() - startTime > timeout) {
+          clearInterval(intervalId);
+          reject(e);
+        }
+      }
+    }, interval);
+  });
+};
+
+const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
   if (isClickEvent(event)) {
     // todo: detect if right click
     get(event.target.domPath).click();
