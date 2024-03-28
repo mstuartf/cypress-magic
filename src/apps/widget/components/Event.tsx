@@ -35,30 +35,17 @@ const Event = ({ id }: { id: string }) => {
       }
     }
   };
-  const step = useSelector(selectIsRunningStep);
-  const eventIds = useSelector(selectEventIdsSorted);
-  const isRunning = useSelector(selectIsRunning);
-  const highlight = isRunning && id === eventIds[step];
   return (
     <div
       key={event.timestamp}
       className="cyw-text-wrap cyw-break-all cyw-flex cyw-group cyw-relative"
     >
-      <div
-        className={`cyw-text-xs cyw-flex-grow ${highlight && "cyw-font-bold"}`}
-      >
+      <div className="cyw-text-xs cyw-flex-grow">
         <EventSteps event={event} />
         {runError && runError.event.id === event.id && (
           <AssertionError message={runError.message} />
         )}
       </div>
-      {/*{isUserEvent(event) && (*/}
-      {/*  <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-ml-1">*/}
-      {/*    <button onClick={updateEventTarget} className="cyw-h-4 cyw-w-4">*/}
-      {/*      <Refresh />*/}
-      {/*    </button>*/}
-      {/*  </div>*/}
-      {/*)}*/}
       <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-absolute cyw-left-0 cyw-p-2">
         <button
           className="cyw-h-4 cyw-w-4 cyw-text-white"

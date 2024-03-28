@@ -33,7 +33,9 @@ const Step = ({
 
   return (
     <div
-      className="cyw-flex cyw-items-start cyw-p-2 hover:cyw-bg-gray-700 event-step-count"
+      className={`cyw-flex cyw-items-start cyw-p-2 hover:cyw-bg-gray-700 event-step-count ${
+        isRunning && "cyw-bg-gray-700 cyw-border-b-2 cyw-border-indigo-600"
+      }`}
       ref={ref}
     >
       <div className="cyw-break-keep cyw-w-6 cyw-ml-6 cyw-text-gray-500 cyw-text-xs cyw-shrink-0">
