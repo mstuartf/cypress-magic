@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { sideBarWith } from "../constants";
 import {
-  getFixedSetRightElements,
+  getFixedSetLeftElements,
   getFixedFullWidthElements,
   useNewFixedElementAdded,
 } from "../hooks/useNewFixedElementAdded";
@@ -28,17 +28,19 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
       ([elem, oldWidth]) => {
         const newWidth = oldWidth + widthChange;
         elem.style.width = `${newWidth}px`;
+        elem.style.left = `${sideBarWith}px`;
         // todo: what if elem no longer exists?
         return [elem, newWidth] as [HTMLElement, number];
       }
     );
     const body = document.getElementsByTagName("body")[0];
     body.style.width = `${innerWidth - sideBarWith}px`;
+    body.style.marginLeft = `${sideBarWith}px`;
 
-    // fixed right elements only need to be moved once (when they are added to the DOM)
+    // fixed left elements only need to be moved once (when they are added to the DOM)
     if (!lastInnerWidth) {
-      getFixedSetRightElements().forEach(([elem, right]) => {
-        elem.style.right = `${sideBarWith + right}px`;
+      getFixedSetLeftElements().forEach(([elem, left]) => {
+        elem.style.left = `${sideBarWith + left}px`;
       });
     }
 
@@ -51,7 +53,7 @@ const Resizer = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className="cyw-font-sans cyw-fixed cyw-top-0 cyw-right-0 cyw-bottom-0 cyw-border-solid cyw-px-4 cyw-py-6 cyw-text-slate-400"
+      className="cyw-font-sans cyw-fixed cyw-top-0 cyw-left-0 cyw-bottom-0 cyw-border-solid cyw-px-4 cyw-py-6 cyw-text-slate-400"
       style={{ width: `${sideBarWith}px`, zIndex, background: "#1b1e2e" }}
     >
       {children}

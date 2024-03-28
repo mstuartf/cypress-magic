@@ -12,8 +12,8 @@ export const useNewFixedElementAdded = () => {
     const elements: Element[] = nodes.filter((node): node is Element =>
       isElement(node)
     );
-    filterFixedSetRightHTMLElements(elements).forEach(([elem, right]) => {
-      elem.style.setProperty("right", `${sideBarWith + right}px`, "important");
+    filterFixedSetLeftHTMLElements(elements).forEach(([elem, left]) => {
+      elem.style.setProperty("left", `${sideBarWith + left}px`, "important");
     });
   });
 };
@@ -41,21 +41,21 @@ export const getFixedFullWidthElements = (
       ];
     });
 
-export const getFixedSetRightElements = (): [HTMLElement, number][] =>
-  filterFixedSetRightHTMLElements(
+export const getFixedSetLeftElements = (): [HTMLElement, number][] =>
+  filterFixedSetLeftHTMLElements(
     Array.prototype.slice.call(document.body.getElementsByTagName("*"))
   );
 
-export const filterFixedSetRightHTMLElements = (
+export const filterFixedSetLeftHTMLElements = (
   elements: Element[]
 ): [HTMLElement, number][] => {
   return elements
     .filter((element): element is HTMLElement => isHTMLElement(element))
     .filter((elem) => isNotInWidget(elem))
     .filter((elem) => isPositionFixed(elem))
-    .filter((elem) => isSetRight(elem))
-    .map((element) => getFixedRight(element))
-    .filter(([element, right]) => right < sideBarWith);
+    .filter((elem) => isSetLeft(elem))
+    .map((element) => getFixedLeft(element))
+    .filter(([element, left]) => left < sideBarWith);
 };
 
 export const isPositionFixed = (element: HTMLElement): boolean => {
@@ -65,22 +65,22 @@ export const isPositionFixed = (element: HTMLElement): boolean => {
   );
 };
 
-export const isSetRight = (element: HTMLElement): boolean => {
-  return element.style.right !== "";
+export const isSetLeft = (element: HTMLElement): boolean => {
+  return element.style.left !== "";
 };
 
 export const isNotInWidget = (element: HTMLElement): boolean => {
   return !document.getElementById(widgetId)!.contains(element);
 };
 
-export const getFixedRight = (element: HTMLElement): [HTMLElement, number] => {
-  const elementRight = parseInt(
+export const getFixedLeft = (element: HTMLElement): [HTMLElement, number] => {
+  const elementLeft = parseInt(
     window
       .getComputedStyle(element, null)
-      .getPropertyValue("right")
+      .getPropertyValue("left")
       .replace("px", "")
   );
-  return [element, elementRight];
+  return [element, elementLeft];
 };
 
 export const isElement = (node: Node): node is Element => {
