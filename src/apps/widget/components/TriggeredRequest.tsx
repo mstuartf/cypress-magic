@@ -6,8 +6,8 @@ const TriggeredRequest = ({ event }: { event: RequestEvent }) => (
   <div className="cyw-ml-14 cyw-mb-2 cyw-italic cyw-font-semibold">
     <div className="cyw-flex cyw-justify-between cyw-items-center">
       <div className="cyw-flex cyw-items-center">
-        <div>(fetch)</div>
-        <div className="cyw-ml-4">
+        <div className="cyw-break-keep">(fetch)</div>
+        <div className="cyw-mx-4 cyw-break-keep">
           {event.method}&nbsp;&nbsp;{event.status}
         </div>
       </div>

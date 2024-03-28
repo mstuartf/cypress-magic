@@ -50,10 +50,10 @@ const RecordingInProgress = () => {
                 </svg>
               </button>
             </div>
-            <div className="cyw-p-0.5 cyw-border-r cyw-border-slate-400">
+            <div className="cyw-p-0.5 cyw-border-r cyw-border-slate-400 cyw-flex cyw-items-center cyw-justify-center">
               <AddAssertion />
             </div>
-            <div className="cyw-p-0.5">
+            <div className="cyw-p-0.5 cyw-flex cyw-items-center cyw-justify-center">
               <RunTest />
             </div>
           </div>
