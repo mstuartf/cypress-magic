@@ -74,11 +74,11 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
       }
     }
     if (changed) {
-      if (!window.location.search.includes(`${param}=${added}`)) {
+      if (!window.location.search.includes(`${param}=${changed}`)) {
         throw Error(
           `Timed out retrying after ${timeout}ms: expected '${buildFullUrl(
             event
-          )}' to include '${param}=${added}'`
+          )}' to include '${param}=${changed}'`
         );
       }
     }
@@ -86,7 +86,7 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
       throw Error(
         `Timed out retrying after ${timeout}ms: expected '${buildFullUrl(
           event
-        )}' not to include '${param}=${added}'`
+        )}' not to include '${param}=${removed}'`
       );
     }
   }
