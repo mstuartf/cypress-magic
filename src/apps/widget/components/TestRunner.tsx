@@ -15,7 +15,7 @@ import {
   setIsRunningError,
   updateRunStep,
 } from "../redux/slice";
-import { run, RunOptions } from "../runner";
+import { runAsync, RunOptions } from "../runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
@@ -34,9 +34,12 @@ const TestRunner = () => {
   const responses = useSelector(selectIsRunningResponses);
   const isMocked = useSelector(selectMockNetworkRequests);
 
-  const runStep = (event: ParsedEvent, runOptions: RunOptions) => {
+  const runStep = async (
+    event: ParsedEvent,
+    runOptions: RunOptions
+  ): Promise<void> => {
     try {
-      run(event, runOptions);
+      return await runAsync(event, runOptions);
     } catch (e: any) {
       dispatch(setIsRunningError({ event, message: e.message }));
     }
@@ -66,10 +69,13 @@ const TestRunner = () => {
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
           dispatch(scheduleUpdateRunStep());
-          runStep(event, runOptions);
+          runStep(event, runOptions).then(() => {
+            console.log("navigating");
+          });
         } else {
-          runStep(event, runOptions);
-          dispatch(updateRunStep());
+          runStep(event, runOptions).then(() => {
+            dispatch(updateRunStep());
+          });
         }
       }, timeout);
     } else {
