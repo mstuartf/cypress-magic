@@ -1,7 +1,8 @@
 import { WidgetRootState } from "./store";
-import { isResponseEvent, toCamelCase } from "../utils";
+import { isRequestEvent, isResponseEvent, toCamelCase } from "../utils";
 import { ResponseEvent } from "../../../plugin/types";
 import { aliasToFileName } from "../../../plugin/utils/pickleBlob";
+import { useSelector } from "react-redux";
 
 export const selectEventsSorted = (state: WidgetRootState) =>
   state.recording.eventIds
@@ -19,6 +20,10 @@ export const selectIsRunning = (state: WidgetRootState) =>
   state.recording.isRunning;
 export const selectIsRunningStep = (state: WidgetRootState) =>
   state.recording.isRunningStep;
+export const selectIsRunningEventId = (state: WidgetRootState) => {
+  const { eventIds, isRunningStep } = state.recording;
+  return eventIds[isRunningStep];
+};
 export const selectIsRunningStepIncrementOnLoad = (state: WidgetRootState) =>
   state.recording.isRunningStepIncrementOnLoad;
 export const selectHasRefreshed = (state: WidgetRootState) =>

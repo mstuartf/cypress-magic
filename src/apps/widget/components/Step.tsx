@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectEventIdsSorted } from "../redux/selectors";
+import Spin from "./Spin";
 
-const Step = ({ children }: { children: React.ReactNode }) => {
+const Step = ({
+  children,
+  isRunning,
+}: {
+  children: React.ReactNode;
+  isRunning: boolean;
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const eventIds = useSelector(selectEventIdsSorted);
 
@@ -29,8 +36,8 @@ const Step = ({ children }: { children: React.ReactNode }) => {
       className="cyw-flex cyw-items-start cyw-p-2 hover:cyw-bg-gray-700 event-step-count"
       ref={ref}
     >
-      <div className="cyw-break-keep cyw-mr-4 cyw-ml-6 cyw-text-gray-500 cyw-text-xs">
-        {stepCount}
+      <div className="cyw-break-keep cyw-w-6 cyw-ml-6 cyw-text-gray-500 cyw-text-xs cyw-shrink-0">
+        {isRunning ? <Spin /> : stepCount}
       </div>
       <div className="cyw-break-all cyw-font-semibold">{children}</div>
     </div>
