@@ -12,7 +12,6 @@ import {
   isResponseEvent,
 } from "../utils";
 import { parseSelector } from "../parser/parseSelector";
-import { getElementCy } from "../parser/getElementCy";
 import { useSelector } from "react-redux";
 import { selectIsRunning, selectIsRunningEventId } from "../redux/selectors";
 
