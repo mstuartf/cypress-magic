@@ -19,6 +19,7 @@ import {
   selectIsRunningEventId,
   selectIsRunningStep,
 } from "../redux/selectors";
+import Alias from "./Alias";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   const isRunningEventId = useSelector(selectIsRunningEventId);
@@ -30,11 +31,11 @@ const EventSteps = ({ event }: { event: ParsedEvent }) => {
   const stepsToShow =
     completeEventIds.includes(event.id) || !isRunning
       ? allSteps
-      : [allSteps[0]];
+      : allSteps.slice(0, 1);
   return (
     <>
       {stepsToShow.map(({ children }, i) => (
-        <Step isRunning={isRunningEventId === event.id && !i && isRunning}>
+        <Step isRunning={isRunningEventId === event.id && isRunning}>
           {children}
         </Step>
       ))}
@@ -143,9 +144,7 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
         children: (
           <span>
             <DefaultLabel text="wait" />
-            <span className="cyw-px-1 cyw-py-0.5 cyw-rounded cyw-bg-purple-700 cyw-text-white cyw-font-light">
-              @{event.alias}
-            </span>
+            <Alias text={`@${event.alias}`} />
           </span>
         ),
       },

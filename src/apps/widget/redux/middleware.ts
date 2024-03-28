@@ -71,6 +71,7 @@ export const throttlerMiddleware: WidgetMiddleware =
       const newEvent: RequestEvent = {
         ...event,
         timestamp: trigger.timestamp - 1,
+        triggerId: trigger.id,
       };
       action.payload = newEvent;
     }
