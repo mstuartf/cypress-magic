@@ -16,7 +16,7 @@ export interface RunOptions {
 }
 
 const interval = 10;
-const timeout = 4000;
+export const timeout = 4000;
 
 export const runAsync = (
   event: ParsedEvent,
@@ -67,7 +67,7 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
     if (added) {
       if (!window.location.search.includes(`${param}=${added}`)) {
         throw Error(
-          `Timed out retrying after 4000ms: expected '${buildFullUrl(
+          `Timed out retrying after ${timeout}ms: expected '${buildFullUrl(
             event
           )}' to include '${param}=${added}'`
         );
@@ -76,7 +76,7 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
     if (changed) {
       if (!window.location.search.includes(`${param}=${added}`)) {
         throw Error(
-          `Timed out retrying after 4000ms: expected '${buildFullUrl(
+          `Timed out retrying after ${timeout}ms: expected '${buildFullUrl(
             event
           )}' to include '${param}=${added}'`
         );
@@ -84,7 +84,7 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
     }
     if (window.location.search.includes(`${param}=${removed}`)) {
       throw Error(
-        `Timed out retrying after 4000ms: expected '${buildFullUrl(
+        `Timed out retrying after ${timeout}ms: expected '${buildFullUrl(
           event
         )}' not to include '${param}=${added}'`
       );
@@ -103,7 +103,7 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
     const el = get(domPath);
     if (!!innerText && !el.innerText.includes(innerText)) {
       throw Error(
-        `Timed out retrying after 4000ms: expected '${parseSelector(
+        `Timed out retrying after ${timeout}ms: expected '${parseSelector(
           domPath
         )}' to contain '${innerText}'`
       );
