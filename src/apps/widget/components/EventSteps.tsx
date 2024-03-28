@@ -142,10 +142,10 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
     return [
       {
         children: (
-          <span>
+          <div className="cyw-flex cyw-items-start">
             <DefaultLabel text="wait" />
             <Alias text={`@${event.alias}`} />
-          </span>
+          </div>
         ),
       },
     ];
