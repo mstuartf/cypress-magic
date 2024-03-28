@@ -66,6 +66,9 @@ export const recordingSlice = createSlice({
       state.aliasTracker = {};
       state.isRunning = false;
       state.isRunningStep = 0;
+      state.isRunningAliasTracker = {};
+      state.isRunningReturnedResponses = [];
+      state.isRunningError = undefined;
     },
     setIsRunning: (state, action: PayloadAction<boolean>) => {
       state.isRunning = action.payload;
