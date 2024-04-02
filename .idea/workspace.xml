@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widget.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widget.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/middleware.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +55,7 @@
       <workItem from="1711573869573" duration="2818000" />
       <workItem from="1711607663689" duration="3431000" />
       <workItem from="1711628216648" duration="1506000" />
+      <workItem from="1712090282461" duration="897000" />
     </task>
     <servers />
   </component>
