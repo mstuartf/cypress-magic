@@ -5,6 +5,7 @@ import {
   selectEventIdsSorted,
   selectEventsSorted,
   selectIsRunning,
+  selectIsRunningEventId,
   selectIsRunningStep,
   selectRunError,
 } from "../redux/selectors";
@@ -23,6 +24,7 @@ const Event = ({ id }: { id: string }) => {
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
   const step = useSelector(selectIsRunningStep);
+  const isRunningEventId = useSelector(selectIsRunningEventId);
   const inProgressOrCompleteEventIds = useSelector(selectEventIdsSorted).slice(
     0,
     step + 1
@@ -44,7 +46,7 @@ const Event = ({ id }: { id: string }) => {
             {runError && runError.event.id === event.id && (
               <AssertionError message={runError.message} />
             )}
-            {!runError && !!triggeredRequests.length && (
+            {!!triggeredRequests.length && isRunningEventId !== event.id && (
               <>
                 {triggeredRequests.map((e) => (
                   <TriggeredRequest event={e} key={event.id} />
