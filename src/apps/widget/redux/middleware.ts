@@ -1,4 +1,4 @@
-import { saveEvent, saveIsRunningResponse } from "./slice";
+import { saveEvent, saveFixture, saveIsRunningResponse } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
@@ -159,7 +159,7 @@ export const testIsRunningMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     // otherwise e.g. reload events run by the test will register again and cause an infinite loop
     if (
-      action.type === saveEvent.type &&
+      (action.type === saveEvent.type || action.type === saveFixture.type) &&
       store.getState().recording.isRunning
     ) {
       const event = action.payload;
