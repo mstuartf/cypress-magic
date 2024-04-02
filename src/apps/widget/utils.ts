@@ -75,7 +75,7 @@ export function isPageRefreshEvent(
 }
 
 export const isRequestTriggerEvent = (event: ParsedEvent) =>
-  isUserEvent(event) ||
+  (isUserEvent(event) && !isAssertionEvent(event)) ||
   isHistoryEvent(event) ||
   isNavigationEvent(event) ||
   isPageRefreshEvent(event);
