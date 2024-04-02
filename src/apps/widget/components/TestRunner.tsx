@@ -38,6 +38,7 @@ const TestRunner = () => {
 
   useEffect(() => {
     if (incrementOnLoad) {
+      // console.log(`updateRunStep for ${event.id} ${step}`)
       dispatch(updateRunStep());
     }
   }, []);
@@ -52,7 +53,7 @@ const TestRunner = () => {
       isResponseEvent(event) &&
       !responses.find(({ alias }) => alias === event.alias)
     ) {
-      console.log(`Waiting for the network response for ${event.alias}...`);
+      // console.log(`Waiting for the network response for ${event.alias}...`);
       return;
     }
     if (step < eventIds.length) {
@@ -70,9 +71,11 @@ const TestRunner = () => {
         } else {
           runAsync(event, runOptions)
             .then(() => {
+              // console.log(`updateRunStep for ${event.id} ${step}`)
               dispatch(updateRunStep());
             })
             .catch((e: any) => {
+              // console.error(`setIsRunningError for ${event.id} ${step}`)
               dispatch(setIsRunningError({ event, message: e.message }));
             });
         }

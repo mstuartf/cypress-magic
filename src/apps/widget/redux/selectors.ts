@@ -21,8 +21,9 @@ export const selectIsRunning = (state: WidgetRootState) =>
 export const selectIsRunningStep = (state: WidgetRootState) =>
   state.recording.isRunningStep;
 export const selectIsRunningEventId = (state: WidgetRootState) => {
-  const { eventIds, isRunningStep } = state.recording;
-  return eventIds[isRunningStep];
+  const { isRunningStep } = state.recording;
+  const sortedEventIds = selectEventIdsSorted(state);
+  return sortedEventIds[isRunningStep];
 };
 export const selectIsRunningStepIncrementOnLoad = (state: WidgetRootState) =>
   state.recording.isRunningStepIncrementOnLoad;

@@ -105,6 +105,8 @@ export function initFetchObserver({
       if (mockedResponse) {
         const { status, statusText, content } = mockedResponse;
         return buildMockedResponse(status, statusText, content);
+      } else {
+        throw Error(`could not find mocked response for ${alias}`);
       }
     }
 
