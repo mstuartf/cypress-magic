@@ -1,5 +1,5 @@
 import { useMutateObserver } from "@rc-component/mutate-observer";
-import { sideBarWith, widgetId } from "../constants";
+import { sideBarWidth, widgetId } from "../constants";
 
 export const useNewFixedElementAdded = () => {
   useMutateObserver(document.body, (mutations, observer) => {
@@ -13,7 +13,7 @@ export const useNewFixedElementAdded = () => {
       isElement(node)
     );
     filterFixedSetLeftHTMLElements(elements).forEach(([elem, left]) => {
-      elem.style.setProperty("left", `${sideBarWith + left}px`, "important");
+      elem.style.setProperty("left", `${sideBarWidth + left}px`, "important");
     });
   });
 };
@@ -55,7 +55,7 @@ export const filterFixedSetLeftHTMLElements = (
     .filter((elem) => isPositionFixed(elem))
     .filter((elem) => isSetLeft(elem))
     .map((element) => getFixedLeft(element))
-    .filter(([element, left]) => left < sideBarWith);
+    .filter(([element, left]) => left < sideBarWidth);
 };
 
 export const isPositionFixed = (element: HTMLElement): boolean => {
