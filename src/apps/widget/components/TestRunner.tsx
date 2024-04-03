@@ -54,11 +54,6 @@ const TestRunner = () => {
       return;
     }
     if (isRunningEventId) {
-      console.log(
-        eventIds,
-        isRunningEventId,
-        eventIds.indexOf(isRunningEventId)
-      );
       const timeout = isRequestEvent(event) || isResponseEvent(event) ? 0 : 500;
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
