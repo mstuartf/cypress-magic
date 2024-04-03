@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/Event.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/Event.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/TestRunner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/TestRunner.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/selectors.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" afterDir="false" />
     </list>

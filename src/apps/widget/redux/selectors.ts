@@ -14,12 +14,8 @@ export const selectRecordingInProgress = (state: WidgetRootState) =>
   state.recording.recordingInProgress;
 export const selectIsRunning = (state: WidgetRootState) =>
   state.recording.isRunning;
-export const selectIsRunningStep = (state: WidgetRootState) =>
-  state.recording.isRunningStep;
-export const selectIsRunningEventId = (state: WidgetRootState) => {
-  const { isRunningStep, eventIds } = state.recording;
-  return eventIds[isRunningStep];
-};
+export const selectIsRunningEventId = (state: WidgetRootState) =>
+  state.recording.isRunningEventId;
 export const selectIsRunningStepIncrementOnLoad = (state: WidgetRootState) =>
   state.recording.isRunningStepIncrementOnLoad;
 export const selectHasRefreshed = (state: WidgetRootState) =>

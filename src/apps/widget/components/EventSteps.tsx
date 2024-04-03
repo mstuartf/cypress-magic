@@ -18,15 +18,17 @@ import {
   selectEventIdsSorted,
   selectIsRunning,
   selectIsRunningEventId,
-  selectIsRunningStep,
 } from "../redux/selectors";
 import Alias from "./Alias";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   const isRunningEventId = useSelector(selectIsRunningEventId);
   const isRunning = useSelector(selectIsRunning);
-  const step = useSelector(selectIsRunningStep);
-  const completeEventIds = useSelector(selectEventIdsSorted).slice(0, step);
+  const eventIds = useSelector(selectEventIdsSorted);
+  const completeEventIds = eventIds.slice(
+    0,
+    isRunningEventId ? eventIds.indexOf(isRunningEventId) : 0
+  );
   // only show the first step until completed (as this is the one that can fail)
   const allSteps = getEventSteps(event);
   const stepsToShow =
