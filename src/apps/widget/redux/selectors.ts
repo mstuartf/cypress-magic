@@ -3,12 +3,10 @@ import { isResponseEvent, toCamelCase } from "../utils";
 import { ResponseEvent } from "../../../plugin/types";
 
 export const selectEventsSorted = (state: WidgetRootState) =>
-  state.recording.eventIds
-    .map((id) => state.recording.events[id])
-    .sort((a, b) => a.timestamp - b.timestamp);
+  state.recording.eventIds.map((id) => state.recording.events[id]);
 
 export const selectEventIdsSorted = (state: WidgetRootState) =>
-  selectEventsSorted(state).map(({ id }) => id);
+  state.recording.eventIds;
 
 export const selectEvent = (id: string) => (state: WidgetRootState) =>
   state.recording.events[id];
@@ -19,9 +17,8 @@ export const selectIsRunning = (state: WidgetRootState) =>
 export const selectIsRunningStep = (state: WidgetRootState) =>
   state.recording.isRunningStep;
 export const selectIsRunningEventId = (state: WidgetRootState) => {
-  const { isRunningStep } = state.recording;
-  const sortedEventIds = selectEventIdsSorted(state);
-  return sortedEventIds[isRunningStep];
+  const { isRunningStep, eventIds } = state.recording;
+  return eventIds[isRunningStep];
 };
 export const selectIsRunningStepIncrementOnLoad = (state: WidgetRootState) =>
   state.recording.isRunningStepIncrementOnLoad;
