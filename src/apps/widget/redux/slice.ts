@@ -14,7 +14,7 @@ interface State {
   events: { [id: string]: ParsedEvent };
   recordingInProgress: boolean;
   isRunning: boolean;
-  isRunningStep: number;
+  isRunningEventId?: string;
   // When running navigation events in test mode, we can't increment the step once
   // the event has run. Schedule it to increment on load using this prop.
   isRunningStepIncrementOnLoad: boolean;
@@ -40,7 +40,7 @@ const initialState: State = {
   events: {},
   recordingInProgress: false,
   isRunning: false,
-  isRunningStep: 0,
+  isRunningEventId: undefined,
   isRunningStepIncrementOnLoad: false,
   hasRefreshed: false,
   baseUrl: undefined,
@@ -64,7 +64,7 @@ export const recordingSlice = createSlice({
       state.fixtures = {};
       state.aliasTracker = {};
       state.isRunning = false;
-      state.isRunningStep = 0;
+      state.isRunningEventId = undefined;
       state.isRunningAliasTracker = {};
       state.isRunningReturnedResponses = [];
       state.isRunningError = undefined;
@@ -72,7 +72,7 @@ export const recordingSlice = createSlice({
     setIsRunning: (state, action: PayloadAction<boolean>) => {
       state.isRunning = action.payload;
       if (action.payload) {
-        state.isRunningStep = 0;
+        state.isRunningEventId = state.eventIds[0];
         state.isRunningAliasTracker = {};
         state.isRunningReturnedResponses = [];
         state.isRunningError = undefined;
@@ -153,7 +153,8 @@ export const recordingSlice = createSlice({
       state.testShould = action.payload.testShould;
     },
     updateRunStep: (state) => {
-      state.isRunningStep = state.isRunningStep + 1;
+      state.isRunningEventId =
+        state.eventIds[state.eventIds.indexOf(state.isRunningEventId!) + 1];
       state.isRunningStepIncrementOnLoad = false;
     },
     scheduleUpdateRunStep: (state) => {

@@ -6,7 +6,6 @@ import {
   selectEventsSorted,
   selectIsRunning,
   selectIsRunningEventId,
-  selectIsRunningStep,
   selectRunError,
 } from "../redux/selectors";
 import { deleteEvent } from "../redux/slice";
@@ -15,7 +14,6 @@ import EventSteps from "./EventSteps";
 import AssertionError from "./AssertionError";
 import { isRequestEvent } from "../utils";
 import { RequestEvent } from "../../../plugin/types";
-import Alias from "./Alias";
 import TriggeredRequest from "./TriggeredRequest";
 
 const Event = ({ id }: { id: string }) => {
@@ -23,11 +21,11 @@ const Event = ({ id }: { id: string }) => {
   const event = useSelector(selectEvent(id));
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
-  const step = useSelector(selectIsRunningStep);
   const isRunningEventId = useSelector(selectIsRunningEventId);
-  const inProgressOrCompleteEventIds = useSelector(selectEventIdsSorted).slice(
+  const eventIds = useSelector(selectEventIdsSorted);
+  const inProgressOrCompleteEventIds = eventIds.slice(
     0,
-    step + 1
+    isRunningEventId ? eventIds.indexOf(isRunningEventId) + 1 : 0
   );
   const events = useSelector(selectEventsSorted);
   const triggeredRequests = events

@@ -4,33 +4,30 @@ import {
   selectEventIdsSorted,
   selectIsRunningEventId,
   selectIsRunningResponses,
-  selectIsRunningStep,
   selectIsRunningStepIncrementOnLoad,
   selectMockNetworkRequests,
   selectRunOptions,
 } from "../redux/selectors";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   scheduleUpdateRunStep,
   setIsRunning,
   setIsRunningError,
   updateRunStep,
 } from "../redux/slice";
-import { runAsync, RunOptions } from "../runner";
+import { runAsync } from "../runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
   isRequestEvent,
   isResponseEvent,
 } from "../utils";
-import { ParsedEvent } from "../../../plugin/types";
 
 const TestRunner = () => {
   const dispatch = useDispatch();
-  const step = useSelector(selectIsRunningStep);
   const incrementOnLoad = useSelector(selectIsRunningStepIncrementOnLoad);
   const eventIds = useSelector(selectEventIdsSorted);
-  const isRunningEventId = useSelector(selectIsRunningEventId);
+  const isRunningEventId = useSelector(selectIsRunningEventId)!;
   const event = useSelector(selectEvent(isRunningEventId));
   const runOptions = useSelector(selectRunOptions);
   const responses = useSelector(selectIsRunningResponses);
@@ -38,7 +35,7 @@ const TestRunner = () => {
 
   useEffect(() => {
     if (incrementOnLoad) {
-      console.log(`updateRunStep for ${event.id} ${step}`);
+      console.log(`updateRunStep for ${event.id}`);
       dispatch(updateRunStep());
     }
   }, []);
@@ -56,7 +53,12 @@ const TestRunner = () => {
       console.log(`Waiting for the network response for ${event.alias}...`);
       return;
     }
-    if (step < eventIds.length) {
+    if (isRunningEventId) {
+      console.log(
+        eventIds,
+        isRunningEventId,
+        eventIds.indexOf(isRunningEventId)
+      );
       const timeout = isRequestEvent(event) || isResponseEvent(event) ? 0 : 500;
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
@@ -71,11 +73,11 @@ const TestRunner = () => {
         } else {
           runAsync(event, runOptions)
             .then(() => {
-              console.log(`updateRunStep for ${event.id} ${step}`);
+              console.log(`updateRunStep for ${event.id}`);
               dispatch(updateRunStep());
             })
             .catch((e: any) => {
-              console.error(`setIsRunningError for ${event.id} ${step}`);
+              console.error(`setIsRunningError for ${event.id}`);
               dispatch(setIsRunningError({ message: e.message }));
             });
         }
