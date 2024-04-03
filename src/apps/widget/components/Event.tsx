@@ -14,7 +14,7 @@ import EventSteps from "./EventSteps";
 import AssertionError from "./AssertionError";
 import { isRequestEvent } from "../utils";
 import { RequestEvent } from "../../../plugin/types";
-import TriggeredRequest from "./TriggeredRequest";
+import TriggeredRequests from "./TriggeredRequests";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -27,32 +27,25 @@ const Event = ({ id }: { id: string }) => {
     0,
     isRunningEventId ? eventIds.indexOf(isRunningEventId) + 1 : 0
   );
-  const events = useSelector(selectEventsSorted);
-  const triggeredRequests = events
-    .filter((e): e is RequestEvent => isRequestEvent(e))
-    .filter((e) => e.triggerId === event.id);
+
+  if (
+    (isRunning || runError) &&
+    !inProgressOrCompleteEventIds.includes(event.id)
+  ) {
+    return null;
+  }
+
   return (
     <div
       key={event.timestamp}
       className="cyw-text-wrap cyw-break-all cyw-flex cyw-group cyw-relative"
     >
       <div className="cyw-text-xs cyw-flex-grow">
-        {((!isRunning && !runError) ||
-          inProgressOrCompleteEventIds.includes(event.id)) && (
-          <>
-            <EventSteps event={event} />
-            {runError && isRunningEventId === event.id && (
-              <AssertionError message={runError.message} />
-            )}
-            {!!triggeredRequests.length && isRunningEventId !== event.id && (
-              <>
-                {triggeredRequests.map((e) => (
-                  <TriggeredRequest event={e} key={event.id} />
-                ))}
-              </>
-            )}
-          </>
+        <EventSteps event={event} />
+        {runError && isRunningEventId === event.id && (
+          <AssertionError message={runError.message} />
         )}
+        <TriggeredRequests id={event.id} />
       </div>
       <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-absolute cyw-left-0 cyw-p-2">
         <button
