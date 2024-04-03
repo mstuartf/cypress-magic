@@ -26,7 +26,6 @@ import {
 const TestRunner = () => {
   const dispatch = useDispatch();
   const incrementOnLoad = useSelector(selectIsRunningStepIncrementOnLoad);
-  const eventIds = useSelector(selectEventIdsSorted);
   const isRunningEventId = useSelector(selectIsRunningEventId)!;
   const event = useSelector(selectEvent(isRunningEventId));
   const runOptions = useSelector(selectRunOptions);
