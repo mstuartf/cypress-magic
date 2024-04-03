@@ -66,7 +66,7 @@ const TestRunner = () => {
               console.log("navigating");
             })
             .catch((e: any) =>
-              dispatch(setIsRunningError({ event, message: e.message }))
+              dispatch(setIsRunningError({ message: e.message }))
             );
         } else {
           runAsync(event, runOptions)
@@ -76,7 +76,7 @@ const TestRunner = () => {
             })
             .catch((e: any) => {
               console.error(`setIsRunningError for ${event.id} ${step}`);
-              dispatch(setIsRunningError({ event, message: e.message }));
+              dispatch(setIsRunningError({ message: e.message }));
             });
         }
       }, timeout);

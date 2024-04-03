@@ -23,7 +23,6 @@ interface State {
   // When running (un-mocked) in test mode, record responses here (so we know when to cy.wait).
   isRunningReturnedResponses: ResponseEvent[];
   isRunningError?: {
-    event: ParsedEvent;
     message: string;
   };
   hasRefreshed: boolean;
@@ -79,10 +78,7 @@ export const recordingSlice = createSlice({
         state.isRunningError = undefined;
       }
     },
-    setIsRunningError: (
-      state,
-      action: PayloadAction<{ event: ParsedEvent; message: string }>
-    ) => {
+    setIsRunningError: (state, action: PayloadAction<{ message: string }>) => {
       state.isRunning = false;
       state.isRunningError = { ...action.payload };
     },
