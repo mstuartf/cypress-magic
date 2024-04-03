@@ -8,8 +8,8 @@ import {
   isPageRefreshEvent,
   isQueryParamChangeEvent,
 } from "../utils";
-import { get } from "./get";
-import { parseSelector } from "../parser/parseSelector";
+import { extractInnerText, parseSelector } from "../parser/parseSelector";
+import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
 
 export interface RunOptions {
   mockNetworkRequests: boolean;
@@ -42,7 +42,7 @@ export const runAsync = (
 const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
   if (isClickEvent(event)) {
     // todo: detect if right click
-    get(event.target.domPath).click();
+    getElement(parseSelector(event.target)).click();
     return;
   }
   // if (isDblClickEvent(event)) {
@@ -54,7 +54,8 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
       //     return `${getElementCy(event.target.domPath)}.check();`;
     } else {
-      get<HTMLInputElement>(event.target.domPath).value = event.value;
+      getElement<HTMLInputElement>(parseSelector(event.target)).value =
+        event.value;
     }
   }
   if (isNavigationEvent(event)) {
@@ -97,16 +98,47 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
   //   return `cy.url().should('include', '${event.urlDiff}')`;
   // }
   if (isAssertionEvent(event)) {
-    const {
-      target: { innerText, domPath },
-    } = event;
-    const el = get(domPath);
-    if (!!innerText && !el.innerText.includes(innerText)) {
+    const { target } = event;
+    const el = getElement(
+      parseSelector(event.target, { ignoreInnerText: true })
+    );
+    if (!!target.innerText && !el.innerText.includes(target.innerText)) {
       throw Error(
         `Timed out retrying after ${timeout}ms: expected '${parseSelector(
-          domPath
-        )}' to contain '${innerText}'`
+          target,
+          { ignoreInnerText: true }
+        )}' to contain '${target.innerText}'`
       );
     }
   }
+};
+
+const getElement = <T extends HTMLElement>(selector: string): T => {
+  let el: T | null;
+  if (!selector.includes("contains")) {
+    el = document.querySelector(selector) as T;
+  } else {
+    const [tag, innerText] = extractInnerText(selector);
+    el = findByInnerText(tag, innerText);
+  }
+  if (!el) {
+    throw Error(
+      `Timed out retrying after ${timeout}ms: Expected to find element: ${selector}, but never found it."`
+    );
+  }
+  return el;
+};
+
+const findByInnerText = <T extends HTMLElement>(
+  tag: string,
+  innerText: string
+): T | null => {
+  const tags = document.getElementsByTagName(tag);
+  for (let i = 0; i < tags.length; i++) {
+    const el = tags[i];
+    if (isHTMLElement(el) && el.textContent?.includes(innerText!)) {
+      return el as T;
+    }
+  }
+  return null;
 };

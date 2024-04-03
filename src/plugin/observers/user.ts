@@ -36,7 +36,7 @@ export const getTargetProps = (target: HTMLElement): TargetEvent => ({
         ? (target as HTMLInputElement).type
         : null,
     domPath: getDomPath(target),
-    innerText: target.innerText || undefined,
+    innerText: target.childElementCount === 0 ? target.innerText : undefined,
     value: (target as HTMLInputElement).value || undefined,
     placeholder: (target as HTMLInputElement).placeholder || undefined,
   },

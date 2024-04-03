@@ -2,10 +2,28 @@ import { Target } from "../../../plugin/types";
 
 const escapeChars = (value: string) => value.replaceAll(":", "\\:");
 
-export function parseSelector(domPath: Target["domPath"]): string {
-  const bottomUp = [...domPath].reverse();
+export interface SelectOptions {
+  ignoreInnerText?: boolean;
+}
+
+export const parseSelector = (
+  target: Target,
+  options?: SelectOptions
+): string => {
+  const el = target.domPath[target.domPath.length - 1];
+  if (el.dataCy) {
+    return `[data-cy="${el.dataCy}"]`;
+  }
+  if (el.dataTestId) {
+    return `[data-testid="${el.dataTestId}"]`;
+  }
+  if (target.innerText && !options?.ignoreInnerText) {
+    return `${target.tag.toLowerCase()}:contains(${target.innerText})`;
+  }
+
+  const bottomUp = [...target.domPath].reverse();
   const selectors = [];
-  for (let i = 0; i < domPath.length; i++) {
+  for (let i = 0; i < bottomUp.length; i++) {
     const { nodeName, id, siblingCount, siblingIndex, dataTestId, dataCy } =
       bottomUp[i];
     if (dataCy) {
@@ -26,20 +44,11 @@ export function parseSelector(domPath: Target["domPath"]): string {
     }
   }
   return [...selectors].reverse().join(" > ");
-}
+};
 
-export function parseSelectorPositionOnly(domPath: Target["domPath"]): string {
-  const selectors = [];
-  for (let i = 0; i < domPath.length; i++) {
-    const { nodeName, id, siblingCount, siblingIndex, dataTestId, dataCy } =
-      domPath[i];
-    if (siblingCount > 1) {
-      selectors.push(
-        `${nodeName.toLowerCase()}:nth-of-type(${siblingIndex + 1})`
-      );
-    } else {
-      selectors.push(`${nodeName.toLowerCase()}`);
-    }
-  }
-  return [...selectors].join(" > ");
-}
+export const extractInnerText = (input: string): [string, string] => {
+  const regex = /(\w+):contains\((.+)\)/;
+  const match = input.match(regex)!;
+  const [, firstGroup, secondGroup] = match;
+  return [firstGroup, secondGroup];
+};
