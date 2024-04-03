@@ -114,8 +114,12 @@ export const recordingSlice = createSlice({
           status: event.status,
         };
       }
-      state.eventIds = [...state.eventIds, event.id];
       state.events[event.id] = { ...event };
+      // always store the event ids in order
+      state.eventIds = [...state.eventIds, event.id]
+        .map((id) => state.events[id])
+        .sort((a, b) => a.timestamp - b.timestamp)
+        .map(({ id }) => id);
       if (event.type === "assertion") {
         state.isAddingAssertion = false;
       }
