@@ -1,8 +1,6 @@
 import { WidgetRootState } from "./store";
-import { isRequestEvent, isResponseEvent, toCamelCase } from "../utils";
+import { isResponseEvent, toCamelCase } from "../utils";
 import { ResponseEvent } from "../../../plugin/types";
-import { aliasToFileName } from "../../../plugin/utils/pickleBlob";
-import { useSelector } from "react-redux";
 
 export const selectEventsSorted = (state: WidgetRootState) =>
   state.recording.eventIds

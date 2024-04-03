@@ -43,7 +43,7 @@ const Event = ({ id }: { id: string }) => {
           inProgressOrCompleteEventIds.includes(event.id)) && (
           <>
             <EventSteps event={event} />
-            {runError && runError.event.id === event.id && (
+            {runError && isRunningEventId === event.id && (
               <AssertionError message={runError.message} />
             )}
             {!!triggeredRequests.length && isRunningEventId !== event.id && (
