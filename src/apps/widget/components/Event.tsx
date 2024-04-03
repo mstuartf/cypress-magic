@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
-  selectEventsSorted,
   selectIsRunning,
   selectIsRunningEventId,
   selectRunError,
@@ -12,8 +11,6 @@ import { deleteEvent } from "../redux/slice";
 import React from "react";
 import EventSteps from "./EventSteps";
 import AssertionError from "./AssertionError";
-import { isRequestEvent } from "../utils";
-import { RequestEvent } from "../../../plugin/types";
 import TriggeredRequests from "./TriggeredRequests";
 
 const Event = ({ id }: { id: string }) => {

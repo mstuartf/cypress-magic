@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
-  selectEventIdsSorted,
   selectIsRunningEventId,
   selectIsRunningResponses,
   selectIsRunningStepIncrementOnLoad,
