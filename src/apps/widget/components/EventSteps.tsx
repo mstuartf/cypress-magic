@@ -12,7 +12,6 @@ import {
   isRequestEvent,
   isResponseEvent,
 } from "../utils";
-import { parseSelector } from "../parser/parseSelector";
 import { useSelector } from "react-redux";
 import {
   selectEventIdsSorted,
@@ -20,6 +19,7 @@ import {
   selectIsRunningEventId,
 } from "../redux/selectors";
 import Alias from "./Alias";
+import { parseSelector } from "../parser/parseSelector";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   const isRunningEventId = useSelector(selectIsRunningEventId);
@@ -72,7 +72,7 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
         children: (
           <span>
             <DefaultLabel text="get" />
-            <span>{parseSelector(event.target.domPath)}</span>
+            <span>{parseSelector(event.target)}</span>
           </span>
         ),
       },
@@ -118,7 +118,11 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
         children: (
           <span>
             <DefaultLabel text="get" />
-            <span>{parseSelector(event.target.domPath)}</span>
+            <span>
+              {parseSelector(event.target, {
+                ignoreInnerText: !!event.target.innerText,
+              })}
+            </span>
           </span>
         ),
       },
@@ -126,13 +130,13 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
         // todo: show more element details like cypress
         children: event.target.innerText ? (
           <Assertion
-            value={parseSelector(event.target.domPath)}
+            value={parseSelector(event.target, { ignoreInnerText: true })}
             operator="to contain"
             comparator={event.target.innerText}
           />
         ) : (
           <Assertion
-            value={parseSelector(event.target.domPath)}
+            value={parseSelector(event.target)}
             operator="to"
             comparator="exist"
           />
@@ -172,7 +176,7 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
           children: (
             <span>
               <DefaultLabel text="get" />
-              <span>{parseSelector(event.target.domPath)}</span>
+              <span>{parseSelector(event.target)}</span>
             </span>
           ),
         },

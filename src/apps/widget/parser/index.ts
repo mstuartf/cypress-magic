@@ -1,5 +1,4 @@
 import { ParsedEvent } from "../../../plugin/types";
-import { getElementCy } from "./getElementCy";
 import {
   isAssertionEvent,
   isClickEvent,
@@ -13,6 +12,7 @@ import {
   isDblClickEvent,
   buildFullUrl,
 } from "../utils";
+import { extractInnerText, parseSelector } from "./parseSelector";
 
 interface ParseOptions {
   mockNetworkRequests: boolean;
@@ -25,18 +25,20 @@ export const parse = (
 ): string => {
   if (isClickEvent(event)) {
     // todo: detect if right click
-    return `${getElementCy(event.target.domPath)}.click();`;
+    return `${getElement(parseSelector(event.target))}.click();`;
   }
   if (isDblClickEvent(event)) {
-    return `${getElementCy(event.target.domPath)}.dblclick();`;
+    return `${getElement(parseSelector(event.target))}.dblclick();`;
   }
   if (isChangeEvent(event)) {
     if (event.target.tag === "SELECT") {
-      return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
+      return `${getElement(parseSelector(event.target))}.select('${
+        event.value
+      }');`;
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
-      return `${getElementCy(event.target.domPath)}.check();`;
+      return `${getElement(parseSelector(event.target))}.check();`;
     } else {
-      return `${getElementCy(event.target.domPath)}.clear().type('${
+      return `${getElement(parseSelector(event.target))}.clear().type('${
         event.value
       }');`;
     }
@@ -77,12 +79,22 @@ export const parse = (
   }
   if (isAssertionEvent(event)) {
     const {
-      target: { innerText, domPath },
+      target: { innerText },
     } = event;
     const assertion = innerText
       ? `should('contain', ${innerText}')`
       : `should('exist')`;
-    return `${getElementCy(domPath)}.${assertion};`;
+    return `${getElement(
+      parseSelector(event.target, { ignoreInnerText: !!innerText })
+    )}.${assertion};`;
   }
   return `${event.type} at ${event.timestamp}`;
+};
+
+const getElement = (selector: string): string => {
+  if (selector.includes("contains")) {
+    const [tag, innerText] = extractInnerText(selector);
+    return `cy.contains(${innerText})`;
+  }
+  return `cy.get('${selector}')`;
 };
