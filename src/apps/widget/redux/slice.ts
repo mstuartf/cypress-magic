@@ -125,12 +125,6 @@ export const recordingSlice = createSlice({
       delete state.events[action.payload];
       // todo: delete from aliasTracker?
     },
-    updateEvent: (state, action: PayloadAction<ParsedEvent>) => {
-      state.events[action.payload.id] = {
-        ...state.events[action.payload.id],
-        ...action.payload,
-      };
-    },
     setMockNetworkRequests: (state, action: PayloadAction<boolean>) => {
       state.mockNetworkRequests = action.payload;
     },
@@ -179,7 +173,6 @@ export const {
   setHasRefreshed,
   setIsAddingAssertion,
   deleteEvent,
-  updateEvent,
   setMockNetworkRequests,
   saveFixture,
   setupTest,
