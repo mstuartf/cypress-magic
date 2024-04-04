@@ -10,6 +10,7 @@ import {
 } from "../utils";
 import { extractInnerText, parseSelector } from "../parser/parseSelector";
 import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
+import { widgetId } from "../constants";
 
 export interface RunOptions {
   mockNetworkRequests: boolean;
@@ -137,7 +138,12 @@ const findByInnerText = <T extends HTMLElement>(
   const tags = document.getElementsByTagName(tag);
   for (let i = 0; i < tags.length; i++) {
     const el = tags[i];
-    if (isHTMLElement(el) && el.textContent?.includes(innerText!)) {
+    if (
+      isHTMLElement(el) &&
+      el.textContent?.includes(innerText!) &&
+      el.childElementCount === 0 &&
+      !document.getElementById(widgetId)!.contains(el)
+    ) {
       return el as T;
     }
   }
