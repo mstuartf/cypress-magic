@@ -113,6 +113,7 @@ const run = (event: ParsedEvent, { mockNetworkRequests }: RunOptions) => {
   }
 };
 
+// todo: make sure not in __widget__
 const getElement = <T extends HTMLElement>(selector: string): T => {
   let el: T | null;
   if (!selector.includes("contains")) {
