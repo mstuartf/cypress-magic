@@ -65,11 +65,13 @@ export const parse = (
   if (isRequestEvent(event)) {
     const { method, url, alias, fixture, status } = event;
     if (mockNetworkRequests) {
-      return `cy.intercept('${method}', '${url}', {statusCode: ${
+      const body =
+        status === 204
+          ? `body: null`
+          : `fixture: '${nestedFixtureFolder}/${fixture}'`;
+      return `cy.intercept('${method}', '${url}', { statusCode: ${
         status || "..."
-      }, fixture: '${nestedFixtureFolder}/${
-        fixture || "..."
-      }'}).as('${alias}')`;
+      }, ${body} }).as('${alias}')`;
     } else {
       return `cy.intercept('${method}', '${url}').as('${alias}')`;
     }
