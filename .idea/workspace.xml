@@ -7,7 +7,6 @@
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/widget/runner/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/runner/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plugin/observers/fetch.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/plugin/observers/fetch.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
