@@ -2,25 +2,21 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setHasRefreshed } from "../redux/slice";
 import Resizer from "./Resizer";
-import { selectRecordingInProgress } from "../redux/selectors";
-import RecordingInProgress from "./RecordingInProgress";
+import { selectSetupComplete } from "../redux/selectors";
+import SetupComplete from "./SetupComplete";
 import Setup from "./Setup";
 
 function App() {
   const dispatch = useDispatch();
-  const recordingInProgress = useSelector(selectRecordingInProgress);
+  const setupComplete = useSelector(selectSetupComplete);
 
   useEffect(() => {
-    if (recordingInProgress) {
+    if (setupComplete) {
       dispatch(setHasRefreshed(true));
     }
   }, []);
 
-  return (
-    <Resizer>
-      {recordingInProgress ? <RecordingInProgress /> : <Setup />}
-    </Resizer>
-  );
+  return <Resizer>{setupComplete ? <SetupComplete /> : <Setup />}</Resizer>;
 }
 
 export default App;

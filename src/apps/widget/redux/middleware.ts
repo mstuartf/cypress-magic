@@ -171,12 +171,12 @@ export const testIsRunningMiddleware: WidgetMiddleware =
     next(action);
   };
 
-export const recordingInProgressMiddleware: WidgetMiddleware =
+export const setupCompleteMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
     // don't start saving events until the user has setup and started
     if (
       action.type === saveEvent.type &&
-      !store.getState().recording.recordingInProgress
+      !store.getState().recording.setupComplete
     ) {
       return;
     }

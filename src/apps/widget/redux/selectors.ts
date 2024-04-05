@@ -10,8 +10,8 @@ export const selectEventIdsSorted = (state: WidgetRootState) =>
 
 export const selectEvent = (id: string) => (state: WidgetRootState) =>
   state.recording.events[id];
-export const selectRecordingInProgress = (state: WidgetRootState) =>
-  state.recording.recordingInProgress;
+export const selectSetupComplete = (state: WidgetRootState) =>
+  state.recording.setupComplete;
 export const selectIsRunning = (state: WidgetRootState) =>
   state.recording.isRunning;
 export const selectIsRunningEventId = (state: WidgetRootState) =>

@@ -16,7 +16,7 @@ import { toCamelCase } from "../utils";
 import FileIcon from "./FileIcon";
 import Cross from "./Cross";
 
-const RecordingInProgress = () => {
+const SetupComplete = () => {
   const dispatch = useDispatch();
   const hasRefreshed = useSelector(selectHasRefreshed);
   const testDescribe = useSelector(selectTestDescribe)!;
@@ -65,4 +65,4 @@ const RecordingInProgress = () => {
   );
 };
 
-export default RecordingInProgress;
+export default SetupComplete;
