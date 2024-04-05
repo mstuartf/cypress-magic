@@ -14,7 +14,9 @@ import Tick from "./Tick";
 import Cross from "./Cross";
 import Bordered from "./Bordered";
 import Wand from "./Wand";
-import { setIsAddingCommands } from "../redux/slice";
+import { setIsAddingCommands, setIsRunning } from "../redux/slice";
+import RunTest from "./RunTest";
+import AddAssertion from "./AddAssertion";
 
 const EventList = () => {
   const dispatch = useDispatch();
@@ -45,23 +47,35 @@ const EventList = () => {
           <span className="cyw-ml-2">{testShould}</span>
         </div>
         {!isAddingCommands && (
-          <button onClick={() => dispatch(setIsAddingCommands(true))}>
-            <Wand />
-          </button>
+          <div className="cyw-flex cyw-items-center cyw-gap-2">
+            <RunTest />
+            <button
+              onClick={() => {
+                dispatch(setIsAddingCommands(true));
+                dispatch(setIsRunning(true));
+              }}
+            >
+              <Wand />
+            </button>
+          </div>
         )}
       </Bordered>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
       ))}
-      {isAddingCommands && (
+      {!isRunning && isAddingCommands && (
         <Bordered className="cyw-flex cyw-items-center cyw-justify-between cyw-pl-4 cyw-py-2">
           <button className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline">
             Cancel
           </button>
-          <div>
+          <div className="cyw-flex cyw-items-center cyw-gap-2">
+            <AddAssertion />
             <button
               className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded"
-              onClick={() => dispatch(setIsAddingCommands(false))}
+              onClick={() => {
+                dispatch(setIsAddingCommands(false));
+                dispatch(setIsRunning(true));
+              }}
             >
               Save commands
             </button>

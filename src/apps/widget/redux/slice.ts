@@ -76,6 +76,7 @@ export const recordingSlice = createSlice({
       state.setupComplete = false;
     },
     setIsRunning: (state, action: PayloadAction<boolean>) => {
+      console.log(`setting is running to ${action.payload}`);
       state.isRunning = action.payload;
       if (action.payload) {
         state.isRunningEventId = state.eventIds[0];
