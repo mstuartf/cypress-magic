@@ -37,6 +37,13 @@ export const parse = (
       }');`;
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
       return `${getElement(parseSelector(event.target))}.check();`;
+    } else if (
+      event.target.tag === "INPUT" &&
+      event.target.type === "checkbox"
+    ) {
+      return `${getElement(parseSelector(event.target))}.${
+        event.target.checked ? "check" : "uncheck"
+      }();`;
     } else {
       return `${getElement(parseSelector(event.target))}.clear().type('${
         event.value

@@ -190,6 +190,27 @@ const getEventSteps = (event: ParsedEvent, error: boolean): IStep[] => {
           children: <DefaultLabel text="-check" />,
         },
       ];
+    } else if (
+      event.target.tag === "INPUT" &&
+      event.target.type === "checkbox"
+    ) {
+      return [
+        {
+          children: (
+            <span>
+              <DefaultLabel text="get" />
+              <span>{parseSelector(event.target)}</span>
+            </span>
+          ),
+        },
+        {
+          children: (
+            <DefaultLabel
+              text={`-${event.target.checked ? "check" : "uncheck"}`}
+            />
+          ),
+        },
+      ];
     } else {
       return [
         {
