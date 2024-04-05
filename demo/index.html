@@ -42,13 +42,26 @@
           .getElementById("xml-request-button")
           .addEventListener("click", function () {
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", "https://swapi.dev/api/people/1", true);
-            xhr.onload = function () {
-              if (xhr.status >= 200 && xhr.status < 300) {
+            xhr.open("GET", "https://swapi.dev/api/people/2", true);
+            xhr.onreadystatechange = function () {
+              if (this.readyState === 4) {
                 const { name } = JSON.parse(xhr.responseText);
                 document.getElementById("xml-request-results").innerText = name;
-              } else {
-                console.error("Request failed with status:", xhr.status);
+              }
+            };
+            xhr.send();
+          });
+        document
+          .getElementById("xml-onload-request-button")
+          .addEventListener("click", function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://swapi.dev/api/people/3", true);
+            xhr.onload = function () {
+              if (this.status === 200) {
+                const { name } = JSON.parse(xhr.responseText);
+                document.getElementById(
+                  "xml-onload-request-results"
+                ).innerText = name;
               }
             };
             xhr.send();
@@ -131,9 +144,19 @@
         id="xml-request-button"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        XML request button
+        XML onreadystatechange request button
       </button>
       <div class="ml-4 flex items-center" id="xml-request-results"></div>
+    </div>
+
+    <div class="flex">
+      <button
+        id="xml-onload-request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        XML onload request button
+      </button>
+      <div class="ml-4 flex items-center" id="xml-onload-request-results"></div>
     </div>
 
     <div class="flex">
