@@ -12,6 +12,7 @@ import React from "react";
 import EventSteps from "./EventSteps";
 import AssertionError from "./AssertionError";
 import TriggeredRequests from "./TriggeredRequests";
+import Bordered from "./Bordered";
 
 const Event = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Event = ({ id }: { id: string }) => {
   }
 
   return (
-    <div
+    <Bordered
       key={event.timestamp}
       className="cyw-text-wrap cyw-break-all cyw-flex cyw-group cyw-relative"
     >
@@ -52,7 +53,7 @@ const Event = ({ id }: { id: string }) => {
           <Trash fill="#94a3b8" width={12} />
         </button>
       </div>
-    </div>
+    </Bordered>
   );
 };
 
