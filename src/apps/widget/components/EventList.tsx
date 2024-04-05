@@ -22,6 +22,7 @@ import {
 } from "../redux/slice";
 import RunTest from "./RunTest";
 import AddAssertion from "./AddAssertion";
+import AddCommand from "./AddCommand";
 
 const EventList = () => {
   const dispatch = useDispatch();
@@ -55,14 +56,7 @@ const EventList = () => {
         {!isAddingCommands && !isRunning && (
           <div className="cyw-flex cyw-items-center cyw-gap-2">
             <RunTest />
-            <button
-              onClick={() => {
-                dispatch(setIsAddingCommands(true));
-                dispatch(setIsRunning(true));
-              }}
-            >
-              <Wand />
-            </button>
+            <AddCommand />
           </div>
         )}
       </Bordered>

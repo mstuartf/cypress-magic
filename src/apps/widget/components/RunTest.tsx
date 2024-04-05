@@ -1,12 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { setIsRunning } from "../redux/slice";
+import { Tooltip } from "react-tooltip";
 
 const RunTest = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <button onClick={() => dispatch(setIsRunning(true))} className="">
+      <button
+        data-tooltip-id="run-test-tooltip"
+        data-tooltip-content="Run test"
+        onClick={() => dispatch(setIsRunning(true))}
+      >
         <svg
           width="16"
           height="16"
@@ -24,6 +29,7 @@ const RunTest = () => {
           ></path>
         </svg>
       </button>
+      <Tooltip id="run-test-tooltip" className="cyw-text-xs" />
     </>
   );
 };
