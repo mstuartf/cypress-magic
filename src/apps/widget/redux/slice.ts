@@ -34,6 +34,7 @@ interface State {
   testShould?: string;
   aliasTracker: AliasTracker;
   isAddingCommands: boolean;
+  isAddingEventIds: string[];
 }
 
 const initialState: State = {
@@ -53,6 +54,7 @@ const initialState: State = {
   isRunningReturnedResponses: [],
   isRunningError: undefined,
   isAddingCommands: false,
+  isAddingEventIds: [],
 };
 
 export const recordingSlice = createSlice({
@@ -62,6 +64,7 @@ export const recordingSlice = createSlice({
     startNewTest: (state) => {
       state.setupComplete = true;
       state.isAddingCommands = true;
+      state.isAddingEventIds = [];
       state.eventIds = [];
       state.events = {};
       state.fixtures = {};
@@ -76,7 +79,6 @@ export const recordingSlice = createSlice({
       state.setupComplete = false;
     },
     setIsRunning: (state, action: PayloadAction<boolean>) => {
-      console.log(`setting is running to ${action.payload}`);
       state.isRunning = action.payload;
       if (action.payload) {
         state.isRunningEventId = state.eventIds[0];
@@ -85,8 +87,25 @@ export const recordingSlice = createSlice({
         state.isRunningError = undefined;
       }
     },
+    removeAddedCommands: (state) => {
+      state.eventIds = state.eventIds.filter(
+        (id) => !state.isAddingEventIds.includes(id)
+      );
+      state.events = Object.entries(state.events)
+        .filter(([id, event]) => !state.isAddingEventIds.includes(id))
+        .reduce(
+          (prev, [id, event]) => ({
+            ...prev,
+            [id]: { ...event },
+          }),
+          {}
+        );
+    },
     setIsAddingCommands: (state, action: PayloadAction<boolean>) => {
       state.isAddingCommands = action.payload;
+      if (action.payload) {
+        state.isAddingEventIds = [];
+      }
     },
     setIsRunningError: (state, action: PayloadAction<{ message: string }>) => {
       state.isRunning = false;
@@ -130,6 +149,14 @@ export const recordingSlice = createSlice({
         .map((id) => state.events[id])
         .sort((a, b) => a.timestamp - b.timestamp)
         .map(({ id }) => id);
+
+      if (state.isAddingCommands) {
+        state.isAddingEventIds = [...state.isAddingEventIds, event.id]
+          .map((id) => state.events[id])
+          .sort((a, b) => a.timestamp - b.timestamp)
+          .map(({ id }) => id);
+      }
+
       if (event.type === "assertion") {
         state.isAddingAssertion = false;
       }
@@ -186,6 +213,7 @@ export const {
   saveEvent,
   startNewTest,
   setIsAddingCommands,
+  removeAddedCommands,
   cancelTest,
   setHasRefreshed,
   setIsAddingAssertion,
