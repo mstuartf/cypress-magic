@@ -1,16 +1,44 @@
 import { useSelector } from "react-redux";
-import { selectEventIdsSorted } from "../redux/selectors";
-import { useEffect, useRef, useState } from "react";
+import {
+  selectEventIdsSorted,
+  selectIsRunning,
+  selectRunError,
+  selectTestDescribe,
+  selectTestShould,
+} from "../redux/selectors";
+import React, { useEffect, useRef, useState } from "react";
 import Event from "./Event";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);
+  const testDescribe = useSelector(selectTestDescribe)!;
+  const testShould = useSelector(selectTestShould)!;
   const ref = useScrollDownOnSizeIncrease();
+  const runError = useSelector(selectRunError);
+  const isRunning = useSelector(selectIsRunning);
+
+  let borderClass: string;
+  if (isRunning) {
+    borderClass = "cyw-border-gray-900";
+  } else if (runError) {
+    borderClass = "cyw-border-red-300";
+  } else if (false) {
+    borderClass = "cyw-border-purple-500";
+  } else {
+    borderClass = "cyw-border-emerald-500";
+  }
+
   return (
     <div
       ref={ref}
-      className="cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900"
+      className={`cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900 cyw-border-l-4 ${borderClass}`}
     >
+      <div className="cyw-text-sm cyw-text-white cyw-ml-4 cyw-mb-2 cyw-mt-1">
+        {testDescribe}
+      </div>
+      <div className="cyw-text-xs cyw-font-light cyw-ml-8 cyw-mb-2">
+        {testShould}
+      </div>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
       ))}
