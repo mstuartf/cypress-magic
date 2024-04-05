@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import {
-  setupTest,
-  setHasRefreshed,
-  setRecordingInProgress,
-} from "../redux/slice";
+import { setHasRefreshed, setupTest, startNewTest } from "../redux/slice";
 import { useDispatch } from "react-redux";
 import InputRow from "./InputRow";
 import FileIcon from "./FileIcon";
@@ -25,7 +20,7 @@ const Setup = () => {
       })
     );
     dispatch(setHasRefreshed(false));
-    dispatch(setRecordingInProgress(true));
+    dispatch(startNewTest());
     window.location.reload();
   };
 

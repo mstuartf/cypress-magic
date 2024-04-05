@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import {
   selectEventIdsSorted,
+  selectIsAddingCommands,
   selectIsRunning,
   selectRunError,
   selectTestDescribe,
@@ -12,6 +13,7 @@ import Spin from "./Spin";
 import Tick from "./Tick";
 import Cross from "./Cross";
 import Bordered from "./Bordered";
+import Wand from "./Wand";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);
@@ -20,6 +22,7 @@ const EventList = () => {
   const ref = useScrollDownOnSizeIncrease();
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
+  const isAddingCommands = useSelector(selectIsAddingCommands);
 
   return (
     <div
@@ -29,9 +32,16 @@ const EventList = () => {
       <Bordered className="cyw-text-sm cyw-text-white cyw-pl-4 cyw-pb-2 cyw-pt-1">
         {testDescribe}
       </Bordered>
-      <Bordered className="cyw-text-xs cyw-font-light cyw-pl-8 cyw-pb-2 cyw-flex cyw-items-center">
-        {isRunning ? <Spin /> : runError ? <Cross /> : <Tick />}
-        <span className="cyw-ml-2">{testShould}</span>
+      <Bordered className="cyw-text-xs cyw-font-light cyw-pl-8 cyw-pb-2 cyw-flex cyw-items-center cyw-justify-between">
+        <div className="cyw-flex cyw-items-center">
+          {isRunning ? <Spin /> : runError ? <Cross /> : <Tick />}
+          {!isAddingCommands && (
+            <button>
+              <span className="cyw-ml-2">{testShould}</span>
+            </button>
+          )}
+        </div>
+        <Wand />
       </Bordered>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
