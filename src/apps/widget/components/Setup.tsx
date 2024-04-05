@@ -3,10 +3,12 @@ import { setHasRefreshed, setupTest, startNewTest } from "../redux/slice";
 import { useDispatch } from "react-redux";
 import InputRow from "./InputRow";
 import FileIcon from "./FileIcon";
+import TextAreaRow from "./TextAreaRow";
 
 const Setup = () => {
   const dispatch = useDispatch();
   const [baseUrl, setBaseUrl] = useState<string | undefined>();
+  const [beforeEach, setBeforeEach] = useState<string | undefined>();
   const [testDescribe, setTestDescribe] = useState("");
   const [testShould, setTestShould] = useState("");
   const disabled = !testShould || !testDescribe;
@@ -17,6 +19,7 @@ const Setup = () => {
         baseUrl,
         testDescribe,
         testShould,
+        testBeforeEach: beforeEach,
       })
     );
     dispatch(setHasRefreshed(false));
@@ -52,6 +55,13 @@ const Setup = () => {
         info="Only API calls made to URLs starting with this value will be matched and intercepted."
         setValue={setBaseUrl}
         label="Match API calls to"
+      />
+      <TextAreaRow
+        value={beforeEach}
+        placeholder="e.g. authentication logic"
+        info="Any code here will be executed in a beforeEach hook."
+        setValue={setBeforeEach}
+        label="Before Each"
       />
       <button
         onClick={startRecording}
