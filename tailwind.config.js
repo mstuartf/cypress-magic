@@ -139,5 +139,5 @@ module.exports = {
   },
   plugins: [],
   prefix: "cyw-",
-  important: "#__widget__",
+  important: ":is(#__widget__, #__popup__)",
 };

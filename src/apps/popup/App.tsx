@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectActiveTabId, selectCacheLoaded } from "./redux/selectors";
 import Main from "./components/Main";
 import { setActiveTabId } from "./redux/slice";
+import { sideBarWidth } from "../widget/constants";
 
 const history = createMemoryHistory();
 
@@ -27,8 +28,8 @@ function App() {
   }
 
   return (
-    <div className="cyw-w-full cyw-h-full cyw-px-8 cyw-py-6">
-      <div className="cyw-h-full cyw-w-full">
+    <div className="cyw-bg-transparent cyw-w-96">
+      <div className="cyw-border cyw-border-gray-100 cyw-w-full">
         <Router history={history}>
           <Switch>
             <Route path="/record">

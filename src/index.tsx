@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import store from "./apps/popup/redux/proxy";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("__popup__") as HTMLElement
 );
 
 // wait for the store to connect to the background page
