@@ -33,6 +33,7 @@ interface State {
   fixtures: { [name: string]: PickledBlob };
   testDescribe?: string;
   testShould?: string;
+  testBeforeEach?: string;
   aliasTracker: AliasTracker;
   isAddingCommands: boolean;
   isAddingEventIds: string[];
@@ -185,6 +186,7 @@ export const recordingSlice = createSlice({
       state,
       action: PayloadAction<{
         baseUrl?: string;
+        testBeforeEach?: string;
         testDescribe: string;
         testShould: string;
       }>
@@ -192,6 +194,7 @@ export const recordingSlice = createSlice({
       state.baseUrl = action.payload.baseUrl;
       state.testDescribe = action.payload.testDescribe;
       state.testShould = action.payload.testShould;
+      state.testBeforeEach = action.payload.testBeforeEach;
     },
     updateRunStep: (state) => {
       state.isRunningEventId =
