@@ -14,7 +14,7 @@ import {
   setIsRunningError,
   updateRunStep,
 } from "../redux/slice";
-import { runAsync } from "../runner";
+import { runEvent, withRetries } from "../runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
@@ -55,13 +55,13 @@ const TestRunner = () => {
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
           dispatch(scheduleUpdateRunStep());
-          runAsync(event, runOptions)
+          withRetries(() => runEvent(event, runOptions))
             .then(() => {})
             .catch((e: any) =>
               dispatch(setIsRunningError({ message: e.message }))
             );
         } else {
-          runAsync(event, runOptions)
+          withRetries(() => runEvent(event, runOptions))
             .then(() => {
               dispatch(updateRunStep());
             })
