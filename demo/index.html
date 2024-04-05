@@ -39,6 +39,21 @@
             });
           });
         document
+          .getElementById("xml-request-button")
+          .addEventListener("click", function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://swapi.dev/api/people/1", true);
+            xhr.onload = function () {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                const { name } = JSON.parse(xhr.responseText);
+                document.getElementById("xml-request-results").innerText = name;
+              } else {
+                console.error("Request failed with status:", xhr.status);
+              }
+            };
+            xhr.send();
+          });
+        document
           .getElementById("404-request-button")
           .addEventListener("click", function () {
             fetch("https://swapi.dev/api/people/1000000").then((res) => {
@@ -96,7 +111,7 @@
         id="request-button"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        Request button
+        Fetch request button
       </button>
       <div class="ml-4 flex items-center" id="request-results"></div>
     </div>
@@ -109,6 +124,16 @@
         404 Request button
       </button>
       <div class="ml-4 flex items-center" id="404-request-results"></div>
+    </div>
+
+    <div class="flex">
+      <button
+        id="xml-request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        XML request button
+      </button>
+      <div class="ml-4 flex items-center" id="xml-request-results"></div>
     </div>
 
     <div class="flex">
