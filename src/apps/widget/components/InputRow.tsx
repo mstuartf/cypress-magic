@@ -6,16 +6,19 @@ const InputRow = ({
   setValue,
   info,
   label,
+  required,
 }: {
   value?: string;
   label: string;
   placeholder: string;
   info: string;
   setValue: (v: string) => void;
+  required?: boolean;
 }) => (
   <div className="cyw-w-full cyw-mb-6">
-    <label className="cyw-block cyw-uppercase cyw-tracking-wide cyw-text-xs cyw-font-bold cyw-mb-2">
-      {label}
+    <label className="cyw-uppercase cyw-tracking-wide cyw-text-xs cyw-font-bold cyw-mb-2 cyw-flex cyw-justify-between">
+      <span>{label}</span>
+      {required && <span className="cyw-text-xs cyw-font-light">required</span>}
     </label>
     <input
       value={value}
