@@ -9,6 +9,8 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import Event from "./Event";
 import Spin from "./Spin";
+import Tick from "./Tick";
+import Cross from "./Cross";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);
@@ -38,9 +40,7 @@ const EventList = () => {
         {testDescribe}
       </div>
       <div className="cyw-text-xs cyw-font-light cyw-ml-8 cyw-mb-2 cyw-flex cyw-items-center">
-        <span className={isRunning ? "visible" : "invisible"}>
-          <Spin />
-        </span>
+        {isRunning ? <Spin /> : runError ? <Cross /> : <Tick />}
         <span className="cyw-ml-2">{testShould}</span>
       </div>
       {eventIds.map((id) => (
