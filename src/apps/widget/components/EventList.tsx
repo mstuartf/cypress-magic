@@ -74,7 +74,7 @@ const EventList = () => {
           <div>
             {canCancelAddingCommands && (
               <button
-                className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline"
+                className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline focus:cyw-outline-none"
                 onClick={() => {
                   dispatch(removeAddedCommands());
                   dispatch(setIsAddingCommands(false));
