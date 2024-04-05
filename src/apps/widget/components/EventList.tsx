@@ -14,7 +14,11 @@ import Tick from "./Tick";
 import Cross from "./Cross";
 import Bordered from "./Bordered";
 import Wand from "./Wand";
-import { setIsAddingCommands, setIsRunning } from "../redux/slice";
+import {
+  removeAddedCommands,
+  setIsAddingCommands,
+  setIsRunning,
+} from "../redux/slice";
 import RunTest from "./RunTest";
 import AddAssertion from "./AddAssertion";
 
@@ -68,6 +72,7 @@ const EventList = () => {
           <button
             className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline"
             onClick={() => {
+              dispatch(removeAddedCommands());
               dispatch(setIsAddingCommands(false));
               dispatch(setIsRunning(true));
             }}
