@@ -12,7 +12,7 @@ import { PickledBlob } from "../../../plugin/utils/pickleBlob";
 interface State {
   eventIds: string[];
   events: { [id: string]: ParsedEvent };
-  recordingInProgress: boolean;
+  setupComplete: boolean;
   isRunning: boolean;
   isRunningEventId?: string;
   // When running navigation events in test mode, we can't increment the step once
@@ -38,7 +38,7 @@ interface State {
 const initialState: State = {
   eventIds: [],
   events: {},
-  recordingInProgress: false,
+  setupComplete: false,
   isRunning: false,
   isRunningEventId: undefined,
   isRunningStepIncrementOnLoad: false,
@@ -58,7 +58,7 @@ export const recordingSlice = createSlice({
   initialState: readCache<State>("recording") || initialState,
   reducers: {
     setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
-      state.recordingInProgress = action.payload;
+      state.setupComplete = action.payload;
       state.eventIds = [];
       state.events = {};
       state.fixtures = {};
