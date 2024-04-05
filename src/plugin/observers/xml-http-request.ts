@@ -12,6 +12,7 @@ import { buildRequestAlias } from "../utils/aliases";
 
 // should only record events to matching URLs
 // should not make network calls when running test in mock mode
+// should send {fixture: null} for 204s
 
 interface PatchedXMLHttpRequest extends XMLHttpRequest {
   __meta: {
@@ -68,7 +69,7 @@ export function initXMLHttpRequestObserver({
       url: instance.__meta.url,
       method: instance.__meta.method,
       alias: instance.__meta.alias,
-      initiator: "xml",
+      initiator: "XML",
     });
 
     return _open.apply(this, arguments as any);
@@ -129,7 +130,6 @@ export function initXMLHttpRequestObserver({
         };
         try {
           if (status === 204) {
-            // todo
             saveEvent({ ...event, fixture: null });
             return;
           }
