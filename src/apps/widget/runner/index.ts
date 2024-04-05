@@ -51,7 +51,8 @@ export const runEvent = (
   // }
   if (isChangeEvent(event)) {
     if (event.target.tag === "SELECT") {
-      //     return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
+      getElement<HTMLSelectElement>(parseSelector(event.target)).value =
+        event.value;
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
       getElement<HTMLInputElement>(parseSelector(event.target)).checked = true;
     } else if (

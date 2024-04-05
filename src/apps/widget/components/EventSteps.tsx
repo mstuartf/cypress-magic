@@ -175,7 +175,24 @@ const getEventSteps = (event: ParsedEvent, error: boolean): IStep[] => {
 
   if (isChangeEvent(event)) {
     if (event.target.tag === "SELECT") {
-      // return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
+      return [
+        {
+          children: (
+            <span>
+              <DefaultLabel text="get" />
+              <span>{parseSelector(event.target)}</span>
+            </span>
+          ),
+        },
+        {
+          children: (
+            <span>
+              <DefaultLabel text="-select" />
+              <span>{event.value}</span>
+            </span>
+          ),
+        },
+      ];
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
       return [
         {
