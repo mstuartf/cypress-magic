@@ -32,9 +32,7 @@ const TestRunner = () => {
   const isMocked = useSelector(selectMockNetworkRequests);
 
   useEffect(() => {
-    console.log("rendinge");
     if (incrementOnLoad) {
-      console.log(`updateRunStep for ${event.id}`);
       dispatch(updateRunStep());
     }
   }, []);
@@ -53,26 +51,21 @@ const TestRunner = () => {
       return;
     }
     if (isRunningEventId) {
-      console.log(`running ${isRunningEventId}`);
       const timeout = isRequestEvent(event) || isResponseEvent(event) ? 0 : 500;
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {
           dispatch(scheduleUpdateRunStep());
           runAsync(event, runOptions)
-            .then(() => {
-              console.log("navigating");
-            })
+            .then(() => {})
             .catch((e: any) =>
               dispatch(setIsRunningError({ message: e.message }))
             );
         } else {
           runAsync(event, runOptions)
             .then(() => {
-              console.log(`updateRunStep for ${event.id}`);
               dispatch(updateRunStep());
             })
             .catch((e: any) => {
-              console.error(`setIsRunningError for ${event.id}`);
               dispatch(setIsRunningError({ message: e.message }));
             });
         }
