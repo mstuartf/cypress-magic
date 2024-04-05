@@ -8,6 +8,7 @@ import {
 } from "../redux/selectors";
 import React, { useEffect, useRef, useState } from "react";
 import Event from "./Event";
+import Spin from "./Spin";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);
@@ -36,8 +37,11 @@ const EventList = () => {
       <div className="cyw-text-sm cyw-text-white cyw-ml-4 cyw-mb-2 cyw-mt-1">
         {testDescribe}
       </div>
-      <div className="cyw-text-xs cyw-font-light cyw-ml-8 cyw-mb-2">
-        {testShould}
+      <div className="cyw-text-xs cyw-font-light cyw-ml-8 cyw-mb-2 cyw-flex cyw-items-center">
+        <span className={isRunning ? "visible" : "invisible"}>
+          <Spin />
+        </span>
+        <span className="cyw-ml-2">{testShould}</span>
       </div>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
