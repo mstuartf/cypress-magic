@@ -1,0 +1,236 @@
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../build/css/content.css" />
+    <script>
+      function onload() {
+        document
+          .getElementById("change-selector-button")
+          .addEventListener("click", function () {
+            let el = document.getElementById("select-this-element");
+            if (!!el) {
+              el.dataset.cy = "select-this-element";
+              el.removeAttribute("id");
+            } else {
+              el = document.querySelector('[data-cy="select-this-element"]');
+              el.id = "select-this-element";
+              delete el.dataset.cy;
+            }
+          });
+        document
+          .getElementById("add-selector-button")
+          .addEventListener("click", function (event) {
+            const el = event.target.parentNode.firstElementChild;
+            if (!!el) {
+              if ("cy" in el.dataset) {
+                delete el.dataset.cy;
+              } else {
+                el.dataset.cy = "now-has-selector";
+              }
+            }
+          });
+        document
+          .getElementById("request-button")
+          .addEventListener("click", function () {
+            fetch("https://swapi.dev/api/people/1").then((res) => {
+              res.json().then(({ name }) => {
+                document.getElementById("request-results").innerText = name;
+              });
+            });
+          });
+        document
+          .getElementById("xml-request-button")
+          .addEventListener("click", function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://swapi.dev/api/people/2", true);
+            xhr.onreadystatechange = function () {
+              if (this.readyState === 4) {
+                const { name } = JSON.parse(xhr.responseText);
+                document.getElementById("xml-request-results").innerText = name;
+              }
+            };
+            xhr.send();
+          });
+        document
+          .getElementById("xml-onload-request-button")
+          .addEventListener("click", function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://swapi.dev/api/people/3", true);
+            xhr.onload = function () {
+              if (this.status === 200) {
+                const { name } = JSON.parse(xhr.responseText);
+                document.getElementById(
+                  "xml-onload-request-results"
+                ).innerText = name;
+              }
+            };
+            xhr.send();
+          });
+        document
+          .getElementById("404-request-button")
+          .addEventListener("click", function () {
+            fetch("https://swapi.dev/api/people/1000000").then((res) => {
+              res.json().then(({ detail }) => {
+                document.getElementById("404-request-results").innerText =
+                  detail;
+              });
+            });
+          });
+        document
+          .getElementById("add-param-button")
+          .addEventListener("click", function () {
+            if (history.pushState) {
+              let searchParams = new URLSearchParams(window.location.search);
+              searchParams.set("newParam", "value");
+              let newUrl =
+                window.location.protocol +
+                "//" +
+                window.location.host +
+                window.location.pathname +
+                "?" +
+                searchParams.toString();
+              window.history.pushState({ path: newUrl }, "", newUrl);
+            }
+          });
+        document
+          .getElementById("remove-param-button")
+          .addEventListener("click", function () {
+            if (history.pushState) {
+              let searchParams = new URLSearchParams(window.location.search);
+              searchParams.delete("newParam");
+              let newUrl =
+                window.location.protocol +
+                "//" +
+                window.location.host +
+                window.location.pathname +
+                "?" +
+                searchParams.toString();
+              window.history.pushState({ path: newUrl }, "", newUrl);
+            }
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", onload);
+    </script>
+  </head>
+</html>
+
+<body>
+  <div class="grid gap-4 p-4">
+    <div>only match calls to https://swapi</div>
+
+    <div class="flex">
+      <button
+        id="request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Fetch request button
+      </button>
+      <div class="ml-4 flex items-center" id="request-results"></div>
+    </div>
+
+    <div class="flex">
+      <button
+        id="404-request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        404 Request button
+      </button>
+      <div class="ml-4 flex items-center" id="404-request-results"></div>
+    </div>
+
+    <div class="flex">
+      <button
+        id="xml-request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        XML onreadystatechange request button
+      </button>
+      <div class="ml-4 flex items-center" id="xml-request-results"></div>
+    </div>
+
+    <div class="flex">
+      <button
+        id="xml-onload-request-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        XML onload request button
+      </button>
+      <div class="ml-4 flex items-center" id="xml-onload-request-results"></div>
+    </div>
+
+    <div class="flex">
+      <button
+        id="add-param-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Add param button
+      </button>
+    </div>
+
+    <div class="flex">
+      <button
+        id="remove-param-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Remove param button
+      </button>
+    </div>
+
+    <div class="flex">
+      <a
+        href="./page_1.html"
+        class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600 cursor-pointer"
+      >
+        Go to other site
+      </a>
+    </div>
+
+    <div class="mb-4 flex">
+      <form>
+        <div>
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="username"
+          >
+            Username
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+
+    <div>
+      <div id="select-this-element">Select this element</div>
+      <button
+        id="change-selector-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Change selector button
+      </button>
+    </div>
+
+    <div>
+      <div>Select this element</div>
+      <button
+        id="add-selector-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Add selector button
+      </button>
+    </div>
+
+    <div data-cy="display-text">This is some text.</div>
+  </div>
+</body>

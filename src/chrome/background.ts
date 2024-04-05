@@ -1,86 +1,46 @@
-import { RootState, store } from "../redux/store";
-import {
-  restoreCache,
-  saveEvent,
-  saveFixture,
-  saveSessionId,
-  startRecording,
-  stopRecording,
-  updateAliases,
-} from "../redux/slice";
-import { readCache, setBadgeText, updateCache } from "./utils";
-import RegisteredContentScript = chrome.scripting.RegisteredContentScript;
-import { EventManager } from "../plugin/types";
-import { createWsClient } from "../plugin/managers";
+import { store } from "../apps/popup/redux/store";
+import { removeClosedTabId, restoreBaseCache } from "../apps/popup/redux/slice";
+import { activeTabNeedsRefresh, inject, readCache, updateCache } from "./utils";
+import { selectInjectForTab } from "../apps/popup/redux/selectors";
+import TabChangeInfo = chrome.tabs.TabChangeInfo;
 
-chrome.runtime.onInstalled.addListener(() => {
-  setBadgeText("OFF");
+// READING AND WRITING TO CACHE ------------------------------------------------
+
+readCache().then((state) => {
+  store.dispatch(restoreBaseCache(state.base));
 });
 
-// https://stackoverflow.com/a/72607832
-// todo: should this only be on install?
-chrome.runtime.onInstalled.addListener(async () => {
-  const scripts: RegisteredContentScript[] = [
-    {
-      id: "inject",
-      js: ["./static/js/inject.js"],
-      matches: ["https://*/*"],
-      runAt: "document_start",
-      world: "MAIN",
-    },
-  ];
-  const ids = scripts.map((s) => s.id);
-  await chrome.scripting.unregisterContentScripts({ ids }).catch(() => {});
-  await chrome.scripting.registerContentScripts(scripts).catch(() => {});
+store.subscribe(() => {
+  const updated = { ...store.getState() };
+  readCache().then((current) => {
+    updateCache(updated).then(() => {
+      // This needs to be done here (not in middleware) because we need to be sure the cache is updated _before_ the refresh.
+      if (activeTabNeedsRefresh(current.base, updated.base)) {
+        chrome.tabs.reload();
+      }
+    });
+  });
 });
 
-let ws: EventManager;
+// LISTENING FOR TAB EVENTS ----------------------------------------------------
 
-// have to handle sockets stuff here (rather than in middleware) for betting logging
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (
-    request.type === "chromex.dispatch" &&
-    request.payload.type === startRecording.type
-  ) {
-    const {
-      user: {
-        info: { client_id },
-      },
-    }: RootState = store.getState();
-    ws = createWsClient(client_id!);
-  }
-  if (
-    request.type === "chromex.dispatch" &&
-    request.payload.type === stopRecording.type
-  ) {
-    const sessionId = ws.close();
-    store.dispatch(saveSessionId(sessionId));
-  }
-  if (request.type === saveFixture.type) {
-    store.dispatch(
-      saveFixture({
-        name: request.payload.name,
-        value: request.payload.value,
-      })
-    );
-  }
-  if (request.type === saveEvent.type) {
-    store.dispatch(saveEvent(request.payload));
-    ws.saveEvent(request.payload);
-  }
-  if (request.type === updateAliases.type) {
-    store.dispatch(
-      updateAliases({ aliases: JSON.parse(request.payload.aliases) })
-    );
-  }
-});
+chrome.tabs.onRemoved.addListener((tabId) =>
+  store.dispatch(removeClosedTabId(tabId))
+);
 
-store.subscribe(async () => {
-  await updateCache({ ...store.getState() });
-});
-
-readCache((state) => {
-  store.dispatch(restoreCache(state.user));
-});
+// Handles re-injection when the extension has already been activated but the page is refreshed
+chrome.tabs.onUpdated.addListener(
+  (tabId: number, changeInfo: TabChangeInfo) => {
+    if (changeInfo.status === "loading") {
+      // Need to read from the cache not the store (store may have default values loaded sync).
+      readCache().then((state) => {
+        const shouldInject = selectInjectForTab(tabId)(state);
+        if (shouldInject) {
+          inject(tabId);
+        }
+      });
+    }
+  }
+);
 
 export default {};
