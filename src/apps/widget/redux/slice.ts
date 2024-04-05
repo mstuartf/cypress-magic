@@ -84,6 +84,9 @@ export const recordingSlice = createSlice({
         state.isRunningError = undefined;
       }
     },
+    setIsAddingCommands: (state, action: PayloadAction<boolean>) => {
+      state.isAddingCommands = action.payload;
+    },
     setIsRunningError: (state, action: PayloadAction<{ message: string }>) => {
       state.isRunning = false;
       state.isRunningError = { ...action.payload };
@@ -181,6 +184,7 @@ export const recordingSlice = createSlice({
 export const {
   saveEvent,
   startNewTest,
+  setIsAddingCommands,
   cancelTest,
   setHasRefreshed,
   setIsAddingAssertion,

@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   selectEventIdsSorted,
   selectIsAddingCommands,
@@ -14,8 +14,10 @@ import Tick from "./Tick";
 import Cross from "./Cross";
 import Bordered from "./Bordered";
 import Wand from "./Wand";
+import { setIsAddingCommands } from "../redux/slice";
 
 const EventList = () => {
+  const dispatch = useDispatch();
   const eventIds = useSelector(selectEventIdsSorted);
   const testDescribe = useSelector(selectTestDescribe)!;
   const testShould = useSelector(selectTestShould)!;
@@ -41,26 +43,31 @@ const EventList = () => {
             <Tick />
           )}
           <span className="cyw-ml-2">{testShould}</span>
-          {!isAddingCommands && (
-            <button>
-              <Wand />
-            </button>
-          )}
         </div>
+        {!isAddingCommands && (
+          <button onClick={() => dispatch(setIsAddingCommands(true))}>
+            <Wand />
+          </button>
+        )}
       </Bordered>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
       ))}
-      <Bordered className="cyw-flex cyw-items-center cyw-justify-between cyw-pl-4 cyw-py-2">
-        <button className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline">
-          Cancel
-        </button>
-        <div>
-          <button className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded">
-            Save commands
+      {isAddingCommands && (
+        <Bordered className="cyw-flex cyw-items-center cyw-justify-between cyw-pl-4 cyw-py-2">
+          <button className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline">
+            Cancel
           </button>
-        </div>
-      </Bordered>
+          <div>
+            <button
+              className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded"
+              onClick={() => dispatch(setIsAddingCommands(false))}
+            >
+              Save commands
+            </button>
+          </div>
+        </Bordered>
+      )}
     </div>
   );
 };
