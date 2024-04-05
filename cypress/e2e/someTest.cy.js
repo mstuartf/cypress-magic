@@ -19,5 +19,8 @@ describe("User Login", () => {
     // );
     // cy.reload();
     // cy.get("#username").clear().type("alskdjfh");
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get("#add-param-button").click();
+    /* ==== End Cypress Studio ==== */
   });
 });

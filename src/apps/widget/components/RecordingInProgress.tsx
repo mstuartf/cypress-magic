@@ -1,7 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRecordingInProgress } from "../redux/slice";
-import { selectHasRefreshed, selectTestDescribe } from "../redux/selectors";
+import {
+  selectHasRefreshed,
+  selectTestDescribe,
+  selectTestShould,
+} from "../redux/selectors";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
 import ToggleMocks from "./ToggleMocks";
@@ -15,6 +19,7 @@ const RecordingInProgress = () => {
   const dispatch = useDispatch();
   const hasRefreshed = useSelector(selectHasRefreshed);
   const testDescribe = useSelector(selectTestDescribe)!;
+  const testShould = useSelector(selectTestShould)!;
   const onCancel = () => {
     dispatch(setRecordingInProgress(false));
   };
@@ -62,6 +67,12 @@ const RecordingInProgress = () => {
       </div>
       {hasRefreshed && (
         <>
+          <div className="cyw-text-sm cyw-text-white cyw-ml-4 cyw-mb-2">
+            {testDescribe}
+          </div>
+          <div className="cyw-text-xs cyw-font-light cyw-ml-8 cyw-mb-2">
+            {testShould}
+          </div>
           <EventList />
           <div className="cyw-grid cyw-grid-cols-2 cyw-mt-4 cyw-pt-4 cyw-border-t cyw-border-slate-400">
             <DownloadFixtures />
