@@ -167,7 +167,12 @@ export const recordingSlice = createSlice({
       }
     },
     deleteEvent: (state, action: PayloadAction<string>) => {
-      state.eventIds = [...state.eventIds].filter((id) => id != action.payload);
+      state.eventIds = [...state.eventIds].filter(
+        (id) => id !== action.payload
+      );
+      state.isAddingEventIds = [...state.isAddingEventIds].filter(
+        (id) => id !== action.payload
+      );
       delete state.events[action.payload];
       // todo: delete from aliasTracker?
     },
