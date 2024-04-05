@@ -31,7 +31,7 @@ export interface RequestEvent extends BaseEvent {
   id: string;
   url: string;
   method: string;
-  initiator: "xml" | "fetch";
+  initiator: "XML" | "fetch";
   alias: string;
   fixture?: string;
   status?: number;
