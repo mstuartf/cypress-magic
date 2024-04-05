@@ -9,6 +9,15 @@ import { generateEventId } from "../utils/generateEventId";
 
 // should only record events to matching URLs
 
+interface PatchedXMLHttpRequest extends XMLHttpRequest {
+  __meta: {
+    url: string;
+    method: string;
+    id: string;
+    alias: string;
+  };
+}
+
 export function initXMLHttpRequestObserver({
   saveEvent,
   saveFixture,
@@ -22,22 +31,24 @@ export function initXMLHttpRequestObserver({
     const url = getAbsoluteUrl(arguments[1]);
 
     if (matchUrl(url)) {
-      const instance = this as any;
+      const instance = this as PatchedXMLHttpRequest;
       // cache these so they are available in onreadystatechange
-      instance.__method = arguments[0].toUpperCase();
-      instance.__url = url;
-      instance.__id = generateEventId();
-      instance.__alias = buildAlias({
-        url: instance.__url,
-        method: instance.__method,
-      });
+      instance.__meta = {
+        method: arguments[0].toUpperCase(),
+        id: generateEventId(),
+        url,
+        alias: buildAlias({
+          url,
+          method: arguments[0].toUpperCase(),
+        }),
+      };
       saveEvent({
         type: "request",
         timestamp: Date.now(),
-        id: instance.__id,
-        url: instance.__url,
-        method: instance.__method,
-        alias: instance.__alias,
+        id: instance.__meta.id,
+        url: instance.__meta.url,
+        method: instance.__meta.method,
+        alias: instance.__meta.alias,
         initiator: "xml",
       });
     }
@@ -47,16 +58,13 @@ export function initXMLHttpRequestObserver({
 
   const _send = window.XMLHttpRequest.prototype.send;
   window.XMLHttpRequest.prototype.send = function () {
-    const instance = this as any;
+    const instance = this as PatchedXMLHttpRequest;
     const _onreadystatechange = this.onreadystatechange;
     this.onreadystatechange = function () {
-      const url = instance.__url;
+      const url = instance.__meta.url;
 
       if (this.readyState === 4 && matchUrl(url)) {
-        const requestId = instance.__id;
-        const url = instance.__url;
-        const method = instance.__method;
-        const alias = instance.__alias;
+        const { method, id: requestId, alias } = instance.__meta;
         const status = this.status;
         const event: Omit<ResponseEvent, "body" | "fixture"> = {
           id: generateEventId(),
