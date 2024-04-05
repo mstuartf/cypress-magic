@@ -1,33 +1,26 @@
-describe("User Login", () => {
-  it("alskjd", () => {
+describe("asdf", () => {
+  it("asdg", () => {
     cy.visit(
-      "./demo/index.html?a=asjdhfgas&b=ldkjhladskjhlksajdhfkljashfljdhljasdlkfjahsglkjhaslgkjadlkgjdalkghldfkgh"
+      "./demo/index.html?_ijt=4svtedidmuk5f2opgdoorupnj9&_ij_reload=RELOAD_ON_SAVE"
     );
-    // cy.wait(1000000000);
-    // cy.url().should("include", "cbsadf");
-    // cy.get("#request-results").should("contain", "askldjfh");
-    cy.intercept("GET", "https://swapi.dev/api/people/1", {
-      statusCode: 200,
-      fixture: "someTest/GET___api_people_1_.json",
-    }).as("GET__/api/people/1/");
-    // cy.get("#request-button").click();
-    cy.wait("@GET__/api/people/1/");
-    // cy.url().should("include", "newParam=value");
-    // cy.get("#change-selector-button").should(
-    //   "contain",
-    //   "Change selector button"
-    // );
-    // cy.reload();
-    // cy.get("#username").clear().type("alskdjfh");
-    /* ==== Generated with Cypress Studio ==== */
-    cy.get("#add-param-button").click();
-    /* ==== End Cypress Studio ==== */
-    /* ==== Generated with Cypress Studio ==== */
-    // cy.get('#change-selector-button').click();
-    cy.get('[data-cy="select-this-element"]').should(
-      "have.text",
-      "Select this element"
+    cy.get(
+      "body > div:nth-of-type(1) > div:nth-of-type(9) > form > button"
+    ).should("contain", "Submit");
+    cy.get("body > div:nth-of-type(1) > div:nth-of-type(10) > button").should(
+      "contain",
+      "Change selector button"
     );
-    /* ==== End Cypress Studio ==== */
+    cy.get(
+      "body > div:nth-of-type(1) > div:nth-of-type(9) > form > div:nth-of-type(2) > div:nth-of-type(2) > input"
+    ).check();
+    cy.contains("CSS").click();
+    cy.get(
+      "body > div:nth-of-type(1) > div:nth-of-type(9) > form > div:nth-of-type(2) > div:nth-of-type(3) > input"
+    ).check();
+    cy.get(
+      "body > div:nth-of-type(1) > div:nth-of-type(9) > form > div:nth-of-type(1) > input"
+    )
+      .clear()
+      .type("adfsa");
   });
 });
