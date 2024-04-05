@@ -52,11 +52,13 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
       () =>
         store.getState().recording.isRunning
           ? store.getState().recording.isRunningAliasTracker
-          : store.getState().recording.aliasTracker,
+          : store.getState().recording.isAddingCommands
+          ? store.getState().recording.aliasTracker
+          : {},
       (updated) => {
         if (store.getState().recording.isRunning) {
           store.dispatch(updateIsRunningAliasTracker(updated));
-        } else {
+        } else if (store.getState().recording.isAddingCommands) {
           store.dispatch(updateAliasTracker(updated));
         }
       }
