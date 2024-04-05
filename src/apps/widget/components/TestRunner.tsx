@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectEvent,
   selectIsRunningEventId,
-  selectIsRunningResponses,
   selectIsRunningStepIncrementOnLoad,
   selectMockNetworkRequests,
   selectRunOptions,
@@ -14,13 +13,14 @@ import {
   setIsRunningError,
   updateRunStep,
 } from "../redux/slice";
-import { runEvent, withRetries } from "../runner";
+import { runEvent, timeout, withRetries } from "../runner";
 import {
   isNavigationEvent,
   isPageRefreshEvent,
   isRequestEvent,
   isResponseEvent,
 } from "../utils";
+import { store } from "../redux/store";
 
 const TestRunner = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,6 @@ const TestRunner = () => {
   const isRunningEventId = useSelector(selectIsRunningEventId)!;
   const event = useSelector(selectEvent(isRunningEventId));
   const runOptions = useSelector(selectRunOptions);
-  const responses = useSelector(selectIsRunningResponses);
   const isMocked = useSelector(selectMockNetworkRequests);
 
   useEffect(() => {
@@ -41,13 +40,21 @@ const TestRunner = () => {
     if (incrementOnLoad) {
       return;
     }
-    if (
-      !isMocked &&
-      !!event &&
-      isResponseEvent(event) &&
-      !responses.find(({ alias }) => alias === event.alias)
-    ) {
-      console.log(`Waiting for the network response for ${event.alias}...`);
+    if (!isMocked && !!event && isResponseEvent(event)) {
+      withRetries(() => {
+        const responses = store.getState().recording.isRunningReturnedResponses;
+        if (!responses.find(({ alias }) => alias === event.alias)) {
+          throw Error(
+            `Timed out retrying after ${timeout}ms: cy.wait() timed out waiting ${timeout}ms for the 1st request to the route: ${event.alias}. No request ever occurred.`
+          );
+        }
+      })
+        .then(() => dispatch(updateRunStep()))
+        .catch((e: any) =>
+          dispatch(
+            setIsRunningError({ message: e.message, title: "CypressError" })
+          )
+        );
       return;
     }
     if (isRunningEventId) {
@@ -58,7 +65,12 @@ const TestRunner = () => {
           withRetries(() => runEvent(event, runOptions))
             .then(() => {})
             .catch((e: any) =>
-              dispatch(setIsRunningError({ message: e.message }))
+              dispatch(
+                setIsRunningError({
+                  message: e.message,
+                  title: "AssertionError",
+                })
+              )
             );
         } else {
           withRetries(() => runEvent(event, runOptions))
@@ -66,14 +78,19 @@ const TestRunner = () => {
               dispatch(updateRunStep());
             })
             .catch((e: any) => {
-              dispatch(setIsRunningError({ message: e.message }));
+              dispatch(
+                setIsRunningError({
+                  message: e.message,
+                  title: "AssertionError",
+                })
+              );
             });
         }
       }, timeout);
     } else {
       dispatch(setIsRunning(false));
     }
-  }, [event, incrementOnLoad, responses]);
+  }, [event, incrementOnLoad]);
 
   return null;
 };

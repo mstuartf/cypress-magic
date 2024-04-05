@@ -41,7 +41,7 @@ const Event = ({ id }: { id: string }) => {
       <div className="cyw-text-xs cyw-flex-grow">
         <EventSteps event={event} />
         {runError && isRunningEventId === event.id && (
-          <AssertionError message={runError.message} />
+          <AssertionError {...runError} />
         )}
         <TriggeredRequests id={event.id} />
       </div>
