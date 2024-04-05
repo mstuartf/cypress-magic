@@ -59,7 +59,7 @@ const Setup = () => {
       <TextAreaRow
         value={beforeEach}
         placeholder="e.g. authentication logic"
-        info="Any code here will be executed in a beforeEach hook."
+        info="Any code here will be put in a beforeEach hook."
         setValue={setBeforeEach}
         label="Before Each"
       />
