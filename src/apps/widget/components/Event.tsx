@@ -1,5 +1,4 @@
-import { ReactComponent as Trash } from "../../../zondicons/trash.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
@@ -7,15 +6,14 @@ import {
   selectIsRunningEventId,
   selectRunError,
 } from "../redux/selectors";
-import { deleteEvent } from "../redux/slice";
 import React from "react";
 import EventSteps from "./EventSteps";
 import AssertionError from "./AssertionError";
 import TriggeredRequests from "./TriggeredRequests";
 import Bordered from "./Bordered";
+import DeleteEvent from "./DeleteEvent";
 
 const Event = ({ id }: { id: string }) => {
-  const dispatch = useDispatch();
   const event = useSelector(selectEvent(id));
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
@@ -46,12 +44,7 @@ const Event = ({ id }: { id: string }) => {
         <TriggeredRequests id={event.id} />
       </div>
       <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-absolute cyw-left-0 cyw-p-2">
-        <button
-          className="cyw-h-4 cyw-w-4 cyw-text-white"
-          onClick={() => dispatch(deleteEvent(id))}
-        >
-          <Trash fill="#94a3b8" width={12} />
-        </button>
+        <DeleteEvent id={id} />
       </div>
     </Bordered>
   );
