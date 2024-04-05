@@ -68,6 +68,9 @@ export const selectRunError = ({
 export const selectIsAddingCommands = ({
   recording: { isAddingCommands },
 }: WidgetRootState) => isAddingCommands;
+export const selectIsAddingEventIds = ({
+  recording: { isAddingEventIds },
+}: WidgetRootState) => isAddingEventIds;
 export const selectCanCancelAddingCommands = ({
   recording: { eventIds, isAddingEventIds },
 }: WidgetRootState) => eventIds.length > isAddingEventIds.length;
