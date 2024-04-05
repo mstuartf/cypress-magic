@@ -1,5 +1,5 @@
 import { InitArgs, RequestEvent, ResponseEvent, SaveFixture } from "../types";
-import { AliasBuilder, buildRequestAlias } from "../utils/aliases";
+import { AliasBuilder } from "../utils/aliases";
 import {
   aliasToFileName,
   getBlobFileExtension,
@@ -97,7 +97,7 @@ export function initFetchObserver({
     }
 
     if (mockApiCalls()) {
-      const alias = buildRequestAlias({
+      const alias = buildAlias({
         url,
         method: init?.method || "GET",
       });
