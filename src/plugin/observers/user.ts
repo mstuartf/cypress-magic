@@ -94,6 +94,9 @@ function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   if (!event.isTrusted) {
     return;
   }
+  if (isClickOnChangeElement(event)) {
+    return;
+  }
   try {
     Promise.resolve(parseEvent(event, { ...rest }))
       .then((res) => {
@@ -108,6 +111,26 @@ function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
     saveEvent(createErrorEvent(event.type, e as any));
   }
 }
+
+const isClickOnChangeElement = (event: Event) => {
+  if (event.type !== "click") {
+    return false;
+  }
+  const element = (event as MouseEvent).target;
+  if (!(element instanceof Element) || !isHTMLElement(element)) {
+    return false;
+  }
+  if (element.tagName.toUpperCase() === "SELECT") {
+    return true;
+  }
+  if (
+    element.tagName.toUpperCase() === "INPUT" &&
+    ["checkbox", "radio"].includes((element as HTMLInputElement).type)
+  ) {
+    return true;
+  }
+  return false;
+};
 
 function addDOMListeners(args: InitArgs) {
   const listener: EventListener = (event) => handleEvent(event, args);
