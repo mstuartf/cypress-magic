@@ -11,6 +11,7 @@ import Event from "./Event";
 import Spin from "./Spin";
 import Tick from "./Tick";
 import Cross from "./Cross";
+import Bordered from "./Bordered";
 
 const EventList = () => {
   const eventIds = useSelector(selectEventIdsSorted);
@@ -20,29 +21,18 @@ const EventList = () => {
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
 
-  let borderClass: string;
-  if (isRunning) {
-    borderClass = "cyw-border-gray-900";
-  } else if (runError) {
-    borderClass = "cyw-border-red-300";
-  } else if (false) {
-    borderClass = "cyw-border-purple-500";
-  } else {
-    borderClass = "cyw-border-emerald-500";
-  }
-
   return (
     <div
       ref={ref}
-      className={`cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900 cyw-border-l-4 ${borderClass}`}
+      className={`cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900`}
     >
-      <div className="cyw-text-sm cyw-text-white cyw-ml-4 cyw-mb-2 cyw-mt-1">
+      <Bordered className="cyw-text-sm cyw-text-white cyw-pl-4 cyw-pb-2 cyw-pt-1">
         {testDescribe}
-      </div>
-      <div className="cyw-text-xs cyw-font-light cyw-ml-8 cyw-mb-2 cyw-flex cyw-items-center">
+      </Bordered>
+      <Bordered className="cyw-text-xs cyw-font-light cyw-pl-8 cyw-pb-2 cyw-flex cyw-items-center">
         {isRunning ? <Spin /> : runError ? <Cross /> : <Tick />}
         <span className="cyw-ml-2">{testShould}</span>
-      </div>
+      </Bordered>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
       ))}
