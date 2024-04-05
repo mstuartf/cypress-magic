@@ -1,4 +1,4 @@
-export const Spin = () => (
+const Spin = () => (
   <svg
     width="16"
     height="16"
