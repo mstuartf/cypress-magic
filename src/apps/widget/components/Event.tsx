@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
+  selectIsAddingCommands,
+  selectIsAddingEventIds,
   selectIsRunning,
   selectIsRunningEventId,
   selectRunError,
@@ -23,6 +25,8 @@ const Event = ({ id }: { id: string }) => {
     0,
     isRunningEventId ? eventIds.indexOf(isRunningEventId) + 1 : 0
   );
+  const isAddingCommands = useSelector(selectIsAddingCommands);
+  const isAddingEventIds = useSelector(selectIsAddingEventIds);
 
   if (
     (isRunning || runError) &&
@@ -44,7 +48,9 @@ const Event = ({ id }: { id: string }) => {
         <TriggeredRequests id={event.id} />
       </div>
       <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-absolute cyw-left-0 cyw-p-2">
-        <DeleteEvent id={id} />
+        {isAddingCommands && isAddingEventIds.includes(id) && (
+          <DeleteEvent id={id} />
+        )}
       </div>
     </Bordered>
   );
