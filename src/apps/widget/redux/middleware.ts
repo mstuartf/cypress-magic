@@ -176,9 +176,8 @@ export const testIsRunningMiddleware: WidgetMiddleware =
 
 export const isAddingCommandsMiddleware: WidgetMiddleware =
   (store) => (next) => (action) => {
-    // don't start saving events until the user has setup and started
     if (
-      action.type === saveEvent.type &&
+      (action.type === saveEvent.type || action.type === saveFixture.type) &&
       !store.getState().recording.isAddingCommands
     ) {
       return;
