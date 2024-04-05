@@ -25,7 +25,7 @@ const TriggeredRequests = ({ id }: { id: string }) => {
   return (
     <div className="">
       <button
-        className="cyw-ml-8 cyw-uppercase cyw-flex cyw-items-center cyw-mb-2 cyw-text-xs"
+        className="cyw-ml-8 cyw-uppercase cyw-flex cyw-items-center cyw-mb-2 cyw-text-xs cyw-font-light"
         onClick={() => setIsOpen(!isOpen)}
       >
         <svg
