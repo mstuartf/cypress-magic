@@ -65,3 +65,6 @@ export const selectMockedResponse =
 export const selectRunError = ({
   recording: { isRunningError },
 }: WidgetRootState) => isRunningError;
+export const selectIsAddingCommands = ({
+  recording: { isAddingCommands },
+}: WidgetRootState) => isAddingCommands;

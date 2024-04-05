@@ -1,6 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectIsRunning, selectRunError } from "../redux/selectors";
+import {
+  selectIsAddingCommands,
+  selectIsRunning,
+  selectRunError,
+} from "../redux/selectors";
 
 const Bordered = ({
   children,
@@ -11,13 +15,14 @@ const Bordered = ({
 }) => {
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
+  const isAddingCommands = useSelector(selectIsAddingCommands);
 
   let borderClass: string;
   if (isRunning) {
     borderClass = "cyw-border-gray-900";
   } else if (runError) {
     borderClass = "cyw-border-red-300";
-  } else if (false) {
+  } else if (isAddingCommands) {
     borderClass = "cyw-border-purple-500";
   } else {
     borderClass = "cyw-border-emerald-500";

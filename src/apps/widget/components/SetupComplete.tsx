@@ -1,11 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setRecordingInProgress } from "../redux/slice";
-import {
-  selectHasRefreshed,
-  selectTestDescribe,
-  selectTestShould,
-} from "../redux/selectors";
+import { cancelTest } from "../redux/slice";
+import { selectHasRefreshed, selectTestDescribe } from "../redux/selectors";
 import AddAssertion from "./AddAssertion";
 import EventList from "./EventList";
 import ToggleMocks from "./ToggleMocks";
@@ -20,9 +16,7 @@ const SetupComplete = () => {
   const dispatch = useDispatch();
   const hasRefreshed = useSelector(selectHasRefreshed);
   const testDescribe = useSelector(selectTestDescribe)!;
-  const onCancel = () => {
-    dispatch(setRecordingInProgress(false));
-  };
+  const onCancel = () => dispatch(cancelTest());
   return (
     <div className="cyw-h-full cyw-flex cyw-flex-col">
       <div className="cyw-mb-4 cyw-border-b cyw-border-slate-400 cyw-pb-4">

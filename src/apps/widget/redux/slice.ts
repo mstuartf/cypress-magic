@@ -33,6 +33,7 @@ interface State {
   testDescribe?: string;
   testShould?: string;
   aliasTracker: AliasTracker;
+  isAddingCommands: boolean;
 }
 
 const initialState: State = {
@@ -51,14 +52,16 @@ const initialState: State = {
   isRunningAliasTracker: {},
   isRunningReturnedResponses: [],
   isRunningError: undefined,
+  isAddingCommands: false,
 };
 
 export const recordingSlice = createSlice({
   name: "recording",
   initialState: readCache<State>("recording") || initialState,
   reducers: {
-    setRecordingInProgress: (state, action: PayloadAction<boolean>) => {
-      state.setupComplete = action.payload;
+    startNewTest: (state) => {
+      state.setupComplete = true;
+      state.isAddingCommands = true;
       state.eventIds = [];
       state.events = {};
       state.fixtures = {};
@@ -68,6 +71,9 @@ export const recordingSlice = createSlice({
       state.isRunningAliasTracker = {};
       state.isRunningReturnedResponses = [];
       state.isRunningError = undefined;
+    },
+    cancelTest: (state) => {
+      state.setupComplete = false;
     },
     setIsRunning: (state, action: PayloadAction<boolean>) => {
       state.isRunning = action.payload;
@@ -174,7 +180,8 @@ export const recordingSlice = createSlice({
 
 export const {
   saveEvent,
-  setRecordingInProgress,
+  startNewTest,
+  cancelTest,
   setHasRefreshed,
   setIsAddingAssertion,
   deleteEvent,
