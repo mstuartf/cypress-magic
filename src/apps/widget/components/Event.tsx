@@ -36,7 +36,7 @@ const Event = ({ id }: { id: string }) => {
   return (
     <Bordered
       key={event.timestamp}
-      className="cyw-text-wrap cyw-break-all cyw-flex cyw-group cyw-relative"
+      className="cyw-text-wrap cyw-break-all cyw-flex cyw-group cyw-relative cyw-bg-gray-900"
     >
       <div className="cyw-text-xs cyw-flex-grow">
         <EventSteps event={event} />

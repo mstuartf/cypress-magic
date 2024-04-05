@@ -25,27 +25,42 @@ const EventList = () => {
   const isAddingCommands = useSelector(selectIsAddingCommands);
 
   return (
-    <div
-      ref={ref}
-      className={`cyw-flex-grow cyw-overflow-scroll cyw-bg-gray-900`}
-    >
+    <div ref={ref} className={`cyw-flex-grow cyw-overflow-scroll`}>
       <Bordered className="cyw-text-sm cyw-text-white cyw-pl-4 cyw-pb-2 cyw-pt-1">
         {testDescribe}
       </Bordered>
       <Bordered className="cyw-text-xs cyw-font-light cyw-pl-8 cyw-pb-2 cyw-flex cyw-items-center cyw-justify-between">
         <div className="cyw-flex cyw-items-center">
-          {isRunning ? <Spin /> : runError ? <Cross /> : <Tick />}
+          {isRunning ? (
+            <Spin />
+          ) : runError ? (
+            <Cross />
+          ) : isAddingCommands ? (
+            <Wand />
+          ) : (
+            <Tick />
+          )}
+          <span className="cyw-ml-2">{testShould}</span>
           {!isAddingCommands && (
             <button>
-              <span className="cyw-ml-2">{testShould}</span>
+              <Wand />
             </button>
           )}
         </div>
-        <Wand />
       </Bordered>
       {eventIds.map((id) => (
         <Event id={id} key={id} />
       ))}
+      <Bordered className="cyw-flex cyw-items-center cyw-justify-between cyw-pl-4 cyw-py-2">
+        <button className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline">
+          Cancel
+        </button>
+        <div>
+          <button className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded">
+            Save commands
+          </button>
+        </div>
+      </Bordered>
     </div>
   );
 };
