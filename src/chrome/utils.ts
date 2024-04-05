@@ -1,29 +1,57 @@
-import { RootState } from "../redux/store";
-import { getInitialUserState } from "../redux/slice";
+import { PopupState } from "../apps/popup/redux/store";
+import { BaseState, initialBaseState } from "../apps/popup/redux/slice";
 
-export const getActiveTabId = async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab.id!;
+const cacheKey = "__seasmoke__";
+const defaultState = { base: { ...initialBaseState } };
+
+export const readCache = async (): Promise<PopupState> => {
+  return chrome.storage.local
+    .get(cacheKey)
+    .then((v) => v[cacheKey])
+    .then((v) => (!!v && isPopupState(v) ? v : defaultState));
 };
 
-export const sendMsgToContent = async (msg: any) => {
-  const tabId = await getActiveTabId();
-  await chrome.tabs.sendMessage(tabId, msg);
-};
-
-export const readCache = async (
-  callback: (value: RootState) => void
-): Promise<void> =>
-  chrome.storage.local.get("seasmoke", ({ seasmoke }) =>
-    callback(seasmoke || { user: getInitialUserState() })
-  );
-
-export const updateCache = async (state: object) =>
+export const updateCache = async (state: PopupState) =>
   chrome.storage.local.set({
-    seasmoke: { ...state },
+    [cacheKey]: state,
   });
 
-export const setBadgeText = async (text: "ON" | "OFF") =>
-  chrome.action.setBadgeText({
-    text,
+export const inject = (tabId: number) =>
+  chrome.scripting.executeScript({
+    target: { tabId },
+    files: ["static/js/content.js"],
+    world: "MAIN",
   });
+
+export const isPopupState = (
+  value: object | PopupState
+): value is PopupState => {
+  const possible = value as PopupState;
+  return possible.base !== undefined && isBaseStateObject(possible.base);
+};
+
+export const isBaseStateObject = (
+  value: object | BaseState
+): value is BaseState => {
+  const possible = value as BaseState;
+  return (
+    possible.injectOnTabs !== undefined && possible.cacheLoaded !== undefined
+  );
+};
+
+export const activeTabNeedsRefresh = (
+  oldState: BaseState,
+  newState: BaseState
+) => {
+  if (
+    oldState.activeTabId !== newState.activeTabId ||
+    !oldState.activeTabId ||
+    !newState.activeTabId
+  ) {
+    return false;
+  }
+  if (!oldState.injectOnTabs.includes(oldState.activeTabId)) {
+    return false;
+  }
+  return !newState.injectOnTabs.includes(newState.activeTabId);
+};

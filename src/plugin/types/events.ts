@@ -1,26 +1,41 @@
 export interface BaseEvent {
   type: string;
   timestamp: number;
+  id: string;
 }
 
-export interface NavigationEvent extends BaseEvent {
+export interface NavigationEvent extends HistoryEvent {}
+
+export interface HistoryEvent extends BaseEvent {
   hostname: string;
   protocol: string;
   pathname: string;
+  search: string;
+  port: string;
 }
 
-export interface PerformanceResourceEvent extends BaseEvent {
-  resources: {
-    name: PerformanceResourceTiming["name"];
-    initiatorType: PerformanceResourceTiming["initiatorType"];
-  }[];
+export interface UrlChangeEvent extends HistoryEvent {
+  urlDiff: string;
 }
+
+export interface QueryParamChangeEvent extends HistoryEvent {
+  param: string;
+  added?: string;
+  removed?: string;
+  changed?: string;
+}
+
+export interface PageRefreshEvent extends NavigationEvent {}
 
 export interface RequestEvent extends BaseEvent {
   id: string;
   url: string;
   method: string;
-  initiator: "xml" | "fetch";
+  initiator: "XML" | "fetch";
+  alias: string;
+  fixture?: string;
+  status?: number;
+  triggerId?: string;
 }
 
 export interface ResponseEvent extends BaseEvent {
@@ -28,6 +43,7 @@ export interface ResponseEvent extends BaseEvent {
   url: string;
   method: string;
   status: number;
+  statusText: string;
   alias: string;
   fixture: string | null;
 }
@@ -47,6 +63,9 @@ export interface Target {
   isHidden: boolean;
   type: string | null;
   domPath: DomPathNode[];
+  innerText?: string;
+  value?: string;
+  placeholder?: string;
 }
 
 export interface TargetEvent {
@@ -54,34 +73,24 @@ export interface TargetEvent {
   pathname: string;
 }
 
-export interface DragDropEvent extends BaseEvent, TargetEvent {
-  destination: {
-    clientX: number;
-    clientY: number;
-  };
-}
-
 export interface ChangeEvent extends BaseEvent, TargetEvent {
   value: any;
 }
 
-export interface UploadEvent extends BaseEvent, TargetEvent {
-  mimeType: string;
-  fileName: string;
-}
-
 export interface ClickEvent extends BaseEvent, TargetEvent {
-  offsetX: number;
-  offsetY: number;
+  clientX: number;
+  clientY: number;
   href?: string;
 }
+
+export interface DblClickEvent extends ClickEvent {}
+
+export interface AssertionEvent extends ClickEvent {}
 
 export interface ErrorEvent extends BaseEvent {
   handler: string;
   message: string;
 }
-
-export interface SubmitEvent extends BaseEvent, TargetEvent {}
 
 export interface ViewEvent extends BaseEvent {
   width: number;
@@ -92,34 +101,18 @@ export interface ViewEvent extends BaseEvent {
   isLandscape: boolean;
 }
 
-export type UserEvent =
-  | ChangeEvent
-  | ClickEvent
-  | SubmitEvent
-  | DragDropEvent
-  | UploadEvent;
-
-export type StorageType = "local" | "session" | "cookie";
-
-export interface StorageEvent extends BaseEvent {
-  fixture: string;
-  storageType: StorageType;
-}
+export type UserEvent = ChangeEvent | ClickEvent | DblClickEvent;
 
 export type ParsedEvent =
   | UserEvent
-  | NavigationEvent
+  | HistoryEvent
   | RequestEvent
   | ResponseEvent
   | ViewEvent
-  | StorageEvent
-  | PerformanceResourceEvent
   | ErrorEvent;
 
 export enum EventType {
   CLICK = "click",
   CHANGE = "change",
   DBLCLICK = "dblclick",
-  SUBMIT = "submit",
-  DRAGEND = "dragend",
 }

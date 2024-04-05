@@ -1,30 +1,31 @@
-// Listens for user events (e.g. click, scroll, etc)
+// Listens for user events (e.g. click, change, etc)
 
 import {
   BaseEvent,
   ChangeEvent,
   ClickEvent,
-  DragDropEvent,
   EventType,
   InitArgs,
-  OnCloseCallback,
-  SaveFixture,
-  SubmitEvent,
   TargetEvent,
-  UploadEvent,
   UserEvent,
 } from "../types";
 import { finder } from "@medv/finder";
 import { isHidden } from "../utils/isHidden";
 import { getDomPath } from "../utils/getDomPath";
 import { createErrorEvent } from "../utils/createErrorEvent";
+import { generateEventId } from "../utils/generateEventId";
+import {
+  isHTMLElement,
+  isElement,
+} from "../../apps/widget/hooks/useNewFixedElementAdded";
 
 const getBaseProps = (event: Event): BaseEvent => ({
+  id: generateEventId(),
   type: event.type,
   timestamp: Date.now(),
 });
 
-const getTargetProps = (target: HTMLElement): TargetEvent => ({
+export const getTargetProps = (target: HTMLElement): TargetEvent => ({
   pathname: window.location.pathname,
   target: {
     selectors: [[finder(target)]],
@@ -35,14 +36,36 @@ const getTargetProps = (target: HTMLElement): TargetEvent => ({
         ? (target as HTMLInputElement).type
         : null,
     domPath: getDomPath(target),
+    innerText: target.childElementCount === 0 ? target.innerText : undefined,
+    value: (target as HTMLInputElement).value || undefined,
+    placeholder: (target as HTMLInputElement).placeholder || undefined,
   },
 });
 
+const getFirstHTMLElement = (element: Element): HTMLElement => {
+  if (isHTMLElement(element)) {
+    return element;
+  } else if (element.parentElement) {
+    return getFirstHTMLElement(element.parentElement);
+  }
+  throw Error("no parent html element found");
+};
+
+// you can't programmatically click on non-html elements like SVGs, so find the
+// first html element parent here
+const getTargetHTMLElement = (target: EventTarget | null): HTMLElement => {
+  if (target instanceof Element) {
+    return getFirstHTMLElement(target);
+  } else {
+    throw Error("can't parse non-elements");
+  }
+};
+
 const parseClickEvent = (event: MouseEvent): ClickEvent => ({
   ...getBaseProps(event),
-  ...getTargetProps(event.target as HTMLElement),
-  offsetX: event.pageX,
-  offsetY: event.pageY,
+  ...getTargetProps(getTargetHTMLElement(event.target)),
+  clientX: event.x,
+  clientY: event.y,
   href: (event.target as HTMLAnchorElement).href,
 });
 
@@ -55,60 +78,14 @@ const parseChangeEvent = (event: Event): ChangeEvent => {
   };
 };
 
-const parseUploadEvent = (
-  event: Event,
-  saveFixture: SaveFixture
-): UploadEvent => {
-  const file = (event.target! as HTMLInputElement)!.files![0];
-  // todo: blobify
-  saveFixture(file.name, file);
-  return {
-    type: "fileUpload",
-    timestamp: Date.now(),
-    ...getTargetProps(event.target as HTMLElement),
-    mimeType: file.type,
-    fileName: file.name,
-  };
-};
-
-const parseSubmitEvent = (event: Event): SubmitEvent => ({
-  ...getBaseProps(event),
-  ...getTargetProps(event.target as HTMLElement),
-});
-
-const isUploadEvent = (target: Event["target"]): target is HTMLInputElement => {
-  return (
-    !!target &&
-    target instanceof HTMLInputElement &&
-    target.type === "file" &&
-    !!target.files![0]
-  );
-};
-
-const parseDragDropEvent = (event: MouseEvent): DragDropEvent => ({
-  ...getBaseProps(event),
-  ...getTargetProps(event.target as HTMLElement),
-  destination: {
-    clientX: event.clientX,
-    clientY: event.clientY,
-  },
-  type: "dragDrop",
-});
-
 const parseEvent = (
   event: Event,
   { saveFixture }: Omit<InitArgs, "saveEvent">
 ): UserEvent | Promise<UserEvent> | undefined => {
   if (event.type === "click" || event.type === "dblclick") {
     return parseClickEvent(event as MouseEvent);
-  } else if (event.type === "change" && isUploadEvent(event.target)) {
-    return parseUploadEvent(event, saveFixture);
   } else if (event.type === "change") {
     return parseChangeEvent(event);
-  } else if (event.type === "submit") {
-    return parseSubmitEvent(event);
-  } else if (event.type === "dragend") {
-    return parseDragDropEvent(event as MouseEvent);
   }
 };
 
@@ -131,7 +108,7 @@ function handleEvent(event: Event, { saveEvent, ...rest }: InitArgs): void {
   }
 }
 
-function addDOMListeners(args: InitArgs): OnCloseCallback {
+function addDOMListeners(args: InitArgs) {
   const listener: EventListener = (event) => handleEvent(event, args);
   Object.values(EventType).forEach((event) => {
     document.addEventListener(event, listener, {
@@ -146,13 +123,6 @@ function addDOMListeners(args: InitArgs): OnCloseCallback {
   };
 }
 
-export function initUserObserver({
-  registerOnCloseCallback,
-  ...rest
-}: InitArgs): void {
-  const removeDOMListeners = addDOMListeners({
-    registerOnCloseCallback,
-    ...rest,
-  });
-  registerOnCloseCallback(removeDOMListeners);
+export function initUserObserver(args: InitArgs): void {
+  addDOMListeners(args);
 }
