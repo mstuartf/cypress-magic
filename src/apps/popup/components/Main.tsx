@@ -15,6 +15,7 @@ const Main = () => {
     } else {
       dispatch(activateForTab(activeTabId));
     }
+    window.close();
   };
   return (
     <div className="cyw-flex cyw-flex-col">
