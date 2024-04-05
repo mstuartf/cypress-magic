@@ -48,7 +48,7 @@ const initialState: State = {
   hasRefreshed: false,
   baseUrl: undefined,
   isAddingAssertion: false,
-  mockNetworkRequests: false,
+  mockNetworkRequests: true,
   fixtures: {},
   aliasTracker: {},
   isRunningAliasTracker: {},
