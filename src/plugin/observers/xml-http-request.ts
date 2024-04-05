@@ -8,7 +8,6 @@ import {
 } from "../utils/pickleBlob";
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 import { generateEventId } from "../utils/generateEventId";
-import { buildRequestAlias } from "../utils/aliases";
 
 // should only record events to matching URLs
 // should not make network calls when running test in mock mode

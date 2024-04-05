@@ -9,7 +9,7 @@ export interface AliasTracker {
   [rawAlias: string]: number;
 }
 
-export const buildRequestAlias = ({ url, method }: RequestAliasArgs): string =>
+const buildRequestAlias = ({ url, method }: RequestAliasArgs): string =>
   `${method}__${new URL(url).pathname.replace(/\/?$/, "/")}`;
 
 export const buildAliasTracker = (
