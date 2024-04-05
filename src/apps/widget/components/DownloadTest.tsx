@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {
+  selectBeforeEach,
   selectEventsSorted,
-  selectMockNetworkRequests,
   selectParseOptions,
   selectTestDescribe,
   selectTestShould,
@@ -14,8 +14,10 @@ import FileIcon from "./FileIcon";
 const template = (
   describe: string,
   should: string,
+  beforeEach: string | undefined,
   steps: string[]
 ) => `describe('${describe}', () => {
+  ${!!beforeEach ? `beforeEach(() => {\n    ${beforeEach}\n  });` : ""}
   it('${should}', () => {\n${steps
   .map((text) => `    ${text}`)
   .join("\n")}\n  });
@@ -26,10 +28,11 @@ const DownloadTest = () => {
   const events = useSelector(selectEventsSorted);
   const testDescribe = useSelector(selectTestDescribe)!;
   const testShould = useSelector(selectTestShould)!;
+  const beforeEach = useSelector(selectBeforeEach);
 
   const download = () => {
     const steps = events.map((event) => parse(event, parseOptions));
-    const content = template(testDescribe, testShould, steps);
+    const content = template(testDescribe, testShould, beforeEach, steps);
     const blob = new Blob([content], { type: "text/javascript" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
