@@ -1,10 +1,16 @@
 import React from "react";
 
-const AssertionError = ({ message }: { message: string }) => (
+const AssertionError = ({
+  message,
+  title,
+}: {
+  message: string;
+  title: string;
+}) => (
   <div>
     <div className="cyw-flex cyw-items-start cyw-p-2 cyw-bg-zinc-800 cyw-text-red-300">
       <div className="cyw-break-keep cyw-mr-4 cyw-ml-6 cyw-text-xs">!</div>
-      <div className="cyw-break-all cyw-font-semibold">AssertionError</div>
+      <div className="cyw-break-all cyw-font-semibold">{title}</div>
     </div>
     <div
       style={{ wordBreak: "break-word" }}
