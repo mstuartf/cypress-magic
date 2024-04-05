@@ -1,7 +1,7 @@
 import { PopupState } from "../apps/popup/redux/store";
 import { BaseState, initialBaseState } from "../apps/popup/redux/slice";
 
-const cacheKey = "__seasmoke__";
+const cacheKey = "__cypressMagic__";
 const defaultState = { base: { ...initialBaseState } };
 
 export const readCache = async (): Promise<PopupState> => {

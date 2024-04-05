@@ -23,13 +23,13 @@ import {
 import { isResponseEvent } from "./apps/widget/utils";
 
 interface W extends Window {
-  seasmokeHasLoaded?: boolean;
+  cypressMagicHasLoaded?: boolean;
 }
 
 const getHasLoaded = (): boolean =>
-  (window as any as W).seasmokeHasLoaded || false;
+  (window as any as W).cypressMagicHasLoaded || false;
 const setHasLoaded = (value: boolean) =>
-  ((window as any as W).seasmokeHasLoaded = value);
+  ((window as any as W).cypressMagicHasLoaded = value);
 
 // content script runs in the main process and in the extension popup, so need this check here
 // because we only want to render the app in the main process
