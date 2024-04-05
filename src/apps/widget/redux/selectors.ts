@@ -71,3 +71,6 @@ export const selectIsAddingCommands = ({
 export const selectCanCancelAddingCommands = ({
   recording: { eventIds, isAddingEventIds },
 }: WidgetRootState) => eventIds.length > isAddingEventIds.length;
+export const selectBeforeEach = ({
+  recording: { testBeforeEach },
+}: WidgetRootState) => testBeforeEach;
