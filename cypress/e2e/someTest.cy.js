@@ -22,5 +22,12 @@ describe("User Login", () => {
     /* ==== Generated with Cypress Studio ==== */
     cy.get("#add-param-button").click();
     /* ==== End Cypress Studio ==== */
+    /* ==== Generated with Cypress Studio ==== */
+    // cy.get('#change-selector-button').click();
+    cy.get('[data-cy="select-this-element"]').should(
+      "have.text",
+      "Select this element"
+    );
+    /* ==== End Cypress Studio ==== */
   });
 });
