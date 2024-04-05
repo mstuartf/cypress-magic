@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
+  selectCanCancelAddingCommands,
   selectEventIdsSorted,
   selectIsAddingCommands,
   selectIsRunning,
@@ -31,6 +32,7 @@ const EventList = () => {
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
   const isAddingCommands = useSelector(selectIsAddingCommands);
+  const canCancelAddingCommands = useSelector(selectCanCancelAddingCommands);
 
   return (
     <div ref={ref} className={`cyw-flex-grow cyw-overflow-scroll`}>
@@ -69,16 +71,20 @@ const EventList = () => {
       ))}
       {!isRunning && isAddingCommands && (
         <Bordered className="cyw-flex cyw-items-center cyw-justify-between cyw-pl-4 cyw-py-2">
-          <button
-            className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline"
-            onClick={() => {
-              dispatch(removeAddedCommands());
-              dispatch(setIsAddingCommands(false));
-              dispatch(setIsRunning(true));
-            }}
-          >
-            Cancel
-          </button>
+          <div>
+            {canCancelAddingCommands && (
+              <button
+                className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline"
+                onClick={() => {
+                  dispatch(removeAddedCommands());
+                  dispatch(setIsAddingCommands(false));
+                  dispatch(setIsRunning(true));
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
           {!runError && (
             <div className="cyw-flex cyw-items-center cyw-gap-2">
               <AddAssertion />
