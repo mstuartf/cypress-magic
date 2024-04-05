@@ -46,7 +46,7 @@ const EventList = () => {
           )}
           <span className="cyw-ml-2">{testShould}</span>
         </div>
-        {!isAddingCommands && (
+        {!isAddingCommands && !isRunning && (
           <div className="cyw-flex cyw-items-center cyw-gap-2">
             <RunTest />
             <button
@@ -65,21 +65,29 @@ const EventList = () => {
       ))}
       {!isRunning && isAddingCommands && (
         <Bordered className="cyw-flex cyw-items-center cyw-justify-between cyw-pl-4 cyw-py-2">
-          <button className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline">
+          <button
+            className="cyw-text-white cyw-text-xs cyw-font-light hover:cyw-underline"
+            onClick={() => {
+              dispatch(setIsAddingCommands(false));
+              dispatch(setIsRunning(true));
+            }}
+          >
             Cancel
           </button>
-          <div className="cyw-flex cyw-items-center cyw-gap-2">
-            <AddAssertion />
-            <button
-              className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded"
-              onClick={() => {
-                dispatch(setIsAddingCommands(false));
-                dispatch(setIsRunning(true));
-              }}
-            >
-              Save commands
-            </button>
-          </div>
+          {!runError && (
+            <div className="cyw-flex cyw-items-center cyw-gap-2">
+              <AddAssertion />
+              <button
+                className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded"
+                onClick={() => {
+                  dispatch(setIsAddingCommands(false));
+                  dispatch(setIsRunning(true));
+                }}
+              >
+                Save commands
+              </button>
+            </div>
+          )}
         </Bordered>
       )}
     </div>

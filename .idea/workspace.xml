@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/e2e/someTest.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/someTest.cy.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/widget/components/EventList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/EventList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/RunTest.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/RunTest.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/SetupComplete.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/SetupComplete.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/TestRunner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/TestRunner.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +58,7 @@
       <workItem from="1711628216648" duration="1506000" />
       <workItem from="1712090282461" duration="2586000" />
       <workItem from="1712254816206" duration="173000" />
-      <workItem from="1712302759841" duration="16992000" />
+      <workItem from="1712302759841" duration="17394000" />
     </task>
     <servers />
   </component>
