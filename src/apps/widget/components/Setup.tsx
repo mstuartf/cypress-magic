@@ -53,7 +53,7 @@ const Setup = () => {
       />
       <button
         onClick={startRecording}
-        className={`cyw-text-xs cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded ${
+        className={`cyw-text-xs cyw-font-bold cyw-py-2 cyw-px-4 cyw-rounded cyw-mb-6 ${
           !disabled
             ? "cyw-bg-emerald-300 hover:cyw-bg-bg-emerald-400 cyw-text-gray-900"
             : "cyw-bg-gray-100 cyw-text-gray-500 cyw-border-gray-500 cyw-cursor-not-allowed"
@@ -61,6 +61,10 @@ const Setup = () => {
       >
         Start recording
       </button>
+      <p className="cyw-text-xs cyw-italic">
+        This will create a new test file that starts with a cy.visit to the
+        current URL. You can then interact with the app to add further commands.
+      </p>
     </div>
   );
 };
