@@ -17,12 +17,14 @@ import {
   selectEventIdsSorted,
   selectIsRunning,
   selectIsRunningEventId,
+  selectRunError,
 } from "../redux/selectors";
 import Alias from "./Alias";
 import { parseSelector } from "../parser/parseSelector";
 
 const EventSteps = ({ event }: { event: ParsedEvent }) => {
   const isRunningEventId = useSelector(selectIsRunningEventId);
+  const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
   const eventIds = useSelector(selectEventIdsSorted);
   const completeEventIds = eventIds.slice(
@@ -30,7 +32,10 @@ const EventSteps = ({ event }: { event: ParsedEvent }) => {
     isRunningEventId ? eventIds.indexOf(isRunningEventId) : 0
   );
   // only show the first step until completed (as this is the one that can fail)
-  const allSteps = getEventSteps(event);
+  const allSteps = getEventSteps(
+    event,
+    !!runError && event.id === isRunningEventId
+  );
   const stepsToShow =
     completeEventIds.includes(event.id) || !isRunning
       ? allSteps
@@ -52,7 +57,7 @@ interface IStep {
   children: React.ReactNode;
 }
 
-const getEventSteps = (event: ParsedEvent): IStep[] => {
+const getEventSteps = (event: ParsedEvent, error: boolean): IStep[] => {
   if (isNavigationEvent(event)) {
     return [
       {
@@ -106,6 +111,7 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
             value={buildFullUrl(event)}
             operator={operator}
             comparator={comparator}
+            success={!error}
           />
         ),
       },
@@ -133,12 +139,14 @@ const getEventSteps = (event: ParsedEvent): IStep[] => {
             value={parseSelector(event.target, { ignoreInnerText: true })}
             operator="to contain"
             comparator={event.target.innerText}
+            success={!error}
           />
         ) : (
           <Assertion
             value={parseSelector(event.target)}
             operator="to"
             comparator="exist"
+            success={!error}
           />
         ),
       },
@@ -216,23 +224,47 @@ const Assertion = ({
   value,
   operator,
   comparator,
+  success,
 }: {
   value: string;
   operator: string;
   comparator: string;
+  success: boolean;
 }) => (
   <span>
     <span className="cyw-break-keep cyw-mr-2">
-      <span className="cyw-text-emerald-500">-</span>
-      <span className="cyw-bg-emerald-500 cyw-text-gray-900 cyw-px-1 cyw-rounded">
+      <span className={success ? `cyw-text-emerald-500` : `cyw-text-red-500`}>
+        -
+      </span>
+      <span
+        className={`${
+          success ? "cyw-bg-emerald-500" : "cyw-bg-red-500"
+        } cyw-text-gray-900 cyw-px-1 cyw-rounded`}
+      >
         assert
       </span>
     </span>
-    <span className="cyw-text-emerald-300 cyw-break-keep">expected&nbsp;</span>
-    <span className="cyw-text-emerald-200">{value}&nbsp;</span>
-    <span className="cyw-text-emerald-300 cyw-break-keep">
+    <span
+      className={`${
+        success ? "cyw-text-emerald-300" : "cyw-text-red-300"
+      } cyw-break-keep`}
+    >
+      expected&nbsp;
+    </span>
+    <span
+      className={`${success ? "cyw-text-emerald-200" : "cyw-text-red-200"}`}
+    >
+      {value}&nbsp;
+    </span>
+    <span
+      className={`${
+        success ? "cyw-text-emerald-300" : "cyw-text-red-300"
+      } cyw-break-keep`}
+    >
       {operator}&nbsp;
     </span>
-    <span className="cyw-text-emerald-200">{comparator}</span>
+    <span className={success ? "cyw-text-emerald-200" : "cyw-text-red-200"}>
+      {comparator}
+    </span>
   </span>
 );
