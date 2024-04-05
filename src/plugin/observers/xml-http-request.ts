@@ -7,42 +7,56 @@ import {
 import { getAbsoluteUrl } from "../utils/absoluteUrls";
 import { generateEventId } from "../utils/generateEventId";
 
+// should only record events to matching URLs
+
 export function initXMLHttpRequestObserver({
   saveEvent,
   saveFixture,
   buildAlias,
+  mockApiCalls,
+  matchUrl,
+  getMockedResponse,
 }: InitArgs) {
   const _open = window.XMLHttpRequest.prototype.open;
   window.XMLHttpRequest.prototype.open = function () {
-    // cache these so they are available in onreadystatechange
-    (this as any).__method = arguments[0].toUpperCase();
-    (this as any).__url = getAbsoluteUrl(arguments[1]);
-    (this as any).__id = generateEventId();
-    (this as any).__alias = buildAlias({
-      url: (this as any).__url,
-      method: (this as any).__method,
-    });
-    saveEvent({
-      type: "request",
-      timestamp: Date.now(),
-      id: (this as any).__id,
-      url: (this as any).__url,
-      method: (this as any).__method,
-      alias: (this as any).__alias,
-      initiator: "xml",
-    });
+    const url = getAbsoluteUrl(arguments[1]);
+
+    if (matchUrl(url)) {
+      const instance = this as any;
+      // cache these so they are available in onreadystatechange
+      instance.__method = arguments[0].toUpperCase();
+      instance.__url = url;
+      instance.__id = generateEventId();
+      instance.__alias = buildAlias({
+        url: instance.__url,
+        method: instance.__method,
+      });
+      saveEvent({
+        type: "request",
+        timestamp: Date.now(),
+        id: instance.__id,
+        url: instance.__url,
+        method: instance.__method,
+        alias: instance.__alias,
+        initiator: "xml",
+      });
+    }
+
     return _open.apply(this, arguments as any);
   };
 
   const _send = window.XMLHttpRequest.prototype.send;
   window.XMLHttpRequest.prototype.send = function () {
+    const instance = this as any;
     const _onreadystatechange = this.onreadystatechange;
     this.onreadystatechange = function () {
-      if (this.readyState === 4) {
-        const requestId = (this as any).__id;
-        const url = (this as any).__url;
-        const method = (this as any).__method;
-        const alias = (this as any).__alias;
+      const url = instance.__url;
+
+      if (this.readyState === 4 && matchUrl(url)) {
+        const requestId = instance.__id;
+        const url = instance.__url;
+        const method = instance.__method;
+        const alias = instance.__alias;
         const status = this.status;
         const event: Omit<ResponseEvent, "body" | "fixture"> = {
           id: generateEventId(),
@@ -79,6 +93,7 @@ export function initXMLHttpRequestObserver({
           saveEvent({ ...event, fixture: "error.json" });
         }
       }
+
       if (_onreadystatechange) {
         return _onreadystatechange.apply(this, arguments as any);
       }
