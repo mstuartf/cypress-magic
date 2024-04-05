@@ -84,7 +84,7 @@ export const parse = (
       target: { innerText },
     } = event;
     const assertion = innerText
-      ? `should('contain', ${innerText}')`
+      ? `should('contain', '${innerText}')`
       : `should('exist')`;
     return `${getElement(
       parseSelector(event.target, { ignoreInnerText: !!innerText })

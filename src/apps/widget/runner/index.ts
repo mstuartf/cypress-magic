@@ -53,7 +53,7 @@ export const runEvent = (
     if (event.target.tag === "SELECT") {
       //     return `${getElementCy(event.target.domPath)}.select('${event.value}');`;
     } else if (event.target.tag === "INPUT" && event.target.type === "radio") {
-      //     return `${getElementCy(event.target.domPath)}.check();`;
+      getElement<HTMLInputElement>(parseSelector(event.target)).checked = true;
     } else {
       getElement<HTMLInputElement>(parseSelector(event.target)).value =
         event.value;
