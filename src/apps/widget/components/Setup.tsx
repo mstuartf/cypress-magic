@@ -36,6 +36,7 @@ const Setup = () => {
         info="Short title for the test that appears in the 'describe' block."
         setValue={setTestDescribe}
         label="Title"
+        required
       />
       <InputRow
         value={testShould}
@@ -43,11 +44,12 @@ const Setup = () => {
         info="Summary of the behaviour the test covers that appears in the 'it' block."
         setValue={setTestShould}
         label="Assertion"
+        required
       />
       <InputRow
         value={baseUrl}
         placeholder="e.g. https://api.placeholder.com"
-        info="Only API calls made to URLs starting with this value will be matched and intercepted (optional)."
+        info="Only API calls made to URLs starting with this value will be matched and intercepted."
         setValue={setBaseUrl}
         label="Match API calls to"
       />
