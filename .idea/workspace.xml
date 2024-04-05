@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8053873f-2982-4efa-a6dd-c0d7fd156cf2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/RecordingInProgress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/SetupComplete.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/middleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/selectors.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/slice.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/widget/redux/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/redux/store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/widget/components/EventSteps.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +57,7 @@
       <workItem from="1711628216648" duration="1506000" />
       <workItem from="1712090282461" duration="2586000" />
       <workItem from="1712254816206" duration="173000" />
-      <workItem from="1712302759841" duration="11670000" />
+      <workItem from="1712302759841" duration="12414000" />
     </task>
     <servers />
   </component>
