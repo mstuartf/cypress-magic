@@ -105,23 +105,23 @@ export const useScrollDownOnSizeIncrease = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [scrollHeight, setScrollHeight] = useState(0);
 
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     const observer = new MutationObserver(() => {
-  //       const newScrollHeight = ref.current?.scrollHeight || 0;
-  //       if (!!ref.current && newScrollHeight > scrollHeight) {
-  //         ref.current.scrollTop = ref.current.scrollHeight;
-  //       }
-  //       setScrollHeight(ref.current?.scrollHeight || 0);
-  //     });
-  //     observer.observe(ref.current, {
-  //       characterData: true,
-  //       childList: true,
-  //       subtree: true,
-  //       attributes: true,
-  //     });
-  //   }
-  // }, [ref]);
+  useEffect(() => {
+    if (ref.current) {
+      const observer = new MutationObserver(() => {
+        const newScrollHeight = ref.current?.scrollHeight || 0;
+        if (!!ref.current && newScrollHeight > scrollHeight) {
+          ref.current.scrollTop = ref.current.scrollHeight;
+        }
+        setScrollHeight(ref.current?.scrollHeight || 0);
+      });
+      observer.observe(ref.current, {
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+  }, [ref]);
 
   return ref;
 };
