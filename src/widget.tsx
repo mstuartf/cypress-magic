@@ -38,12 +38,10 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   // this needs to be done immediately (i.e. not in the app) to catch all events from the host page
   initialize({
     saveEvent: (event: ParsedEvent) => {
-      if (store.getState().recording.isAddingCommands) {
+      const { isAddingCommands, isRunning } = store.getState().recording;
+      if (isAddingCommands && !isRunning) {
         store.dispatch(saveEvent(event));
-      } else if (
-        store.getState().recording.isRunning &&
-        isResponseEvent(event)
-      ) {
+      } else if (isRunning && isResponseEvent(event)) {
         store.dispatch(saveIsRunningResponse(event));
       }
     },
