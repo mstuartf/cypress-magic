@@ -25,13 +25,14 @@ const Main = () => {
       </div>
       <div className="cyw-flex cyw-flex-col cyw-bg-white cyw-py-4 cyw-px-8 cyw-pb-8 cyw-items-start cyw-w-full cyw-gap-4">
         <p>
-          Inject {appName} into any tab and start recording. Like Cypress
+          Inject {appName} into any SPA and start recording. Like Cypress
           Studio, the extension will record&nbsp;
           <strong>click</strong>,&nbsp;
           <strong>type</strong>,&nbsp;
           <strong>check</strong>,&nbsp;
           <strong>uncheck</strong>, and&nbsp;
-          <strong>select</strong> interactions with the page.
+          <strong>select</strong> interactions with the page. You can also add
+          simple assertions.
         </p>
         <p>
           It will also record all network calls made using{" "}
