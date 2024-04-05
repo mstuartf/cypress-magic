@@ -66,6 +66,7 @@ export interface Target {
   innerText?: string;
   value?: string;
   placeholder?: string;
+  checked?: boolean;
 }
 
 export interface TargetEvent {
