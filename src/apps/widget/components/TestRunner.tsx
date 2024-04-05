@@ -32,6 +32,7 @@ const TestRunner = () => {
   const isMocked = useSelector(selectMockNetworkRequests);
 
   useEffect(() => {
+    console.log("rendinge");
     if (incrementOnLoad) {
       console.log(`updateRunStep for ${event.id}`);
       dispatch(updateRunStep());
@@ -52,6 +53,7 @@ const TestRunner = () => {
       return;
     }
     if (isRunningEventId) {
+      console.log(`running ${isRunningEventId}`);
       const timeout = isRequestEvent(event) || isResponseEvent(event) ? 0 : 500;
       setTimeout(() => {
         if (isNavigationEvent(event) || isPageRefreshEvent(event)) {

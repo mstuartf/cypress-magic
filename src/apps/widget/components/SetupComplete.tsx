@@ -1,21 +1,25 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cancelTest } from "../redux/slice";
-import { selectHasRefreshed, selectTestDescribe } from "../redux/selectors";
-import AddAssertion from "./AddAssertion";
+import {
+  selectHasRefreshed,
+  selectIsRunning,
+  selectTestDescribe,
+} from "../redux/selectors";
 import EventList from "./EventList";
 import ToggleMocks from "./ToggleMocks";
 import DownloadFixtures from "./DownloadFixtures";
 import DownloadTest from "./DownloadTest";
-import RunTest from "./RunTest";
 import { toCamelCase } from "../utils";
 import FileIcon from "./FileIcon";
 import Cross from "./Cross";
+import TestRunner from "./TestRunner";
 
 const SetupComplete = () => {
   const dispatch = useDispatch();
   const hasRefreshed = useSelector(selectHasRefreshed);
   const testDescribe = useSelector(selectTestDescribe)!;
+  const isRunning = useSelector(selectIsRunning);
   const onCancel = () => dispatch(cancelTest());
   return (
     <div className="cyw-h-full cyw-flex cyw-flex-col">
@@ -30,22 +34,13 @@ const SetupComplete = () => {
             </span>
             <span>.cy.js</span>
           </div>
-          <div className="cyw-grid cyw-grid-cols-3 cyw-border cyw-border-slate-400 cyw-rounded">
-            <div className="cyw-p-0.5 cyw-border-r cyw-border-slate-400 cyw-flex cyw-items-center cyw-justify-center">
-              <button onClick={onCancel} className="">
-                <Cross />
-              </button>
-            </div>
-            <div className="cyw-p-0.5 cyw-border-r cyw-border-slate-400 cyw-flex cyw-items-center cyw-justify-center">
-              <AddAssertion />
-            </div>
-            <div className="cyw-p-0.5 cyw-flex cyw-items-center cyw-justify-center">
-              <RunTest />
-            </div>
-          </div>
+          <button onClick={onCancel} className="">
+            <Cross />
+          </button>
         </div>
         <ToggleMocks />
       </div>
+      {isRunning && <TestRunner />}
       {hasRefreshed && (
         <>
           <EventList />
