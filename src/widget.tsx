@@ -78,7 +78,6 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
     return el;
   };
 
-  console.log("INJECTED");
   const root = ReactDOM.createRoot(
     window.document.getElementById(widgetId) || createRootElement()
   );
