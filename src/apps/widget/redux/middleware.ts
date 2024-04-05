@@ -10,7 +10,10 @@ import {
   isUserEvent,
 } from "../utils";
 import { widgetId } from "../constants";
-import { assertionOverlayId } from "../components/AddAssertion";
+import {
+  assertionOverlayId,
+  getAssertedElement,
+} from "../components/AddAssertion";
 import {
   AssertionEvent,
   NavigationEvent,
@@ -39,10 +42,10 @@ export const assertionMiddleware: WidgetMiddleware =
       event.target.domPath[event.target.domPath.length - 1].id ===
         assertionOverlayId
     ) {
-      const elementUnderneath = document.elementsFromPoint(
+      const elementUnderneath = getAssertedElement(
         event.clientX,
         event.clientY
-      )[1] as HTMLElement;
+      );
 
       const newEvent: AssertionEvent = {
         id: event.id,
