@@ -10,6 +10,7 @@ import { ParsedEvent } from "./plugin/types";
 import {
   saveEvent,
   saveFixture,
+  saveIsRunningResponse,
   updateAliasTracker,
   updateIsRunningAliasTracker,
 } from "./apps/widget/redux/slice";
@@ -19,6 +20,7 @@ import {
   selectMockedResponse,
   selectMockNetworkInTests,
 } from "./apps/widget/redux/selectors";
+import { isResponseEvent } from "./apps/widget/utils";
 
 interface W extends Window {
   seasmokeHasLoaded?: boolean;
@@ -35,7 +37,16 @@ const { protocol } = new URL(window.location.href);
 if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
   // this needs to be done immediately (i.e. not in the app) to catch all events from the host page
   initialize({
-    saveEvent: (event: ParsedEvent) => store.dispatch(saveEvent(event)),
+    saveEvent: (event: ParsedEvent) => {
+      if (store.getState().recording.isAddingCommands) {
+        store.dispatch(saveEvent(event));
+      } else if (
+        store.getState().recording.isRunning &&
+        isResponseEvent(event)
+      ) {
+        store.dispatch(saveIsRunningResponse(event));
+      }
+    },
     saveFixture: (name, pickle) =>
       store.dispatch(saveFixture({ name, pickle })),
     // aliases need to be stored in state so that counts do not reset if there is a reload() as part of a test

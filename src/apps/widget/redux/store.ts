@@ -5,8 +5,6 @@ import {
   cacheMiddleware,
   filterClicksMiddleware,
   navMiddleware,
-  isAddingCommandsMiddleware,
-  testIsRunningMiddleware,
   throttlerMiddleware,
   urlMatcherMiddleware,
   widgetClickMiddleware,
@@ -18,7 +16,6 @@ export type WidgetRootState = ReturnType<typeof widgetRootReducer>;
 export const store = configureStore({
   reducer: widgetRootReducer,
   middleware: [
-    isAddingCommandsMiddleware,
     cacheMiddleware,
     assertionMiddleware,
     throttlerMiddleware,
@@ -26,7 +23,6 @@ export const store = configureStore({
     widgetClickMiddleware,
     urlMatcherMiddleware,
     filterClicksMiddleware,
-    testIsRunningMiddleware,
   ],
 });
 

@@ -90,6 +90,7 @@ export function initFetchObserver({
 
   window.fetch = async (input, init) => {
     const url = getAbsoluteUrl(parseUrl(input));
+    console.log(url);
     const include = !isDataUrl(input) && matchUrl(url);
 
     if (!include) {

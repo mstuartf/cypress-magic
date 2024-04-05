@@ -1,4 +1,4 @@
-import { saveEvent, saveFixture, saveIsRunningResponse } from "./slice";
+import { saveEvent } from "./slice";
 import { setCache } from "../cache";
 import {
   isClickEvent,
@@ -6,7 +6,6 @@ import {
   isRequestEvent,
   isRequestOrResponseEvent,
   isRequestTriggerEvent,
-  isResponseEvent,
   isUserEvent,
 } from "../utils";
 import { widgetId } from "../constants";
@@ -154,33 +153,6 @@ export const filterClicksMiddleware: WidgetMiddleware =
         // this should be handled by the change handler
         return;
       }
-    }
-    next(action);
-  };
-
-export const testIsRunningMiddleware: WidgetMiddleware =
-  (store) => (next) => (action) => {
-    // otherwise e.g. reload events run by the test will register again and cause an infinite loop
-    if (
-      (action.type === saveEvent.type || action.type === saveFixture.type) &&
-      store.getState().recording.isRunning
-    ) {
-      const event = action.payload;
-      if (isResponseEvent(event)) {
-        next(saveIsRunningResponse(event));
-      }
-      return;
-    }
-    next(action);
-  };
-
-export const isAddingCommandsMiddleware: WidgetMiddleware =
-  (store) => (next) => (action) => {
-    if (
-      (action.type === saveEvent.type || action.type === saveFixture.type) &&
-      !store.getState().recording.isAddingCommands
-    ) {
-      return;
     }
     next(action);
   };
