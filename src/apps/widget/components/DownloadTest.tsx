@@ -10,6 +10,7 @@ import {
 import { parse } from "../parser";
 import { toCamelCase } from "../utils";
 import FileIcon from "./FileIcon";
+import { Tooltip } from "react-tooltip";
 
 const template = (
   describe: string,
@@ -44,15 +45,20 @@ const DownloadTest = () => {
     URL.revokeObjectURL(url);
   };
   return (
-    <button
-      onClick={download}
-      className="cyw-text-xs cyw-font-semibold cyw-py-2 cyw-px-2 cyw-flex cyw-items-center cyw-justify-center"
-    >
-      <span>
-        <FileIcon />
-      </span>
-      <span className="cyw-ml-1">Download test</span>
-    </button>
+    <>
+      <button
+        data-tooltip-id="download-test-tooltip"
+        data-tooltip-content={`Download ${toCamelCase(testDescribe)}.cy.js`}
+        onClick={download}
+        className="cyw-text-xs cyw-font-semibold cyw-py-2 cyw-px-2 cyw-flex cyw-items-center cyw-justify-center"
+      >
+        <span>
+          <FileIcon />
+        </span>
+        <span className="cyw-ml-1">Download test file</span>
+      </button>
+      <Tooltip id="download-test-tooltip" className="cyw-text-xs" />
+    </>
   );
 };
 
