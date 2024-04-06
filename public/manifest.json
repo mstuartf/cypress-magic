@@ -12,7 +12,7 @@
     "default_popup": "index.html",
     "default_title": "open popup"
   },
-  "permissions": ["activeTab", "scripting", "storage", "webNavigation"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
