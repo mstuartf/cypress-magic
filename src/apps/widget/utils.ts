@@ -86,7 +86,14 @@ export function toCamelCase(str: string) {
     .replace(/^./, (match) => match.toLowerCase());
 }
 
-export const buildFullUrl = (event: HistoryEvent) => {
+export const buildFullUrl = <
+  E extends Pick<
+    HistoryEvent,
+    "protocol" | "hostname" | "pathname" | "port" | "search"
+  >
+>(
+  event: E
+) => {
   const { protocol, hostname, pathname, port, search } = event;
   return `${protocol}//${hostname}${
     port.length ? `:${port}` : ""

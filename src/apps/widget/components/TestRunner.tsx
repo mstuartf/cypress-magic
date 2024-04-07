@@ -31,6 +31,7 @@ const TestRunner = () => {
   const isMocked = useSelector(selectMockNetworkRequests);
 
   useEffect(() => {
+    console.log("rendering");
     if (incrementOnLoad) {
       dispatch(updateRunStep());
     }
