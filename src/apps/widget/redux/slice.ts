@@ -185,6 +185,7 @@ export const recordingSlice = createSlice({
         payload: { name, pickle },
       }: PayloadAction<{ name: string; pickle: PickledBlob }>
     ) => {
+      console.log(`saving fixture ${name}`);
       state.fixtures[name] = pickle;
     },
     setupTest: (
