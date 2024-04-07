@@ -45,8 +45,12 @@ if (!protocol.includes("chrome-extension") && !getHasLoaded()) {
         store.dispatch(saveIsRunningResponse(event));
       }
     },
-    saveFixture: (name, pickle) =>
-      store.dispatch(saveFixture({ name, pickle })),
+    saveFixture: (name, pickle) => {
+      const { isAddingCommands } = store.getState().recording;
+      if (isAddingCommands) {
+        store.dispatch(saveFixture({ name, pickle }));
+      }
+    },
     // aliases need to be stored in state so that counts do not reset if there is a reload() as part of a test
     buildAlias: buildAliasTracker(
       () =>
