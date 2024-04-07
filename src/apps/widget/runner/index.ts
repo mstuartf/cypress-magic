@@ -67,7 +67,14 @@ export const runEvent = (
     }
   }
   if (isNavigationEvent(event)) {
-    window.location.href = buildFullUrl(event);
+    const destination = buildFullUrl(event);
+    if (destination === buildFullUrl(window.location)) {
+      // some sites require reload (rather than setting href) e.g. https://www.reddit.com/r/javascript/
+      // something to do with SSR?
+      window.location.reload();
+    } else {
+      window.location.href = buildFullUrl(event);
+    }
     return;
   }
   if (isQueryParamChangeEvent(event)) {
