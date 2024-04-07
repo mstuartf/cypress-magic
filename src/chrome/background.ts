@@ -36,7 +36,14 @@ chrome.tabs.onUpdated.addListener(
       readCache().then((state) => {
         const shouldInject = selectInjectForTab(tabId)(state);
         if (shouldInject) {
-          inject(tabId);
+          inject(tabId).catch((e) => {
+            // when a new version of the extension is loaded it needs to be re-injected
+            if (e.message.includes("Cannot access contents of the page")) {
+              store.dispatch(removeClosedTabId(tabId));
+            } else {
+              throw e;
+            }
+          });
         }
       });
     }
