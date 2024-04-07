@@ -11,6 +11,7 @@ import {
   isQueryParamChangeEvent,
   isRequestEvent,
   isResponseEvent,
+  isUrlChangeEvent,
 } from "../utils";
 import { useSelector } from "react-redux";
 import {
@@ -255,6 +256,24 @@ const getEventSteps = (event: ParsedEvent, error: boolean): IStep[] => {
 
   if (isRequestEvent(event)) {
     return [];
+  }
+
+  if (isUrlChangeEvent(event)) {
+    return [
+      {
+        children: <DefaultLabel text="url" />,
+      },
+      {
+        children: (
+          <Assertion
+            value={buildFullUrl(event)}
+            operator="to include"
+            comparator={event.urlDiff}
+            success={!error}
+          />
+        ),
+      },
+    ];
   }
 
   return [
