@@ -8,7 +8,7 @@ import {
   selectTestDescribe,
   selectTestShould,
 } from "../redux/selectors";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import Event from "./Event";
 import Spin from "./Spin";
 import Tick from "./Tick";
@@ -23,13 +23,14 @@ import {
 import RunTest from "./RunTest";
 import AddAssertion from "./AddAssertion";
 import AddCommand from "./AddCommand";
+import { useAutoScroll } from "../hooks/useAutoScroll";
 
 const EventList = () => {
   const dispatch = useDispatch();
   const eventIds = useSelector(selectEventIdsSorted);
   const testDescribe = useSelector(selectTestDescribe)!;
   const testShould = useSelector(selectTestShould)!;
-  const ref = useScrollDownOnSizeIncrease();
+  const ref = useAutoScroll();
   const runError = useSelector(selectRunError);
   const isRunning = useSelector(selectIsRunning);
   const isAddingCommands = useSelector(selectIsAddingCommands);
@@ -100,28 +101,3 @@ const EventList = () => {
 };
 
 export default EventList;
-
-export const useScrollDownOnSizeIncrease = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [scrollHeight, setScrollHeight] = useState(0);
-
-  useEffect(() => {
-    if (ref.current) {
-      const observer = new MutationObserver(() => {
-        const newScrollHeight = ref.current?.scrollHeight || 0;
-        if (!!ref.current && newScrollHeight > scrollHeight) {
-          ref.current.scrollTop = ref.current.scrollHeight;
-        }
-        setScrollHeight(ref.current?.scrollHeight || 0);
-      });
-      observer.observe(ref.current, {
-        characterData: true,
-        childList: true,
-        subtree: true,
-        attributes: true,
-      });
-    }
-  }, [ref]);
-
-  return ref;
-};
