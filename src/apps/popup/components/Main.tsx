@@ -11,6 +11,7 @@ import {
   refreshUserInfo,
 } from "../redux/slice";
 import Refresh from "../../shared/Refresh";
+import packageJson from "../../../../package.json";
 
 const appName = "Cypress Magic";
 
@@ -30,7 +31,10 @@ const Main = () => {
   return (
     <div className="cyw-flex cyw-flex-col">
       <div className="cyw-flex cyw-flex-col cyw-bg-slate-100 cyw-py-4 cyw-px-8 cyw-items-start cyw-w-full">
-        <p className="cyw-font-semibold cyw-text-lg cyw-mb-1">{appName}</p>
+        <div className="cyw-flex cyw-items-center cyw-justify-between cyw-w-full">
+          <p className="cyw-font-semibold cyw-text-lg cyw-mb-1">{appName}</p>
+          <p className="cyw-ml-2">{packageJson.version}</p>
+        </div>
         <div className="cyw-flex cyw-items-center cyw-justify-between cyw-w-full">
           <p>
             {!!email
@@ -38,7 +42,10 @@ const Main = () => {
               : "Please sign into Chrome and click the refresh icon to get started."}
           </p>
           {!email && (
-            <button onClick={() => dispatch(refreshUserInfo())}>
+            <button
+              className="cyw-ml-2"
+              onClick={() => dispatch(refreshUserInfo())}
+            >
               <Refresh />
             </button>
           )}

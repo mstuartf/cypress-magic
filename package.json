@@ -1,6 +1,6 @@
 {
   "name": "react-extension",
-  "version": "0.1.0",
+  "version": "1.06.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.5",
@@ -48,7 +48,7 @@
   "scripts": {
     "cypress:open": "cypress open",
     "start": "react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false craco build",
+    "build": "node syncVersion.js && INLINE_RUNTIME_CHUNK=false craco build",
     "zip": "zip -r build.zip build/",
     "dev": "REACT_APP_ENVIRONMENT=development INLINE_RUNTIME_CHUNK=false craco build",
     "test": "react-scripts test",
