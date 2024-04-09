@@ -4,6 +4,7 @@ export interface BaseState {
   activeTabId?: number;
   injectOnTabs: number[];
   cacheLoaded: boolean;
+  userInfo?: chrome.identity.UserInfo;
 }
 
 export const initialBaseState: BaseState = {
@@ -22,6 +23,12 @@ export const baseSlice = createSlice({
     ) => {
       state.cacheLoaded = true;
       state.injectOnTabs = [...injectOnTabs];
+    },
+    saveUserInfo: (
+      state,
+      { payload }: PayloadAction<BaseState["userInfo"]>
+    ) => {
+      state.userInfo = payload;
     },
     activateForTab: (state, { payload: tabId }: PayloadAction<number>) => {
       state.injectOnTabs = [...state.injectOnTabs, tabId];
@@ -44,4 +51,5 @@ export const {
   deactivateForTab,
   setActiveTabId,
   removeClosedTabId,
+  saveUserInfo,
 } = baseSlice.actions;

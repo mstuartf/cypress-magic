@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActiveTabId, selectCacheLoaded } from "./redux/selectors";
+import {
+  selectActiveTabId,
+  selectCacheLoaded,
+  selectUserInfo,
+} from "./redux/selectors";
 import Main from "./components/Main";
 import { setActiveTabId } from "./redux/slice";
 import { sideBarWidth } from "../widget/constants";
@@ -13,6 +17,7 @@ function App() {
   const dispatch = useDispatch();
   const cacheLoaded = useSelector(selectCacheLoaded);
   const activeTabId = useSelector(selectActiveTabId);
+  const userInfo = useSelector(selectUserInfo);
 
   useEffect(() => {
     // Better to set the active tab ID when opening the popup rather than on focus changes in case
@@ -23,7 +28,7 @@ function App() {
     });
   }, []);
 
-  if (!cacheLoaded || !activeTabId) {
+  if (!cacheLoaded || !activeTabId || !userInfo) {
     return <>Loading...</>;
   }
 

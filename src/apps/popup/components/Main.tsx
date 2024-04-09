@@ -1,6 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActiveTabId, selectInjectForTab } from "../redux/selectors";
+import {
+  selectActiveTabId,
+  selectInjectForTab,
+  selectUserInfo,
+} from "../redux/selectors";
 import { activateForTab, deactivateForTab } from "../redux/slice";
 
 const appName = "Cypress Magic";
@@ -8,6 +12,7 @@ const appName = "Cypress Magic";
 const Main = () => {
   const activeTabId = useSelector(selectActiveTabId)!;
   const injectForActiveTab = useSelector(selectInjectForTab(activeTabId));
+  const { email } = useSelector(selectUserInfo)!;
   const dispatch = useDispatch();
   const onClick = () => {
     if (injectForActiveTab) {
@@ -21,7 +26,7 @@ const Main = () => {
     <div className="cyw-flex cyw-flex-col">
       <div className="cyw-flex cyw-flex-col cyw-bg-slate-100 cyw-py-4 cyw-px-8 cyw-items-start cyw-w-full">
         <p className="cyw-font-semibold cyw-text-lg cyw-mb-1">{appName}</p>
-        <p>Write tests faster.</p>
+        <p>{email}</p>
       </div>
       <div className="cyw-flex cyw-flex-col cyw-bg-white cyw-py-4 cyw-px-8 cyw-pb-8 cyw-items-start cyw-w-full cyw-gap-4">
         <p>

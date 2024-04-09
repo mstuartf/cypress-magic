@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Cypress Magic",
-  "version": "1.03",
+  "version": "1.04",
   "icons": {
     "16": "128.png",
     "48": "128.png",
@@ -12,7 +12,13 @@
     "default_popup": "index.html",
     "default_title": "open popup"
   },
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "identity",
+    "identity.email"
+  ],
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
