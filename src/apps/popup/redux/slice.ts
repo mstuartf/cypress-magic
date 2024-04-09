@@ -30,6 +30,9 @@ export const baseSlice = createSlice({
     ) => {
       state.userInfo = payload;
     },
+    refreshUserInfo: (state) => {
+      state.userInfo = undefined;
+    },
     activateForTab: (state, { payload: tabId }: PayloadAction<number>) => {
       state.injectOnTabs = [...state.injectOnTabs, tabId];
     },
@@ -52,4 +55,5 @@ export const {
   setActiveTabId,
   removeClosedTabId,
   saveUserInfo,
+  refreshUserInfo,
 } = baseSlice.actions;
