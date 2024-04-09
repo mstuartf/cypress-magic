@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Cypress Magic",
-  "version": "1.04",
+  "version": "1.06.0",
   "icons": {
     "16": "128.png",
     "48": "128.png",
