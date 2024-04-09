@@ -18,7 +18,6 @@ readCache().then((state) => {
 chrome.identity.getProfileUserInfo(
   { accountStatus: AccountStatus.ANY },
   (res) => {
-    console.log(res);
     store.dispatch(saveUserInfo(res));
   }
 );
