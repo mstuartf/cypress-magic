@@ -23,3 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 build.zip
+
+src/driver/src/dom
+src/driver/src/cypress/UsKeyboardLayout.ts
+src/driver/src/cypress/utils.ts
+src/driver/src/cy/keyboard.ts
+src/driver/src/cy/commands/actions
+src/driver/src/cy/actionability.ts

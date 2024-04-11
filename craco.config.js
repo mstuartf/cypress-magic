@@ -1,6 +1,9 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
+  eslint: {
+    enable: false,
+  },
   webpack: {
     configure: (webpackConfig) => {
       const miniCssExtractPlugin = webpackConfig.plugins.find(

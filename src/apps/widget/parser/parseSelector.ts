@@ -22,7 +22,7 @@ export const parseSelector = (
   }
 
   const bottomUp = [...target.domPath].reverse();
-  const selectors = [];
+  const selectors: string[] = [];
   for (let i = 0; i < bottomUp.length; i++) {
     const { nodeName, id, siblingCount, siblingIndex, dataTestId, dataCy } =
       bottomUp[i];

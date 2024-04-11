@@ -21,6 +21,68 @@ import {
   selectMockNetworkInTests,
 } from "./apps/widget/redux/selectors";
 import { isResponseEvent } from "./apps/widget/utils";
+import $Commands from "./driver/src/cypress/commands";
+import { Keyboard } from "./driver/src/cy/keyboard";
+import $ from "jquery";
+import Promise from "bluebird";
+
+(window as any).Cypress = {
+  isBrowser(name: Cypress.IsBrowserMatcher): boolean {
+    return false;
+  },
+  ensure: {
+    isElement: () => true,
+    isAttached: () => true,
+    isNotDisabled: () => true,
+    isStrictlyVisible: () => true,
+    isNotReadonly: () => true,
+    isNotHiddenByAncestors: () => true,
+  },
+};
+
+const _commands = {};
+const commands = $Commands.create(
+  {
+    log: console.log,
+    action: () => {},
+  },
+  {
+    devices: {
+      keyboard: new Keyboard(() => ({
+        alt: true,
+        ctrl: true,
+        meta: true,
+        shift: true,
+      })),
+    },
+    subjectChain: console.log,
+    getSubjectFromChain: () => $("#username"),
+    state: () => ({
+      get: () => "alksdjh",
+    }),
+    now: (name, ...rest) => {
+      if (name === "type") {
+        return _commands[name](...rest);
+      }
+
+      return Promise.resolve($("#username").click());
+      // throw Error(`${name}!`)
+    },
+    addCommand: ({ name, fn }) => {
+      _commands[name] = fn;
+    },
+  },
+  console.log,
+  console.log
+);
+console.log(commands["type"]);
+
+setTimeout(() => {
+  console.log("running");
+  const $el = $("#username");
+  console.log(commands);
+  commands["type"]["fn"]($el, "anasdlkfjasf", {});
+}, 2000);
 
 interface W extends Window {
   cypressMagicHasLoaded?: boolean;
