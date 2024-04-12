@@ -24,9 +24,14 @@ yarn-error.log*
 
 build.zip
 
-src/driver/src/dom
-src/driver/src/cypress/UsKeyboardLayout.ts
-src/driver/src/cypress/utils.ts
-src/driver/src/cy/keyboard.ts
-src/driver/src/cy/commands/actions
-src/driver/src/cy/actionability.ts
+src/_driver/src/config
+src/_driver/src/cy
+src/_driver/src/cypress
+src/_driver/src/dom
+src/_driver/src/util
+src/_driver/types/
+
+patches
+
+src/_driver/packages/net-stubbing/lib
+src/_driver/packages/network/lib

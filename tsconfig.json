@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2016",
+    "target": "ES2018",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,7 +18,10 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "useUnknownInCatchVariables": false,
-    "types": ["cypress", "chrome"]
+    "types": ["cypress", "chrome", "mocha", "node"],
+    "paths": {
+      "@packages/*": ["src/_driver/packages/*"]
+    }
   },
   "include": ["src"]
 }

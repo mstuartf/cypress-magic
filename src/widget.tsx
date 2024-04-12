@@ -21,68 +21,93 @@ import {
   selectMockNetworkInTests,
 } from "./apps/widget/redux/selectors";
 import { isResponseEvent } from "./apps/widget/utils";
-import $Commands from "./driver/src/cypress/commands";
-import { Keyboard } from "./driver/src/cy/keyboard";
-import $ from "jquery";
-import Promise from "bluebird";
+// import $Commands from "./driver/src/cypress/commands";
+// import { Keyboard } from "./driver/src/cy/keyboard";
+// import { create as createMouse, Mouse } from './driver/src/cy/mouse'
+// import { create as createFocused, IFocused } from './driver/src/cy/focused'
+// import $ from "jquery";
+// import Promise from "bluebird";
+// import $SetterGetter from './driver/src/cypress/setter_getter'
+// import {StateFunc} from "./driver/src/cypress/state";
 
-(window as any).Cypress = {
-  isBrowser(name: Cypress.IsBrowserMatcher): boolean {
-    return false;
-  },
-  ensure: {
-    isElement: () => true,
-    isAttached: () => true,
-    isNotDisabled: () => true,
-    isStrictlyVisible: () => true,
-    isNotReadonly: () => true,
-    isNotHiddenByAncestors: () => true,
-  },
-};
-
-const _commands = {};
-const commands = $Commands.create(
-  {
-    log: console.log,
-    action: () => {},
-  },
-  {
-    devices: {
-      keyboard: new Keyboard(() => ({
-        alt: true,
-        ctrl: true,
-        meta: true,
-        shift: true,
-      })),
-    },
-    subjectChain: console.log,
-    getSubjectFromChain: () => $("#username"),
-    state: () => ({
-      get: () => "alksdjh",
-    }),
-    now: (name, ...rest) => {
-      if (name === "type") {
-        return _commands[name](...rest);
-      }
-
-      return Promise.resolve($("#username").click());
-      // throw Error(`${name}!`)
-    },
-    addCommand: ({ name, fn }) => {
-      _commands[name] = fn;
-    },
-  },
-  console.log,
-  console.log
-);
-console.log(commands["type"]);
-
-setTimeout(() => {
-  console.log("running");
-  const $el = $("#username");
-  console.log(commands);
-  commands["type"]["fn"]($el, "anasdlkfjasf", {});
-}, 2000);
+// (window as any).Cypress = {
+//   isBrowser(name: Cypress.IsBrowserMatcher): boolean {
+//     return false;
+//   },
+//   ensure: {
+//     isElement: () => true,
+//     isAttached: () => true,
+//     isNotDisabled: () => true,
+//     isStrictlyVisible: () => true,
+//     isNotReadonly: () => true,
+//     isNotHiddenByAncestors: () => true,
+//   },
+// };
+//
+// const state = $SetterGetter.create({}) as unknown as StateFunc
+//
+// state("keyboardModifiers", {
+//   alt: false,
+//   ctrl: false,
+//   meta: false,
+//   shift: false,
+// })
+//
+// const $Cypress = {
+//   browser: {
+//     family: "chrome"
+//   },
+//   log: console.log,
+//   action: () => {},
+// }
+//
+// const createCy = () => {
+//   const commands = {}
+//   const addCommand = ({name, fn}: {name: string, fn: (args: any) => any}) => {
+//     commands[name] = fn
+//   }
+//   const type = (...args: any) => {
+//     commands["type"](...args)
+//   }
+//
+//   const keyboard = new Keyboard(state)
+//   const focus = createFocused(state)
+//   return {
+//     type,
+//     addCommand,
+//     timeout: console.log,
+//     devices: {
+//       keyboard,
+//       mouse: createMouse(state, keyboard, focus, $Cypress)
+//     },
+//     subjectChain: console.log,
+//     getSubjectFromChain: () => $("#username"),
+//     state: () => ({
+//       get: () => "alksdjh",
+//     }),
+//     now: (name, ...rest) => {
+//       console.log(`calling ${name} with ${rest}`)
+//       console.log(commands)
+//       return commands[name](...rest)
+//     },
+//   }
+// }
+//
+// const cy = createCy()
+//
+// // wire up command create to cy
+// $Commands.create(
+//     $Cypress,
+//     cy,
+//     state,
+//   console.log
+// );
+//
+// setTimeout(() => {
+//   console.log("running");
+//   const $el = $("#username");
+//   cy.type($el, "anasdlkfjasf", {});
+// }, 2000);
 
 interface W extends Window {
   cypressMagicHasLoaded?: boolean;
