@@ -1,3 +1,4 @@
+# version is 13.7.2
 
 # copy basic files
 cp -R ../cypress/packages/driver/src/config src/_driver/src/
