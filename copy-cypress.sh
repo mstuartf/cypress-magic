@@ -27,10 +27,6 @@ cp ../cypress/packages/errors/src/stackUtils.ts src/_driver/packages/errors/src
 cp ../cypress/packages/errors/src/errorTypes.ts src/_driver/packages/errors/src
 
 
-# delete unneeded
-#rm src/_driver/src/cypress/cookies.ts
-#
-#
 #edits:
 #
 #return chai.util.objDisplay = function (obj) {
