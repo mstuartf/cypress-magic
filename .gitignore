@@ -29,9 +29,12 @@ src/_driver/src/cy
 src/_driver/src/cypress
 src/_driver/src/dom
 src/_driver/src/util
+
 src/_driver/types/
 
 patches
 
 src/_driver/packages/net-stubbing/lib
 src/_driver/packages/network/lib
+src/_driver/packages/errors/src/errorTypes.ts
+src/_driver/packages/errors/src/stackUtils.ts
