@@ -97,7 +97,7 @@ export const parse = (
       parseSelector(event.target, { ignoreInnerText: !!innerText })
     )}.${assertion};`;
   }
-  return `${event.type} at ${event.timestamp}`;
+  throw Error(`UNSUPPORTED: ${event.type} at ${event.timestamp}`);
 };
 
 const getElement = (selector: string): string => {

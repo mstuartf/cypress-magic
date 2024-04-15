@@ -1,11 +1,9 @@
-import { initHistoryObserver } from "./history";
 import { initFetchObserver } from "./fetch";
 import { initUserObserver } from "./user";
 import { initXMLHttpRequestObserver } from "./xml-http-request";
 import { initNavigationObserver } from "./navigation";
 
 export const initializers = {
-  history: initHistoryObserver,
   fetch: initFetchObserver,
   user: initUserObserver,
   xml: initXMLHttpRequestObserver,
