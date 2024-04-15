@@ -18,6 +18,7 @@ import {
   isHTMLElement,
   isElement,
 } from "../../apps/widget/hooks/useNewFixedElementAdded";
+import { findAllTagsWithInnerText } from "../../apps/utils";
 
 const getBaseProps = (event: Event): BaseEvent => ({
   id: generateEventId(),
@@ -25,23 +26,30 @@ const getBaseProps = (event: Event): BaseEvent => ({
   timestamp: Date.now(),
 });
 
-export const getTargetProps = (target: HTMLElement): TargetEvent => ({
-  pathname: window.location.pathname,
-  target: {
-    selectors: [[finder(target)]],
-    tag: target.tagName,
-    isHidden: isHidden(target),
-    type:
-      target.tagName.toUpperCase() === "INPUT"
-        ? (target as HTMLInputElement).type
-        : null,
-    domPath: getDomPath(target),
-    innerText: target.childElementCount === 0 ? target.innerText : undefined,
-    value: (target as HTMLInputElement).value || undefined,
-    checked: (target as HTMLInputElement).checked || undefined,
-    placeholder: (target as HTMLInputElement).placeholder || undefined,
-  },
-});
+export const getTargetProps = (target: HTMLElement): TargetEvent => {
+  const tag = target.tagName;
+  const innerText =
+    target.childElementCount === 0 ? target.innerText : undefined;
+  return {
+    pathname: window.location.pathname,
+    target: {
+      selectors: [[finder(target)]],
+      tag,
+      isHidden: isHidden(target),
+      type:
+        target.tagName.toUpperCase() === "INPUT"
+          ? (target as HTMLInputElement).type
+          : null,
+      domPath: getDomPath(target),
+      innerText,
+      innerTextValidAsSelector:
+        !!innerText && findAllTagsWithInnerText(tag, innerText).length < 2,
+      value: (target as HTMLInputElement).value || undefined,
+      checked: (target as HTMLInputElement).checked || undefined,
+      placeholder: (target as HTMLInputElement).placeholder || undefined,
+    },
+  };
+};
 
 const getFirstHTMLElement = (element: Element): HTMLElement => {
   if (isHTMLElement(element)) {

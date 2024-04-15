@@ -17,7 +17,11 @@ export const parseSelector = (
   if (el.dataTestId) {
     return `[data-testid="${escapeChars(el.dataTestId)}"]`;
   }
-  if (target.innerText && !options?.ignoreInnerText) {
+  if (
+    target.innerText &&
+    !options?.ignoreInnerText &&
+    target.innerTextValidAsSelector
+  ) {
     return `${target.tag.toLowerCase()}:contains('${target.innerText}')`;
   }
 

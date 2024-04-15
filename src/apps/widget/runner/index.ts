@@ -11,6 +11,7 @@ import {
 import { extractInnerText, parseSelector } from "../parser/parseSelector";
 import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
 import { widgetId } from "../constants";
+import { findAllTagsWithInnerText } from "../../utils";
 
 export interface RunOptions {
   mockNetworkRequests: boolean;
@@ -135,7 +136,7 @@ const getElement = <T extends HTMLElement>(selector: string): T => {
     el = document.querySelector(selector) as T;
   } else {
     const [tag, innerText] = extractInnerText(selector);
-    el = findByInnerText(tag, innerText);
+    el = findAllTagsWithInnerText<T>(tag, innerText)[0];
   }
   if (!el) {
     throw Error(
@@ -143,23 +144,4 @@ const getElement = <T extends HTMLElement>(selector: string): T => {
     );
   }
   return el;
-};
-
-const findByInnerText = <T extends HTMLElement>(
-  tag: string,
-  innerText: string
-): T | null => {
-  const tags = document.getElementsByTagName(tag);
-  for (let i = 0; i < tags.length; i++) {
-    const el = tags[i];
-    if (
-      isHTMLElement(el) &&
-      el.textContent?.includes(innerText!) &&
-      el.childElementCount === 0 &&
-      !document.getElementById(widgetId)!.contains(el)
-    ) {
-      return el as T;
-    }
-  }
-  return null;
 };

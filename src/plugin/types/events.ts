@@ -64,6 +64,7 @@ export interface Target {
   type: string | null;
   domPath: DomPathNode[];
   innerText?: string;
+  innerTextValidAsSelector?: boolean;
   value?: string;
   placeholder?: string;
   checked?: boolean;
