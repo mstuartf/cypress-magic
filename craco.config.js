@@ -23,7 +23,7 @@ module.exports = {
         optimization: {
           ...webpackConfig.optimization,
           runtimeChunk: false,
-          minimize: false,
+          minimize: true,
         },
       };
     },

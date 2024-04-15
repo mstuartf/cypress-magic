@@ -19,13 +19,6 @@
     "identity",
     "identity.email"
   ],
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "css": ["./css/content.css"],
-      "world": "MAIN"
-    }
-  ],
   "background": {
     "service_worker": "./static/js/background.js"
   }

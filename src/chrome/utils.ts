@@ -16,12 +16,19 @@ export const updateCache = async (state: PopupState) =>
     [cacheKey]: state,
   });
 
-export const inject = (tabId: number) =>
-  chrome.scripting.executeScript({
-    target: { tabId },
-    files: ["static/js/content.js"],
-    world: "MAIN",
-  });
+export const inject = (tabId: number) => {
+  return Promise.all([
+    chrome.scripting.executeScript({
+      target: { tabId },
+      files: ["static/js/content.js"],
+      world: "MAIN",
+    }),
+    chrome.scripting.insertCSS({
+      target: { tabId },
+      files: ["css/content.css"],
+    }),
+  ]);
+};
 
 export const isPopupState = (
   value: object | PopupState
