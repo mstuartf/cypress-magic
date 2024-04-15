@@ -28,6 +28,14 @@ export const selectFixtures = (state: WidgetRootState) =>
   Object.entries(state.recording.fixtures);
 export const selectTestDescribe = (state: WidgetRootState) =>
   state.recording.testDescribe;
+export const selectTestFileName = (state: WidgetRootState) => {
+  const { mockNetworkRequests, testDescribe } = state.recording;
+  return `${toCamelCase(testDescribe!)}${mockNetworkRequests ? "Stubbed" : ""}`;
+};
+export const selectTestFolderName = (state: WidgetRootState) => {
+  const { testDescribe } = state.recording;
+  return `${toCamelCase(testDescribe!)}`;
+};
 export const selectTestShould = (state: WidgetRootState) =>
   state.recording.testShould;
 export const selectParseOptions = ({

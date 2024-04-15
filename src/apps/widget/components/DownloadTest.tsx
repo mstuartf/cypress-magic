@@ -6,13 +6,13 @@ import {
   selectMockNetworkRequests,
   selectParseOptions,
   selectTestDescribe,
+  selectTestFileName,
   selectTestShould,
 } from "../redux/selectors";
 import { parse } from "../parser";
-import { isResponseEvent, toCamelCase } from "../utils";
+import { isResponseEvent } from "../utils";
 import FileIcon from "./FileIcon";
 import { Tooltip } from "react-tooltip";
-import { WidgetRootState } from "../redux/store";
 
 const template = (
   describe: string,
@@ -30,6 +30,7 @@ const DownloadTest = () => {
   const parseOptions = useSelector(selectParseOptions);
   const events = useSelector(selectEventsSorted);
   const testDescribe = useSelector(selectTestDescribe)!;
+  const fileName = useSelector(selectTestFileName);
   const testShould = useSelector(selectTestShould)!;
   const beforeEach = useSelector(selectBeforeEach);
   const mocks = useSelector(selectMockNetworkRequests);
@@ -43,7 +44,7 @@ const DownloadTest = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${toCamelCase(testDescribe)}.cy.js`;
+    link.download = `${fileName}.cy.js`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -53,7 +54,7 @@ const DownloadTest = () => {
     <>
       <button
         data-tooltip-id="download-test-tooltip"
-        data-tooltip-content={`Download ${toCamelCase(testDescribe)}.cy.js`}
+        data-tooltip-content={`Download ${fileName}.cy.js`}
         onClick={download}
         className="cyw-text-xs cyw-font-semibold cyw-py-2 cyw-px-2 cyw-flex cyw-items-center cyw-justify-center"
       >

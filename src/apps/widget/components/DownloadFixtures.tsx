@@ -3,21 +3,20 @@ import { useSelector } from "react-redux";
 import {
   selectFixtures,
   selectMockNetworkRequests,
-  selectTestDescribe,
+  selectTestFolderName,
 } from "../redux/selectors";
 import JSZip from "jszip";
-import { toCamelCase } from "../utils";
 import { unPickleBlob } from "../../../plugin/utils/pickleBlob";
 import { Tooltip } from "react-tooltip";
 
 const DownloadFixtures = () => {
   const fixtures = useSelector(selectFixtures);
   const mockNetworkRequests = useSelector(selectMockNetworkRequests);
-  const testDescribe = useSelector(selectTestDescribe)!;
   const disabled = !mockNetworkRequests || !fixtures.length;
+  const fileName = useSelector(selectTestFolderName);
   const download = () => {
     const zip = new JSZip();
-    const folder = zip.folder(toCamelCase(testDescribe));
+    const folder = zip.folder(fileName);
     Promise.all(
       fixtures.map(([name, pickle]) =>
         unPickleBlob(pickle).then((blob) => ({ name, blob }))
@@ -30,7 +29,7 @@ const DownloadFixtures = () => {
         const url = URL.createObjectURL(zipBlob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${toCamelCase(testDescribe)}.zip`;
+        link.download = `${fileName}.zip`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

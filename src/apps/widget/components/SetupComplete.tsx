@@ -3,21 +3,20 @@ import { useSelector } from "react-redux";
 import {
   selectHasRefreshed,
   selectIsRunning,
-  selectTestDescribe,
+  selectTestFileName,
 } from "../redux/selectors";
 import EventList from "./EventList";
 import ToggleMocks from "./ToggleMocks";
 import DownloadFixtures from "./DownloadFixtures";
 import DownloadTest from "./DownloadTest";
-import { toCamelCase } from "../utils";
 import FileIcon from "./FileIcon";
 import TestRunner from "./TestRunner";
 import CancelTest from "./CancelTest";
 
 const SetupComplete = () => {
   const hasRefreshed = useSelector(selectHasRefreshed);
-  const testDescribe = useSelector(selectTestDescribe)!;
   const isRunning = useSelector(selectIsRunning);
+  const fileName = useSelector(selectTestFileName);
   return (
     <div className="cyw-h-full cyw-flex cyw-flex-col">
       <div className="cyw-mb-4 cyw-border-b cyw-border-slate-400 cyw-pb-4">
@@ -27,7 +26,7 @@ const SetupComplete = () => {
               <FileIcon />
             </span>
             <span className="cyw-text-slate-100 cyw-font-semibold cyw-ml-1">
-              {toCamelCase(testDescribe)}
+              {fileName}
             </span>
             <span>.cy.js</span>
           </div>
