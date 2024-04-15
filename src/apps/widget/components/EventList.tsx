@@ -54,7 +54,7 @@ const EventList = () => {
           )}
           <span className="cyw-ml-2">{testShould}</span>
         </div>
-        {!isAddingCommands && !isRunning && (
+        {!isAddingCommands && !isRunning && RUNNER_ENABLED && (
           <div className="cyw-flex cyw-items-center cyw-gap-2">
             <RunTest />
             <AddCommand />
@@ -87,7 +87,9 @@ const EventList = () => {
                 className="cyw-bg-indigo-600 hover:cyw-bg-indigo-500 cyw-text-white cyw-text-xs cyw-px-4 cyw-py-2 cyw-rounded"
                 onClick={() => {
                   dispatch(setIsAddingCommands(false));
-                  dispatch(setIsRunning(true));
+                  if (RUNNER_ENABLED) {
+                    dispatch(setIsRunning(true));
+                  }
                 }}
               >
                 Save commands
@@ -101,3 +103,5 @@ const EventList = () => {
 };
 
 export default EventList;
+
+const RUNNER_ENABLED = false;
