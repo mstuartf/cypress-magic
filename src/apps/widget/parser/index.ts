@@ -91,7 +91,7 @@ export const parse = (
       target: { innerText },
     } = event;
     const assertion = innerText
-      ? `should('contain', '${innerText}')`
+      ? `should('contain', ${JSON.stringify(innerText)})`
       : `should('exist')`;
     return `${getElement(
       parseSelector(event.target, { ignoreInnerText: !!innerText })
@@ -103,7 +103,7 @@ export const parse = (
 const getElement = (selector: string): string => {
   if (selector.includes("contains")) {
     const [tag, innerText] = extractInnerText(selector);
-    return `cy.get('${tag}').contains('${innerText}')`;
+    return `cy.get('${tag}').contains(${JSON.stringify(innerText)})`;
   }
   return `cy.get('${selector}')`;
 };

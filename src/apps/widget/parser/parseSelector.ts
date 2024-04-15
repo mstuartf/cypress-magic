@@ -22,7 +22,9 @@ export const parseSelector = (
     !options?.ignoreInnerText &&
     target.innerTextValidAsSelector
   ) {
-    return `${target.tag.toLowerCase()}:contains('${target.innerText}')`;
+    return `${target.tag.toLowerCase()}:contains(${JSON.stringify(
+      target.innerText
+    )})`;
   }
 
   const bottomUp = [...target.domPath].reverse();
@@ -48,7 +50,7 @@ export const parseSelector = (
 };
 
 export const extractInnerText = (input: string): [string, string] => {
-  const regex = /(\w+):contains\('(.+)'\)/;
+  const regex = /(\w+):contains\("(.+)"\)/;
   const match = input.match(regex)!;
   const [, firstGroup, secondGroup] = match;
   return [firstGroup, secondGroup];
