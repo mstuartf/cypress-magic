@@ -103,7 +103,7 @@ export const parse = (
 const getElement = (selector: string): string => {
   if (selector.includes("contains")) {
     const [tag, innerText] = extractInnerText(selector);
-    return `cy.contains('${innerText}')`;
+    return `cy.get('${tag}').contains('${innerText}')`;
   }
   return `cy.get('${selector}')`;
 };
