@@ -3,14 +3,16 @@ import { useSelector } from "react-redux";
 import {
   selectBeforeEach,
   selectEventsSorted,
+  selectMockNetworkRequests,
   selectParseOptions,
   selectTestDescribe,
   selectTestShould,
 } from "../redux/selectors";
 import { parse } from "../parser";
-import { toCamelCase } from "../utils";
+import { isResponseEvent, toCamelCase } from "../utils";
 import FileIcon from "./FileIcon";
 import { Tooltip } from "react-tooltip";
+import { WidgetRootState } from "../redux/store";
 
 const template = (
   describe: string,
@@ -30,9 +32,12 @@ const DownloadTest = () => {
   const testDescribe = useSelector(selectTestDescribe)!;
   const testShould = useSelector(selectTestShould)!;
   const beforeEach = useSelector(selectBeforeEach);
+  const mocks = useSelector(selectMockNetworkRequests);
 
   const download = () => {
-    const steps = events.map((event) => parse(event, parseOptions));
+    const steps = events
+      .filter((event) => !mocks || !isResponseEvent(event))
+      .map((event) => parse(event, parseOptions));
     const content = template(testDescribe, testShould, beforeEach, steps);
     const blob = new Blob([content], { type: "text/javascript" });
     const url = URL.createObjectURL(blob);
