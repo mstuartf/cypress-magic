@@ -1,0 +1,27 @@
+{
+  "url": "https://www.anapioficeandfire.com/api/houses/11",
+  "name": "House Baelish of the Fingers",
+  "region": "The Vale",
+  "coatOfArms": "A grey stone head with fiery eyes, on a light green field(Vert, a stone head cendrée, orbed gules)",
+  "words": "",
+  "titles": [],
+  "seats": ["unnamed tower"],
+  "currentLord": "https://www.anapioficeandfire.com/api/characters/823",
+  "heir": "",
+  "overlord": "https://www.anapioficeandfire.com/api/houses/7",
+  "founded": "",
+  "founder": "https://www.anapioficeandfire.com/api/characters/1182",
+  "diedOut": "",
+  "ancestralWeapons": [],
+  "cadetBranches": ["https://www.anapioficeandfire.com/api/houses/10"],
+  "swornMembers": [
+    "https://www.anapioficeandfire.com/api/characters/688",
+    "https://www.anapioficeandfire.com/api/characters/823",
+    "https://www.anapioficeandfire.com/api/characters/1240",
+    "https://www.anapioficeandfire.com/api/characters/1249",
+    "https://www.anapioficeandfire.com/api/characters/1448",
+    "https://www.anapioficeandfire.com/api/characters/1581",
+    "https://www.anapioficeandfire.com/api/characters/1719",
+    "https://www.anapioficeandfire.com/api/characters/2052"
+  ]
+}

@@ -80,7 +80,7 @@ export function initXMLHttpRequestObserver({
     const _onreadystatechange = this.onreadystatechange;
     const _onload = this.onload;
 
-    const url = instance.__meta.url;
+    const url = getAbsoluteUrl(arguments[1]);
     if (!matchUrl(url)) {
       return _send.apply(this, sendArgs);
     }

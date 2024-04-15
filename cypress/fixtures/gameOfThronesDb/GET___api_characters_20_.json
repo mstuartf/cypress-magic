@@ -1,0 +1,22 @@
+{
+  "url": "https://www.anapioficeandfire.com/api/characters/20",
+  "name": "Mordane",
+  "gender": "Female",
+  "culture": "",
+  "born": "",
+  "died": "",
+  "titles": ["Septa"],
+  "aliases": [],
+  "father": "",
+  "mother": "",
+  "spouse": "",
+  "allegiances": ["https://www.anapioficeandfire.com/api/houses/362"],
+  "books": [
+    "https://www.anapioficeandfire.com/api/books/1",
+    "https://www.anapioficeandfire.com/api/books/2",
+    "https://www.anapioficeandfire.com/api/books/3"
+  ],
+  "povBooks": [],
+  "tvSeries": ["Season 1"],
+  "playedBy": ["Susan Brown"]
+}
