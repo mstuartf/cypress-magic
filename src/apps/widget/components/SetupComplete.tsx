@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {
   selectHasRefreshed,
   selectIsRunning,
+  selectMockNetworkRequests,
   selectTestFileName,
 } from "../redux/selectors";
 import EventList from "./EventList";
@@ -17,6 +18,7 @@ const SetupComplete = () => {
   const hasRefreshed = useSelector(selectHasRefreshed);
   const isRunning = useSelector(selectIsRunning);
   const fileName = useSelector(selectTestFileName);
+  const mockNetworkRequests = useSelector(selectMockNetworkRequests);
   return (
     <div className="cyw-h-full cyw-flex cyw-flex-col">
       <div className="cyw-mb-4 cyw-border-b cyw-border-slate-400 cyw-pb-4">
@@ -39,8 +41,10 @@ const SetupComplete = () => {
         <>
           <EventList />
           <div className="cyw-grid cyw-grid-cols-2 cyw-mt-4 cyw-pt-4 cyw-border-t cyw-border-slate-400">
-            <DownloadFixtures />
-            <DownloadTest />
+            <div>{mockNetworkRequests && <DownloadFixtures />}</div>
+            <div>
+              <DownloadTest />
+            </div>
           </div>
         </>
       )}
