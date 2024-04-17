@@ -37,6 +37,7 @@ interface State {
   aliasTracker: AliasTracker;
   isAddingCommands: boolean;
   isAddingEventIds: string[];
+  missedRequests: string[];
 }
 
 const initialState: State = {
@@ -57,6 +58,7 @@ const initialState: State = {
   isRunningError: undefined,
   isAddingCommands: false,
   isAddingEventIds: [],
+  missedRequests: [],
 };
 
 export const recordingSlice = createSlice({
@@ -76,6 +78,10 @@ export const recordingSlice = createSlice({
       state.isRunningAliasTracker = {};
       state.isRunningReturnedResponses = [];
       state.isRunningError = undefined;
+      state.missedRequests = [];
+    },
+    setMissedRequests: (state, { payload }: PayloadAction<string[]>) => {
+      state.missedRequests = payload;
     },
     cancelTest: (state) => {
       state.setupComplete = false;
@@ -241,4 +247,5 @@ export const {
   updateIsRunningAliasTracker,
   saveIsRunningResponse,
   setIsRunningError,
+  setMissedRequests,
 } = recordingSlice.actions;

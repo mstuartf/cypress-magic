@@ -1,5 +1,5 @@
 import { WidgetRootState } from "./store";
-import { isResponseEvent, toCamelCase } from "../utils";
+import { isNavigationEvent, isResponseEvent, toCamelCase } from "../utils";
 import { ResponseEvent } from "../../../plugin/types";
 
 export const selectEventsSorted = (state: WidgetRootState) =>
@@ -10,6 +10,19 @@ export const selectEventIdsSorted = (state: WidgetRootState) =>
 
 export const selectEvent = (id: string) => (state: WidgetRootState) =>
   state.recording.events[id];
+
+export const selectFirstNavEvent = ({
+  recording: { events, eventIds },
+}: WidgetRootState) => {
+  return eventIds
+    .map((id) => events[id])
+    .find((event) => isNavigationEvent(event));
+};
+
+export const selectMissedRequests = ({
+  recording: { missedRequests },
+}: WidgetRootState) => missedRequests;
+
 export const selectSetupComplete = (state: WidgetRootState) =>
   state.recording.setupComplete;
 export const selectIsRunning = (state: WidgetRootState) =>

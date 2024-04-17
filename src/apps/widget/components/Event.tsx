@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import {
   selectEvent,
   selectEventIdsSorted,
+  selectFirstNavEvent,
   selectIsAddingCommands,
   selectIsAddingEventIds,
   selectIsRunning,
@@ -14,6 +15,7 @@ import AssertionError from "./AssertionError";
 import TriggeredRequests from "./TriggeredRequests";
 import Bordered from "./Bordered";
 import DeleteEvent from "./DeleteEvent";
+import MissedRequests from "./MissedRequests";
 
 const Event = ({ id }: { id: string }) => {
   const event = useSelector(selectEvent(id));
@@ -27,6 +29,7 @@ const Event = ({ id }: { id: string }) => {
   );
   const isAddingCommands = useSelector(selectIsAddingCommands);
   const isAddingEventIds = useSelector(selectIsAddingEventIds);
+  const firstNav = useSelector(selectFirstNavEvent);
 
   if (
     (isRunning || runError) &&
@@ -45,6 +48,7 @@ const Event = ({ id }: { id: string }) => {
         {runError && isRunningEventId === event.id && (
           <AssertionError {...runError} />
         )}
+        {id === firstNav?.id && <MissedRequests />}
         <TriggeredRequests id={event.id} />
       </div>
       <div className="cyw-invisible group-hover:cyw-visible cyw-flex cyw-items-center cyw-transition-all cyw-absolute cyw-left-0 cyw-p-2">

@@ -13,7 +13,7 @@ import {
 import Refresh from "../../shared/Refresh";
 import packageJson from "../../../../package.json";
 
-const appName = "Cypress Magic";
+export const appName = "Cypress Magic";
 
 const Main = () => {
   const activeTabId = useSelector(selectActiveTabId)!;
