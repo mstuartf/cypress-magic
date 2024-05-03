@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { alias, wrapStore } from "webext-redux";
 import { rootReducer } from "./reducers";
 import { inject } from "../../../chrome/utils";
-import { activateForTab, refreshUserInfo, saveUserInfo } from "./slice";
+import { activateForTab } from "./slice";
 
 export type PopupState = ReturnType<typeof rootReducer>;
 
@@ -10,12 +10,6 @@ export type PopupState = ReturnType<typeof rootReducer>;
 export const middlewareAliases: { [key: string]: (action: any) => any } = {
   [activateForTab.type]: (action: ReturnType<typeof activateForTab>) => {
     inject(action.payload);
-    return action;
-  },
-  [refreshUserInfo.type]: (action: ReturnType<typeof refreshUserInfo>) => {
-    chrome.identity.getProfileUserInfo({}, (res) =>
-      store.dispatch(saveUserInfo(res))
-    );
     return action;
   },
 };

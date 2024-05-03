@@ -1,26 +1,14 @@
 import { store } from "../apps/popup/redux/store";
-import {
-  removeClosedTabId,
-  restoreBaseCache,
-  saveUserInfo,
-} from "../apps/popup/redux/slice";
+import { removeClosedTabId, restoreBaseCache } from "../apps/popup/redux/slice";
 import { activeTabNeedsRefresh, inject, readCache, updateCache } from "./utils";
 import { selectInjectForTab } from "../apps/popup/redux/selectors";
 import TabChangeInfo = chrome.tabs.TabChangeInfo;
-import AccountStatus = chrome.identity.AccountStatus;
 
 // READING AND WRITING TO CACHE ------------------------------------------------
 
 readCache().then((state) => {
   store.dispatch(restoreBaseCache(state.base));
 });
-
-chrome.identity.getProfileUserInfo(
-  { accountStatus: AccountStatus.ANY },
-  (res) => {
-    store.dispatch(saveUserInfo(res));
-  }
-);
 
 store.subscribe(() => {
   const updated = { ...store.getState() };
