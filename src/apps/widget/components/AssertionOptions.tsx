@@ -5,9 +5,9 @@ interface Props {
   innerText?: string;
   value?: HTMLInputElement["value"];
   classList: string[];
-  onHaveText: () => void;
-  onHaveValue: () => void;
-  onHaveClass: () => void;
+  onHaveText: (text: string) => void;
+  onHaveValue: (value: string) => void;
+  onHaveClass: (className: string) => void;
   onBeVisible: () => void;
   onClose: () => void;
 }

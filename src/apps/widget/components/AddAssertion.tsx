@@ -4,10 +4,17 @@ import {
   selectIsAddingAssertion,
   selectIsSelectingAssertion,
 } from "../redux/selectors";
-import { setIsAddingAssertion, setIsSelectingAssertion } from "../redux/slice";
+import {
+  saveEvent,
+  setIsAddingAssertion,
+  setIsSelectingAssertion,
+} from "../redux/slice";
 import { sideBarWidth } from "../constants";
 import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
 import AssertionOptions from "./AssertionOptions";
+import { AssertionEvent } from "../../../plugin/types";
+import { getTargetProps } from "../../../plugin/observers/user";
+import { generateEventId } from "../../../plugin/utils/generateEventId";
 
 interface HighlightBox {
   width: number;
@@ -54,6 +61,19 @@ const AddAssertion = () => {
       return;
     }
     setTarget(null);
+  };
+
+  const saveAssertionEvent = (el: HTMLElement, meta: AssertionEvent["on"]) => {
+    const newEvent: AssertionEvent = {
+      id: generateEventId(),
+      type: "assertion",
+      timestamp: Date.now(),
+      ...getTargetProps(el),
+      on: {
+        ...meta,
+      },
+    };
+    dispatch(saveEvent(newEvent));
   };
 
   return (
@@ -109,13 +129,21 @@ const AddAssertion = () => {
                 >
                   <AssertionOptions
                     tagName={target.tagName}
-                    innerText={target.innerText}
+                    innerText={
+                      target.childElementCount === 0
+                        ? target.innerText
+                        : undefined
+                    }
                     value={(target as HTMLInputElement).value?.toString()}
                     classList={target.className.split(" ")}
-                    onHaveText={console.log}
-                    onHaveValue={console.log}
-                    onHaveClass={console.log}
-                    onBeVisible={console.log}
+                    onHaveText={(text) => saveAssertionEvent(target, { text })}
+                    onHaveValue={(value) =>
+                      saveAssertionEvent(target, { value })
+                    }
+                    onHaveClass={(className) =>
+                      saveAssertionEvent(target, { className })
+                    }
+                    onBeVisible={() => saveAssertionEvent(target, {})}
                     onClose={onOverlayClick}
                   />
                 </div>

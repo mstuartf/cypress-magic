@@ -88,13 +88,20 @@ export const parse = (
   }
   if (isAssertionEvent(event)) {
     const {
-      target: { innerText },
+      on: { text, value, className },
     } = event;
-    const assertion = innerText
-      ? `should('contain', ${JSON.stringify(innerText)})`
-      : `should('exist')`;
+    let assertion: string;
+    if (text !== undefined) {
+      assertion = `should('contain', ${JSON.stringify(text)})`;
+    } else if (value !== undefined) {
+      assertion = `should('have.value', ${JSON.stringify(value)})`;
+    } else if (className !== undefined) {
+      assertion = `should('have.class', ${JSON.stringify(className)})`;
+    } else {
+      assertion = `should('be.visible')`;
+    }
     return `${getElement(
-      parseSelector(event.target, { ignoreInnerText: !!innerText })
+      parseSelector(event.target, { ignoreInnerText: !!text })
     )}.${assertion};`;
   }
   throw Error(`UNSUPPORTED: ${event.type} at ${event.timestamp}`);

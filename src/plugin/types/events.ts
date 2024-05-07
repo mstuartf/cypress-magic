@@ -87,7 +87,13 @@ export interface ClickEvent extends BaseEvent, TargetEvent {
 
 export interface DblClickEvent extends ClickEvent {}
 
-export interface AssertionEvent extends ClickEvent {}
+export interface AssertionEvent extends BaseEvent, TargetEvent {
+  on: {
+    text?: string;
+    value?: HTMLInputElement["value"];
+    className?: string;
+  };
+}
 
 export interface ErrorEvent extends BaseEvent {
   handler: string;
@@ -111,6 +117,7 @@ export type ParsedEvent =
   | RequestEvent
   | ResponseEvent
   | ViewEvent
+  | AssertionEvent
   | ErrorEvent;
 
 export enum EventType {

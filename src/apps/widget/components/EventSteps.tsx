@@ -120,6 +120,47 @@ const getEventSteps = (event: ParsedEvent, error: boolean): IStep[] => {
   }
 
   if (isAssertionEvent(event)) {
+    const {
+      on: { text, value, className },
+    } = event;
+    let children: React.ReactNode;
+    if (text !== undefined) {
+      children = (
+        <Assertion
+          value={parseSelector(event.target, { ignoreInnerText: true })}
+          operator="to contain"
+          comparator={text}
+          success={!error}
+        />
+      );
+    } else if (value !== undefined) {
+      children = (
+        <Assertion
+          value={parseSelector(event.target)}
+          operator="to have value"
+          comparator={value}
+          success={!error}
+        />
+      );
+    } else if (className !== undefined) {
+      children = (
+        <Assertion
+          value={parseSelector(event.target)}
+          operator="to have class"
+          comparator={className}
+          success={!error}
+        />
+      );
+    } else {
+      children = (
+        <Assertion
+          value={parseSelector(event.target)}
+          operator="to"
+          comparator="be visible"
+          success={!error}
+        />
+      );
+    }
     return [
       {
         children: (
@@ -134,22 +175,7 @@ const getEventSteps = (event: ParsedEvent, error: boolean): IStep[] => {
         ),
       },
       {
-        // todo: show more element details like cypress
-        children: event.target.innerText ? (
-          <Assertion
-            value={parseSelector(event.target, { ignoreInnerText: true })}
-            operator="to contain"
-            comparator={event.target.innerText}
-            success={!error}
-          />
-        ) : (
-          <Assertion
-            value={parseSelector(event.target)}
-            operator="to"
-            comparator="exist"
-            success={!error}
-          />
-        ),
+        children,
       },
     ];
   }
@@ -333,7 +359,7 @@ const Assertion = ({
       {operator}&nbsp;
     </span>
     <span className={success ? "cyw-text-emerald-200" : "cyw-text-red-200"}>
-      {comparator}
+      {comparator.length === 0 ? `""` : comparator}
     </span>
   </span>
 );
