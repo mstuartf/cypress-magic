@@ -29,6 +29,7 @@ interface State {
   hasRefreshed: boolean;
   baseUrl?: string;
   isAddingAssertion: boolean;
+  isSelectingAssertion: boolean;
   mockNetworkRequests: boolean;
   fixtures: { [name: string]: PickledBlob };
   testDescribe?: string;
@@ -50,6 +51,7 @@ const initialState: State = {
   hasRefreshed: false,
   baseUrl: undefined,
   isAddingAssertion: false,
+  isSelectingAssertion: false,
   mockNetworkRequests: true,
   fixtures: {},
   aliasTracker: {},
@@ -133,6 +135,10 @@ export const recordingSlice = createSlice({
     },
     setIsAddingAssertion: (state, action: PayloadAction<boolean>) => {
       state.isAddingAssertion = action.payload;
+      state.isSelectingAssertion = false;
+    },
+    setIsSelectingAssertion: (state, action: PayloadAction<boolean>) => {
+      state.isSelectingAssertion = action.payload;
     },
     setHasRefreshed: (state, action: PayloadAction<boolean>) => {
       state.hasRefreshed = action.payload;
@@ -248,4 +254,5 @@ export const {
   saveIsRunningResponse,
   setIsRunningError,
   setMissedRequests,
+  setIsSelectingAssertion,
 } = recordingSlice.actions;

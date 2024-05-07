@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsAddingAssertion } from "../redux/selectors";
-import { setIsAddingAssertion } from "../redux/slice";
+import {
+  selectIsAddingAssertion,
+  selectIsSelectingAssertion,
+} from "../redux/selectors";
+import { setIsAddingAssertion, setIsSelectingAssertion } from "../redux/slice";
 import { sideBarWidth } from "../constants";
 import { isHTMLElement } from "../hooks/useNewFixedElementAdded";
+import AssertionOptions from "./AssertionOptions";
 
 interface HighlightBox {
   width: number;
@@ -15,7 +19,32 @@ interface HighlightBox {
 const AddAssertion = () => {
   const dispatch = useDispatch();
   const isAddingAssertion = useSelector(selectIsAddingAssertion);
+  const isSelectingAssertion = useSelector(selectIsSelectingAssertion);
   const [target, setTarget] = useState<HTMLElement | null>();
+
+  const onOverlayClick = () =>
+    dispatch(setIsSelectingAssertion(!isSelectingAssertion));
+
+  const onOverlayMouseMove: MouseEventHandler<HTMLDivElement> = (event) => {
+    if (isSelectingAssertion) {
+      return;
+    }
+    const elementUnderneath = getAssertedElement(event.clientX, event.clientY);
+    if (
+      elementUnderneath !== target &&
+      elementUnderneath.id !== assertionHighlightId
+    ) {
+      setTarget(elementUnderneath);
+    }
+  };
+
+  const onOverlayMouseLeave: MouseEventHandler<HTMLDivElement> = () => {
+    if (isSelectingAssertion) {
+      return;
+    }
+    setTarget(null);
+  };
+
   return (
     <>
       <button
@@ -47,29 +76,42 @@ const AddAssertion = () => {
       {isAddingAssertion && (
         <div
           id={assertionOverlayId}
+          onClick={onOverlayClick}
+          onMouseMove={onOverlayMouseMove}
+          onMouseLeave={onOverlayMouseLeave}
           className="cyw-fixed cyw-top-0 cyw-right-0 cyw-bottom-0 cyw-cursor-pointer"
           style={{ left: `${sideBarWidth}px`, zIndex: `${maxZIndex() + 2}` }}
-          onMouseMove={(event) => {
-            const elementUnderneath = getAssertedElement(
-              event.clientX,
-              event.clientY
-            );
-            if (
-              elementUnderneath !== target &&
-              elementUnderneath.id !== assertionHighlightId
-            ) {
-              setTarget(elementUnderneath);
-            }
-          }}
-          onMouseLeave={() => setTarget(null)}
         />
       )}
       {!!target && isAddingAssertion && (
-        <div
-          id={assertionHighlightId}
-          className="cyw-fixed cyw-outline cyw-outline-2 cyw-outline-offset-2 cyw-outline-yellow-500 cyw-rounded"
-          style={{ ...getTargetBox(target), zIndex: `${maxZIndex() + 1}` }}
-        />
+        <>
+          <div
+            id={assertionHighlightId}
+            className="cyw-fixed cyw-outline cyw-outline-2 cyw-outline-offset-2 cyw-outline-yellow-500 cyw-rounded"
+            style={{ ...getTargetBox(target), zIndex: `${maxZIndex() + 1}` }}
+          />
+          {isSelectingAssertion && (
+            <div
+              className="cyw-fixed"
+              style={{
+                ...getAssertionOptionsBox(target),
+                zIndex: `${maxZIndex() + 3}`,
+              }}
+            >
+              <AssertionOptions
+                tagName={target.tagName}
+                innerText={target.innerText}
+                value={(target as HTMLInputElement).value.toString()}
+                classList={target.className.split(" ")}
+                onHaveText={console.log}
+                onHaveValue={console.log}
+                onHaveClass={console.log}
+                onBeVisible={console.log}
+                onClose={onOverlayClick}
+              />
+            </div>
+          )}
+        </>
       )}
     </>
   );
@@ -95,6 +137,16 @@ const getTargetBox = (el: HTMLElement): HighlightBox => {
     height,
     left,
     top,
+  };
+};
+
+const getAssertionOptionsBox = (
+  el: HTMLElement
+): Pick<HighlightBox, "top" | "left"> => {
+  const { width, height, left, top } = el.getBoundingClientRect();
+  return {
+    left,
+    top: top + height,
   };
 };
 

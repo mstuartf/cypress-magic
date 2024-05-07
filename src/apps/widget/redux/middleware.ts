@@ -41,21 +41,22 @@ export const assertionMiddleware: WidgetMiddleware =
       event.target.domPath[event.target.domPath.length - 1].id ===
         assertionOverlayId
     ) {
-      const elementUnderneath = getAssertedElement(
-        event.clientX,
-        event.clientY
-      );
-
-      const newEvent: AssertionEvent = {
-        id: event.id,
-        type: "assertion",
-        timestamp: Date.now(),
-        ...getTargetProps(elementUnderneath),
-        clientX: event.clientX,
-        clientY: event.clientY,
-        href: (elementUnderneath as HTMLAnchorElement).href,
-      };
-      action.payload = newEvent;
+      return;
+      // const elementUnderneath = getAssertedElement(
+      //   event.clientX,
+      //   event.clientY
+      // );
+      //
+      // const newEvent: AssertionEvent = {
+      //   id: event.id,
+      //   type: "assertion",
+      //   timestamp: Date.now(),
+      //   ...getTargetProps(elementUnderneath),
+      //   clientX: event.clientX,
+      //   clientY: event.clientY,
+      //   href: (elementUnderneath as HTMLAnchorElement).href,
+      // };
+      // action.payload = newEvent;
     }
     next(action);
   };

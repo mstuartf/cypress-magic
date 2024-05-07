@@ -35,6 +35,8 @@ export const selectHasRefreshed = (state: WidgetRootState) =>
   state.recording.hasRefreshed;
 export const selectIsAddingAssertion = (state: WidgetRootState) =>
   state.recording.isAddingAssertion;
+export const selectIsSelectingAssertion = (state: WidgetRootState) =>
+  state.recording.isSelectingAssertion;
 export const selectMockNetworkRequests = (state: WidgetRootState) =>
   state.recording.mockNetworkRequests;
 export const selectFixtures = (state: WidgetRootState) =>
