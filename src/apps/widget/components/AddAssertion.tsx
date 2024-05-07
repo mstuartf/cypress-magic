@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectIsAddingAssertion,
@@ -19,8 +19,19 @@ interface HighlightBox {
 const AddAssertion = () => {
   const dispatch = useDispatch();
   const isAddingAssertion = useSelector(selectIsAddingAssertion);
+  const [zIndex, setZIndex] = useState<number>(1000);
   const isSelectingAssertion = useSelector(selectIsSelectingAssertion);
   const [target, setTarget] = useState<HTMLElement | null>();
+
+  useEffect(() => {
+    dispatch(setIsAddingAssertion(false));
+    dispatch(setIsSelectingAssertion(false));
+  }, []);
+
+  const onButtonClick = () => {
+    dispatch(setIsAddingAssertion(!isAddingAssertion));
+    setZIndex(maxZIndex());
+  };
 
   const onOverlayClick = () =>
     dispatch(setIsSelectingAssertion(!isSelectingAssertion));
@@ -48,7 +59,7 @@ const AddAssertion = () => {
   return (
     <>
       <button
-        onClick={() => dispatch(setIsAddingAssertion(!isAddingAssertion))}
+        onClick={onButtonClick}
         className="cyw-group cyw-flex cyw-items-center focus:cyw-outline-none"
       >
         <svg
@@ -80,38 +91,38 @@ const AddAssertion = () => {
           onMouseMove={onOverlayMouseMove}
           onMouseLeave={onOverlayMouseLeave}
           className="cyw-fixed cyw-top-0 cyw-right-0 cyw-bottom-0 cyw-cursor-pointer"
-          style={{ left: `${sideBarWidth}px`, zIndex: `${maxZIndex() + 2}` }}
-        />
-      )}
-      {!!target && isAddingAssertion && (
-        <>
-          <div
-            id={assertionHighlightId}
-            className="cyw-fixed cyw-outline cyw-outline-2 cyw-outline-offset-2 cyw-outline-yellow-500 cyw-rounded"
-            style={{ ...getTargetBox(target), zIndex: `${maxZIndex() + 1}` }}
-          />
-          {isSelectingAssertion && (
-            <div
-              className="cyw-fixed"
-              style={{
-                ...getAssertionOptionsBox(target),
-                zIndex: `${maxZIndex() + 3}`,
-              }}
-            >
-              <AssertionOptions
-                tagName={target.tagName}
-                innerText={target.innerText}
-                value={(target as HTMLInputElement).value.toString()}
-                classList={target.className.split(" ")}
-                onHaveText={console.log}
-                onHaveValue={console.log}
-                onHaveClass={console.log}
-                onBeVisible={console.log}
-                onClose={onOverlayClick}
+          style={{ left: `${sideBarWidth}px`, zIndex: `${zIndex + 1}` }}
+        >
+          {!!target && (
+            <>
+              <div
+                id={assertionHighlightId}
+                className="cyw-fixed cyw-outline cyw-outline-2 cyw-outline-offset-2 cyw-outline-yellow-500 cyw-rounded"
+                style={{ ...getTargetBox(target) }}
               />
-            </div>
+              {isSelectingAssertion && (
+                <div
+                  className="cyw-fixed"
+                  style={{
+                    ...getAssertionOptionsBox(target),
+                  }}
+                >
+                  <AssertionOptions
+                    tagName={target.tagName}
+                    innerText={target.innerText}
+                    value={(target as HTMLInputElement).value?.toString()}
+                    classList={target.className.split(" ")}
+                    onHaveText={console.log}
+                    onHaveValue={console.log}
+                    onHaveClass={console.log}
+                    onBeVisible={console.log}
+                    onClose={onOverlayClick}
+                  />
+                </div>
+              )}
+            </>
           )}
-        </>
+        </div>
       )}
     </>
   );

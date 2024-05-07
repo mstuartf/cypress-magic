@@ -57,13 +57,14 @@ const AssertionOptions = ({
           onOptionClick={onHaveValue}
         />
       )}
-      {!!classList.length && (
-        <AssertionOption
-          label="have class"
-          options={classList}
-          onOptionClick={onHaveClass}
-        />
-      )}
+      {!!classList.length &&
+        !(classList.length === 1 && classList[0] === "") && (
+          <AssertionOption
+            label="have class"
+            options={classList}
+            onOptionClick={onHaveClass}
+          />
+        )}
       <button
         className="cyw-px-2 cyw-py-2 hover:cyw-bg-gray-200 cyw-block cyw-w-full cyw-text-left"
         onClick={onBeVisible}
