@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="h-full scroll-smooth bg-white antialiased __variable_aaf875 __variable_866216"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      function onload() {
+        document
+          .getElementById("request-button")
+          .addEventListener("click", function () {
+            fetch("https://swapi.dev/api/people/4").then((res) => {
+              res.json().then(({ name }) => {
+                document.getElementById("request-results").innerText = name;
+              });
+            });
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", onload);
+    </script>
+  </head>
+  <body class="flex h-full flex-col">
+    <main class="h-full flex flex-col">
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 pt-20 text-center lg:pt-32 flex-grow"
+      >
+        <h1
+          data-cy="main-header"
+          class="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl"
+        >
+          My demo<!-- -->
+          <span class="relative whitespace-nowrap text-blue-600"
+            ><span class="relative">Star Wars</span></span
+          >
+          <!-- -->app.
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
+          Click the button below to fetch a random character.
+        </p>
+        <div class="mt-10 flex justify-center gap-x-6">
+          <button
+            id="request-button"
+            class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
+            variant="solid"
+            color="slate"
+          >
+            Fetch a character
+          </button>
+        </div>
+        <div class="mt-10 flex justify-center gap-x-6">
+          <p
+            class="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700"
+            id="request-results"
+            data-cy="request-results"
+          ></p>
+        </div>
+      </div>
+      <section
+        id="features"
+        class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
+      ></section>
+    </main>
+  </body>
+</html>

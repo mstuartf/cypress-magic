@@ -129,11 +129,7 @@ const AddAssertion = () => {
                 >
                   <AssertionOptions
                     tagName={target.tagName}
-                    innerText={
-                      target.childElementCount === 0
-                        ? target.innerText
-                        : undefined
-                    }
+                    innerText={target.innerText}
                     value={(target as HTMLInputElement).value?.toString()}
                     classList={target.className.split(" ")}
                     onHaveText={(text) => saveAssertionEvent(target, { text })}
